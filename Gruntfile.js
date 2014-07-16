@@ -30,8 +30,8 @@ module.exports = function( grunt ) {
 	],
 
 	BP_EXCLUDED_JS = [
-		'!bp-core/js/jquery.atwho*.js',
-		'!bp-core/js/jquery.caret*.js',
+		'!bp-core/js/jquery.atwho.js',
+		'!bp-core/js/jquery.caret.js',
 		'!bp-templates/bp-legacy/js/*.js'
 	];
 
