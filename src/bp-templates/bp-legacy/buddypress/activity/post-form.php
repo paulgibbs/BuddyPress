@@ -25,7 +25,6 @@
 		printf( __( "What's new, %s?", 'buddypress' ), bp_get_user_firstname( bp_get_loggedin_user_fullname() ) );
 	?></p>
 
-<div id="atwho-container"><div id="atwho-ground-whats-new"><div class="atwho-view" id="at-view-64" style="display: block; top: 245px; left: 634px;"><ul class="atwho-view-ul"><li data-value="@tessa" class=""><img src="https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro"><span class="username">@tessa</span><small>Tessa Name</small></li><li data-value="@test" class="cur"><img src="https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro"><span class="username">@test</span><small>Test Surname</small></li></ul></div></div><div id="atwho-ground-ac-input-3"><div class="atwho-view" id="at-view-64"><ul class="atwho-view-ul"></ul></div></div><div id="atwho-ground-ac-input-2"><div class="atwho-view" id="at-view-64"><ul class="atwho-view-ul"></ul></div></div></div>
 	<div id="whats-new-content">
 		<div id="whats-new-textarea">
 			<textarea class="bp-suggestions" name="whats-new" id="whats-new" cols="50" rows="10"><?php if ( isset( $_GET['r'] ) ) : ?>@<?php echo esc_textarea( $_GET['r'] ); ?> <?php endif; ?></textarea>
