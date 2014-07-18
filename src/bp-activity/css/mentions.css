@@ -3,7 +3,7 @@
 	border-radius: 2px;
 	border: 1px solid rgb(204, 204, 204);
 	box-shadow: 0 0 5px rgba(204, 204, 204, 0.25), 0 0 1px #FFF;
-	color: #00BCF5;
+	color: #D84800;
 	display: none;
 	font-family: sans-serif;
 	left: 0;
@@ -40,7 +40,7 @@
 	font: bold;
 }
 .atwho-view .username strong {
-	color: #0095c2;
+	color: #D54E21;
 }
 .atwho-view small {
 	color: #AAA;
