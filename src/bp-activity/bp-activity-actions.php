@@ -647,3 +647,19 @@ function bp_activity_setup_akismet() {
 	// Instantiate Akismet for BuddyPress
 	$bp->activity->akismet = new BP_Akismet();
 }
+
+/**
+ * Enqueue @mentions JS.
+ *
+ * @since BuddyPress (2.1)
+ */
+function bp_activity_mentions_scripts() {
+	if ( ! bp_is_user_active() || ! ( bp_is_activity_component() || bp_is_blog_page() && is_singular() ) ) {
+		return;
+	}
+
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-activity/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), true );
+	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/mentions{$min}.css", array(), bp_get_version() );
+}
+add_action( 'bp_enqueue_scripts', 'bp_activity_mentions_scripts' );
