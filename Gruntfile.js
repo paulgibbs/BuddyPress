@@ -18,6 +18,7 @@ module.exports = function( grunt ) {
 	],
 
 	BP_JS = [
+		'bp-activity/js/*.js',
 		'bp-activity/admin/js/*.js',
 		'bp-core/js/*.js',
 		'bp-friends/js/*.js',
