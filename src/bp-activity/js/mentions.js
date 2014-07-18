@@ -113,7 +113,7 @@
 	};
 
 	$( document ).ready(function() {
-		$( '.bp-suggestions, .comment_form' ).bp_mentions( [
+		$( '.bp-suggestions, #comments form textarea' ).bp_mentions( [
       { 'ID': 'tessa', 'image': 'https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro', 'name': 'Tessa Name'   },
       { 'ID': 'test',  'image': 'https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro', 'name': 'Test Surname' }
 		] );
