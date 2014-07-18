@@ -72,6 +72,7 @@ function bp_xprofile_get_field_types() {
 		'datebox'        => 'BP_XProfile_Field_Type_Datebox',
 		'multiselectbox' => 'BP_XProfile_Field_Type_Multiselectbox',
 		'number'         => 'BP_XProfile_Field_Type_Number',
+		'url'            => 'BP_XProfile_Field_Type_URL',
 		'radio'          => 'BP_XProfile_Field_Type_Radiobutton',
 		'selectbox'      => 'BP_XProfile_Field_Type_Selectbox',
 		'textarea'       => 'BP_XProfile_Field_Type_Textarea',
@@ -320,6 +321,21 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 	// For certain fields, only certain parameters are acceptable, so add them to the whitelist.
 	if ( $field_type_obj->supports_options ) {
 		$field_type_obj->set_whitelist_values( wp_list_pluck( $field->get_children(), 'name' ) );
+	}
+
+	/**
+	 * If the field type is a URL and doesn't appear to contain a scheme,
+	 * we presume it needs http:// appended (unless a relative link starting
+	 * with / or a php file).
+	 */
+	if ( 'url' === $field_type ) {
+		if (   ( strpos( $value, ':'  ) === false )
+			&& ( substr( $value, 0, 1 ) !== '/' )
+			&& ( substr( $value, 0, 1 ) !== '#' )
+			&& ! preg_match( '/^[a-z0-9-]+?\.php/i', $value )
+		) {
+			$value = 'http://' . $value;
+		}
 	}
 
 	// Check the value is in an accepted format for this form field.
