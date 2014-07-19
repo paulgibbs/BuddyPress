@@ -1,4 +1,7 @@
 (function( $, undefined ) {
+	var mentionsQueryCache = [],
+		mentionsItem;
+
 	/**
 	 * Adds BuddyPress @mentions to form inputs.
 	 *
@@ -103,6 +106,54 @@
 		 * Default options for our @mentions; see https://github.com/ichord/At.js/.
 		 */
 		mentionsDefaults = {
+			callbacks: {
+				/**
+				 * If there are no matches for the query in this.data, then query BuddyPress.
+				 *
+				 * @param {string} query Partial @mention to search for.
+				 * @param {function} render_view Render page callback function.
+				 */
+				remote_filter: function( query, render_view ) {
+					var self = $( this );
+
+					mentionsItem = mentionsQueryCache[ query ];
+					if ( typeof mentionsItem === 'object' ) {
+						render_view( mentionsItem );
+						return;
+					}
+
+					if ( self.xhr ) {
+						self.xhr.abort();
+					}
+
+					self.xhr = $.getJSON( ajaxurl, { action: 'bp_get_suggestions', term: query },
+						/**
+						 * Success callback for the @suggestions lookup.
+						 *
+						 * @param {object} data Details of users matching the query.
+						 */
+						function( data ) {
+							data = $.map( data,
+								/**
+								 * Create a composite index to search against of nicename + display name.
+								 * This will also determine ordering of results, so nicename matches will appear on top.
+								 *
+								 * @param {array} suggestion An individual suggestion's original data.
+								 * @return {array}
+								 */
+								function( suggestion ) {
+									suggestion.search = suggestion.search || suggestion.ID + ' ' + suggestion.name;
+									return suggestion;
+								}
+							);
+
+							mentionsQueryCache[ query ] = data;
+							render_view( data );
+						}
+					);
+				}
+			},
+
 			data: $.map( options.data,
 				/**
 				 * Create a composite index to search against of nicename + display name.
