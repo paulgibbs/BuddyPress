@@ -135,8 +135,8 @@
 						function( data ) {
 							data = $.map( data,
 								/**
-								 * Create a composite index to search against of nicename + display name.
-								 * This will also determine ordering of results, so nicename matches will appear on top.
+								 * Create a composite index to determine ordering of results;
+								 * nicename matches will appear on top.
 								 *
 								 * @param {array} suggestion An individual suggestion's original data.
 								 * @return {array}
