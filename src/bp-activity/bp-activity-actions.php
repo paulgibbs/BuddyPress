@@ -688,6 +688,5 @@ function bp_activity_mentions_dashboard_scripts() {
 
 	// We need to pass a JS callback to tinymce.init().
 	add_filter( 'tiny_mce_before_init', 'bp_activity_mentions_tinymce_integration' );
-	//https://github.com/ichord/At.js/wiki/usage-with-TinyMCE
 }
 add_action( 'bp_admin_enqueue_scripts', 'bp_activity_mentions_dashboard_scripts' );
