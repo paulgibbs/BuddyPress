@@ -579,13 +579,13 @@ function bp_friends_prime_mentions_results() {
 		return;
 	}
 
-	$friends_query = bp_has_members( array(
+	$friends_query = array(
 		'count_total'     => '',                    // Prevents total count
 		'populate_extras' => false,
 
 		'type'            => 'alphabetical',
 		'user_id'         => get_current_user_id(),
-	) );
+	);
 
 	$friends_query = new BP_User_Query( $friends_query );
 	$results       = array();
