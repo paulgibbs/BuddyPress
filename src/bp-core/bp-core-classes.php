@@ -2553,7 +2553,7 @@ class BP_Members_Suggestions extends BP_Suggestions {
 	 * }
 	 */
 	protected $default_args = array(
-		'limit'        => 16,
+		'limit'        => 10,
 		'only_friends' => false,
 		'term'         => '',
 		'type'         => '',
