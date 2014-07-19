@@ -82,6 +82,19 @@
 
 					offset.top  += 1;
 					offset.left += move;
+				},
+
+				/**
+				 * Override default behaviour which inserts junk tags in the WordPress Visual editor.
+				 *
+				 * @param {unknown} $inputor Element which we're inserting content into.
+				 * @param {string) content The content that will be inserted.
+				 * @param {string) suffix Applied to the end of the content string.
+				 * @return {string}
+				 */
+				inserting_wrapper: function( $inputor, content, suffix ) {
+					var new_suffix = ( suffix === '' ) ? suffix : suffix || ' ';
+					return '' + content + new_suffix;
 				}
 			}
 		},
@@ -105,6 +118,7 @@
 			),
 
 			at:         '@',
+			insert_tpl: false,  // This causes an error but we need to set it to avoid useless span tags.
 			search_key: 'search',
 			tpl:        '<li data-value="@${ID}"><img src="${image}" /><span class="username">@${ID}</span><small>${name}</small></li>'
 		},
