@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @since BuddyPress (2.1)
  */
-function bp_activity_mentions_scripts() {
+function bp_activity_mentions_script() {
 	if ( ! bp_is_user_active() || ! ( bp_is_activity_component() || bp_is_blog_page() && is_singular() ) ) {
 		return;
 	}
@@ -24,14 +24,14 @@ function bp_activity_mentions_scripts() {
 	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-activity/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), true );
 	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/mentions{$min}.css", array(), bp_get_version() );
 }
-add_action( 'bp_enqueue_scripts', 'bp_activity_mentions_scripts' );
+add_action( 'bp_enqueue_scripts', 'bp_activity_mentions_script' );
 
 /**
  * Enqueue @mentions JS in wp-admin.
  *
  * @since BuddyPress (2.1)
  */
-function bp_activity_mentions_dashboard_scripts() {
+function bp_activity_mentions_dashboard_script() {
 	if ( ! bp_is_user_active() || ! is_admin() ) {
 		return;
 	}
@@ -48,4 +48,4 @@ function bp_activity_mentions_dashboard_scripts() {
 	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-activity/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), false );
 	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/mentions{$min}.css", array(), bp_get_version() );
 }
-add_action( 'bp_admin_enqueue_scripts', 'bp_activity_mentions_dashboard_scripts' );
+add_action( 'bp_admin_enqueue_scripts', 'bp_activity_mentions_dashboard_script' );
