@@ -13,9 +13,10 @@
 		 * Default options for at.js; see https://github.com/ichord/At.js/.
 		 */
 		var suggestionsDefaults = {
-			limit:            10,
-			space_after:      false,
-			start_with_space: false,
+			hide_without_suffix: true,
+			limit:               10,
+			start_with_space:    false,
+			suffix:              '',
 
 			callbacks: {
 				/**
