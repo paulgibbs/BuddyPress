@@ -127,10 +127,12 @@
 	};
 
 	$( document ).ready(function() {
-		$( '.bp-suggestions, #comments form textarea, .wp-editor-area' ).bp_mentions( [
-			{ 'ID': 'tessa', 'image': 'https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro', 'name': 'Tessa Name'   },
-			{ 'ID': 'test',  'image': 'https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro', 'name': 'Test Surname' },
-			{ 'ID': 'testtest',  'image': 'https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro', 'name': 'TestTest Surname' }
-		] );
+		var users = [];
+
+		if ( typeof window.BP_Suggestions === 'object' ) {
+			users = window.BP_Suggestions.friends || users;
+		}
+
+		$( '.bp-suggestions, #comments form textarea, .wp-editor-area' ).bp_mentions( users );
 	});
 })( jQuery );
