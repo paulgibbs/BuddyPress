@@ -685,8 +685,5 @@ function bp_activity_mentions_dashboard_scripts() {
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-activity/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), false );
 	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/mentions{$min}.css", array(), bp_get_version() );
-
-	// We need to pass a JS callback to tinymce.init().
-	add_filter( 'tiny_mce_before_init', 'bp_activity_mentions_tinymce_integration' );
 }
 add_action( 'bp_admin_enqueue_scripts', 'bp_activity_mentions_dashboard_scripts' );

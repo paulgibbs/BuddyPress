@@ -571,23 +571,3 @@ function bp_activity_heartbeat_strings( $strings = array() ) {
 	return $strings;
 }
 add_filter( 'bp_core_get_js_strings', 'bp_activity_heartbeat_strings', 10, 1 );
-
-/**
- * Integrate @mentions JS into TinyMCE in the WordPress dashboard.
- *
- * @param array $input MCE settings array.
- * @return array MCE settings array.
- * @see bp_activity_mentions_dashboard_scripts()
- */
-function bp_activity_mentions_tinymce_integration( $input ) {
-	$input['init_instance_callback'] = "function( editor ) {
-		var ifr = jQuery( '#' + editor.id + '_ifr' )[0];
-
-		jQuery( ifr.contentDocument.body ).atwho( 'setIframe', ifr ).bp_mentions( [
-			{ 'ID': 'tessa', 'image': 'https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro', 'name': 'Tessa Name'   },
-			{ 'ID': 'test',  'image': 'https://gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?d=retro', 'name': 'Test Surname' }
-		] );
-	}";
-
-	return $input;
-}

@@ -118,7 +118,6 @@
 			),
 
 			at:         '@',
-			insert_tpl: false,  // This causes an error but we need to set it to avoid useless span tags.
 			search_key: 'search',
 			tpl:        '<li data-value="@${ID}"><img src="${image}" /><span class="username">@${ID}</span><small>${name}</small></li>'
 		},
