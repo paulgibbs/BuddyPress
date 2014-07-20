@@ -132,8 +132,12 @@
 						 *
 						 * @param {object} response Details of users matching the query.
 						 */
-						function( data ) {
-							data = $.map( data,
+						function( response ) {
+							if ( ! response.success || $.isEmptyObject( response.data ) ) {
+								return;
+							}
+
+							var data = $.map( response.data,
 								/**
 								 * Create a composite index to determine ordering of results;
 								 * nicename matches will appear on top.
