@@ -58,7 +58,7 @@
 						return li;
 					}
 
-					var regexp = new RegExp( '>(\\s*|[\\w\\s]*)(' + this.at.replace( '+', '\\+') + '?' + query.replace( '+', '\\+' ) + ')([\\w ]*)\\s*<', 'ig' );
+					var regexp = new RegExp( '>(\\s*|[' + this.at.replace( '+', '\\+') + '\\w\\s]*)(' + this.at.replace( '+', '\\+') + '?' + query.replace( '+', '\\+' ) + ')([\\w ]*)\\s*<', 'ig' );
 					return li.replace( regexp, function( str, $1, $2, $3 ) {
 						return '>' + $1 + '<strong>' + $2 + '</strong>' + $3 + '<';
 					});
