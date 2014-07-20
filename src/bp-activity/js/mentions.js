@@ -23,7 +23,7 @@
 
 			callbacks: {
 				/**
-				 * Custom filter to only match the start of spaced words.
+				 * Custom filter to match the start of spaced words.
 				 * Based on the core/default one.
 				 *
 				 * @param {string} query
@@ -33,7 +33,7 @@
 				 */
 				filter: function( query, data, search_key ) {
 					var item, _i, _len, _results = [],
-					regxp = new RegExp( '^' + query + '| ' + query, 'ig' ); // start of string, or preceded by a space.
+					regxp = new RegExp( query + '| ' + query, 'ig' ); // start of string, or preceded by a space.
 
 					for ( _i = 0, _len = data.length; _i < _len; _i++ ) {
 						item = data[ _i ];
