@@ -655,7 +655,7 @@ function bp_activity_setup_akismet() {
  */
 function bp_ajax_get_suggestions() {
 	if ( ! bp_is_user_active() || empty( $_GET['term'] ) || empty( $_GET['type'] ) ) {
-		wp_send_json_error();
+		wp_send_json_error( 'missing_parameter' );
 		exit;
 	}
 
