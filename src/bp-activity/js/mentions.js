@@ -126,7 +126,7 @@
 						self.xhr.abort();
 					}
 
-					self.xhr = $.getJSON( ajaxurl, { 'action': 'bp_get_suggestions', 'term': query },
+					self.xhr = $.getJSON( ajaxurl, { 'action': 'bp_get_suggestions', 'term': query, 'type': 'members' },
 						/**
 						 * Success callback for the @suggestions lookup.
 						 *
