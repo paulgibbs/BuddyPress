@@ -130,7 +130,7 @@
 						/**
 						 * Success callback for the @suggestions lookup.
 						 *
-						 * @param {object} data Details of users matching the query.
+						 * @param {object} response Details of users matching the query.
 						 */
 						function( data ) {
 							data = $.map( data,
@@ -138,8 +138,8 @@
 								 * Create a composite index to determine ordering of results;
 								 * nicename matches will appear on top.
 								 *
-								 * @param {array} suggestion An individual suggestion's original data.
-								 * @return {array}
+								 * @param {array} suggestion A suggestion's original data.
+								 * @return {array} A suggestion's new data.
 								 */
 								function( suggestion ) {
 									suggestion.search = suggestion.search || suggestion.ID + ' ' + suggestion.name;
@@ -159,8 +159,8 @@
 				 * Create a composite index to search against of nicename + display name.
 				 * This will also determine ordering of results, so nicename matches will appear on top.
 				 *
-				 * @param {array} suggestion An individual suggestion's original data.
-				 * @return {array}
+				 * @param {array} suggestion A suggestion's original data.
+				 * @return {array} A suggestion's new data.
 				 */
 				function( suggestion ) {
 					suggestion.search = suggestion.search || suggestion.ID + ' ' + suggestion.name;
