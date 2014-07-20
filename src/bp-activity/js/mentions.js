@@ -188,6 +188,7 @@
 			users = window.BP_Suggestions.friends || users;
 		}
 
+		// Activity/reply, post comments, dashboard post 'text' editor.
 		$( '.bp-suggestions, #comments form textarea, .wp-editor-area' ).bp_mentions( users );
 	});
 })( jQuery );
