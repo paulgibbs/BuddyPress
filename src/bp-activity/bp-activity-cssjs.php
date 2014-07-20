@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @since BuddyPress (2.1)
  */
 function bp_activity_mentions_script() {
-	if ( ! bp_is_user_active() || ! ( bp_is_activity_component() || bp_is_blog_page() && is_singular() ) ) {
+	if ( ! bp_is_user_active() || ! ( bp_is_activity_component() || bp_is_blog_page() && is_singular() && comments_open() ) ) {
 		return;
 	}
 
