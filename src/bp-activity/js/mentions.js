@@ -18,6 +18,7 @@
 		 */
 		var suggestionsDefaults = {
 			hide_without_suffix: true,
+			insert_tpl:          '</>${atwho-data-value}</>', // For contentEditable, the fake tags make jQuery insert a textNode.
 			limit:               10,
 			start_with_space:    false,
 			suffix:              '',
