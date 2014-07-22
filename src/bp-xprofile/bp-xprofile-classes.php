@@ -1560,11 +1560,12 @@ class BP_XProfile_Field_Type_Datebox extends BP_XProfile_Field_Type {
 	 */
 	public function edit_field_options_html( array $args = array() ) {
 
-		$date  = BP_XProfile_ProfileData::get_value_byid( $this->field_obj->id, $args['user_id'] );
-		$day   = 0;
-		$month = 0;
-		$year  = 0;
-		$html  = '';
+		$date       = BP_XProfile_ProfileData::get_value_byid( $this->field_obj->id, $args['user_id'] );
+		$day        = 0;
+		$month      = 0;
+		$year       = 0;
+		$html       = '';
+		$eng_months = array( 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' );
 
 		// Set day, month, year defaults
 		if ( ! empty( $date ) ) {
@@ -1591,12 +1592,17 @@ class BP_XProfile_Field_Type_Datebox extends BP_XProfile_Field_Type {
 		}
 
 		if ( ! empty( $_POST['field_' . $this->field_obj->id . '_month'] ) ) {
-			$new_month = (int) $_POST['field_' . $this->field_obj->id . '_month'];
-			$month     = ( $month != $new_month ) ? $new_month : $month;
+			if ( in_array( $_POST['field_' . $this->field_obj->id . '_month'], $eng_months ) ) {
+				$new_month = $_POST['field_' . $this->field_obj->id . '_month'];
+			} else {
+				$new_month = $month;
+			}
+
+			$month = ( $month !== $new_month ) ? $new_month : $month;
 		}
 
 		if ( ! empty( $_POST['field_' . $this->field_obj->id . '_year'] ) ) {
-			$new_year = date( 'j', (int) $_POST['field_' . $this->field_obj->id . '_year'] );
+			$new_year = (int) $_POST['field_' . $this->field_obj->id . '_year'];
 			$year     = ( $year != $new_year ) ? $new_year : $year;
 		}
 
@@ -1611,8 +1617,6 @@ class BP_XProfile_Field_Type_Datebox extends BP_XProfile_Field_Type {
 			break;
 
 			case 'month':
-				$eng_months = array( 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' );
-
 				$months = array(
 					__( 'January',   'buddypress' ),
 					__( 'February',  'buddypress' ),
@@ -2392,9 +2396,7 @@ class BP_XProfile_Field_Type_Textarea extends BP_XProfile_Field_Type {
 
 		<?php do_action( bp_get_the_profile_field_errors_action() ); ?>
 
-		<textarea <?php echo $this->get_edit_field_html_elements( $r ); ?>>
-			<?php bp_the_profile_field_edit_value(); ?>
-		</textarea>
+		<textarea <?php echo $this->get_edit_field_html_elements( $r ); ?>><?php bp_the_profile_field_edit_value(); ?></textarea>
 
 		<?php
 	}
@@ -3035,7 +3037,7 @@ abstract class BP_XProfile_Field_Type {
 
 						<div id="<?php echo esc_attr( "{$type}_div{$j}" ); ?>" class="bp-option sortable">
 							<span class="bp-option-icon grabber"></span>
-							<input type="text" name="<?php echo esc_attr( "{$type}_option[{$j}]" ); ?>" id="<?php echo esc_attr( "{$type}_option{$j}" ); ?>" value="<?php echo esc_attr( $options[$i]->name ); ?>" />
+							<input type="text" name="<?php echo esc_attr( "{$type}_option[{$j}]" ); ?>" id="<?php echo esc_attr( "{$type}_option{$j}" ); ?>" value="<?php echo esc_attr( stripslashes( $options[$i]->name ) ); ?>" />
 							<label>
 								<input type="<?php echo esc_attr( $control_type ); ?>" name="<?php echo esc_attr( "isDefault_{$type}_option{$default_name}" ); ?>" <?php checked( $options[$i]->is_default_option, true ); ?> value="<?php echo esc_attr( $j ); ?>" />
 								<?php _e( 'Default Value', 'buddypress' ); ?>
