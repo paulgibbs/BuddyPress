@@ -25,7 +25,7 @@ class BP_Tests_Suggestions_Authenticated extends BP_UnitTestCase {
 
 		$users = array(
 			// user_login, display_name
-			array( 'aardvark',    'Bob Smith' ),
+			array( 'aardvark',    'Smith Bob' ),
 			array( 'alpaca red',  'William Quinn' ),
 			array( 'cat',         'Lauren Curtis' ),
 			array( 'caterpillar', 'Eldon Burrows' ),
@@ -35,7 +35,8 @@ class BP_Tests_Suggestions_Authenticated extends BP_UnitTestCase {
 			array( 'smith',       'Robert Bar' ),
 			array( 'snake',       'Eleanor Moore' ),
 			array( 'xylo',        'Silver McFadden' ),
-			array( 'zoom',        'Lisa Smithy' ),
+			array( 'yellowsnake', 'Lisa Smithy' ),
+			array( 'zoom',        'Smithy Lisa' ),
 		);
 
 		// Create some dummy users.
@@ -423,7 +424,7 @@ class BP_Tests_Suggestions_Authenticated extends BP_UnitTestCase {
 		$this->assertEquals( 1, count( $uppercase ) );
 
 		$this->assertSame( $lowercase[0]->ID, $uppercase[0]->ID );
-		$this->assertSame( 'zoom', $lowercase[0]->ID );
+		$this->assertSame( 'yellowsnake', $lowercase[0]->ID );
 	}
 
 	public function test_suggestions_response_property_types() {
