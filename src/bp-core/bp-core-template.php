@@ -157,7 +157,7 @@ function bp_comment_author_avatar() {
 	global $comment;
 
 	if ( function_exists( 'bp_core_fetch_avatar' ) )
-		echo apply_filters( 'bp_comment_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $comment->user_id, 'type' => 'thumb', 'alt' => sprintf( __( 'Avatar of %s', 'buddypress' ), bp_core_get_user_displayname( $comment->user_id ) ) ) ) );
+		echo apply_filters( 'bp_comment_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $comment->user_id, 'type' => 'thumb', 'alt' => sprintf( __( 'Profile photo of %s', 'buddypress' ), bp_core_get_user_displayname( $comment->user_id ) ) ) ) );
 	else if ( function_exists('get_avatar') )
 		get_avatar();
 }
@@ -173,7 +173,7 @@ function bp_post_author_avatar() {
 	global $post;
 
 	if ( function_exists( 'bp_core_fetch_avatar' ) )
-		echo apply_filters( 'bp_post_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $post->post_author, 'type' => 'thumb', 'alt' => sprintf( __( 'Avatar of %s', 'buddypress' ), bp_core_get_user_displayname( $post->post_author ) ) ) ) );
+		echo apply_filters( 'bp_post_author_avatar', bp_core_fetch_avatar( array( 'item_id' => $post->post_author, 'type' => 'thumb', 'alt' => sprintf( __( 'Profile photo of %s', 'buddypress' ), bp_core_get_user_displayname( $post->post_author ) ) ) ) );
 	else if ( function_exists('get_avatar') )
 		get_avatar();
 }
@@ -2461,6 +2461,67 @@ function bp_the_body_class() {
 	add_filter( 'body_class', 'bp_get_the_body_class', 10, 2 );
 
 /**
+ * Customizes the post CSS class according to BuddyPress content.
+ *
+ * Hooked to the 'post_class' filter.
+ *
+ * @since BuddyPress (2.1.0)
+ *
+ * @param array $wp_classes The post classes coming from WordPress.
+ * @return array
+ */
+function bp_get_the_post_class( $wp_classes = array() ) {
+	// don't do anything if we're not on a BP page
+	if ( ! is_buddypress() ) {
+		return $wp_classes;
+	}
+
+	$bp_classes = array();
+
+	if ( bp_is_user() || bp_is_single_activity() ) {
+		$bp_classes[] = 'bp_members';
+
+	} elseif ( bp_is_group() ) {
+		$bp_classes[] = 'bp_group';
+
+	} elseif ( bp_is_activity_component() ) {
+		$bp_classes[] = 'bp_activity';
+
+	} elseif ( bp_is_blogs_component() ) {
+		$bp_classes[] = 'bp_blogs';
+
+	} elseif ( bp_is_register_page() ) {
+		$bp_classes[] = 'bp_register';
+
+	} elseif ( bp_is_activation_page() ) {
+		$bp_classes[] = 'bp_activate';
+
+	} elseif ( bp_is_forums_component() && bp_is_directory() ) {
+		$bp_classes[] = 'bp_forum';
+	}
+
+	if ( empty( $bp_classes ) ) {
+		return $wp_classes;
+	}
+
+	// emulate post type css class
+	foreach ( $bp_classes as $bp_class ) {
+		$bp_classes[] = "type-{$bp_class}";
+	}
+
+	// removes the 'page' and 'type-page' post classes
+	// we need to remove these classes since they did not exist before we switched
+	// theme compat to use the 'page' post type
+	$page_key      = array_search( 'page',      $wp_classes );
+	$page_type_key = array_search( 'type-page', $wp_classes );
+	unset( $wp_classes[$page_key], $wp_classes[$page_type_key] );
+
+	// okay let's merge!
+	return array_unique( array_merge( $bp_classes, $wp_classes ) );
+}
+add_filter( 'post_class', 'bp_get_the_post_class' );
+
+/**
  * Sort BuddyPress nav menu items by their position property.
  *
  * This is an internal convenience function and it will probably be removed in
@@ -2515,7 +2576,7 @@ function bp_get_nav_menu_items() {
 
 			// Add this menu
 			$menu         = new stdClass;
-			$menu->class  = array();
+			$menu->class  = array( 'menu-child' );
 			$menu->css_id = $sub_nav['css_id'];
 			$menu->link   = $sub_nav['link'];
 			$menu->name   = $sub_nav['name'];
@@ -2523,7 +2584,7 @@ function bp_get_nav_menu_items() {
 
 			// If we're viewing this item's screen, record that we need to mark its parent menu to be selected
 			if ( $sub_nav['slug'] == bp_current_action() ) {
-				$menu->class      = array( 'current-menu-item' );
+				$menu->class[]    = 'current-menu-item';
 				$selected_menus[] = $parent_menu;
 			}
 
@@ -2547,7 +2608,7 @@ function bp_get_nav_menu_items() {
 
 		// Add this menu
 		$menu         = new stdClass;
-		$menu->class  = array();
+		$menu->class  = array( 'menu-parent' );
 		$menu->css_id = $nav['css_id'];
 		$menu->link   = $link;
 		$menu->name   = $nav['name'];
@@ -2555,7 +2616,7 @@ function bp_get_nav_menu_items() {
 
 		// Check if we need to mark this menu as selected
 		if ( in_array( $nav['css_id'], $selected_menus ) )
-			$menu->class = array( 'current-menu-parent' );
+			$menu->class[] = 'current-menu-parent';
 
 		$menus[] = $menu;
 	}

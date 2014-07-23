@@ -1097,7 +1097,7 @@ class BP_XProfile_ProfileData {
 
 		$this->user_id      = apply_filters( 'xprofile_data_user_id_before_save',      $this->user_id,         $this->id );
 		$this->field_id     = apply_filters( 'xprofile_data_field_id_before_save',     $this->field_id,        $this->id );
-		$this->value        = apply_filters( 'xprofile_data_value_before_save',        $this->value,           $this->id );
+		$this->value        = apply_filters( 'xprofile_data_value_before_save',        $this->value,           $this->id, true, $this );
 		$this->last_updated = apply_filters( 'xprofile_data_last_updated_before_save', bp_core_current_time(), $this->id );
 
 		do_action_ref_array( 'xprofile_data_before_save', array( $this ) );
@@ -2645,8 +2645,9 @@ class BP_XProfile_Field_Type_URL extends BP_XProfile_Field_Type {
 		}
 
 		$r = bp_parse_args( $raw_properties, array(
-			'type'  => 'url',
-			'value' =>  esc_url( bp_get_the_profile_field_edit_value() ),
+			'type'      => 'text',
+			'inputmode' => 'url',
+			'value'     => esc_url( bp_get_the_profile_field_edit_value() ),
 		) ); ?>
 
 		<label for="<?php bp_the_profile_field_input_name(); ?>">
@@ -2693,13 +2694,39 @@ class BP_XProfile_Field_Type_URL extends BP_XProfile_Field_Type {
 	public function admin_new_field_html( BP_XProfile_Field $current_field, $control_type = '' ) {}
 
 	/**
-	 * Format Date values for display.
+	 * Modify submitted URL values before validation.
+	 *
+	 * The URL validation regex requires a http(s) protocol, so that all
+	 * values saved in the database are fully-formed URLs. However, we
+	 * still want to allow users to enter URLs without a protocol, for a
+	 * better user experience. So we catch submitted URL values, and if
+	 * the protocol is missing, we prepend 'http://' before passing to
+	 * is_valid().
 	 *
 	 * @since BuddyPress (2.1.0)
 	 *
-	 * @param string $field_value The date value, as saved in the database.
-	 *        Typically, this is a MySQL-formatted date string (Y-m-d H:i:s).
-	 * @return string Date formatted by bp_format_time().
+	 * @param string $submitted_value Raw value submitted by the user.
+	 * @return string
+	 */
+	public static function pre_validate_filter( $submitted_value ) {
+		if ( false === strpos( $submitted_value, ':'  )
+	          && substr( $submitted_value, 0, 1 ) !== '/'
+                  && substr( $submitted_value, 0, 1 ) !== '#'
+		  && ! preg_match( '/^[a-z0-9-]+?\.php/i', $submitted_value )
+		) {
+			$submitted_value = 'http://' . $submitted_value;
+		}
+
+		return $submitted_value;
+	}
+
+	/**
+	 * Format URL values for display.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param string $field_value The URL value, as saved in the database.
+	 * @return string URL converted to a link.
 	 */
 	public static function display_filter( $field_value ) {
 		$link      = strip_tags( $field_value );
@@ -3062,6 +3089,30 @@ abstract class BP_XProfile_Field_Type {
 		</div>
 
 		<?php
+	}
+
+	/**
+	 * Allow field types to modify submitted values before they are validated.
+	 *
+	 * In some cases, it may be appropriate for a field type to catch
+	 * submitted values and modify them before they are passed to the
+	 * is_valid() method. For example, URL validation requires the
+	 * 'http://' scheme (so that the value saved in the database is always
+	 * a fully-formed URL), but in order to allow users to enter a URL
+	 * without this scheme, BP_XProfile_Field_Type_URL prepends 'http://'
+	 * when it's not present.
+	 *
+	 * By default, this is a pass-through method that does nothing. Only
+	 * override in your own field type if you need this kind of pre-
+	 * validation filtering.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param mixed $submitted_value Submitted value.
+	 * @return mixed
+	 */
+	public static function pre_validate_filter( $field_value ) {
+		return $field_value;
 	}
 
 	/**

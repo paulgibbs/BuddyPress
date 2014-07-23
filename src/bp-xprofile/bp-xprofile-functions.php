@@ -293,14 +293,28 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 	if ( empty( $field_id ) )
 		return false;
 
+	$field          = new BP_XProfile_Field( $field_id );
+	$field_type     = BP_XProfile_Field::get_type( $field_id );
+	$field_type_obj = bp_xprofile_create_field_type( $field_type );
+
+	/**
+	 * Filter the raw submitted profile field value.
+	 *
+	 * Use this filter to modify the values submitted by users before
+	 * doing field-type-specific validation.
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param mixed $value Value passed to xprofile_set_field_data()
+	 * @param BP_XProfile_Field $field Field object.
+	 * @param BP_XProfile_Field_Type $field_type_obj Field type object.
+	 */
+	$value = apply_filters( 'bp_xprofile_set_field_data_pre_validate', $value, $field, $field_type_obj );
+
 	// Special-case support for integer 0 for the number field type
 	if ( $is_required && ! is_integer( $value ) && $value !== '0' && ( empty( $value ) || ! is_array( $value ) && ! strlen( trim( $value ) ) ) ) {
 		return false;
 	}
-
-	$field          = new BP_XProfile_Field( $field_id );
-	$field_type     = BP_XProfile_Field::get_type( $field_id );
-	$field_type_obj = bp_xprofile_create_field_type( $field_type );
 
 	/**
 	 * Certain types of fields (checkboxes, multiselects) may come through empty.
@@ -321,21 +335,6 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 	// For certain fields, only certain parameters are acceptable, so add them to the whitelist.
 	if ( $field_type_obj->supports_options ) {
 		$field_type_obj->set_whitelist_values( wp_list_pluck( $field->get_children(), 'name' ) );
-	}
-
-	/**
-	 * If the field type is a URL and doesn't appear to contain a scheme,
-	 * we presume it needs http:// appended (unless a relative link starting
-	 * with / or a php file).
-	 */
-	if ( 'url' === $field_type ) {
-		if (   ( strpos( $value, ':'  ) === false )
-			&& ( substr( $value, 0, 1 ) !== '/' )
-			&& ( substr( $value, 0, 1 ) !== '#' )
-			&& ! preg_match( '/^[a-z0-9-]+?\.php/i', $value )
-		) {
-			$value = 'http://' . $value;
-		}
 	}
 
 	// Check the value is in an accepted format for this form field.
@@ -596,10 +595,18 @@ function bp_xprofile_bp_user_query_search( $sql, BP_User_Query $query ) {
 
 	$search_terms_clean = esc_sql( esc_sql( $query->query_vars['search_terms'] ) );
 
+	if ( $query->query_vars['search_wildcard'] === 'left' ) {
+		$search_terms_clean = '%' . $search_terms_clean;
+	} elseif ( $query->query_vars['search_wildcard'] === 'right' ) {
+		$search_terms_clean = $search_terms_clean . '%';
+	} else {
+		$search_terms_clean = '%' . $search_terms_clean . '%';
+	}
+
 	// Combine the core search (against wp_users) into a single OR clause
 	// with the xprofile_data search
 	$search_core     = $sql['where']['search'];
-	$search_xprofile = "u.{$query->uid_name} IN ( SELECT user_id FROM {$bp->profile->table_name_data} WHERE value LIKE '%{$search_terms_clean}%' )";
+	$search_xprofile = "u.{$query->uid_name} IN ( SELECT user_id FROM {$bp->profile->table_name_data} WHERE value LIKE '{$search_terms_clean}' )";
 	$search_combined = "( {$search_xprofile} OR {$search_core} )";
 
 	$sql['where']['search'] = $search_combined;

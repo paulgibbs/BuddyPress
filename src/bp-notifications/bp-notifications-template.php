@@ -724,17 +724,52 @@ function bp_the_notification_mark_read_link() {
 	 */
 	function bp_get_the_notification_mark_read_link() {
 
-		// Get the URL with nonce, action, and id
-		$url = wp_nonce_url( add_query_arg( array( 'action' => 'read', 'notification_id' => bp_get_the_notification_id() ), bp_get_notifications_unread_permalink() ), 'bp_notification_mark_read_' . bp_get_the_notification_id() );
-
 		// Start the output buffer
 		ob_start(); ?>
 
-		<a href="<?php echo esc_url( $url ); ?>" class="mark-read primary"><?php _e( 'Read', 'buddypress' ); ?></a>
+		<a href="<?php bp_the_notification_mark_read_url(); ?>" class="mark-read primary"><?php _e( 'Read', 'buddypress' ); ?></a>
 
 		<?php $retval = ob_get_clean();
 
 		return apply_filters( 'bp_get_the_notification_mark_read_link', $retval );
+	}
+
+/**
+ * Output the URL used for marking a single notification as read
+ *
+ * Since this function directly outputs a URL, it is escaped.
+ *
+ * @since BuddyPress (2.1.0)
+ *
+ * @uses bp_get_the_notification_mark_read_url()
+ */
+function bp_the_notification_mark_read_url() {
+	echo esc_url( bp_get_the_notification_mark_read_url() );
+}
+	/**
+	 * Return the URL used for marking a single notification as read
+ 	 *
+	 * @since BuddyPress (2.1.0)
+	 */
+	function bp_get_the_notification_mark_read_url() {
+
+		// Get the notification ID
+		$id   = bp_get_the_notification_id();
+
+		// Get the args to add to the URL
+		$args = array(
+			'action'          => 'read',
+			'notification_id' => $id
+		);
+
+		// Add the args to the URL
+		$url = add_query_arg( $args, bp_get_notifications_unread_permalink() );
+
+		// Add the nonce
+		$url = wp_nonce_url( $url, 'bp_notification_mark_read_' . $id );
+
+		// Filter and return
+		return apply_filters( 'bp_get_the_notification_mark_read_url', $url );
 	}
 
 /**
@@ -754,17 +789,52 @@ function bp_the_notification_mark_unread_link() {
 	 */
 	function bp_get_the_notification_mark_unread_link() {
 
-		// Get the URL with nonce, action, and id
-		$url = wp_nonce_url( add_query_arg( array( 'action' => 'unread', 'notification_id' => bp_get_the_notification_id() ), bp_get_notifications_read_permalink() ), 'bp_notification_mark_unread_' . bp_get_the_notification_id() );
-
 		// Start the output buffer
 		ob_start(); ?>
 
-		<a href="<?php echo esc_url( $url ); ?>" class="mark-unread primary"><?php _e( 'Unread', 'buddypress' ); ?></a>
+		<a href="<?php bp_the_notification_mark_unread_url(); ?>" class="mark-unread primary"><?php _e( 'Unread', 'buddypress' ); ?></a>
 
 		<?php $retval = ob_get_clean();
 
 		return apply_filters( 'bp_get_the_notification_mark_unread_link', $retval );
+	}
+
+/**
+ * Output the URL used for marking a single notification as unread
+ *
+ * Since this function directly outputs a URL, it is escaped.
+ *
+ * @since BuddyPress (2.1.0)
+ *
+ * @uses bp_get_the_notification_mark_unread_url()
+ */
+function bp_the_notification_mark_unread_url() {
+	echo esc_url( bp_get_the_notification_mark_unread_url() );
+}
+	/**
+	 * Return the URL used for marking a single notification as unread
+ 	 *
+	 * @since BuddyPress (2.1.0)
+	 */
+	function bp_get_the_notification_mark_unread_url() {
+
+		// Get the notification ID
+		$id   = bp_get_the_notification_id();
+
+		// Get the args to add to the URL
+		$args = array(
+			'action'          => 'unread',
+			'notification_id' => $id
+		);
+
+		// Add the args to the URL
+		$url = add_query_arg( $args, bp_get_notifications_read_permalink() );
+
+		// Add the nonce
+		$url = wp_nonce_url( $url, 'bp_notification_mark_unread_' . $id );
+
+		// Filter and return
+		return apply_filters( 'bp_get_the_notification_mark_unread_url', $url );
 	}
 
 /**
@@ -810,6 +880,38 @@ function bp_the_notification_delete_link() {
 	 */
 	function bp_get_the_notification_delete_link() {
 
+		// Start the output buffer
+		ob_start(); ?>
+
+		<a href="<?php bp_the_notification_delete_url(); ?>" class="delete secondary confirm"><?php _e( 'Delete', 'buddypress' ); ?></a>
+
+		<?php $retval = ob_get_clean();
+
+		return apply_filters( 'bp_get_the_notification_delete_link', $retval );
+	}
+
+/**
+ * Output the URL used for deleting a single notification
+ *
+ * Since this function directly outputs a URL, it is escaped.
+ *
+ * @since BuddyPress (2.1.0)
+ *
+ * @uses esc_url()
+ * @uses bp_get_the_notification_delete_url()
+ */
+function bp_the_notification_delete_url() {
+	echo esc_url( bp_get_the_notification_delete_url() );
+}
+	/**
+	 * Return the URL used for deleting a single notification
+	 *
+	 * @since BuddyPress (2.1.0)
+	 *
+	 * @return string
+	 */
+	function bp_get_the_notification_delete_url() {
+
 		// URL to add nonce to
 		if ( bp_is_current_action( 'unread' ) ) {
 			$link = bp_get_notifications_unread_permalink();
@@ -817,17 +919,23 @@ function bp_the_notification_delete_link() {
 			$link = bp_get_notifications_read_permalink();
 		}
 
-		// Get the URL with nonce, action, and id
-		$url = wp_nonce_url( add_query_arg( array( 'action' => 'delete', 'notification_id' => bp_get_the_notification_id() ), $link ), 'bp_notification_delete_' . bp_get_the_notification_id() );
+		// Get the ID
+		$id = bp_get_the_notification_id();
 
-		// Start the output buffer
-		ob_start(); ?>
+		// Get the args to add to the URL
+		$args = array(
+			'action'          => 'delete',
+			'notification_id' => $id
+		);
 
-		<a href="<?php echo esc_url( $url ); ?>" class="delete secondary confirm"><?php _e( 'Delete', 'buddypress' ); ?></a>
+		// Add the args
+		$url = add_query_arg( $args, $link );
 
-		<?php $retval = ob_get_clean();
+		// Add the nonce
+		$url = wp_nonce_url( $url, 'bp_notification_delete_' . $id );
 
-		return apply_filters( 'bp_get_the_notification_delete_link', $retval );
+		// Filter and return
+		return apply_filters( 'bp_get_the_notification_delete_url', $url );
 	}
 
 /**

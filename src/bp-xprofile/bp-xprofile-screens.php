@@ -139,7 +139,7 @@ function xprofile_screen_edit_profile() {
 
 			// Set the feedback messages
 			if ( !empty( $errors ) ) {
-				bp_core_add_message( __( 'There was a problem updating some of your profile information, please try again.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was a problem updating some of your profile information; please try again.', 'buddypress' ), 'error' );
 			} else {
 				bp_core_add_message( __( 'Changes saved.', 'buddypress' ) );
 			}
@@ -209,10 +209,10 @@ function xprofile_screen_change_avatar() {
 		);
 
 		if ( ! bp_core_avatar_handle_crop( $args ) ) {
-			bp_core_add_message( __( 'There was a problem cropping your avatar.', 'buddypress' ), 'error' );
+			bp_core_add_message( __( 'There was a problem cropping your profile photo.', 'buddypress' ), 'error' );
 		} else {
 			do_action( 'xprofile_avatar_uploaded' );
-			bp_core_add_message( __( 'Your new avatar was uploaded successfully.', 'buddypress' ) );
+			bp_core_add_message( __( 'Your new profile photo was uploaded successfully.', 'buddypress' ) );
 			bp_core_redirect( bp_displayed_user_domain() );
 		}
 	}

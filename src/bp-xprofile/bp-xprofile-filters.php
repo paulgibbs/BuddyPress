@@ -51,7 +51,8 @@ add_filter( 'xprofile_field_description_before_save',   'force_balance_tags' );
 add_filter( 'xprofile_get_field_data',                  'stripslashes' );
 add_filter( 'xprofile_get_field_data',                  'xprofile_filter_format_field_value_by_field_id', 5, 2 );
 
-add_filter( 'xprofile_data_value_before_save',          'xprofile_sanitize_data_value_before_save', 1, 2 );
+add_filter( 'bp_xprofile_set_field_data_pre_validate',  'xprofile_filter_pre_validate_value_by_field_type', 10, 3 );
+add_filter( 'xprofile_data_value_before_save',          'xprofile_sanitize_data_value_before_save', 1, 4 );
 add_filter( 'xprofile_filtered_data_value_before_save', 'trim', 2 );
 
 /**
@@ -60,15 +61,16 @@ add_filter( 'xprofile_filtered_data_value_before_save', 'trim', 2 );
  * Run profile field values through kses with filterable allowed tags.
  *
  * @param string $content
+ * @param object $data_obj The BP_XProfile_ProfileData object
  * @return string $content
  */
-function xprofile_filter_kses( $content ) {
+function xprofile_filter_kses( $content, $data_obj = null ) {
 	global $allowedtags;
 
 	$xprofile_allowedtags             = $allowedtags;
 	$xprofile_allowedtags['a']['rel'] = array();
 
-	$xprofile_allowedtags = apply_filters( 'xprofile_allowed_tags', $xprofile_allowedtags );
+	$xprofile_allowedtags = apply_filters( 'xprofile_allowed_tags', $xprofile_allowedtags, $data_obj );
 	return wp_kses( $content, $xprofile_allowedtags );
 }
 
@@ -78,9 +80,10 @@ function xprofile_filter_kses( $content ) {
  * @param string $field_value
  * @param int $field_id
  * @param bool $reserialize Whether to reserialize arrays before returning. Defaults to true
+ * @param object $data_obj The BP_XProfile_ProfileData object
  * @return string
  */
-function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, $reserialize = true ) {
+function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, $reserialize = true, $data_obj = null ) {
 
 	// Return if empty
 	if ( empty( $field_value ) ) {
@@ -92,17 +95,17 @@ function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, 
 
 	// Filter single value
 	if ( !is_array( $field_value ) ) {
-		$kses_field_value     = xprofile_filter_kses( $field_value );
+		$kses_field_value     = xprofile_filter_kses( $field_value, $data_obj );
 		$filtered_field_value = wp_rel_nofollow( force_balance_tags( $kses_field_value ) );
-		$filtered_field_value = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_field_value, $field_value );
+		$filtered_field_value = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_field_value, $field_value, $data_obj );
 
 	// Filter each array item independently
 	} else {
 		$filtered_values = array();
 		foreach ( (array) $field_value as $value ) {
-			$kses_field_value       = xprofile_filter_kses( $value );
+			$kses_field_value       = xprofile_filter_kses( $value, $data_obj );
 			$filtered_value 	= wp_rel_nofollow( force_balance_tags( $kses_field_value ) );
-			$filtered_values[] = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_value, $value );
+			$filtered_values[] = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_value, $value, $data_obj );
 
 		}
 
@@ -173,6 +176,25 @@ function xprofile_filter_format_field_value_by_type( $field_value, $field_type =
 function xprofile_filter_format_field_value_by_field_id( $field_value, $field_id ) {
 	$field = new BP_XProfile_Field( $field_id );
 	return xprofile_filter_format_field_value_by_type( $field_value, $field->type );
+}
+
+/**
+ * Apply pre_validate_filter() filters as defined by the BP_XProfile_Field_Type classes before validating.
+ *
+ * @since BuddyPress (2.1.0)
+ *
+ * @param mixed $value Value passed to the bp_xprofile_set_field_data_pre_validate
+ *        filter.
+ * @param BP_XProfile_Field $field Field object.
+ * @param BP_XProfile_Field_Type Field type object.
+ * @return mixed
+ */
+function xprofile_filter_pre_validate_value_by_field_type( $value, $field, $field_type_obj ) {
+	if ( method_exists( $field_type_obj, 'pre_validate_filter' ) ) {
+		$value = call_user_func( array( $field_type_obj, 'pre_validate_filter' ), $value );
+	}
+
+	return $value;
 }
 
 function xprofile_filter_link_profile_data( $field_value, $field_type = 'textbox' ) {
