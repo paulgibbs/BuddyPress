@@ -20,9 +20,11 @@ function bp_activity_mentions_script() {
 		return;
 	}
 
-	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$min  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$file = is_rtl() ? "mentions-rtl{$min}.css" : "mentions{$min}.css";
+
 	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-activity/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), true );
-	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/mentions{$min}.css", array(), bp_get_version() );
+	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/{$file}", array(), bp_get_version() );
 
 	// Print a list of the current user's friends to the page for quicker @mentions lookups.
 	do_action( 'bp_activity_mentions_prime_results' );
@@ -47,9 +49,11 @@ function bp_activity_mentions_dashboard_script() {
 		return;
 	}
 
-	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-activity/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), false );
-	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/mentions{$min}.css", array(), bp_get_version() );
+	$min  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$file = is_rtl() ? "mentions-rtl{$min}.css" : "mentions{$min}.css";
+
+	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-activity/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), true );
+	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-activity/css/{$file}", array(), bp_get_version() );
 
 	// Print a list of the current user's friends to the page for quicker @mentions lookups.
 	do_action( 'bp_activity_mentions_prime_results' );
