@@ -2606,7 +2606,7 @@ class BP_Members_Suggestions extends BP_Suggestions {
 			'page'            => 1,
 			'per_page'        => $this->args['limit'],
 			'search_terms'    => $this->args['term'],
-			'search_wildcard' => 'right',
+			'search_wildcard' => is_rtl() ? 'left' : 'right',
 		);
 
 		// Only return matches of friends of this user.
