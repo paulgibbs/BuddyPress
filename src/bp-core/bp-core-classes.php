@@ -368,17 +368,26 @@ class BP_User_Query {
 		// 'search_terms' searches user_login and user_nicename
 		// xprofile field matches happen in bp_xprofile_bp_user_query_search()
 		if ( false !== $search_terms ) {
-			$search_terms_like = bp_esc_like( $search_terms );
+			$search_terms = bp_esc_like( $search_terms );
 
 			if ( $search_wildcard === 'left' ) {
-				$search_terms_like = '%' . $search_terms_like;
+				$search_terms_nospace = '%' . $search_terms;
+				$search_terms_space   = '%' . $search_terms . ' %';
 			} elseif ( $search_wildcard === 'right' ) {
-				$search_terms_like = $search_terms_like . '%';
+				$search_terms_nospace =      $search_terms . '%';
+				$search_terms_space   = '% ' .$search_terms . '%';
 			} else {
-				$search_terms_like = '%' . $search_terms_like . '%';
+				$search_terms_nospace = '%' . $search_terms . '%';
+				$search_terms_space   = '%' . $search_terms . '%';
 			}
 
-			$sql['where']['search'] = $wpdb->prepare( "u.{$this->uid_name} IN ( SELECT ID FROM {$wpdb->users} WHERE ( user_login LIKE %s OR user_nicename LIKE %s ) )", $search_terms_like, $search_terms_like );
+			$sql['where']['search'] = $wpdb->prepare(
+				"u.{$this->uid_name} IN ( SELECT ID FROM {$wpdb->users} WHERE ( user_login LIKE %s OR user_login LIKE %s OR user_nicename LIKE %s OR user_nicename LIKE %s ) )",
+				$search_terms_nospace,
+				$search_terms_space,
+				$search_terms_nospace,
+				$search_terms_space
+			);
 		}
 
 		// 'meta_key', 'meta_value' allow usermeta search
