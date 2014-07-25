@@ -15,7 +15,7 @@ class BP_Tests_Suggestions_Non_Authenticated extends BP_UnitTestCase {
 
 		$users = array(
 			// user_login, display_name
-			array( 'aardvark',    'Smith Bob' ),
+			array( 'aardvark',    'Bob Smith' ),
 			array( 'alpaca red',  'William Quinn' ),
 			array( 'cat',         'Lauren Curtis' ),
 			array( 'caterpillar', 'Eldon Burrows' ),
@@ -25,7 +25,7 @@ class BP_Tests_Suggestions_Non_Authenticated extends BP_UnitTestCase {
 			array( 'smith',       'Robert Bar' ),
 			array( 'snake',       'Eleanor Moore' ),
 			array( 'xylo',        'Silver McFadden' ),
-			array( 'zoom',        'Smithy Lisa' ),
+			array( 'zoom',        'Lisa Smithy' ),
 		);
 
 		// Create some dummy users.
