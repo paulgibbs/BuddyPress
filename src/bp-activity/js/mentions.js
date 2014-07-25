@@ -133,14 +133,14 @@
 						self.xhr.abort();
 					}
 
-					self.xhr = $.getJSON( ajaxurl, { 'action': 'bp_get_suggestions', 'term': query, 'type': 'members' },
+					self.xhr = $.getJSON( ajaxurl, { 'action': 'bp_get_suggestions', 'term': query, 'type': 'members' } )
 						/**
 						 * Success callback for the @suggestions lookup.
 						 *
 						 * @param {object} response Details of users matching the query.
 						 * @since BuddyPress (2.1.0)
 						 */
-						function( response ) {
+						.done(function( response ) {
 							if ( ! response.success || $.isEmptyObject( response.data ) ) {
 								return;
 							}
@@ -162,8 +162,7 @@
 
 							mentionsQueryCache[ query ] = data;
 							render_view( data );
-						}
-					);
+						});
 				}
 			},
 
