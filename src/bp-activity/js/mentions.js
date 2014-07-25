@@ -141,7 +141,7 @@
 						 * @since BuddyPress (2.1.0)
 						 */
 						.done(function( response ) {
-							if ( ! response.success || $.isEmptyObject( response.data ) ) {
+							if ( ! response.success ) {
 								return;
 							}
 
