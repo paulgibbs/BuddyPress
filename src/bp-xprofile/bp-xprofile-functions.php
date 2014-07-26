@@ -593,7 +593,7 @@ function bp_xprofile_bp_user_query_search( $sql, BP_User_Query $query ) {
 
 	$bp = buddypress();
 
-	$search_terms_clean = esc_sql( esc_sql( $query->query_vars['search_terms'] ) );
+	$search_terms_clean = bp_esc_like( $query->query_vars['search_terms'] );
 
 	if ( $query->query_vars['search_wildcard'] === 'left' ) {
 		$search_terms_nospace = '%' . $search_terms_clean;
