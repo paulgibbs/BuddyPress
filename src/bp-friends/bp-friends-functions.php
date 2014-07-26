@@ -575,7 +575,7 @@ add_action( 'bp_make_spam_user', 'friends_remove_data' );
  * @see bp_activity_mentions_script()
  */
 function bp_friends_prime_mentions_results() {
-	if ( ! bp_is_user_active() ) {
+	if ( ! bp_activity_do_mentions() || ! bp_is_user_active() ) {
 		return;
 	}
 
