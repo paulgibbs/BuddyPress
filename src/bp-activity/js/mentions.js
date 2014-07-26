@@ -17,6 +17,7 @@
 		 * Default options for at.js; see https://github.com/ichord/At.js/.
 		 */
 		var suggestionsDefaults = {
+			delay:               200,
 			hide_without_suffix: true,
 			insert_tpl:          '</>${atwho-data-value}</>', // For contentEditable, the fake tags make jQuery insert a textNode.
 			limit:               10,
