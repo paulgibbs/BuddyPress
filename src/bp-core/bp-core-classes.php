@@ -374,8 +374,8 @@ class BP_User_Query {
 				$search_terms_nospace = '%' . $search_terms;
 				$search_terms_space   = '%' . $search_terms . ' %';
 			} elseif ( $search_wildcard === 'right' ) {
-				$search_terms_nospace =      $search_terms . '%';
-				$search_terms_space   = '% ' .$search_terms . '%';
+				$search_terms_nospace =        $search_terms . '%';
+				$search_terms_space   = '% ' . $search_terms . '%';
 			} else {
 				$search_terms_nospace = '%' . $search_terms . '%';
 				$search_terms_space   = '%' . $search_terms . '%';
