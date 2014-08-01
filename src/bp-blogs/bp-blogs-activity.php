@@ -319,7 +319,6 @@ function bp_blogs_record_activity( $args = '' ) {
  * @since BuddyPress (1.0.0)
  *
  * @see bp_activity_delete() for description of parameters.
- * @global object $bp The BuddyPress global settings object.
  *
  * @param array $args {
  *     See {@link bp_activity_delete()} for complete description of arguments.
@@ -329,31 +328,22 @@ function bp_blogs_record_activity( $args = '' ) {
  * }
  * @return bool True on success, false on failure.
  */
-function bp_blogs_delete_activity( $args = true ) {
-	global $bp;
+function bp_blogs_delete_activity( $args = '' ) {
 
 	// Bail if activity is not active
-	if ( ! bp_is_active( 'activity' ) )
+	if ( ! bp_is_active( 'activity' ) ) {
 		return false;
+	}
 
-	$defaults = array(
+	$r = bp_parse_args( $args, array(
 		'item_id'           => false,
-		'component'         => $bp->blogs->id,
+		'component'         => buddypress()->blogs->id,
 		'type'              => false,
 		'user_id'           => false,
 		'secondary_item_id' => false
-	);
-
-	$params = wp_parse_args( $args, $defaults );
-	extract( $params, EXTR_SKIP );
-
-	bp_activity_delete_by_item_id( array(
-		'item_id'           => $item_id,
-		'component'         => $component,
-		'type'              => $type,
-		'user_id'           => $user_id,
-		'secondary_item_id' => $secondary_item_id
 	) );
+
+	bp_activity_delete_by_item_id( $r );
 }
 
 /**
@@ -654,12 +644,14 @@ add_action( 'bp_activity_before_save', 'bp_blogs_sync_activity_edit_to_post_comm
  * @since BuddyPress (2.0.0)
  *
  * @param int $post_id The post ID
- * @param array $statuses Array of comment statuses. The key is comment ID, the
+ * @param array $comments Array of comment statuses. The key is comment ID, the
  *        value is the $comment->comment_approved value.
  */
-function bp_blogs_remove_activity_meta_for_trashed_comments( $post_id, $statuses ) {
-	foreach ( $statuses as $comment_id => $comment_approved ) {
-		delete_comment_meta( $comment_id, 'bp_activity_comment_id' );
+function bp_blogs_remove_activity_meta_for_trashed_comments( $post_id = 0, $comments = array() ) {
+	if ( ! empty( $comments ) ) {
+		foreach ( array_keys( $comments ) as $comment_id ) {
+			delete_comment_meta( $comment_id, 'bp_activity_comment_id' );
+		}
 	}
 }
 add_action( 'trashed_post_comments', 'bp_blogs_remove_activity_meta_for_trashed_comments', 10, 2 );
@@ -850,10 +842,16 @@ add_filter( 'bp_activity_can_comment_reply', 'bp_blogs_can_comment_reply', 10, 2
  * @param string $retval The activity comment permalink
  * @return string
  */
-function bp_blogs_activity_comment_permalink( $retval ) {
+function bp_blogs_activity_comment_permalink( $retval = '' ) {
 	global $activities_template;
 
-	if ( isset( buddypress()->blogs->allow_comments[$activities_template->activity->current_comment->item_id] ) ){
+	// Get the current comment ID
+	$item_id = isset( $activities_template->activity->current_comment->item_id )
+		? $activities_template->activity->current_comment->item_id
+		: false;
+
+	// Maybe adjust the link if item ID exists
+	if ( ( false !== $item_id ) && isset( buddypress()->blogs->allow_comments[ $item_id ] ) ) {
 		$retval = $activities_template->activity->current_comment->primary_link;
 	}
 

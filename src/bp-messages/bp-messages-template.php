@@ -717,7 +717,7 @@ function bp_messages_pagination_count() {
 	$to_num = bp_core_number_format( ( $start_num + ( $messages_template->pag_num - 1 ) > $messages_template->total_thread_count ) ? $messages_template->total_thread_count : $start_num + ( $messages_template->pag_num - 1 ) );
 	$total = bp_core_number_format( $messages_template->total_thread_count );
 
-	echo sprintf( _n( 'Viewing message %1$s to %2$s (of %3$s message)', 'Viewing message %1$s to %2$s (of %3$s messages)', $total, 'buddypress' ), $from_num, $to_num, number_format_i18n( $total ) ); ?><?php
+	echo sprintf( _n( 'Viewing message %1$s to %2$s (of %3$s message)', 'Viewing message %1$s to %2$s (of %3$s messages)', $total, 'buddypress' ), $from_num, $to_num, number_format_i18n( $total ) );
 }
 
 /**
@@ -826,15 +826,15 @@ function bp_messages_options() {
 
 	<select name="message-type-select" id="message-type-select">
 		<option value=""></option>
-		<option value="read"><?php _e('Read', 'buddypress') ?></option>
-		<option value="unread"><?php _e('Unread', 'buddypress') ?></option>
-		<option value="all"><?php _e('All', 'buddypress') ?></option>
+		<option value="read"><?php _ex('Read', 'Message dropdown filter', 'buddypress') ?></option>
+		<option value="unread"><?php _ex('Unread', 'Message dropdown filter', 'buddypress') ?></option>
+		<option value="all"><?php _ex('All', 'Message dropdown filter', 'buddypress') ?></option>
 	</select> &nbsp;
 
 	<?php if ( ! bp_is_current_action( 'sentbox' ) && bp_is_current_action( 'notices' ) ) : ?>
 
-		<a href="#" id="mark_as_read"><?php _e('Mark as Read', 'buddypress') ?></a> &nbsp;
-		<a href="#" id="mark_as_unread"><?php _e('Mark as Unread', 'buddypress') ?></a> &nbsp;
+		<a href="#" id="mark_as_read"><?php _ex('Mark as Read', 'Message management markup', 'buddypress') ?></a> &nbsp;
+		<a href="#" id="mark_as_unread"><?php _ex('Mark as Unread', 'Message management markup', 'buddypress') ?></a> &nbsp;
 
 	<?php endif; ?>
 

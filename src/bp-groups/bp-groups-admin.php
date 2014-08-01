@@ -29,8 +29,8 @@ function bp_groups_add_admin_menu() {
 
 	// Add our screen
 	$hook = add_menu_page(
-		__( 'Groups', 'buddypress' ),
-		__( 'Groups', 'buddypress' ),
+		_x( 'Groups', 'Admin Groups page title', 'buddypress' ),
+		_x( 'Groups', 'Admin Groups menu', 'buddypress' ),
 		'bp_moderate',
 		'bp-groups',
 		'bp_groups_admin',
@@ -1404,16 +1404,20 @@ class BP_Groups_List_Table extends WP_List_Table {
 		$actions = apply_filters( 'bp_groups_admin_comment_row_actions', array_filter( $actions ), $item );
 
 		// Get group name and avatar
-		$avatar  = bp_core_fetch_avatar( array(
-			'item_id'    => $item['id'],
-			'object'     => 'group',
-			'type'       => 'thumb',
-			'avatar_dir' => 'group-avatars',
-			'alt'        => sprintf( __( 'Group logo of %s', 'buddypress' ), $group_name ),
-			'width'      => '32',
-			'height'     => '32',
-			'title'      => $group_name
-		) );
+		$avatar = '';
+
+		if ( buddypress()->avatar->show_avatars ) {
+			$avatar  = bp_core_fetch_avatar( array(
+				'item_id'    => $item['id'],
+				'object'     => 'group',
+				'type'       => 'thumb',
+				'avatar_dir' => 'group-avatars',
+				'alt'        => sprintf( __( 'Group logo of %s', 'buddypress' ), $group_name ),
+				'width'      => '32',
+				'height'     => '32',
+				'title'      => $group_name
+			) );
+		}
 
 		$content = sprintf( '<strong><a href="%s">%s</a></strong>', esc_url( $edit_url ), $group_name );
 

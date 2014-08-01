@@ -146,11 +146,12 @@ function bp_alpha_sort_by_key( $items, $key ) {
  * @param bool $decimals Whether to use decimals. See {@link number_format_i18n()}.
  * @return string The formatted number.
  */
-function bp_core_number_format( $number, $decimals = false ) {
+function bp_core_number_format( $number = 0, $decimals = false ) {
 
 	// Force number to 0 if needed
-	if ( empty( $number ) )
+	if ( ! is_numeric( $number ) ) {
 		$number = 0;
+	}
 
 	return apply_filters( 'bp_core_number_format', number_format_i18n( $number, $decimals ), $number, $decimals );
 }
@@ -703,13 +704,14 @@ function bp_core_get_root_domain() {
  * @param int $status Optional. The numeric code to give in the redirect
  *        headers. Default: 302.
  */
-function bp_core_redirect( $location, $status = 302 ) {
+function bp_core_redirect( $location = '', $status = 302 ) {
 
 	// On some setups, passing the value of wp_get_referer() may result in an
 	// empty value for $location, which results in an error. Ensure that we
 	// have a valid URL.
-	if ( empty( $location ) )
+	if ( empty( $location ) ) {
 		$location = bp_get_root_domain();
+	}
 
 	// Make sure we don't call status_header() in bp_core_do_catch_uri() as this
 	// conflicts with wp_redirect() and wp_safe_redirect().
@@ -740,23 +742,24 @@ function bp_core_referrer() {
 function bp_core_get_site_path() {
 	global $current_site;
 
-	if ( is_multisite() )
+	if ( is_multisite() ) {
 		$site_path = $current_site->path;
-	else {
+	} else {
 		$site_path = (array) explode( '/', home_url() );
 
-		if ( count( $site_path ) < 2 )
+		if ( count( $site_path ) < 2 ) {
 			$site_path = '/';
-		else {
+		} else {
 			// Unset the first three segments (http(s)://domain.com part)
 			unset( $site_path[0] );
 			unset( $site_path[1] );
 			unset( $site_path[2] );
 
-			if ( !count( $site_path ) )
+			if ( !count( $site_path ) ) {
 				$site_path = '/';
-			else
+			} else {
 				$site_path = '/' . implode( '/', $site_path ) . '/';
+			}
 		}
 	}
 
@@ -776,10 +779,7 @@ function bp_core_get_site_path() {
  * @return string Current time in 'Y-m-d h:i:s' format.
  */
 function bp_core_current_time( $gmt = true, $type = 'mysql' ) {
-	// Get current time
-	$current_time = current_time( $type, $gmt );
-
-	return apply_filters( 'bp_core_current_time', $current_time );
+	return apply_filters( 'bp_core_current_time', current_time( $type, $gmt ) );
 }
 
 /**
@@ -811,7 +811,8 @@ function bp_core_current_time( $gmt = true, $type = 'mysql' ) {
 function bp_core_time_since( $older_date, $newer_date = false ) {
 
 	// Use this filter to bypass BuddyPress's time_since calculations
-	if ( $pre_value = apply_filters( 'bp_core_time_since_pre', false, $older_date, $newer_date ) ) {
+	$pre_value = apply_filters( 'bp_core_time_since_pre', false, $older_date, $newer_date );
+	if ( false !== $pre_value ) {
 		return $pre_value;
 	}
 
@@ -1064,18 +1065,26 @@ function bp_core_render_message() {
  */
 function bp_core_record_activity() {
 
-	if ( !is_user_logged_in() )
+	// Bail if user is not logged in
+	if ( ! is_user_logged_in() ) {
 		return false;
+	}
 
+	// Get the user ID
 	$user_id = bp_loggedin_user_id();
 
-	if ( bp_is_user_inactive( $user_id ) )
+	// Bail if user is not active
+	if ( bp_is_user_inactive( $user_id ) ) {
 		return false;
+	}
 
+	// Get the user's last activity
 	$activity = bp_get_user_last_activity( $user_id );
 
-	if ( !is_numeric( $activity ) )
+	// Make sure it's numeric
+	if ( ! is_numeric( $activity ) ) {
 		$activity = strtotime( $activity );
+	}
 
 	// Get current time
 	$current_time = bp_core_current_time();
@@ -1085,7 +1094,8 @@ function bp_core_record_activity() {
 		do_action( 'bp_first_activity_for_member', $user_id );
 	}
 
-	if ( empty( $activity ) || strtotime( $current_time ) >= strtotime( '+5 minutes', $activity ) ) {
+	// If it's been more than 5 minutes, record a newer last-activity time
+	if ( empty( $activity ) || ( strtotime( $current_time ) >= strtotime( '+5 minutes', $activity ) ) ) {
 		bp_update_user_last_activity( $user_id, $current_time );
 	}
 }
@@ -1098,16 +1108,22 @@ add_action( 'wp_head', 'bp_core_record_activity' );
  *       representation of the time elapsed.
  *
  * @param int|string $last_activity_date The date of last activity.
- * @param string $string A sprintf()-able statement of the form '% ago'.
+ * @param string $string A sprintf()-able statement of the form 'active %s'
  * @return string $last_active A string of the form '3 years ago'.
  */
-function bp_core_get_last_activity( $last_activity_date, $string ) {
+function bp_core_get_last_activity( $last_activity_date = '', $string = '' ) {
 
-	if ( empty( $last_activity_date ) )
-		$last_active = __( 'Not recently active', 'buddypress' );
-	else
-		$last_active = sprintf( $string, bp_core_time_since( $last_activity_date ) );
+	// Setup a default string if none was passed
+	$string = empty( $string )
+		? '%s'     // Gettext placeholder
+		: $string;
 
+	// Use the string if a last activity date was passed
+	$last_active = empty( $last_activity_date )
+		? __( 'Not recently active', 'buddypress' )
+		: sprintf( $string, bp_core_time_since( $last_activity_date ) );
+
+	// Filter and return
 	return apply_filters( 'bp_core_get_last_activity', $last_active, $last_activity_date, $string );
 }
 
@@ -1336,8 +1352,9 @@ function bp_core_do_network_admin() {
 	// Default
 	$retval = bp_is_network_activated();
 
-	if ( bp_is_multiblog_mode() )
+	if ( bp_is_multiblog_mode() ) {
 		$retval = false;
+	}
 
 	return (bool) apply_filters( 'bp_core_do_network_admin', $retval );
 }
@@ -1376,12 +1393,14 @@ function bp_is_root_blog( $blog_id = 0 ) {
 	$is_root_blog = false;
 
 	// Use current blog if no ID is passed
-	if ( empty( $blog_id ) )
+	if ( empty( $blog_id ) ) {
 		$blog_id = get_current_blog_id();
+	}
 
 	// Compare to root blog ID
-	if ( $blog_id == bp_get_root_blog_id() )
+	if ( $blog_id == bp_get_root_blog_id() ) {
 		$is_root_blog = true;
+	}
 
 	return (bool) apply_filters( 'bp_is_root_blog', (bool) $is_root_blog );
 }
@@ -1473,8 +1492,9 @@ function bp_is_network_activated() {
 	$plugins = get_site_option( 'active_sitewide_plugins' );
 
 	// Override is_multisite() if not network activated
-	if ( ! is_array( $plugins ) || ! isset( $plugins[$base] ) )
+	if ( ! is_array( $plugins ) || ! isset( $plugins[ $base ] ) ) {
 		$retval = false;
+	}
 
 	return (bool) apply_filters( 'bp_is_network_activated', $retval );
 }
@@ -1672,8 +1692,9 @@ add_action ( 'bp_core_loaded', 'bp_core_load_buddypress_textdomain' );
  */
 function bp_core_action_search_site( $slug = '' ) {
 
-	if ( !bp_is_current_component( bp_get_search_slug() ) )
+	if ( ! bp_is_current_component( bp_get_search_slug() ) ) {
 		return;
+	}
 
 	if ( empty( $_POST['search-terms'] ) ) {
 		bp_core_redirect( bp_get_root_domain() );
