@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @since BuddyPress (2.1)
  */
 function bp_activity_mentions_script() {
-	if ( ! bp_activity_do_mentions() || ! bp_is_user_active() || ! ( bp_is_activity_component() || bp_is_blog_page() && is_singular() && comments_open() ) ) {
+	if ( ! bp_activity_maybe_load_mentions_scripts() ) {
 		return;
 	}
 
@@ -37,7 +37,7 @@ add_action( 'bp_enqueue_scripts', 'bp_activity_mentions_script' );
  * @since BuddyPress (2.1)
  */
 function bp_activity_mentions_dashboard_script() {
-	if ( ! bp_activity_do_mentions() || ! bp_is_user_active() || ! is_admin() ) {
+	if ( ! bp_activity_maybe_load_mentions_scripts() ) {
 		return;
 	}
 
