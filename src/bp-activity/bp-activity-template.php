@@ -3719,3 +3719,18 @@ function bp_activity_show_filters( $context = '' ) {
 
 		return apply_filters( 'bp_get_activity_show_filters', $output, $filters, $context );
 	}
+
+/**
+ * Advertise oEmbed provider for single activity items
+ *
+ * @since BuddyPress (2.2)
+ */
+function bp_activity_embed_provider_header() {
+	if ( ! bp_is_single_activity() ) {
+		return;
+	}
+
+	printf( '<link rel="alternate" type="application/json+oembed" href="%s" />' . PHP_EOL, site_url( '/?oembed=true&amp;format=json&amp;url=' . urlencode( get_permalink() ) ) );
+	printf( '<link rel="alternate" type="text/xml+oembed" href="%s" />' . PHP_EOL, site_url( '/?oembed=true&amp;format=xml&amp;url=' . urlencode( get_permalink() ) ) );
+}
+add_action( 'bp_head', 'bp_activity_sitewide_feed' );

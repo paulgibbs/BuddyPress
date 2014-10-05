@@ -672,3 +672,7 @@ function bp_ajax_get_suggestions() {
 	wp_send_json_success( $results );
 }
 add_action( 'wp_ajax_bp_get_suggestions', 'bp_ajax_get_suggestions' );
+
+
+// add oembed handler endpoint thing here
+// https://wordpress.org/plugins/oembed-provider/
