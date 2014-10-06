@@ -2397,6 +2397,28 @@ function bp_activity_thread_permalink() {
 	}
 
 /**
+ * Output the activity thread shortlink.
+ *
+ * @since BuddyPress (2.2)
+ */
+function bp_activity_thread_shortlink() {
+	echo bp_get_activity_thread_shortlink();
+}
+
+	/**
+	 * Return the activity thread shortlink.
+	 *
+	 * @return string $link The activity thread shortlink.
+	 * @since BuddyPress (2.2)
+	 */
+	function bp_get_activity_thread_shortlink() {
+		global $activities_template;
+
+		$link = bp_activity_get_shortlink( $activities_template->activity->id, $activities_template->activity );
+	 	return apply_filters( 'bp_get_activity_thread_shortlink', $link );
+	}
+
+/**
  * Output the activity comment permalink.
  *
  * @since BuddyPress (1.8)
@@ -2433,6 +2455,39 @@ function bp_activity_comment_permalink() {
 		$link = bp_activity_get_permalink( $activities_template->activity->id, $activities_template->activity ) . $comment_link;
 
 		return apply_filters( 'bp_get_activity_comment_permalink', $link, $comment_id );
+	}
+
+/**
+ * Output the activity comment shortlink.
+ *
+ * @since BuddyPress (2.2)
+ */
+function bp_activity_comment_shortlink() {
+	echo bp_get_activity_comment_shortlink();
+}
+	/**
+	 * Return the activity comment shortlink.
+	 *
+	 * @return string $link The activity comment shortlink.
+	 * @since BuddyPress (2.2)
+	 */
+	function bp_get_activity_comment_shortlink() {
+		global $activities_template;
+
+		// Check that comment exists
+		$comment_id = isset( $activities_template->activity->current_comment->id )
+			? $activities_template->activity->current_comment->id
+			: 0;
+
+		// Setup the comment link
+		$comment_link = ! empty( $comment_id )
+			? '#acomment-' .$comment_id
+			: false;
+
+		// Append comment ID to end of activity shortlink
+		$link = bp_activity_get_shortlink( $activities_template->activity->id, $activities_template->activity ) . $comment_link;
+
+		return apply_filters( 'bp_get_activity_comment_shortlink', $link, $comment_id );
 	}
 
 /**
