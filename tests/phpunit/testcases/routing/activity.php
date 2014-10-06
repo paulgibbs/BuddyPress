@@ -23,15 +23,19 @@ class BP_Tests_Routing_Activity extends BP_UnitTestCase {
 		$this->assertEquals( bp_get_activity_root_slug(), bp_current_component() );
 	}
 
-	/**
-	 * Can't test using bp_activity_get_permalink(); see bp_activity_action_permalink_router().
-	 */
 	function test_activity_permalink() {
 		$a = $this->factory->activity->create();
 		$activity = $this->factory->activity->get_object_by_id( $a );
 
-		$url = bp_core_get_user_domain( $activity->user_id ) . bp_get_activity_slug() . '/' . $activity->id . '/';
-		$this->go_to( $url );
+		$this->go_to( bp_activity_get_permalink( $activity->id, $activity ) );
+		$this->assertTrue( bp_is_single_activity() );
+	}
+
+	function test_activity_shortlink() {
+		$a = $this->factory->activity->create();
+		$activity = $this->factory->activity->get_object_by_id( $a );
+
+		$this->go_to( bp_activity_get_shortlink( $activity->id, $activity ) );
 		$this->assertTrue( bp_is_single_activity() );
 	}
 
