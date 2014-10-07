@@ -891,7 +891,7 @@ function bp_member_latest_update( $args = '' ) {
 		if ( $view_link && ( $update_content != $update['content'] ) ) {
 			$view = __( 'View', 'buddypress' );
 
-			$update_content .= '<span class="activity-read-more"><a href="' . bp_activity_get_permalink( $update['id'] ) . '" rel="nofollow">' . $view . '</a></span>';
+			$update_content .= '<span class="activity-read-more"><a href="' . bp_activity_get_shortlink( $update['id'] ) . '" rel="nofollow">' . $view . '</a></span>';
 		}
 
 		return apply_filters( 'bp_get_member_latest_update', $update_content );

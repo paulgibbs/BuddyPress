@@ -952,6 +952,7 @@ function bp_blogs_activity_comment_single_permalink( $retval, $activity ) {
 	return $retval;
 }
 add_filter( 'bp_activity_get_permalink', 'bp_blogs_activity_comment_single_permalink', 10, 2 );
+add_filter( 'bp_activity_get_shortlink', 'bp_blogs_activity_comment_single_permalink', 10, 2 );
 
 /**
  * Formats single activity comment entries to use the blog comment action.

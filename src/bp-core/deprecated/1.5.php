@@ -339,7 +339,7 @@ function groups_at_message_notification( $content, $poster_user_id, $group_id, $
 		if ( 'no' != bp_get_user_meta( $receiver_user_id, 'notification_activity_new_mention', true ) ) {
 			$poster_name = bp_core_get_user_displayname( $poster_user_id );
 
-			$message_link  = bp_activity_get_permalink( $activity_id );
+			$message_link  = bp_activity_get_shortlink( $activity_id );
 			$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 			$settings_link = bp_core_get_user_domain( $receiver_user_id ) . $settings_slug . '/notifications/';
 

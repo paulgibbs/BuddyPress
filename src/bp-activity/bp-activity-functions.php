@@ -1703,19 +1703,13 @@ function bp_activity_delete_comment( $activity_id, $comment_id ) {
  * be sure to pass the full $activity_obj parameter as well, if you already
  * have it available.
  *
- * @since BuddyPress (1.2.0)
- *
- * @uses bp_get_root_domain()
- * @uses bp_get_activity_root_slug()
- * @uses apply_filters_ref_array() To call the 'bp_activity_get_permalink' hook.
- *
  * @param int $activity_id The unique id of the activity object.
  * @param object $activity_obj Optional. The activity object.
  * @return string $link Permalink for the activity item.
+ * @since BuddyPress (1.2.0)
  */
 function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
-
-	if ( empty( $activity_obj ) ) {
+	if ( ! $activity_obj ) {
 		$activity_obj = new BP_Activity_Activity( $activity_id );
 	}
 
@@ -1725,15 +1719,56 @@ function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
 
 	if ( 'new_blog_post' == $activity_obj->type || 'new_blog_comment' == $activity_obj->type || 'new_forum_topic' == $activity_obj->type || 'new_forum_post' == $activity_obj->type ) {
 		$link = $activity_obj->primary_link;
+
 	} else {
-		if ( 'activity_comment' == $activity_obj->type ) {
-			$link = bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $activity_obj->item_id . '/';
+		if ( 'activity_comment' === $activity_obj->type ) {
+			$id = $activity_obj->item_id;
 		} else {
-			$link = bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $activity_obj->id . '/';
+			$id = $activity_obj->id;
 		}
+
+		$link = bp_core_get_user_domain( $activity_obj->user_id ) . bp_get_activity_slug() . "/{$id}/";
 	}
 
 	return apply_filters_ref_array( 'bp_activity_get_permalink', array( $link, &$activity_obj ) );
+}
+
+/**
+ * Get the shortlink for a single activity item.
+ *
+ * When only the $activity_id param is passed, BP has to instantiate a new
+ * BP_Activity_Activity object. To save yourself some processing overhead,
+ * be sure to pass the full $activity_obj parameter as well, if you already
+ * have it available.
+ *
+ * @param int $activity_id The unique id of the activity object.
+ * @param object $activity_obj Optional. The activity object.
+ * @return string $link Permalink for the activity item.
+ * @since BuddyPress (2.2.0)
+ */
+function bp_activity_get_shortlink( $activity_id, $activity_obj = false ) {
+	if ( ! $activity_obj ) {
+		$activity_obj = new BP_Activity_Activity( $activity_id );
+	}
+
+	if ( isset( $activity_obj->current_comment ) ) {
+		$activity_obj = $activity_obj->current_comment;
+	}
+
+	if ( 'new_blog_post' == $activity_obj->type || 'new_blog_comment' == $activity_obj->type || 'new_forum_topic' == $activity_obj->type || 'new_forum_post' == $activity_obj->type ) {
+		$link = $activity_obj->primary_link;
+
+	} else {
+		if ( 'activity_comment' == $activity_obj->type ) {
+			$id = $activity_obj->item_id;
+		} else {
+			$id = $activity_obj->id;
+		}
+
+		$link = bp_get_root_domain() . '/' . bp_get_activity_root_slug() . "/p/{$id}/";
+	}
+
+	return apply_filters_ref_array( 'bp_activity_get_shortlink', array( $link, &$activity_obj ) );
 }
 
 /**
