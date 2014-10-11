@@ -3801,6 +3801,7 @@ function bp_activity_oembed_provider_header() {
 		return;
 	}
 
+	// djpaultodo update this to point to oembed endpoint and append required params to end of string.
 	$url = bp_activity_get_permalink( (int) bp_current_action() ) . 'embed';
 	printf( '<link rel="alternate" type="application/json+oembed" href="%s" />' . PHP_EOL, $url );
 }
