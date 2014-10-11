@@ -79,7 +79,9 @@ function bp_get_default_options() {
 		/** Activity HeartBeat ************************************************/
 
 		// HeartBeat is on to refresh activities
-		'_bp_enable_heartbeat_refresh'    => true,
+		'_bp_enable_heartbeat_refresh'        => true,
+
+		'_bp_enable_activity_oembed_provider' => true,
 
 		/** BuddyBar **********************************************************/
 
@@ -611,6 +613,20 @@ function bp_is_akismet_active( $default = true ) {
  */
 function bp_is_activity_heartbeat_active( $default = true ) {
 	return (bool) apply_filters( 'bp_is_activity_heartbeat_active', (bool) bp_get_option( '_bp_enable_heartbeat_refresh', $default ) );
+}
+
+/**
+ * Is the oembed provider for the Activity component enabled?
+ *
+ * @param bool $default Optional. Fallback value if not found in the database. Default: true.
+ * @return bool
+ * @since BuddyPress (2.2.0)
+ */
+function bp_is_activity_oembed_provider_enabled( $default = true ) {
+	return (bool) apply_filters(
+		'_bp_enable_activity_oembed_provider',
+		(bool) bp_get_option( '_bp_enable_activity_oembed_provider', $default )
+	);
 }
 
 /**

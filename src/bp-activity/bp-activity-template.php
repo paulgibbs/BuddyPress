@@ -3782,7 +3782,17 @@ function bp_activity_show_filters( $context = '' ) {
 	}
 
 /**
- * Advertise oEmbed provider for single activity items
+ * Get the activity oembed provider slug.
+ *
+ * @return string
+ * @since BuddyPress (2.2.0)
+ */
+function bp_get_activity_oembed_slug() {
+	return apply_filters( 'bp_get_activity_oembed_slug', 'oembed' );
+}
+
+/**
+ * Advertise oEmbed provider on single activity templates.
  *
  * @since BuddyPress (2.2)
  */
