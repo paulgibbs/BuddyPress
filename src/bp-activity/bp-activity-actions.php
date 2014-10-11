@@ -676,3 +676,12 @@ add_action( 'wp_ajax_bp_get_suggestions', 'bp_ajax_get_suggestions' );
 
 // add oembed handler endpoint thing here
 // https://wordpress.org/plugins/oembed-provider/
+// http://alisothegeek.com/2013/01/adding-oembed-handlers-to-wordpress/
+function bp_activity_embed_bp_activity_add_oembed_provider() {
+	$url    = bp_displayed_user_domain() . bp_get_activity_slug() . '/';
+	$url    = str_replace( array( 'http:', 'https:' ), 'https?:', $url );
+	$oembed = bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/oembed';
+
+	wp_oembed_add_provider( "#{$url}\d+/?#i", $oembed, true );
+}
+add_action( 'bp_init', 'bp_activity_embed_bp_activity_add_oembed_provider' );
