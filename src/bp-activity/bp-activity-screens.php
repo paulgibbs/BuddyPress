@@ -180,10 +180,12 @@ function bp_activity_screen_single_activity_permalink() {
 		return false;
 
 	// Get the activity details
-	$activity = bp_activity_get_specific( array( 'activity_ids' => bp_current_action(), 'show_hidden' => true, 'spam' => 'ham_only', ) );
+	$activity   = bp_activity_get_specific( array( 'activity_ids' => bp_current_action(), 'show_hidden' => true, 'spam' => 'ham_only', ) );
+	$url_suffix = bp_action_variables();
+	$is_oembed  = $url_suffix && count( $url_suffix ) === 1 && $url_suffix[0] === 'embed';
 
 	// 404 if activity does not exist
-	if ( empty( $activity['activities'][0] ) || bp_action_variables() ) {
+	if ( empty( $activity['activities'][0] ) || ! $is_oembed && $url_suffix ) {
 		bp_do_404();
 		return;
 
@@ -222,7 +224,9 @@ function bp_activity_screen_single_activity_permalink() {
 	$has_access = apply_filters_ref_array( 'bp_activity_permalink_access', array( $has_access, &$activity ) );
 
 	// Allow additional code execution
-	do_action( 'bp_activity_screen_single_activity_permalink', $activity, $has_access );
+	if ( ! $is_oembed ) {
+		do_action( 'bp_activity_screen_single_activity_permalink', $activity, $has_access );
+	}
 
 	// Access is specifically disallowed
 	if ( false === $has_access ) {
@@ -242,6 +246,22 @@ function bp_activity_screen_single_activity_permalink() {
 		}
 
 		bp_core_redirect( $url );
+	}
+
+	if ( $is_oembed ) {
+		//add_filter( 'bp_activity_can_comment', '__return_false' );
+		ob_start();
+
+		bp_has_activities( array( 'include' => $activity->id ) );
+		bp_the_activity();
+		bp_get_template_part( 'activity/entry' );
+		$markup = ob_get_contents();
+
+		ob_end_clean();
+		//remove_filter( 'bp_activity_can_comment', '__return_false' );
+
+		echo json_encode( $markup );
+		exit;
 	}
 
 	bp_core_load_template( apply_filters( 'bp_activity_template_profile_activity_permalink', 'members/single/activity/permalink' ) );
