@@ -3786,7 +3786,7 @@ function bp_activity_show_filters( $context = '' ) {
  *
  * @since BuddyPress (2.2)
  */
-function bp_activity_embed_provider_header() {
+function bp_activity_oembed_provider_header() {
 	if ( ! bp_is_single_activity() ) {
 		return;
 	}
@@ -3794,4 +3794,4 @@ function bp_activity_embed_provider_header() {
 	$url = bp_activity_get_permalink( (int) bp_current_action() ) . 'embed';
 	printf( '<link rel="alternate" type="application/json+oembed" href="%s" />' . PHP_EOL, $url );
 }
-add_action( 'bp_head', 'bp_activity_embed_provider_header' );
+add_action( 'bp_head', 'bp_activity_oembed_provider_header' );
