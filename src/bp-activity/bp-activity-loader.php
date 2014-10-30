@@ -221,18 +221,6 @@ class BP_Activity_Component extends BP_Component {
 			);
 		}
 
-		// Activity oembed provider endpoint. Not intended to be exposed in theme templates. :)
-		$sub_nav[] = array(
-			'name'            => bp_get_activity_oembed_slug(),  // Required for the router, but can be anything.
-			'parent_slug'     => $this->slug,
-			'parent_url'      => bp_get_activity_directory_permalink(),
-			'screen_function' => function() {
-				die('this might work');
-			},
-			'slug'            => bp_get_activity_oembed_slug(),
-			'user_has_access' => true,  // djpaultodo: too early for bp_is_activity_directory(), how to address?
-		);
-
 		parent::setup_nav( $main_nav, $sub_nav );
 	}
 

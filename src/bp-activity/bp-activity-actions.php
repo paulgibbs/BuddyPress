@@ -107,6 +107,54 @@ function bp_activity_action_permalink_router() {
 add_action( 'bp_actions', 'bp_activity_action_permalink_router' );
 
 /**
+ * Route requests for the Activity oembed provider endpoint.
+ *
+ * @since BuddyPress (2.2.0)
+ */
+function bp_activity_oembed_provider_router() {
+	if ( ! bp_is_activity_component() ) {
+		return;
+	}
+
+	if ( ! bp_is_current_action( bp_get_activity_oembed_slug() ) || bp_action_variables() ) {
+		return;
+	}
+
+
+		status_header( 200 );
+		$oembed_provider_data = array();
+    $oembed_provider_data['version'] = '1.0';
+    $oembed_provider_data['provider_name'] = get_bloginfo('name');
+    $oembed_provider_data['provider_url'] = home_url();
+    $oembed_provider_data['author_name'] = 'paul';
+    $oembed_provider_data['author_url'] = 'http://paul.com';
+    $oembed_provider_data['title'] = 'post title';
+    $oembed_provider_data['type'] = 'rich';
+    $oembed_provider_data['html'] = 'post content';
+    echo json_encode( $oembed_provider_data );
+    die;
+
+
+	// Get the activity details
+	$activity = bp_activity_get_specific( array( 'activity_ids' => bp_action_variable( 0 ), 'show_hidden' => true ) );
+
+	// 404 if activity does not exist
+	if ( empty( $activity['activities'][0] ) ) {
+		bp_do_404();
+		return;
+	} else {
+		$activity = $activity['activities'][0];
+	}
+
+	// Do not redirect at default
+	$redirect = false;
+
+	exit;
+}
+add_action( 'bp_actions', 'bp_activity_oembed_provider_router' );
+
+
+/**
  * Delete specific activity item and redirect to previous page.
  *
  * @since BuddyPress (1.1)
@@ -675,17 +723,20 @@ add_action( 'wp_ajax_bp_get_suggestions', 'bp_ajax_get_suggestions' );
 
 
 // add oembed handler endpoint thing here
-// https://wordpress.org/plugins/oembed-provider/
-// http://alisothegeek.com/2013/01/adding-oembed-handlers-to-wordpress/
 function bp_activity_embed_bp_activity_add_oembed_provider() {
 	if ( ! bp_is_activity_oembed_provider_enabled() ) {
 		return;
 	}
 
-	$url      = bp_displayed_user_domain() . bp_get_activity_slug() . '/';
-	$url      = str_replace( array( 'http:', 'https:' ), 'https?:', $url );
-	$endpoint = bp_get_activity_directory_permalink() . bp_get_activity_oembed_slug();
+	$regex = str_replace( array( 'http:', 'https:' ), 'https?:', bp_get_root_domain() ) . '/';
 
-	wp_oembed_add_provider( "#{$url}\d+/?#i", $endpoint, true );
+	if ( ! bp_core_enable_root_profiles() ) {
+		$regex .= bp_get_members_root_slug() . '/';
+	}
+
+	$regex .= '[^/]+/' . bp_get_activity_slug() . '/[\d]+/?\b';
+	$oembed = bp_get_activity_directory_permalink() . bp_get_activity_oembed_slug() . '/';
+
+	wp_oembed_add_provider( "#{$regex}#i", $oembed, true );
 }
 add_action( 'bp_init', 'bp_activity_embed_bp_activity_add_oembed_provider' );
