@@ -424,9 +424,6 @@ class BP_Admin {
 
 		// Network Admin Tools
 		remove_submenu_page( 'network-tools', 'network-tools' );
-
-		// About page
-		remove_submenu_page( 'index.php', 'bp-about'   );
 	}
 
 	/**
