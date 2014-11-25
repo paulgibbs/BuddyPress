@@ -154,9 +154,6 @@ class BP_Admin {
 		// Add settings
 		add_action( 'bp_register_admin_settings', array( $this, 'register_admin_settings' ) );
 
-		// Add a link to BuddyPress About page to the admin bar
-		add_action( 'admin_bar_menu', array( $this, 'admin_bar_about_link' ), 15 );
-
 		// Add a description of new BuddyPress tools in the available tools page
 		add_action( 'tool_box', 'bp_core_admin_available_tools_intro' );
 		add_action( 'bp_network_tool_box', 'bp_core_admin_available_tools_intro' );
@@ -192,8 +189,8 @@ class BP_Admin {
 
 		// About
 		add_dashboard_page(
-			__( 'Welcome to BuddyPress',  'buddypress' ),
-			__( 'Welcome to BuddyPress',  'buddypress' ),
+			__( 'BuddyPress Dashboard', 'buddypress' ),
+			__( 'BuddyPress Dashboard', 'buddypress' ),
 			'manage_options',
 			'bp-about',
 			array( $this, 'about_screen' )
@@ -389,24 +386,6 @@ class BP_Admin {
 		    // Allow avatar uploads
 		    add_settings_field( 'bp-disable-avatar-uploads', __( 'Profile Photo Uploads',   'buddypress' ), 'bp_admin_setting_callback_avatar_uploads',   'buddypress', $avatar_setting );
 		    register_setting  ( 'buddypress',         'bp-disable-avatar-uploads',   'intval'                                                                                    );
-		}
-	}
-
-	/**
-	 * Add a link to BuddyPress About page to the admin bar.
-	 *
-	 * @since BuddyPress (1.9.0)
-	 *
-	 * @param WP_Admin_Bar $wp_admin_bar As passed to 'admin_bar_menu'.
-	 */
-	public function admin_bar_about_link( $wp_admin_bar ) {
-		if ( is_user_logged_in() ) {
-			$wp_admin_bar->add_menu( array(
-				'parent' => 'wp-logo',
-				'id'     => 'bp-about',
-				'title'  => esc_html__( 'About BuddyPress', 'buddypress' ),
-				'href'   => add_query_arg( array( 'page' => 'bp-about' ), bp_get_admin_url( 'index.php' ) ),
-			) );
 		}
 	}
 
