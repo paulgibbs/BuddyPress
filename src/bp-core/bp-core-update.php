@@ -389,31 +389,6 @@ function bp_update_to_2_0_1() {
 	bp_core_maybe_install_signups();
 }
 
-/**
- * Redirect user to BP's What's New page on first page load after activation.
- *
- * @since BuddyPress (1.7.0)
- *
- * @internal Used internally to redirect BuddyPress to the about page on activation.
- *
- * @uses set_transient() To drop the activation transient for 30 seconds.
- */
-function bp_add_activation_redirect() {
-
-	// Bail if activating from network, or bulk
-	if ( isset( $_GET['activate-multi'] ) ) {
-		return;
-	}
-
-	// Record that this is a new installation, so we show the right
-	// welcome message
-	if ( bp_is_install() ) {
-		set_transient( '_bp_is_new_install', true, 30 );
-	}
-
-	// Add the transient to redirect
-	set_transient( '_bp_activation_redirect', true, 30 );
-}
 
 /** Signups *******************************************************************/
 

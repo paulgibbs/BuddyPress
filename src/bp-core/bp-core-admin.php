@@ -199,15 +199,6 @@ class BP_Admin {
 			array( $this, 'about_screen' )
 		);
 
-		// Credits
-		add_dashboard_page(
-			__( 'Welcome to BuddyPress',  'buddypress' ),
-			__( 'Welcome to BuddyPress',  'buddypress' ),
-			'manage_options',
-			'bp-credits',
-			array( $this, 'credits_screen' )
-		);
-
 		$hooks = array();
 
 		// Changed in BP 1.6 . See bp_core_admin_backpat_menu()
@@ -455,9 +446,8 @@ class BP_Admin {
 		// Network Admin Tools
 		remove_submenu_page( 'network-tools', 'network-tools' );
 
-		// About and Credits pages
+		// About page
 		remove_submenu_page( 'index.php', 'bp-about'   );
-		remove_submenu_page( 'index.php', 'bp-credits' );
 	}
 
 	/**
@@ -507,8 +497,6 @@ class BP_Admin {
 			<h2 class="nav-tab-wrapper">
 				<a class="nav-tab nav-tab-active" href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-about' ), 'index.php' ) ) ); ?>">
 					<?php _e( 'What&#8217;s New', 'buddypress' ); ?>
-				</a><a class="nav-tab" href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-credits' ), 'index.php' ) ) ); ?>">
-					<?php _e( 'Credits', 'buddypress' ); ?>
 				</a>
 			</h2>
 
@@ -688,8 +676,6 @@ class BP_Admin {
 			<h2 class="nav-tab-wrapper">
 				<a class="nav-tab" href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-about' ), 'index.php' ) ) ); ?>">
 					<?php _e( 'What&#8217;s New', 'buddypress' ); ?>
-				</a><a class="nav-tab nav-tab-active" href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-credits' ), 'index.php' ) ) ); ?>">
-					<?php _e( 'Credits', 'buddypress' ); ?>
 				</a>
 			</h2>
 
