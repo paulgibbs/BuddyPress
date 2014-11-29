@@ -182,19 +182,23 @@ class BP_Admin {
 	 *       section.
 	 */
 	public function admin_menus() {
-
-		// Bail if user cannot moderate
-		if ( ! bp_current_user_can( 'manage_options' ) )
+		if ( ! bp_current_user_can( 'install_plugins' ) ) {
 			return;
+		}
 
 		// About
 		add_dashboard_page(
 			_x( 'BuddyPress Dashboard', 'Dashboard page title', 'buddypress' ),
 			_x( 'BuddyPress', 'Dashboard menu title', 'buddypress' ),
-			'manage_options',
+			'install_plugins',
 			'bp-about',
 			array( $this, 'about_screen' )
 		);
+
+
+		if ( ! bp_current_user_can( 'manage_options' ) ) {
+			return;
+		}
 
 		$hooks = array();
 
