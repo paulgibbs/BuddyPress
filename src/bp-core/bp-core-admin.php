@@ -452,7 +452,7 @@ class BP_Admin {
 	 * @since BuddyPress (1.7.0)
 	 */
 	public function about_screen() {
-		echo 'About screen';
+		echo '<div class="wrap">About screen</div>';
 	}
 }
 endif; // class_exists check
