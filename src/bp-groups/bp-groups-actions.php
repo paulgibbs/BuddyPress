@@ -163,7 +163,7 @@ function groups_action_create_group() {
 			$new_group_id = isset( $bp->groups->new_group_id ) ? $bp->groups->new_group_id : 0;
 
 			if ( !$bp->groups->new_group_id = groups_create_group( array( 'group_id' => $new_group_id, 'name' => $_POST['group-name'], 'description' => $_POST['group-desc'], 'slug' => groups_check_slug( sanitize_title( esc_attr( $_POST['group-name'] ) ) ), 'date_created' => bp_core_current_time(), 'status' => 'public' ) ) ) {
-				bp_core_add_message( __( 'There was an error saving group details, please try again.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error saving group details. Please try again.', 'buddypress' ), 'error' );
 				bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/' . bp_get_groups_current_create_step() . '/' );
 			}
 		}
@@ -187,7 +187,7 @@ function groups_action_create_group() {
 				$group_status = 'hidden';
 
 			if ( !$bp->groups->new_group_id = groups_create_group( array( 'group_id' => $bp->groups->new_group_id, 'status' => $group_status, 'enable_forum' => $group_enable_forum ) ) ) {
-				bp_core_add_message( __( 'There was an error saving group details, please try again.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'There was an error saving group details. Please try again.', 'buddypress' ), 'error' );
 				bp_core_redirect( bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/' . bp_get_groups_current_create_step() . '/' );
 			}
 
@@ -234,6 +234,9 @@ function groups_action_create_group() {
 		if ( count( $bp->groups->completed_create_steps ) == count( $keys ) && bp_get_groups_current_create_step() == array_pop( $keys ) ) {
 			unset( $bp->groups->current_create_step );
 			unset( $bp->groups->completed_create_steps );
+
+			setcookie( 'bp_new_group_id', false, time() - 3600, COOKIEPATH );
+			setcookie( 'bp_completed_create_steps', false, time() - 3600, COOKIEPATH );
 
 			// Once we compelete all steps, record the group creation in the activity stream.
 			groups_record_activity( array(

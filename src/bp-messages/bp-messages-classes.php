@@ -109,12 +109,11 @@ class BP_Messages_Thread {
 	 *
 	 * @since BuddyPress (1.0.0)
 	 *
-	 * @param bool|int $thread_id The message thread ID.
-	 * @param string $order The order to sort the messages. Either 'ASC' or 'DESC'.
+	 * @see BP_Messages_Thread::populate() for full description of parameters
 	 */
-	public function __construct( $thread_id = false, $order = 'ASC' ) {
+	public function __construct( $thread_id = false, $order = 'ASC', $args = array() ) {
 		if ( $thread_id ) {
-			$this->populate( $thread_id, $order );
+			$this->populate( $thread_id, $order, $args );
 		}
 	}
 
@@ -127,14 +126,24 @@ class BP_Messages_Thread {
 	 *
 	 * @param int $thread_id The message thread ID.
 	 * @param string $order The order to sort the messages. Either 'ASC' or 'DESC'.
+	 * @param array $args {
+	 *     Array of arguments.
+	 *     @type bool $update_meta_cache Whether to pre-fetch metadata for
+	 *           queried message items. Default: true.
+	 * }
 	 * @return bool False on failure.
 	 */
-	public function populate( $thread_id, $order ) {
+	public function populate( $thread_id = 0, $order = 'ASC', $args = array() ) {
 		global $wpdb, $bp;
 
 		if( 'ASC' != $order && 'DESC' != $order ) {
-			$order= 'ASC';
+			$order = 'ASC';
 		}
+
+		// merge $args with our defaults
+		$r = wp_parse_args( $args, array(
+			'update_meta_cache' => true
+		) );
 
 		$this->messages_order = $order;
 		$this->thread_id      = $thread_id;
@@ -153,6 +162,11 @@ class BP_Messages_Thread {
 		// Get the unread count for the logged in user
 		if ( isset( $this->recipients[bp_loggedin_user_id()] ) ) {
 			$this->unread_count = $this->recipients[bp_loggedin_user_id()]->unread_count;
+		}
+
+		// Grab all message meta
+		if ( true === (bool) $r['update_meta_cache'] ) {
+			bp_messages_update_meta_cache( wp_list_pluck( $this->messages, 'id' ) );
 		}
 
 		/**
@@ -218,7 +232,10 @@ class BP_Messages_Thread {
 	/** Static Functions ******************************************************/
 
 	/**
-	 * Delete a message thread.
+	 * Mark messages in a thread as deleted or delete all messages in a thread.
+	 *
+	 * Note: All messages in a thread are deleted once every recipient in a thread
+	 * has marked the thread as deleted.
 	 *
 	 * @since BuddyPress (1.0.0)
 	 *
@@ -229,40 +246,69 @@ class BP_Messages_Thread {
 		global $wpdb, $bp;
 
 		/**
-		 * Fires before a message thread is deleted.
+		 * Fires before a message thread is marked as deleted.
 		 *
 		 * @since BuddyPress (2.2.0)
 		 *
 		 * @param int $thread_id ID of the thread being deleted.
 		 */
-		do_action( 'bp_messages_thread_before_delete', $thread_id );
+		do_action( 'bp_messages_thread_before_mark_delete', $thread_id );
 
 		// Mark messages as deleted
+		//
+		// @todo the reliance on bp_loggedin_user_id() sucks for plugins
+		//       refactor this method to accept a $user_id parameter
 		$wpdb->query( $wpdb->prepare( "UPDATE {$bp->messages->table_name_recipients} SET is_deleted = 1 WHERE thread_id = %d AND user_id = %d", $thread_id, bp_loggedin_user_id() ) );
 
-		// Get the message id in order to pass to the action
-		$message_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp->messages->table_name_messages} WHERE thread_id = %d", $thread_id ) );
+		// Get the message ids in order to pass to the action
+		$message_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->messages->table_name_messages} WHERE thread_id = %d", $thread_id ) );
 
 		// Check to see if any more recipients remain for this message
-		// if not, then delete the message from the database.
 		$recipients = $wpdb->get_results( $wpdb->prepare( "SELECT id FROM {$bp->messages->table_name_recipients} WHERE thread_id = %d AND is_deleted = 0", $thread_id ) );
 
+		// No more recipients so delete all messages associated with the thread
 		if ( empty( $recipients ) ) {
+			/**
+			 * Fires before an entire message thread is deleted.
+			 *
+			 * @since BuddyPress (2.2.0)
+			 *
+			 * @param int   $thread_id   ID of the thread being deleted.
+			 * @param array $message_ids IDs of messages being deleted.
+			 */
+			do_action( 'bp_messages_thread_before_delete', $thread_id, $message_ids );
+
 			// Delete all the messages
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->messages->table_name_messages} WHERE thread_id = %d", $thread_id ) );
+
+			// Do something for each message ID
+			foreach ( $message_ids as $message_id ) {
+				// Delete message meta
+				bp_messages_delete_meta( $message_id );
+
+				/**
+				 * Fires after a message is deleted. This hook is poorly named.
+				 *
+				 * @since BuddyPress (1.0.0)
+				 *
+				 * @param int $message_id ID of the message
+				 */
+				do_action( 'messages_thread_deleted_thread', $message_id );
+			}
 
 			// Delete all the recipients
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->messages->table_name_recipients} WHERE thread_id = %d", $thread_id ) );
 		}
 
 		/**
-		 * Fires after a message thread is deleted.
+		 * Fires after a message thread is either marked as deleted or deleted
 		 *
 		 * @since BuddyPress (2.2.0)
 		 *
-		 * @param int $thread_id ID of the thread being deleted.
+		 * @param int   $thread_id   ID of the thread being deleted.
+		 * @param array $message_ids IDs of messages being deleted.
 		 */
-		do_action( 'bp_messages_thread_after_delete', $message_id );
+		do_action( 'bp_messages_thread_after_delete', $thread_id, $message_ids );
 
 		return true;
 	}
@@ -325,7 +371,9 @@ class BP_Messages_Thread {
 
 		$threads = false;
 		foreach ( (array) $sorted_threads as $thread_id => $date_sent ) {
-			$threads[] = new BP_Messages_Thread( $thread_id );
+			$threads[] = new BP_Messages_Thread( $thread_id, 'ASC', array(
+				'update_meta_cache' => false
+			) );
 		}
 
 		/**

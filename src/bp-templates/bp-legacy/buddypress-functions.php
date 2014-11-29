@@ -723,7 +723,7 @@ function bp_legacy_theme_post_update() {
 	}
 
 	if ( empty( $activity_id ) )
-		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . __( 'There was a problem posting your update; please try again.', 'buddypress' ) . '</p></div>' );
+		exit( '-1<div id="message" class="error bp-ajax-message"><p>' . __( 'There was a problem posting your update. Please try again.', 'buddypress' ) . '</p></div>' );
 
 	$last_recorded = ! empty( $_POST['since'] ) ? date( 'Y-m-d H:i:s', intval( $_POST['since'] ) ) : 0;
 	if ( $last_recorded ) {
@@ -1297,6 +1297,8 @@ function bp_legacy_theme_ajax_messages_send_reply() {
 		global $thread_template;
 
 		bp_thread_has_messages( array( 'thread_id' => (int) $_REQUEST['thread_id'] ) );
+
+		bp_thread_the_message();
 
 		if ( $thread_template->message_count % 2 == 1 ) {
 			$class = 'odd';

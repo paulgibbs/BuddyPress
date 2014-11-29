@@ -241,6 +241,11 @@ function bp_version_updater() {
 		if ( $raw_db_version < 8311 ) {
 			bp_update_to_2_0_1();
 		}
+
+		// 2.2
+		if ( $raw_db_version < 9181 ) {
+			bp_update_to_2_2();
+		}
 	}
 
 	/** All done! *************************************************************/
@@ -389,6 +394,18 @@ function bp_update_to_2_0_1() {
 	bp_core_maybe_install_signups();
 }
 
+/**
+ * 2.2.0 update routine.
+ *
+ * - Add messages meta table
+ *
+ * @since BuddyPress (2.2.0)
+ */
+function bp_update_to_2_2() {
+	if ( bp_is_active( 'messages' ) ) {
+		bp_core_install_private_messaging();
+	}
+}
 
 /** Signups *******************************************************************/
 

@@ -725,7 +725,9 @@ function bp_message_thread_total_count( $thread_id = false ) {
 			$thread_id = bp_get_message_thread_id();
 		}
 
-		$thread_template = new BP_Messages_Thread_Template( $thread_id, 'ASC' );
+		$thread_template = new BP_Messages_Thread_Template( $thread_id, 'ASC', array(
+			'update_meta_cache' => false
+		) );
 
 		$count = 0;
 		if ( ! empty( $thread_template->message_count ) ) {
@@ -1467,11 +1469,10 @@ class BP_Messages_Thread_Template {
 	/**
 	 * Constructor method.
 	 *
-	 * @param int $thread_id ID of the message thread.
-	 * @param string $order 'ASC' or 'DESC'.
+	 * @see BP_Messages_Thread::populate() for full parameter info
 	 */
-	public function __construct( $thread_id, $order ) {
-		$this->thread        = new BP_Messages_Thread( $thread_id, $order );
+	public function __construct( $thread_id = 0, $order = 'ASC', $args = array() ) {
+		$this->thread        = new BP_Messages_Thread( $thread_id, $order, $args );
 		$this->message_count = count( $this->thread->messages );
 
 		$last_message_index                 = $this->message_count - 1;
@@ -1572,6 +1573,8 @@ class BP_Messages_Thread_Template {
  *           Default: if viewing a thread, the thread ID will be parsed from
  *           the URL (bp_action_variable( 0 )).
  *     @type string $order 'ASC' or 'DESC'. Default: 'ASC'.
+ *     @type bool $update_meta_cache Whether to pre-fetch metadata for
+ *           queried message items. Default: true.
  * }
  * @return bool True if there are messages to display, otherwise false.
  */
@@ -1579,15 +1582,20 @@ function bp_thread_has_messages( $args = '' ) {
 	global $thread_template;
 
 	$r = bp_parse_args( $args, array(
-		'thread_id' => false,
-		'order'     => 'ASC'
+		'thread_id'         => false,
+		'order'             => 'ASC',
+		'update_meta_cache' => true,
 	), 'thread_has_messages' );
 
 	if ( empty( $r['thread_id'] ) && bp_is_messages_component() && bp_is_current_action( 'view' ) ) {
 		$r['thread_id'] = (int) bp_action_variable( 0 );
 	}
 
-	$thread_template = new BP_Messages_Thread_Template( $r['thread_id'], $r['order'] );
+	// Set up extra args
+	$extra_args = $r;
+	unset( $extra_args['thread_id'], $extra_args['order'] );
+
+	$thread_template = new BP_Messages_Thread_Template( $r['thread_id'], $r['order'], $extra_args );
 
 	return $thread_template->has_messages();
 }
@@ -1992,15 +2000,47 @@ function bp_the_thread_message_content() {
 /**
  * Enable oEmbed support for Messages.
  *
- * There's no caching as BP 1.5 does not have a Messages meta API.
- *
  * @since BuddyPress (1.5.0)
  *
  * @see BP_Embed
- *
- * @todo Add Messages meta?
  */
 function bp_messages_embed() {
-	add_filter( 'embed_post_id', 'bp_get_message_thread_id' );
+	add_filter( 'embed_post_id',         'bp_get_the_thread_message_id' );
+	add_filter( 'bp_embed_get_cache',    'bp_embed_message_cache',      10, 3 );
+	add_action( 'bp_embed_update_cache', 'bp_embed_message_save_cache', 10, 3 );
 }
-add_action( 'messages_box_loop_start', 'bp_messages_embed' );
+add_action( 'thread_loop_start', 'bp_messages_embed' );
+
+/**
+ * Fetch a private message item's cached embeds.
+ *
+ * Used during {@link BP_Embed::parse_oembed()} via {@link bp_messages_embed()}.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @param string $cache An empty string passed by BP_Embed::parse_oembed() for
+ *        functions like this one to filter.
+ * @param int $id The ID of the message item.
+ * @param string $cachekey The cache key generated in BP_Embed::parse_oembed().
+ * @return mixed The cached embeds for this message item.
+ */
+function bp_embed_message_cache( $cache, $id, $cachekey ) {
+	return bp_messages_get_meta( $id, $cachekey );
+}
+
+/**
+ * Set a private message item's embed cache.
+ *
+ * Used during {@link BP_Embed::parse_oembed()} via {@link bp_messages_embed()}.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @param string $cache An empty string passed by BP_Embed::parse_oembed() for
+ *        functions like this one to filter.
+ * @param string $cachekey The cache key generated in BP_Embed::parse_oembed().
+ * @param int $id The ID of the message item.
+ * @return bool True on success, false on failure.
+ */
+function bp_embed_message_save_cache( $cache, $cachekey, $id ) {
+	bp_messages_update_meta( $id, $cachekey, $cache );
+}
