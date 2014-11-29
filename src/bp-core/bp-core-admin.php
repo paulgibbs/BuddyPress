@@ -406,8 +406,8 @@ class BP_Admin {
 
 		// Add a few links to the existing links array
 		return array_merge( $links, array(
-			'settings' => '<a href="' . add_query_arg( array( 'page' => 'bp-components' ), bp_get_admin_url( $this->settings_page ) ) . '">' . esc_html__( 'Settings', 'buddypress' ) . '</a>',
-			'about'    => '<a href="' . add_query_arg( array( 'page' => 'bp-about'      ), bp_get_admin_url( 'index.php'          ) ) . '">' . esc_html__( 'About',    'buddypress' ) . '</a>'
+			'dashboard' => '<a href="' . add_query_arg( array( 'page' => 'bp-about' ), bp_get_admin_url( 'index.php' ) ) . '">' . _x( 'Dashboard', 'Plugins screen dashboard link', 'buddypress' ) . '</a>',
+			'settings'  => '<a href="' . add_query_arg( array( 'page' => 'bp-components' ), bp_get_admin_url( $this->settings_page ) ) . '">' . _x( 'Settings', 'Plugins screen settings link', 'buddypress' ) . '</a>',
 		) );
 	}
 
