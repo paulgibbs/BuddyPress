@@ -23,7 +23,7 @@
 
 .bpa-header-logo:before {
 	content: "\f448";
-	font: normal 40px/1 'dashicons';
+	font: normal 30px/1 'dashicons';
 }
 
 .bpa-nav li {
