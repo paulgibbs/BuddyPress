@@ -30,6 +30,13 @@ class BP_Admin {
 	 */
 	public $admin_dir = '';
 
+	/**
+	 * Path to the admin templates directory.
+	 *
+	 * @var string
+	 */
+	public $templates_dir = '';
+
 	/** URLs ******************************************************************/
 
 	/**
@@ -70,6 +77,14 @@ class BP_Admin {
 	 */
 	public $notices = array();
 
+	/**
+	 * Set when an admin screen is rendered. Helps automate the template loading logic.
+	 *
+	 * @var string
+	 */
+	protected $current_screen_id = '';
+
+
 	/** Methods ***************************************************************/
 
 	/**
@@ -97,11 +112,12 @@ class BP_Admin {
 		$bp = buddypress();
 
 		// Paths and URLs
-		$this->admin_dir  = trailingslashit( $bp->plugin_dir  . 'bp-core/admin' ); // Admin path
-		$this->admin_url  = trailingslashit( $bp->plugin_url  . 'bp-core/admin' ); // Admin url
-		$this->images_url = trailingslashit( $this->admin_url . 'images'        ); // Admin images URL
-		$this->css_url    = trailingslashit( $this->admin_url . 'css'           ); // Admin css URL
-		$this->js_url     = trailingslashit( $this->admin_url . 'js'            ); // Admin css URL
+		$this->admin_dir     = trailingslashit( $bp->plugin_dir . 'bp-core/admin' );
+		$this->admin_url     = trailingslashit( $bp->plugin_url . 'bp-core/admin' );
+		$this->templates_dir = trailingslashit( $this->admin_dir . 'templates' );
+		$this->images_url    = trailingslashit( $this->admin_url . 'images' );
+		$this->css_url       = trailingslashit( $this->admin_url . 'css' );
+		$this->js_url        = trailingslashit( $this->admin_url . 'js' );
 
 		// Main settings page
 		$this->settings_page = bp_core_do_network_admin() ? 'settings.php' : 'options-general.php';
@@ -194,7 +210,7 @@ class BP_Admin {
 			_x( 'BuddyPress', 'Dashboard menu title', 'buddypress' ),
 			'manage_options',
 			'bp-about',
-			array( $this, 'about_screen' )
+			array( $this, 'dashboard_screen' )
 		);
 
 		$hooks = array();
@@ -451,65 +467,39 @@ class BP_Admin {
 	 */
 
 	/**
-	 * Output the about screen.
+	 * Output the dashboard screen.
 	 *
-	 * @since BuddyPress (1.7.0)
-	 */
-	public function about_screen() {
-		self::screen_header();
-		echo '<p>in about_screen</p>';
-		self::screen_footer();
-	}
-
-
-	/**
-	 * Static helper/template functions.
-	 */
-
-	/**
-	 * Outputs the common header template for the BP wp-admin screens.
-	 *
-	 * @param string $version Optional identifier to help support future changes backpat.
 	 * @since BuddyPress (2.2.0)
 	 */
-	public static function screen_header( $version = '' ) {
-		$nav  = bp_core_get_admin_tabs();
+	public function dashboard_screen() {
+		$this->current_screen_id = 'dashboard';
 
+		$this->load_template( 'header' );
+		$this->load_template( 'dashboard' );
+		$this->load_template( 'footer' );
+	}
 
-		// Header block wrapper
-		$html = '<div class="bpa-header bpa-width-full clearfix">';
-
-		// Small BP logo
-		$html .= sprintf( '<p class="bpa-header-logo" aria-hidden="true">%s</p>',
-			'<span class="screen-reader-text">' . __( 'BuddyPress', 'buddypress' ) . '</span>'
+	/**
+	 * Loads templates for the BP wp-admin screens.
+	 *
+	 * Supports a basic template hierarchy. For example, on the dashboard screen,
+	 * it tries to load "header-dashboard.php" and then "header.php".
+	 *
+	 * @param string $template_name Name of template to include.
+	 * @return
+	 */
+	protected function load_template( $template_name ) {
+		$templates = array(
+			sanitize_file_name( "{$template_name}-{$this->current_screen_id}.php" ),
+			sanitize_file_name( "{$template_name}.php" ),
 		);
 
-		// Main navigation
-		if ( ! empty( $nav ) ) {
-			$html .= '<ul class="bpa-nav" role="navigation">';
-
-			foreach ( $nav as $item ) {
-				$html .= sprintf(
-					'<li><a href="%s">%s</a></li>',
-					esc_url( $item['href'] ),
-					esc_html( $item['name'] )
-				);
+		foreach ( $templates as $template ) {
+			if ( is_readable( $this->templates_dir . $template ) ) {
+				include( $this->templates_dir . $template );
+				break;
 			}
-
-			$html .= '</ul>';  // .bpa-nav
 		}
-
-		$html .= '</div>';  // .bpa-header
-		echo $html;
-	}
-
-	/**
-	 * Outputs the common footer template for the BP wp-admin screens.
-	 *
-	 * @param string $version Optional identifier to help support future changes backpat.
-	 * @since BuddyPress (2.2.0)
-	 */
-	public static function screen_footer( $version = '' ) {
 	}
 }
 endif; // class_exists check
