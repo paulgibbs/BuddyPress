@@ -472,11 +472,11 @@ class BP_Admin {
 	 * @since BuddyPress (2.2.0)
 	 */
 	public static function screen_header( $version = '' ) {
-		$html = '<div class="wrap">';      // Closed in screen_footer()
 		$nav  = bp_core_get_admin_tabs();
 
+
 		// Header block wrapper
-		$html .= '<div class="bpa-header bpa-width-full clearfix">';
+		$html = '<div class="bpa-header bpa-width-full clearfix">';
 
 		// Small BP logo
 		$html .= sprintf( '<p class="bpa-header-logo" aria-hidden="true">%s</p>',
@@ -509,7 +509,6 @@ class BP_Admin {
 	 * @since BuddyPress (2.2.0)
 	 */
 	public static function screen_footer( $version = '' ) {
-		echo '</div>';  // Closes .wrap in screen_header()
 	}
 }
 endif; // class_exists check

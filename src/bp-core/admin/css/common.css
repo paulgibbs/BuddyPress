@@ -16,6 +16,10 @@
 .bpa-width-full {
 	width: 100%;
 }
+#wpcontent {
+	margin-left: 160px;
+	padding: 0;
+}
 
 .bpa-header-logo:before {
 	content: "\f448";
@@ -30,11 +34,13 @@
 	margin-right: 0;
 }
 
-.bpa-header .bpa-header-logo {
+.bpa-header-logo {
 	float: left;
+	margin: 0;
 }
 .bpa-header .bpa-nav {
 	float: right;
+	margin: 0;
 }
 
 
