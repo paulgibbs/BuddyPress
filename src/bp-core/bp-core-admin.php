@@ -444,7 +444,10 @@ class BP_Admin {
 		}
 	}
 
-	/** About *****************************************************************/
+
+	/**
+	 * Screens
+	 */
 
 	/**
 	 * Output the about screen.
@@ -452,7 +455,61 @@ class BP_Admin {
 	 * @since BuddyPress (1.7.0)
 	 */
 	public function about_screen() {
-		echo '<div class="wrap">About screen</div>';
+		self::screen_header();
+		echo '<p>in about_screen</p>';
+		self::screen_footer();
+	}
+
+
+	/**
+	 * Static helper/template functions.
+	 */
+
+	/**
+	 * Outputs the common header template for the BP wp-admin screens.
+	 *
+	 * @param string $version Optional identifier to help support future changes backpat.
+	 * @since BuddyPress (2.2.0)
+	 */
+	public static function screen_header( $version = '' ) {
+		$html = '<div class="wrap">';      // Closed in screen_footer()
+		$nav  = bp_core_get_admin_tabs();
+
+		// Header block wrapper
+		$html .= '<div class="bpa-header bpa-width-full clearfix">';
+
+		// Small BP logo
+		$html .= sprintf( '<p class="bpa-header-logo" aria-hidden="true">%s</p>',
+			'<span class="screen-reader-text">' . __( 'BuddyPress', 'buddypress' ) . '</span>'
+		);
+
+		// Main navigation
+		if ( ! empty( $nav ) ) {
+			$html .= '<ul class="bpa-nav" role="navigation">';
+
+			foreach ( $nav as $item ) {
+				$html .= sprintf(
+					'<li><a href="%s">%s</a></li>',
+					esc_url( $item['href'] ),
+					esc_html( $item['name'] )
+				);
+			}
+
+			$html .= '</ul>';  // .bpa-nav
+		}
+
+		$html .= '</div>';  // .bpa-header
+		echo $html;
+	}
+
+	/**
+	 * Outputs the common footer template for the BP wp-admin screens.
+	 *
+	 * @param string $version Optional identifier to help support future changes backpat.
+	 * @since BuddyPress (2.2.0)
+	 */
+	public static function screen_footer( $version = '' ) {
+		echo '</div>';  // Closes .wrap in screen_header()
 	}
 }
 endif; // class_exists check
