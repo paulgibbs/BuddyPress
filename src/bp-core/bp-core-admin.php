@@ -446,16 +446,27 @@ class BP_Admin {
 	/**
 	 * Add some general styling to the admin area.
 	 *
+	 * @param string $current_screen WP's internal hook suffix for the current screen being rendered.
 	 * @since BuddyPress (1.6.0)
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts( $current_screen ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		$file = $this->css_url . "common{$min}.css";
-		$file = apply_filters( 'bp_core_admin_common_css', $file );
-		wp_enqueue_style( 'bp-admin-common-css', $file, array(), bp_get_version() );
+		// Dashboard screen
+		if ( $current_screen === 'dashboard_page_bp-about' ) {
+			wp_enqueue_style( 'bp-admin-css', "{$this->css_url}common{$min}.css", array(), bp_get_version() );
+			wp_style_add_data( 'bp-admin-css', 'rtl', true );
 
+			if ( $min ) {
+				wp_style_add_data( 'bp-admin-css', 'suffix', $min );
+			}
+		}
+
+		// CSS loaded for every screen
+		$file = apply_filters( 'bp_core_admin_common_css', "{$this->css_url}common{$min}.css" );
+		wp_enqueue_style( 'bp-admin-common-css', $file, array(), bp_get_version() );
 		wp_style_add_data( 'bp-admin-common-css', 'rtl', true );
+
 		if ( $min ) {
 			wp_style_add_data( 'bp-admin-common-css', 'suffix', $min );
 		}

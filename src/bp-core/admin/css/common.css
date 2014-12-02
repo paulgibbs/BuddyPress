@@ -4,46 +4,6 @@
  * @since BuddyPress (1.6)
  */
 
-/* BP Dashboard (formally the About screen) basic styles
-------------------------------------------------------------------------------*/
-
-.clearfix:before,
-.clearfix:after {
-	clear: both;
-	content: " ";
-	display: table;
-}
-.bpa-width-full {
-	width: 100%;
-}
-#wpcontent {
-	margin-left: 160px;
-	padding: 0;
-}
-
-.bpa-header-logo:before {
-	content: "\f448";
-	font: normal 30px/1 'dashicons';
-}
-
-.bpa-nav li {
-	display: inline-block;
-	margin-right: 10px;
-}
-.bpa-nav li:last-child {
-	margin-right: 0;
-}
-
-.bpa-header-logo {
-	float: left;
-	margin: 0;
-}
-.bpa-header .bpa-nav {
-	float: right;
-	margin: 0;
-}
-
-
 /* User's Lists
 ------------------------------------------------------------------------------*/
 
