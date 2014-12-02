@@ -454,7 +454,7 @@ class BP_Admin {
 
 		// Dashboard screen
 		if ( $current_screen === 'dashboard_page_bp-about' ) {
-			wp_enqueue_style( 'bp-admin-css', "{$this->css_url}common{$min}.css", array(), bp_get_version() );
+			wp_enqueue_style( 'bp-admin-css', "{$this->css_url}admin{$min}.css", array(), bp_get_version() );
 			wp_style_add_data( 'bp-admin-css', 'rtl', true );
 
 			if ( $min ) {
