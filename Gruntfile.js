@@ -69,6 +69,20 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+		sass: {
+			admin: {
+				cwd: SOURCE_DIR,
+				extDot: 'last',
+				expand: true,
+				ext: '.css',
+				flatten: true,
+				src: ['bp-core/admin/sass/*.scss'],
+				dest: SOURCE_DIR + 'bp-core/admin/css/',
+				options: {
+					outputStyle: 'expanded'
+				}
+			}
+		},
 		cssjanus: {
 			core: {
 				expand: true,
@@ -228,7 +242,7 @@ module.exports = function( grunt ) {
 	/**
 	 * Register tasks.
 	 */
-	grunt.registerTask( 'build',         ['jsvalidate:src', 'jshint', 'cssjanus'] );
+	grunt.registerTask( 'build',         ['jsvalidate:src', 'jshint', 'sass', 'cssjanus'] );
 	grunt.registerTask( 'build-commit',  ['build', 'checktextdomain', 'imagemin'] );
 	grunt.registerTask( 'build-release', ['build-commit', 'clean:all', 'copy:files', 'uglify', 'jsvalidate:build', 'cssmin', 'makepot', 'exec:bbpress', 'exec:bpdefault', 'test'] );
 
