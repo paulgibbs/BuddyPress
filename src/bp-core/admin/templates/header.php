@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<nav role="navigation">
 		<ul class="bpa-nav">
 			<li class="bpa-header-logo">
-				<a href="#"><span class="screen-reader-text"><?php _e( 'BuddyPress', 'buddypress' ); ?></span></a>
+				<a href="#"><?php _e( 'BuddyPress', 'buddypress' ); ?></a>
 			</li>
 
 			<?php
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			if ( ! empty( $nav ) ) : ?>
 				<?php foreach ( $nav as $item ) : ?>
 					<li>
-						<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['name'] ); ?></a>
+						<a class="bpa-button" href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['name'] ); ?></a>
 					</li>
 				<?php endforeach; ?>
 			<?php endif; ?>

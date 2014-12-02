@@ -15,7 +15,6 @@
  * Common header/navigation.
  */
 .bpa-nav {
-  background-color: yellow;
   float: right;
   margin: 0;
   padding: 0; }
@@ -23,13 +22,25 @@
     display: inline-block;
     margin: 0 0 0 10px;
     line-height: 60px; }
-    .bpa-nav li:last-child {
-      margin-left: 0; }
+    .bpa-nav li .bpa-button {
+      border: 2px solid DarkGoldenRod;
+      border-radius: 3px;
+      padding: 5px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      color: DarkGoldenRod;
+      vertical-align: middle; }
+      .bpa-nav li .bpa-button:hover {
+        background-color: DarkGoldenRod;
+        color: white; }
   .bpa-nav .bpa-header-logo {
     margin-left: 0;
     padding-right: 15px;
-    width: 300px; }
+    width: 200px; }
 
+.bpa-header-logo a {
+  font-size: 20px;
+  vertical-align: middle; }
 .bpa-header-logo:before {
   content: "\f448";
   font: normal 30px/1 'dashicons';
