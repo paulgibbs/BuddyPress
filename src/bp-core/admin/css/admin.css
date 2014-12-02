@@ -1,0 +1,36 @@
+/**
+ * Markup for the BuddyPress wp-admin screens.
+ */
+*, *:before, *:after {
+  box-sizing: border-box; }
+
+#wpcontent {
+  margin-left: 160px;
+  padding: 0; }
+
+.bpa-width-full {
+  width: 100%; }
+
+/**
+ * Common header/navigation.
+ */
+.bpa-nav {
+  background-color: yellow;
+  float: left;
+  margin: 0;
+  padding: 0; }
+  .bpa-nav li {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    line-height: 60px; }
+    .bpa-nav li:last-child {
+      margin-right: 0; }
+  .bpa-nav .bpa-header-logo {
+    margin-right: 0;
+    padding-left: 15px;
+    width: 300px; }
+
+.bpa-header-logo:before {
+  content: "\f448";
+  font: normal 30px/1 'dashicons';
+  vertical-align: middle; }
