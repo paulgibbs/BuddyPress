@@ -235,6 +235,17 @@ module.exports = function( grunt ) {
 			options: {
 				tracUrl: 'buddypress.trac.wordpress.org'
 			}
+		},
+		watch: {
+			options: {
+				dot: true,
+				spawn: false,
+				interval: 2000
+			},
+			sass: {
+				files: [SOURCE_DIR + 'bp-core/admin/sass/*.scss'],
+				tasks: ['sass:admin', 'cssjanus']
+			}
 		}
 	});
 
