@@ -1,0 +1,6 @@
+// Clearfix
+@mixin clearfix() {
+	clear: both;
+	content: "";
+	display: table;
+}
