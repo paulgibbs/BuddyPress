@@ -243,7 +243,7 @@ module.exports = function( grunt ) {
 				interval: 2000
 			},
 			sass: {
-				files: [SOURCE_DIR + 'bp-core/admin/sass/*.scss'],
+				files: [SOURCE_DIR + 'bp-core/admin/sass/**/*.scss'],
 				tasks: ['sass:admin', 'cssjanus']
 			}
 		}
