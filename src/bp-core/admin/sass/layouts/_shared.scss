@@ -21,15 +21,8 @@
 			border: 2px solid DarkGoldenRod;
 			border-radius: 3px;
 			padding: 5px;
-			text-decoration: none;
 			transition: all 0.3s ease;
-			color: DarkGoldenRod;
 			vertical-align: middle;
-
-			&:hover {
-				background-color: DarkGoldenRod;
-				color: white;
-			}
 		}
 	}
 
@@ -41,10 +34,7 @@
 }
 
 .bpa-header-logo {
-	a {
-		font-size: 20px;
-		vertical-align: middle;
-	}
+	a { vertical-align: middle; }
 
 	&:before {
 		content: "\f448";

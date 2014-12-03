@@ -1,0 +1,20 @@
+.bp-admin {
+	-webkit-font-smoothing: antialiased;
+}
+
+.bpa-header-logo {
+	a {
+		font-size: 20px;
+		text-decoration: none;
+	}
+}
+
+.bpa-button {
+	color: DarkGoldenRod;
+	text-decoration: none;
+
+	&:hover {
+		background-color: DarkGoldenRod;
+		color: white;
+	}
+}

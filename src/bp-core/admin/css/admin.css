@@ -1,6 +1,20 @@
 /**
  * Markup for the BuddyPress wp-admin screens.
  */
+.bp-admin {
+  -webkit-font-smoothing: antialiased; }
+
+.bpa-header-logo a {
+  font-size: 20px;
+  text-decoration: none; }
+
+.bpa-button {
+  color: DarkGoldenRod;
+  text-decoration: none; }
+  .bpa-button:hover {
+    background-color: DarkGoldenRod;
+    color: white; }
+
 *, *:before, *:after {
   box-sizing: border-box; }
 
@@ -26,20 +40,14 @@
       border: 2px solid DarkGoldenRod;
       border-radius: 3px;
       padding: 5px;
-      text-decoration: none;
       transition: all 0.3s ease;
-      color: DarkGoldenRod;
       vertical-align: middle; }
-      .bpa-nav li .bpa-button:hover {
-        background-color: DarkGoldenRod;
-        color: white; }
   .bpa-nav .bpa-header-logo {
     margin-right: 0;
     padding-left: 15px;
     width: 200px; }
 
 .bpa-header-logo a {
-  font-size: 20px;
   vertical-align: middle; }
 .bpa-header-logo:before {
   content: "\f448";
