@@ -163,6 +163,9 @@ class BP_Admin {
 		// Enqueue all admin JS and CSS
 		add_action( 'bp_admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// <body> CSS classes
+		add_filter( 'admin_body_class', 'bp_get_the_admin_body_class' );
+
 		/** BuddyPress Actions ************************************************/
 
 		// Load the BuddyPress metabox in the WP Nav Menu Admin UI

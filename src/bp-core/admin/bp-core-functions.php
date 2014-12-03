@@ -883,3 +883,17 @@ function bp_core_admin_user_spammed_js() {
 	</script>
 	<?php
 }
+
+/**
+ * Customise the admin <body> class, according to the currently displayed screen.
+ *
+ * @param string $body_class The body classes coming from WP.
+ * @return string Updated body classes.
+ */
+function bp_get_the_admin_body_class( $body_class ) {
+	if ( get_current_screen()->id === 'dashboard_page_bp-about' ) {
+		$body_class .= ' bp-admin';
+	}
+
+	return apply_filters( 'bp_get_the_admin_body_class', $body_class );
+}
