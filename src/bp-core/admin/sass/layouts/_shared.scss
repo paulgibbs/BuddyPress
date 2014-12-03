@@ -18,7 +18,7 @@
 		line-height: 60px;
 
 		.bpa-button {
-			border: 2px solid DarkGoldenRod;
+			border: 2px solid $color-major-contrast;
 			border-radius: 3px;
 			padding: 5px;
 			transition: all 0.3s ease;
@@ -30,15 +30,5 @@
 		margin-right: 0;
 		padding-left: 15px;
 		width: 200px;
-	}
-}
-
-.bpa-header-logo {
-	a { vertical-align: middle; }
-
-	&:before {
-		content: "\f448";
-		font: normal 30px/1 'dashicons';
-		vertical-align: middle;
 	}
 }
