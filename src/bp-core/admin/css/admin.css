@@ -1,12 +1,11 @@
 /**
  * Markup for the BuddyPress wp-admin screens.
  */
-.bp-admin {
-  -webkit-font-smoothing: antialiased;
-  background-color: #D84800; }
+.bp-admin .bpa-header {
+  -webkit-font-smoothing: antialiased; }
 
 .bpa-header, .bpa-header a {
-  color: #FFF; }
+  color: #fff; }
 
 .bpa-header-logo a {
   font-size: 20px;
@@ -18,10 +17,10 @@
   vertical-align: middle; }
 
 .bpa-button {
-  color: #FFF;
+  color: #fff;
   text-decoration: none; }
   .bpa-button:hover {
-    background-color: #FFF;
+    background-color: #fff;
     color: #D84800; }
 
 *, *:before, *:after {
@@ -34,27 +33,45 @@
 #wpfooter {
   display: none; }
 
-.bpa-width-full {
-  width: 100%; }
-
 /**
  * Common header/navigation.
  */
+.bpa-header {
+  width: 100%;
+  background-color: #D84800;
+  height: 175px; }
+  .bpa-header:after {
+    clear: both;
+    content: "";
+    display: table; }
+
 .bpa-nav {
   float: left;
   margin: 0;
-  padding: 0; }
+  padding: 0 15px;
+  width: 100%;
+  text-align: right; }
   .bpa-nav li {
     display: inline-block;
-    margin: 0 10px 0 0;
-    line-height: 60px; }
+    margin: 0 5px 0 0;
+    line-height: 60px;
+    text-align: left; }
+    .bpa-nav li:after {
+      clear: both;
+      content: "";
+      display: table; }
+    .bpa-nav li:last-child {
+      margin-right: 0; }
     .bpa-nav li .bpa-button {
-      border: 2px solid #FFF;
+      border: 1px solid #fff;
       border-radius: 3px;
       padding: 5px;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       vertical-align: middle; }
   .bpa-nav .bpa-header-logo {
-    margin-right: 0;
-    padding-left: 15px;
+    float: left;
     width: 200px; }
+
+.bpa-card {
+  width: 75%;
+  margin: 0 auto; }

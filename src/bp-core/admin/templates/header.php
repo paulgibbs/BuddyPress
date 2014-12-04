@@ -10,6 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<a href="#"><?php _e( 'BuddyPress', 'buddypress' ); ?></a>
 			</li>
 
+			<li>
+				<a class="bpa-button" href="#"><?php _e( 'Documentation', 'buddypress' ); ?></a>
+			</li>
+
+			<li>
+				<a class="bpa-button" href="#"><?php _e( 'Support', 'buddypress' ); ?></a>
+			</li>
+
 			<?php
 			$nav = bp_core_get_admin_tabs();
 			if ( ! empty( $nav ) ) : ?>
