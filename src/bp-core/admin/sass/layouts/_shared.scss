@@ -1,11 +1,12 @@
-.bpa-width-full {
-	width: 100%;
-}
-
-
 /**
  * Common header/navigation.
  */
+
+.bpa-header {
+	width: 100%;
+
+	&:after { @include clearfix(); }
+}
 
 .bpa-nav {
 	float: left;
