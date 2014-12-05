@@ -1,5 +1,11 @@
-.bp-admin .bpa-header {
+$font-size-header-nav: 12px;
+$font-size-header-logo: 20px;
+
+
+//.bp-admin .bpa-header
+.bpa-header-logo:before {
 	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .bpa-header,
@@ -9,7 +15,7 @@
 
 .bpa-header-logo {
 	a {
-		font-size: 20px;
+		font-size: $font-size-header-logo;
 		text-decoration: none;
 		vertical-align: middle;
 	}
@@ -23,6 +29,7 @@
 
 .bpa-button {
 	color: $color-major-contrast;
+	font-size: $font-size-header-nav;
 	text-decoration: none;
 
 	&:hover {

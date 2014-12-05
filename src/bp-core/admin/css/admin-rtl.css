@@ -1,8 +1,9 @@
 /**
  * Markup for the BuddyPress wp-admin screens.
  */
-.bp-admin .bpa-header {
-  -webkit-font-smoothing: antialiased; }
+.bpa-header-logo:before {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
 
 .bpa-header, .bpa-header a {
   color: #fff; }
@@ -18,6 +19,7 @@
 
 .bpa-button {
   color: #fff;
+  font-size: 12px;
   text-decoration: none; }
   .bpa-button:hover {
     background-color: #fff;
