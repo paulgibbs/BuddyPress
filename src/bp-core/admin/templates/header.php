@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div class="bpa-header clearfix">
 	<nav role="navigation">
 		<ul class="bpa-nav">
-			<li class="bpa-header-logo">
+			<li class="bpa-nav-logo">
 				<a href="#"><?php _e( 'BuddyPress', 'buddypress' ); ?></a>
 			</li>
 
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<a class="bpa-button" href="#"><?php _e( 'Documentation', 'buddypress' ); ?></a>
 			</li>
 
-			<li>
+			<li class="bpa-nav-support">
 				<a class="bpa-button" href="#"><?php _e( 'Support', 'buddypress' ); ?></a>
 			</li>
 

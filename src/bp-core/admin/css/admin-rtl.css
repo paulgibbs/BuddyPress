@@ -1,18 +1,18 @@
 /**
  * Markup for the BuddyPress wp-admin screens.
  */
-.bpa-header-logo:before {
+.bpa-nav-logo:before {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
 .bpa-header, .bpa-header a {
   color: #fff; }
 
-.bpa-header-logo a {
+.bpa-nav-logo a {
   font-size: 20px;
   text-decoration: none;
   vertical-align: middle; }
-.bpa-header-logo:before {
+.bpa-nav-logo:before {
   content: "\f448";
   font: normal 30px/1 'dashicons';
   vertical-align: middle; }
@@ -67,9 +67,11 @@
       padding: 5px;
       transition: all 0.2s ease;
       vertical-align: middle; }
-  .bpa-nav .bpa-header-logo {
+  .bpa-nav .bpa-nav-logo {
     float: right;
     width: 200px; }
+  .bpa-nav .bpa-nav-support {
+    margin-left: 20px; }
 
 .bpa-card {
   width: 75%;

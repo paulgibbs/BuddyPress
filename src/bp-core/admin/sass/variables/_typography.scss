@@ -3,7 +3,7 @@ $font-size-header-logo: 20px;
 
 
 //.bp-admin .bpa-header
-.bpa-header-logo:before {
+.bpa-nav-logo:before {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -13,7 +13,7 @@ $font-size-header-logo: 20px;
 	color: $color-major-contrast;
 }
 
-.bpa-header-logo {
+.bpa-nav-logo {
 	a {
 		font-size: $font-size-header-logo;
 		text-decoration: none;
