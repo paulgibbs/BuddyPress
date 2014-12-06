@@ -65,8 +65,7 @@
     .bpa-nav li:last-child {
       margin-left: 0; }
     .bpa-nav li .bpa-button {
-      border: 1px solid #FFF;
-      border-radius: 3px;
+      border-radius: 2px;
       padding: 5px;
       transition: all 0.2s ease;
       vertical-align: middle; }
