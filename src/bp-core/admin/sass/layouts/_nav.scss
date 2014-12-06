@@ -1,13 +1,13 @@
 .bpa-nav {
 	float: left;
 	margin: 0;
-	padding: 0 15px;
+	padding: 0 ($margin_nav_bar * 3);
 	width: 100%;
 	text-align: right;
 
 	li {
 		display: inline-block;
-		margin: 0 5px 0 0;
+		margin: 0 $margin_nav_bar 0 0;
 		line-height: 60px;
 		text-align: left;
 
@@ -20,7 +20,7 @@
 		.bpa-button {
 			border: 1px solid $color-major-contrast;
 			border-radius: 3px;
-			padding: 5px;
+			padding: $margin_nav_bar;
 			transition: all 0.2s ease;
 			vertical-align: middle;
 		}
@@ -32,6 +32,6 @@
 	}
 
 	.bpa-nav-support {
-		margin-right: 20px;
+		margin-right: ($margin_nav_bar * 3);
 	}
 }

@@ -71,8 +71,14 @@
     float: left;
     width: 200px; }
   .bpa-nav .bpa-nav-support {
-    margin-right: 20px; }
+    margin-right: 15px; }
+
+.bpa-cards {
+  position: relative;
+  top: -60px; }
 
 .bpa-card {
   width: 75%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  background-color: yellow;
+  z-index: 10; }

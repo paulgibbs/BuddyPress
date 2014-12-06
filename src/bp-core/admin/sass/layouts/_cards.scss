@@ -1,4 +1,12 @@
+.bpa-cards {
+	position: relative;
+	top: -60px;
+}
+
 .bpa-card {
 	width: 75%;
 	margin: 0 auto;
+
+	background-color: yellow;
+	z-index: 10;
 }
