@@ -6,7 +6,7 @@
   -moz-osx-font-smoothing: grayscale; }
 
 .bpa-header, .bpa-header a {
-  color: #fff; }
+  color: #FFF; }
 
 .bpa-nav-logo a {
   font-size: 20px;
@@ -18,11 +18,11 @@
   vertical-align: middle; }
 
 .bpa-button {
-  color: #fff;
+  color: #FFF;
   font-size: 12px;
   text-decoration: none; }
   .bpa-button:hover {
-    background-color: #fff;
+    background-color: #FFF;
     color: #D84800; }
 
 *, *:before, *:after {
@@ -34,6 +34,9 @@
 
 #wpfooter {
   display: none; }
+
+#wpbody {
+  background-color: #FAFAED; }
 
 .bpa-header {
   width: 100%;
@@ -62,7 +65,7 @@
     .bpa-nav li:last-child {
       margin-left: 0; }
     .bpa-nav li .bpa-button {
-      border: 1px solid #fff;
+      border: 1px solid #FFF;
       border-radius: 3px;
       padding: 5px;
       transition: all 0.2s ease;
@@ -74,10 +77,17 @@
 
 .bpa-cards {
   position: relative;
-  top: -60px; }
+  top: -97px; }
 
 .bpa-card {
   width: 75%;
-  margin: 0 auto;
-  background-color: yellow;
+  margin: 0 auto 15px;
+  padding: 15px;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  background-color: #FFF;
   z-index: 10; }
+  .bpa-card :first-child {
+    margin-top: 0; }
+  .bpa-card :last-child {
+    margin-bottom: 0; }
