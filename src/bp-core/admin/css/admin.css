@@ -85,6 +85,7 @@
   padding: 15px;
   border-radius: 2px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  text-align: justify;
   background-color: #FFF;
   z-index: 10; }
   .bpa-card :first-child {
