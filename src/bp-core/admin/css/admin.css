@@ -66,20 +66,20 @@
       margin-right: 0; }
     .bpa-nav li .bpa-button {
       border-radius: 2px;
-      padding: 5px;
+      padding: 5px 10px;
       transition: all 0.2s ease;
       vertical-align: middle; }
   .bpa-nav .bpa-nav-logo {
     float: left; }
   .bpa-nav .bpa-nav-support {
-    margin-right: 15px; }
+    margin-right: 60px; }
 
 .bpa-cards {
   position: relative;
   top: -97px; }
 
 .bpa-card {
-  width: 75%;
+  width: 70%;
   margin: 0 auto 15px;
   padding: 15px;
   border-radius: 2px;

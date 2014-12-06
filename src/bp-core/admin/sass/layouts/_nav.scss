@@ -12,14 +12,13 @@
 		text-align: left;
 
 		&:after { @include clearfix(); }
-
 		&:last-child {
 			margin-right: 0;
 		}
 
 		.bpa-button {
 			border-radius: 2px;
-			padding: $margin-nav-bar;
+			padding: $margin-nav-bar ($margin-nav-bar * 2);
 			transition: all 0.2s ease;
 			vertical-align: middle;
 		}
@@ -30,6 +29,6 @@
 	}
 
 	.bpa-nav-support {
-		margin-right: ($margin-nav-bar * 3);
+		margin-right: 60px;
 	}
 }
