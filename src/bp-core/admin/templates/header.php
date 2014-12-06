@@ -7,15 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<nav role="navigation">
 		<ul class="bpa-nav">
 			<li class="bpa-nav-logo">
-				<a href="#"><?php _e( 'BuddyPress', 'buddypress' ); ?></a>
+				<a href="<?php echo esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ); ?>"><?php _e( 'BuddyPress', 'buddypress' ); ?></a>
 			</li>
 
 			<li>
-				<a class="bpa-button" href="#"><?php _e( 'Documentation', 'buddypress' ); ?></a>
+				<a class="bpa-button" href="https://codex.buddypress.org/" target="_new"><?php _e( 'Documentation', 'buddypress' ); ?></a>
 			</li>
 
 			<li class="bpa-nav-support">
-				<a class="bpa-button" href="#"><?php _e( 'Support', 'buddypress' ); ?></a>
+				<a class="bpa-button" href="https://buddypress.org/support/" target="_new"><?php _e( 'Support', 'buddypress' ); ?></a>
 			</li>
 
 			<?php
