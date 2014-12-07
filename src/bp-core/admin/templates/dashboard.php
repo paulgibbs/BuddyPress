@@ -1,21 +1,20 @@
 <?php
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+// &#8217;  == apostrophe
 ?>
 
 <div class="bpa-cards">
 	<article class="bpa-card">
-		<p>Lorem ipsum dolor sit amet, tritani probatus evertitur vim at. Nonumy omnium insolens id sed. Mei hinc vitae option et, sit ex brute hendrerit definiebas. Summo nostro possim nec ne, saepe scripta te eum, saepe tacimates suscipiantur at has. Noster timeam corpora et sit.</p>
-		<p>Eum ei congue eligendi, no menandri postulant vim, purto atqui viris cum an. Aliquam tibique vim at. Cu esse minim legendos sit, omnium probatus sea in, pro id atqui iuvaret delectus. Munere albucius scripserit cu has. Cu cum wisi vituperatoribus, ex sed inermis fastidii. Meliore gubergren id sit, at congue labores persequeris vim, per esse incorrupte eu.</p>
+		<p>BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and more.</p>
 	</article>
 
 	<article class="bpa-card">
-		<p>Lorem ipsum dolor sit amet, tritani probatus evertitur vim at. Nonumy omnium insolens id sed. Mei hinc vitae option et, sit ex brute hendrerit definiebas. Summo nostro possim nec ne, saepe scripta te eum, saepe tacimates suscipiantur at has. Noster timeam corpora et sit.</p>
-		<p>Eum ei congue eligendi, no menandri postulant vim, purto atqui viris cum an. Aliquam tibique vim at. Cu esse minim legendos sit, omnium probatus sea in, pro id atqui iuvaret delectus. Munere albucius scripserit cu has. Cu cum wisi vituperatoribus, ex sed inermis fastidii. Meliore gubergren id sit, at congue labores persequeris vim, per esse incorrupte eu.</p>
-	</article>
-
-	<article class="bpa-card">
-		<p>Lorem ipsum dolor sit amet, tritani probatus evertitur vim at. Nonumy omnium insolens id sed. Mei hinc vitae option et, sit ex brute hendrerit definiebas. Summo nostro possim nec ne, saepe scripta te eum, saepe tacimates suscipiantur at has. Noster timeam corpora et sit.</p>
-		<p>Eum ei congue eligendi, no menandri postulant vim, purto atqui viris cum an. Aliquam tibique vim at. Cu esse minim legendos sit, omnium probatus sea in, pro id atqui iuvaret delectus. Munere albucius scripserit cu has. Cu cum wisi vituperatoribus, ex sed inermis fastidii. Meliore gubergren id sit, at congue labores persequeris vim, per esse incorrupte eu.</p>
+		<h3>Getting You Started</h3>
+		<p>We&#8217;ve activated our two most popular modules so you can start enjoying BuddyPress immediately; Activity Streams and Community Profiles.
+		<p><strong>Activity Streams</strong> give your members a central place to discuss and comment on what other members are doing on your site. Activity Streams also provide Twitter-style @mentions and favouriting.</p>
+		<p><strong>Extended Profiles</strong> are fully editadble profile field that allow you to define the fields that your members will use to describe themselves. Tailor profile fields to suit your audience.</p>
+		<p>Here are quick introductions to these features; they only take a few minutes to learn, so you'll be up and ready in no time!</p>
 	</article>
 </div>
