@@ -124,13 +124,14 @@
     color: inherit; }
 
 .bpa-elevator-pitch {
-  margin: 70px auto 50px;
+  margin: 50px auto 50px;
   color: white;
   width: 70%; }
   .bpa-elevator-pitch h1 {
     font-weight: 100;
     text-align: center;
-    line-height: 50px; }
+    line-height: 42px;
+    margin: 0; }
 
 .bpa-button-activity {
   margin-right: 15px; }
