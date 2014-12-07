@@ -5,11 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 // &#8217;  == apostrophe
 ?>
 
-<div class="bpa-cards">
-	<article class="bpa-card">
-		<p>BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and more.</p>
-	</article>
+<div class="bpa-elevator-pitch">
+	<h1>BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and&nbsp;more.</h1>
+</div>
 
+<div class="bpa-cards">
 	<article class="bpa-card">
 		<h3>Getting You Started</h3>
 		<p>We&#8217;ve activated our two most popular modules so you can start enjoying BuddyPress immediately; Activity Streams and Community Profiles.
@@ -17,4 +17,26 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<p><strong>Extended Profiles</strong> are fully editadble profile field that allow you to define the fields that your members will use to describe themselves. Tailor profile fields to suit your audience.</p>
 		<p>Here are quick introductions to these features; they only take a few minutes to learn, so you'll be up and ready in no time!</p>
 	</article>
+</div>
+
+<div class="bpa-buttons">
+	<div class="bpa-button-major bpa-button-activity">
+		<a href="#">
+			<div class="bpa-button-major-icon"></div>
+			<div class="bpa-button-major-contents">
+				<h3>Activity Stream</h3>
+				<p>Dashboard Management</p>
+			</div>
+		</a>
+	</div>
+
+	<div class="bpa-button-major bpa-button-xprofile">
+		<a href="#">
+			<div class="bpa-button-major-icon"></div>
+			<div class="bpa-button-major-contents">
+				<h3>Extended Profiles</h3>
+				<p>Create Custom Fields</p>
+			</div>
+		</a>
+	</div>
 </div>

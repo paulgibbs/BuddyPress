@@ -1,0 +1,29 @@
+.bpa-elevator-pitch {
+	margin: 70px auto 50px;
+	color: white;
+	width: 70%;
+
+	h1 {
+		font-weight: 100;
+		text-align: center;
+		line-height: 50px;
+	}
+}
+
+.bpa-button-activity {
+	margin-right: $cards-margin;
+
+	.bpa-button-major-icon {
+		&:before {
+			content: "\f452";
+		}
+	}
+}
+
+.bpa-button-xprofile {
+	.bpa-button-major-icon {
+		&:before {
+			content: "\f336";
+		}
+	}
+}

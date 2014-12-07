@@ -25,6 +25,9 @@
     background-color: #FFF;
     color: #D84800; }
 
+.bpa-button-activity h3 {
+  text-transform: uppercase; }
+
 *, *:before, *:after {
   box-sizing: border-box; }
 
@@ -38,10 +41,11 @@
 #wpbody {
   background-color: #FAFAED; }
 
+#wpbody-content {
+  background-color: #D84800; }
+
 .bpa-header {
-  width: 100%;
-  background-color: #D84800;
-  height: 175px; }
+  width: 100%; }
   .bpa-header:after {
     clear: both;
     content: "";
@@ -74,10 +78,6 @@
   .bpa-nav .bpa-nav-support {
     margin-left: 60px; }
 
-.bpa-cards {
-  position: relative;
-  top: -97px; }
-
 .bpa-card {
   width: 70%;
   margin: 0 auto 15px;
@@ -85,9 +85,57 @@
   border-radius: 2px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   text-align: justify;
-  background-color: #FFF;
+  background-color: #FAFAED;
   z-index: 10; }
   .bpa-card :first-child {
     margin-top: 0; }
   .bpa-card :last-child {
     margin-bottom: 0; }
+
+.bpa-button-major {
+  display: inline-block;
+  background-color: #FAFAED;
+  padding: 5px 10px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 2px; }
+  .bpa-button-major h3 {
+    margin: 0; }
+  .bpa-button-major p {
+    margin: 0; }
+  .bpa-button-major:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); }
+
+.bpa-button-major-icon {
+  display: inline-block;
+  margin-left: 5px;
+  width: 50px;
+  vertical-align: middle; }
+  .bpa-button-major-icon:before {
+    font: normal 50px/1 'dashicons';
+    vertical-align: middle; }
+
+.bpa-button-major-contents {
+  display: inline-block;
+  vertical-align: middle; }
+
+.bpa-buttons {
+  text-align: center; }
+  .bpa-buttons a {
+    color: inherit; }
+
+.bpa-elevator-pitch {
+  margin: 70px auto 50px;
+  color: white;
+  width: 70%; }
+  .bpa-elevator-pitch h1 {
+    font-weight: 100;
+    text-align: center;
+    line-height: 50px; }
+
+.bpa-button-activity {
+  margin-left: 15px; }
+  .bpa-button-activity .bpa-button-major-icon:before {
+    content: "\f452"; }
+
+.bpa-button-xprofile .bpa-button-major-icon:before {
+  content: "\f336"; }

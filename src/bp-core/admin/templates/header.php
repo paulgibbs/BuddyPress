@@ -27,7 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					</li>
 				<?php endforeach; ?>
 			<?php endif; ?>
-
 		</ul><!-- .bpa-nav -->
 	</nav>
 </div><!-- .bpa-header -->
