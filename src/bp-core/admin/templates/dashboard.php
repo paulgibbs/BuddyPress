@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 
 <div class="bpa-elevator-pitch">
-	<h1>BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and&nbsp;more.</h1>
+	<h1><?php _e( 'Welcome! BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and&nbsp;more.', 'buddypress' ); ?></h1>
 </div>
 
 <article class="bpa-card">
@@ -18,21 +18,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <div class="bpa-buttons">
 	<div class="bpa-button-major bpa-button-activity">
-		<a href="#">
+		<a href="<?php echo esc_url( bp_get_admin_url( 'admin.php?page=bp-activity' ) ); ?>">
 			<div class="bpa-button-major-icon"></div>
 			<div class="bpa-button-major-contents">
 				<h3>Activity Stream</h3>
-				<p>Dashboard Management</p>
+				<h3><?php _ex( 'Activity Stream', 'dashboard screen button title', 'buddypress' ); ?></h3>
+				<p><?php _ex( 'Dashboard Management', 'dashboard screen button title', 'buddypress' ); ?></p>
 			</div>
 		</a>
 	</div>
 
 	<div class="bpa-button-major bpa-button-xprofile">
-		<a href="#">
+		<a href="<?php echo esc_url( bp_get_admin_url( 'admin.php?page=bp-profile-setup' ) ); ?>">
 			<div class="bpa-button-major-icon"></div>
 			<div class="bpa-button-major-contents">
-				<h3>Extended Profiles</h3>
-				<p>Create Custom Fields</p>
+				<h3><?php _ex( 'Extended Profiles', 'dashboard screen button title', 'buddypress' ); ?></h3>
+				<p><?php _ex( 'Create Custom Fields', 'dashboard screen button title', 'buddypress' ); ?></p>
 			</div>
 		</a>
 	</div>
