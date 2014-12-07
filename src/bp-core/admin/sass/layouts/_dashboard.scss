@@ -28,3 +28,28 @@
 		}
 	}
 }
+
+.bpa-credits {
+	background-color: $color-background;
+	text-align: center;
+}
+
+.bpa-person {
+	display: inline-block;
+	margin: 0 $credits-margin 0 0;
+	padding: 0;
+	width: 280px;
+
+	img {
+		border-radius: 100%;
+		margin-right: 5px;
+	}
+}
+
+.bpa-person-details {
+	display: inline-block;
+
+	a {
+		display: block;
+	}
+}
