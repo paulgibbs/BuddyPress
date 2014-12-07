@@ -124,6 +124,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 		</li>
 	</ul>
 
+	<!--
 	<h4 class=""><?php printf( __( 'Contributors to BuddyPress %s', 'buddypress' ), $display_version ); ?></h4>
 	<p class="bpa-people-all-contributors">
 		<a href="https://profiles.wordpress.org/adamt19/">adamt19</a>,
@@ -177,4 +178,5 @@ list( $display_version ) = explode( '-', bp_get_version() );
 		<a href="https://github.com/ichord/Caret.js">Caret.js</a>,
 		<a href="https://github.com/carhartl/jquery-cookie">jquery.cookie</a>.
 	</p>
+	-->
 </div>
