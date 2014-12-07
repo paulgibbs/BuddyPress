@@ -1,11 +1,6 @@
-.bpa-cards {
-	position: relative;
-	top: -(142px - ($margin-nav-bar*9));
-}
-
 .bpa-card {
 	width: 70%;
-	margin: 0 auto $cards-margin;
+	margin: $cards-margin auto;
 	padding: $cards-margin;
 	border-radius: 2px;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
