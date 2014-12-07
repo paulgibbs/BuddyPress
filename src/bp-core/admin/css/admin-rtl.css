@@ -116,7 +116,8 @@
 
 .bpa-button-major-contents {
   display: inline-block;
-  vertical-align: middle; }
+  vertical-align: middle;
+  text-align: right; }
 
 .bpa-buttons {
   text-align: center; }
