@@ -153,7 +153,8 @@
   width: 280px; }
   .bpa-person img {
     border-radius: 100%;
-    margin-left: 5px; }
+    margin-left: 5px;
+    box-shadow: magenta 0px 0px 5px 2px; }
 
 .bpa-person-details {
   display: inline-block; }
