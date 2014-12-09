@@ -145,10 +145,12 @@
   content: "\f336"; }
 
 .bpa-credits {
-  margin: 15px 0;
-  padding: 0 15%;
-  text-align: center;
+  margin: 15px auto;
+  padding: 15px;
+  width: 70%;
   background-color: #FAFAED; }
+  .bpa-credits h3 {
+    margin-top: 0; }
 
 .bpa-people {
   display: inline-block;
@@ -165,18 +167,15 @@
       display: table; }
 
 .bpa-person {
-  margin: 0 15px 0 0;
+  margin: 0 15px 15px 0;
   padding: 0;
-  float: left; }
+  float: left;
+  width: 230px; }
   .bpa-person img {
     border-radius: 100%;
-    margin-right: 5px;
-    box-shadow: magenta 0px 0px 5px 2px; }
+    margin-right: 5px; }
   .bpa-person > a + a {
     display: block; }
 
 .bpa-person-details a {
   display: block; }
-
-.bpa-people-core-team {
-  margin-top: 15px; }

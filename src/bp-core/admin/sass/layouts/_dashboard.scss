@@ -30,10 +30,14 @@
 }
 
 .bpa-credits {
-	margin: $credits-margin 0;
-	padding: 0 15%;
-	text-align: center;
+	margin: $cards-margin auto;
+	padding: $cards-margin;
+	width: 70%;
 	background-color: $color-background;
+
+	h3 {
+		margin-top: 0;
+	}
 }
 
 .bpa-people {
@@ -49,14 +53,15 @@
 }
 
 .bpa-person {
-	margin: 0 $credits-margin 0 0;
+	margin: 0 $credits-margin $credits-margin 0;
 	padding: 0;
 	float: left;
+	width: 230px;
 
 	img {
 		border-radius: 100%;
 		margin-right: 5px;
-		box-shadow: rgb(255, 0, 255) 0px 0px 5px 2px;
+		//box-shadow: rgb(255, 0, 255) 0px 0px 5px 2px;
 	}
 
 	> a + a {
@@ -68,8 +73,4 @@
 	a {
 		display: block;
 	}
-}
-
-.bpa-people-core-team {
-	margin-top: $credits-margin;
 }
