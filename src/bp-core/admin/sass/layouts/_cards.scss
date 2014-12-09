@@ -1,6 +1,5 @@
 .bpa-card {
-	width: 70%;
-	margin: $cards-margin auto;
+	margin: $cards-margin $cards-margin;
 	padding: $cards-margin;
 	border-radius: 2px;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -17,3 +16,11 @@
 	}
 }
 
+
+// Small + large tablets
+@media only screen and (min-width: 783px) {
+	.bpa-card {
+		margin: $cards-margin auto;
+		width: 70%;
+	}
+}

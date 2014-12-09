@@ -44,6 +44,10 @@
 #wpbody-content {
   background-color: #D84800; }
 
+@media screen and (max-width: 782px) {
+  .auto-fold #wpcontent {
+    padding-left: 0; } }
+
 .bpa-header {
   width: 100%; }
   .bpa-header:after {
@@ -57,11 +61,12 @@
   margin: 0;
   padding: 0 15px;
   width: 100%;
-  text-align: right; }
+  text-align: right;
+  height: 46px; }
   .bpa-nav li {
     display: inline-block;
     margin: 0 10px 0 0;
-    line-height: 60px;
+    line-height: 46px;
     text-align: left; }
     .bpa-nav li:after {
       clear: both;
@@ -74,30 +79,25 @@
       padding: 10px;
       transition: all 0.2s ease;
       vertical-align: middle; }
+  .bpa-nav .bpa-nav-docs, .bpa-nav .bpa-nav-support {
+    display: none; }
   .bpa-nav .bpa-nav-logo {
     background-color: #D84800;
     float: left;
     padding: 0 10px; }
-  .bpa-nav .bpa-nav-support {
-    margin-right: 60px; }
 
-/**
- * RESPONSIVE MAGIC
- *
- * The base CSS is for phone-sized devices.
- *
- * Small tablets = 783px+ wide  (matches a breakpoint in wp-admin).
- * Large tablets = 1200px+ wide (arbitary breakpoint, needs testing).
- */
-/* Small + large tablets */
-@media only screen and (min-width: 783px) { }
-
-/* Large tablets/desktop */
-@media only screen and (min-width: 1200px) { }
+@media only screen and (min-width: 783px) {
+  .bpa-nav {
+    height: auto; }
+    .bpa-nav li {
+      line-height: 60px; }
+    .bpa-nav .bpa-nav-docs, .bpa-nav .bpa-nav-support {
+      display: inline-block; }
+    .bpa-nav .bpa-nav-support {
+      margin-right: 60px; } }
 
 .bpa-card {
-  width: 70%;
-  margin: 15px auto;
+  margin: 15px 15px;
   padding: 15px;
   border-radius: 2px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -107,6 +107,11 @@
     margin-top: 0; }
   .bpa-card :last-child {
     margin-bottom: 0; }
+
+@media only screen and (min-width: 783px) {
+  .bpa-card {
+    margin: 15px auto;
+    width: 70%; } }
 
 .bpa-button-major {
   display: inline-block;
@@ -141,9 +146,8 @@
     color: inherit; }
 
 .bpa-elevator-pitch {
-  margin: 50px auto 50px;
-  color: white;
-  width: 70%; }
+  margin: 50px 15px;
+  color: white; }
   .bpa-elevator-pitch h1 {
     font-weight: 100;
     text-align: center;
@@ -161,7 +165,6 @@
 .bpa-credits {
   margin: 15px auto;
   padding: 15px;
-  width: 70%;
   background-color: #FAFAED; }
   .bpa-credits h3 {
     margin-top: 0; }
@@ -193,3 +196,10 @@
 
 .bpa-person-details a {
   display: block; }
+
+@media only screen and (min-width: 783px) {
+  .bpa-elevator-pitch {
+    margin: 50px auto 50px;
+    width: 70%; }
+  .bpa-credits {
+    width: 70%; } }

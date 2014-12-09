@@ -5,11 +5,12 @@
 	padding: 0 ($margin-nav-bar * 1.5);
 	width: 100%;
 	text-align: right;
+	height: 46px;
 
 	li {
 		display: inline-block;
 		margin: 0 $margin-nav-bar 0 0;
-		line-height: 60px;
+		line-height: 46px;
 		text-align: left;
 
 		&:after { @include clearfix(); }
@@ -25,31 +26,35 @@
 		}
 	}
 
+	.bpa-nav-docs,
+	.bpa-nav-support {
+		display: none;
+	}
+
 	.bpa-nav-logo {
 		background-color: $color-major;
 		float: left;
 		padding: 0 $margin-nav-bar;
 	}
-
-	.bpa-nav-support {
-		margin-right: 60px;
-	}
 }
 
 
-/**
- * RESPONSIVE MAGIC
- *
- * The base CSS is for phone-sized devices.
- *
- * Small tablets = 783px+ wide  (matches a breakpoint in wp-admin).
- * Large tablets = 1200px+ wide (arbitary breakpoint, needs testing).
- */
-
-/* Small + large tablets */
+// Small + large tablets
 @media only screen and (min-width: 783px) {
-}
+	.bpa-nav {
+		height: auto;
 
-/* Large tablets/desktop */
-@media only screen and (min-width: 1200px) {
+		li {
+			line-height: 60px;
+		}
+
+		.bpa-nav-docs,
+		.bpa-nav-support {
+			display: inline-block;
+		}
+
+		.bpa-nav-support {
+			margin-right: 60px;
+		}
+	}
 }

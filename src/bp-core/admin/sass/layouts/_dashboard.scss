@@ -1,7 +1,6 @@
 .bpa-elevator-pitch {
-	margin: 50px auto 50px;
+	margin: 50px $cards-margin;
 	color: white;
-	width: 70%;
 
 	h1 {
 		font-weight: 100;
@@ -32,7 +31,6 @@
 .bpa-credits {
 	margin: $cards-margin auto;
 	padding: $cards-margin;
-	width: 70%;
 	background-color: $color-background;
 
 	h3 {
@@ -72,5 +70,17 @@
 .bpa-person-details {
 	a {
 		display: block;
+	}
+}
+
+
+@media only screen and (min-width: 783px) {
+	.bpa-elevator-pitch {
+		margin: 50px auto 50px;
+		width: 70%;
+	}
+
+	.bpa-credits {
+		width: 70%;
 	}
 }
