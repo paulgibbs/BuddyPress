@@ -39,6 +39,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	</div>
 </div>
 
+<!--
 <div class="bpa-credits">
 	<h3><?php _e( 'Core Team', 'buddypress' ); ?></h3>
 	<ul class="bpa-people bpa-people-project-leaders">
@@ -102,7 +103,6 @@ list( $display_version ) = explode( '-', bp_get_version() );
 		</li>
 	</ul>
 
-	<!--
 	<h3><?php printf( __( 'Contributors to BuddyPress %s', 'buddypress' ), $display_version ); ?></h3>
 	<p class="bpa-people-all-contributors">
 		<a href="https://profiles.wordpress.org/adamt19/">adamt19</a>,
