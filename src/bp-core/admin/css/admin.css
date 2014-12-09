@@ -52,6 +52,7 @@
     display: table; }
 
 .bpa-nav {
+  background-color: #B93E00;
   float: left;
   margin: 0;
   padding: 0 15px;
@@ -74,7 +75,9 @@
       transition: all 0.2s ease;
       vertical-align: middle; }
   .bpa-nav .bpa-nav-logo {
-    float: left; }
+    background-color: #D84800;
+    float: left;
+    padding: 0 10px; }
   .bpa-nav .bpa-nav-support {
     margin-right: 60px; }
 
