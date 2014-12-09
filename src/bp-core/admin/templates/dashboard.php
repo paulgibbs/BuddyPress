@@ -40,92 +40,70 @@ list( $display_version ) = explode( '-', bp_get_version() );
 </div>
 
 <div class="bpa-credits">
-	<h4 class=""><?php _e( 'Project Leaders', 'buddypress' ); ?></h4>
+	<h3><?php _e( 'Core Team', 'buddypress' ); ?></h3>
 	<ul class="bpa-people bpa-people-project-leaders">
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/johnjamesjacoby"><img src="//0.gravatar.com/avatar/81ec16063d89b162d55efe72165c105f?s=60" alt="John James Jacoby"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/johnjamesjacoby">John James Jacoby</a>
-				<span><?php _e( 'Project Lead', 'buddypress' ); ?></span>
-			</div>
+			<a href="http://profiles.wordpress.org/johnjamesjacoby">John James Jacoby</a>
+			<span><?php _e( 'Project Lead', 'buddypress' ); ?></span>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/boonebgorges"><img src="//0.gravatar.com/avatar/9cf7c4541a582729a5fc7ae484786c0c?s=60" alt="Boone B. Gorges"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/boonebgorges">Boone B. Gorges</a>
-				<span><?php _e( 'Lead Developer', 'buddypress' ); ?></span>
-			</div>
+			<a href="http://profiles.wordpress.org/boonebgorges">Boone B. Gorges</a>
+			<span><?php _e( 'Lead Developer', 'buddypress' ); ?></span>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/djpaul"><img src="//0.gravatar.com/avatar/3bc9ab796299d67ce83dceb9554f75df?s=60" alt="Paul Gibbs"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/djpaul">Paul Gibbs</a>
-				<span><?php _e( 'Lead Developer', 'buddypress' ); ?></span>
-			</div>
+			<a href="http://profiles.wordpress.org/djpaul">Paul Gibbs</a>
+			<span><?php _e( 'Lead Developer', 'buddypress' ); ?></span>
 		</li>
 	</ul>
+	<br>
 
-	<h4 class=""><?php _e( 'Core Team', 'buddypress' ); ?></h4>
-		<ul class="bpa-people bpa-people-core-team">
+	<ul class="bpa-people bpa-people-core-team">
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/r-a-y"><img src="//0.gravatar.com/avatar/3bfa556a62b5bfac1012b6ba5f42ebfa?s=60" alt="Ray"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/r-a-y">Ray</a>
-				<span><?php _e( 'Core Developer', 'buddypress' ); ?></span>
-			</div>
+			<a href="http://profiles.wordpress.org/r-a-y">Ray</a>
+			<span><?php _e( 'Core Developer', 'buddypress' ); ?></span>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/imath"><img src="//0.gravatar.com/avatar/8b208ca408dad63888253ee1800d6a03?s=60" alt="Mathieu Viet"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/imath">Mathieu Viet</a>
-				<span><?php _e( 'Core Developer', 'buddypress' ); ?></span>
-			</div>
+			<a href="http://profiles.wordpress.org/imath">Mathieu Viet</a>
+			<span><?php _e( 'Core Developer', 'buddypress' ); ?></span>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/mercime"><img src="//0.gravatar.com/avatar/fae451be6708241627983570a1a1817a?s=60" alt="Mercime"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/mercime">Mercime</a>
-				<span><?php _e( 'Navigator', 'buddypress' ); ?></span>
-			</div>
+			<a href="http://profiles.wordpress.org/mercime">Mercime</a>
+			<span><?php _e( 'Navigator', 'buddypress' ); ?></span>
 		</li>
 	</ul>
 
-	<h4 class=""><?php _e( 'Recent Rockstars', 'buddypress' ); ?></h4>
+	<h3><?php _e( 'Recent Rockstars', 'buddypress' ); ?></h3>
 	<ul class="bpa-people bpa-people-rockstars">
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/dcavins"><img src="//0.gravatar.com/avatar/a5fa7e83d59cb45ebb616235a176595a?s=60" alt="David Cavins"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/dcavins">David Cavins</a>
-			</div>
+			<a href="http://profiles.wordpress.org/dcavins">David Cavins</a>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/henry.wright"><img src="//0.gravatar.com/avatar/0da2f1a9340d6af196b870f6c107a248?s=60" alt="Henry Wright"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/henry.wright">Henry Wright</a>
-			</div>
+			<a href="http://profiles.wordpress.org/henry.wright">Henry Wright</a>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/danbp"><img src="//0.gravatar.com/avatar/0deae2e7003027fbf153500cd3fa5501?s=60" alt="danbp"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/danbp">danbp</a>
-			</div>
+			<a href="http://profiles.wordpress.org/danbp">danbp</a>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/shanebp"><img src="//0.gravatar.com/avatar/ffd294ab5833ba14aaf175f9acc71cc4?s=60" alt="shanebp"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/shanebp">shanebp</a>
-			</div
+			<a href="http://profiles.wordpress.org/shanebp">shanebp</a>
 		</li>
 		<li class="bpa-person">
 			<a href="http://profiles.wordpress.org/netweb"><img src="//0.gravatar.com/avatar/97e1620b501da675315ba7cfb740e80f?s=60" alt="Stephen Edgar"></a>
-			<div class="bpa-person-details">
-				<a href="http://profiles.wordpress.org/netweb">Stephen Edgar</a>
-			</div>
+			<a href="http://profiles.wordpress.org/netweb">Stephen Edgar</a>
 		</li>
 	</ul>
 
 	<!--
-	<h4 class=""><?php printf( __( 'Contributors to BuddyPress %s', 'buddypress' ), $display_version ); ?></h4>
+	<h3><?php printf( __( 'Contributors to BuddyPress %s', 'buddypress' ), $display_version ); ?></h3>
 	<p class="bpa-people-all-contributors">
 		<a href="https://profiles.wordpress.org/adamt19/">adamt19</a>,
 		<a href="https://profiles.wordpress.org/Viper007Bond/">Alex Mills (Viper007Bond)</a>,
@@ -172,7 +150,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 		<a href="https://profiles.wordpress.org/wolfhoundjesse/">wolfhoundjesse</a>.
 	</p>
 
-	<h4 class="wp-people-group"><?php _e( 'External Libraries', 'buddypress' ); ?></h4>
+	<h3><?php _e( 'External Libraries', 'buddypress' ); ?></h3>
 	<p class="wp-credits-list">
 		<a href="https://github.com/ichord/At.js">At.js</a>,
 		<a href="https://github.com/ichord/Caret.js">Caret.js</a>,

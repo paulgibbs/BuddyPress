@@ -85,7 +85,6 @@
   border-radius: 2px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   text-align: justify;
-  background-color: #FAFAED;
   z-index: 10; }
   .bpa-card :first-child {
     margin-top: 0; }
@@ -97,7 +96,7 @@
   background-color: #FAFAED;
   padding: 5px 10px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 2px; }
+  border-radius: 6px; }
   .bpa-button-major h3 {
     margin: 0; }
   .bpa-button-major p {
@@ -143,20 +142,38 @@
   content: "\f336"; }
 
 .bpa-credits {
-  background-color: #FAFAED;
-  text-align: center; }
+  margin: 15px 0;
+  padding: 0 15%;
+  text-align: center;
+  background-color: #FAFAED; }
+
+.bpa-people {
+  display: inline-block;
+  margin: 0; }
+  .bpa-people:after {
+    clear: both;
+    content: "";
+    display: table; }
+  .bpa-people :last-child {
+    margin-left: 0; }
+    .bpa-people :last-child:after {
+      clear: both;
+      content: "";
+      display: table; }
 
 .bpa-person {
-  display: inline-block;
   margin: 0 0 0 15px;
   padding: 0;
-  width: 280px; }
+  float: right; }
   .bpa-person img {
     border-radius: 100%;
     margin-left: 5px;
     box-shadow: magenta 0px 0px 5px 2px; }
-
-.bpa-person-details {
-  display: inline-block; }
-  .bpa-person-details a {
+  .bpa-person > a + a {
     display: block; }
+
+.bpa-person-details a {
+  display: block; }
+
+.bpa-people-core-team {
+  margin-top: 15px; }
