@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<a href="<?php echo esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ); ?>"><?php _e( 'BuddyPress', 'buddypress' ); ?></a>
 			</li>
 
-			<li>
+			<li class="bpa-nav-docs">
 				<a class="bpa-button" href="https://codex.buddypress.org/" target="_new"><?php _e( 'Documentation', 'buddypress' ); ?></a>
 			</li>
 
