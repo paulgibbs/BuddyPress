@@ -1,5 +1,5 @@
 .bpa-elevator-pitch {
-	margin: 50px $cards-margin;
+	margin: 50px $dashboard-margin;
 	color: $color-major-contrast;
 
 	h1 {
@@ -11,7 +11,7 @@
 }
 
 .bpa-button-activity {
-	margin-right: $cards-margin;
+	margin-right: $dashboard-margin;
 
 	.bpa-button-major-icon {
 		&:before {
@@ -29,8 +29,8 @@
 }
 
 .bpa-credits {
-	margin: $cards-margin auto;
-	padding: $cards-margin;
+	margin: $dashboard-margin auto;
+	padding: $dashboard-margin;
 	background-color: $color-background;
 
 	h3 {

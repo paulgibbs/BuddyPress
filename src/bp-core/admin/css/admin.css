@@ -96,22 +96,8 @@
     .bpa-nav .bpa-nav-support {
       margin-right: 60px; } }
 
-.bpa-card {
-  margin: 15px 15px;
-  padding: 15px;
-  border-radius: 2px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  text-align: justify;
-  z-index: 10; }
-  .bpa-card :first-child {
-    margin-top: 0; }
-  .bpa-card :last-child {
-    margin-bottom: 0; }
-
-@media only screen and (min-width: 783px) {
-  .bpa-card {
-    margin: 15px auto;
-    width: 70%; } }
+.bpa-content {
+  margin: 50px 15px; }
 
 .bpa-button-major {
   display: inline-block;
@@ -147,10 +133,9 @@
 
 .bpa-elevator-pitch {
   margin: 50px 15px;
-  color: white; }
+  color: #FFF; }
   .bpa-elevator-pitch h1 {
     font-weight: 100;
-    text-align: center;
     line-height: 42px;
     margin: 0; }
 

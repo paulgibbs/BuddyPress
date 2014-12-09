@@ -10,7 +10,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	<h1><?php _e( 'Welcome! BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and&nbsp;more.', 'buddypress' ); ?></h1>
 </div>
 
-<article class="bpa-card">
+<div class="bpa-content">
 	<h3>Getting You Started</h3>
 	<p>We&#8217;ve activated our two most popular modules so you can start enjoying BuddyPress immediately; Activity Streams and Community Profiles.
 	<p><strong>Activity Streams</strong> give your members a central place to discuss and comment on what other members are doing on your site. Activity Streams also provide Twitter-style @mentions and favouriting.</p>
