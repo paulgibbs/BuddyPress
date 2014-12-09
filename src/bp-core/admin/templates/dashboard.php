@@ -11,10 +11,13 @@ list( $display_version ) = explode( '-', bp_get_version() );
 </div>
 
 <div class="bpa-content">
-	<h3>Getting You Started</h3>
-	<p>We&#8217;ve activated our two most popular modules so you can start enjoying BuddyPress immediately; Activity Streams and Community Profiles.
-	<p><strong>Activity Streams</strong> give your members a central place to discuss and comment on what other members are doing on your site. Activity Streams also provide Twitter-style @mentions and favouriting.</p>
-	<p><strong>Extended Profiles</strong> are fully editadble profile field that allow you to define the fields that your members will use to describe themselves. Tailor profile fields to suit your audience.</p>
+	<h2><?php
+		/* translators: idiom meaning "this is important, read (or do) it first". */
+		_e( 'First things first', 'buddypress' );
+	?></h2>
+	<p>We&#8217;ve activated our two most popular modules so you can start enjoying BuddyPress immediately; Activity Streams and Profile Fields.
+	<p><?php _e( '<strong>Activity Streams</strong> provide a central place for your community to share, discuss, and comment. Activity Streams also provide Twitter-style @mentions and favoriting.', 'buddypress' ); ?></p>
+	<p><?php _e( 'Like many social networks, each member has their own profile. Members are able to edit their profile and enter details about themselves. As a site administrator, you create and manage the available <strong>Profile Fields</strong> for your community.', 'buddypress' ); ?></p>
 </article>
 
 <div class="bpa-buttons">
@@ -32,8 +35,8 @@ list( $display_version ) = explode( '-', bp_get_version() );
 		<a href="<?php echo esc_url( bp_get_admin_url( 'admin.php?page=bp-profile-setup' ) ); ?>">
 			<div class="bpa-button-major-icon"></div>
 			<div class="bpa-button-major-contents">
-				<h3><?php _ex( 'Extended Profiles', 'dashboard screen button title', 'buddypress' ); ?></h3>
-				<p><?php _ex( 'Create Custom Fields', 'dashboard screen button title', 'buddypress' ); ?></p>
+				<h3><?php _ex( 'Profile Fields', 'dashboard screen button title', 'buddypress' ); ?></h3>
+				<p><?php _ex( 'Create &amp; Manage', 'dashboard screen button title', 'buddypress' ); ?></p>
 			</div>
 		</a>
 	</div>
