@@ -81,6 +81,20 @@
   .bpa-nav .bpa-nav-support {
     margin-left: 60px; }
 
+/**
+ * RESPONSIVE MAGIC
+ *
+ * The base CSS is for phone-sized devices.
+ *
+ * Small tablets = 783px+ wide  (matches a breakpoint in wp-admin).
+ * Large tablets = 1200px+ wide (arbitary breakpoint, needs testing).
+ */
+/* Small + large tablets */
+@media only screen and (min-width: 783px) { }
+
+/* Large tablets/desktop */
+@media only screen and (min-width: 1200px) { }
+
 .bpa-card {
   width: 70%;
   margin: 15px auto;
