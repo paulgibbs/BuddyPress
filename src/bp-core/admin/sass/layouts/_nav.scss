@@ -2,7 +2,7 @@
 	background-color: $color-complementary;
 	float: left;
 	margin: 0;
-	padding: 0 ($margin-nav-bar * 3);
+	padding: 0 ($margin-nav-bar * 1.5);
 	width: 100%;
 	text-align: right;
 
@@ -19,7 +19,7 @@
 
 		.bpa-button {
 			border-radius: 2px;
-			padding: $margin-nav-bar ($margin-nav-bar * 2);
+			padding: $margin-nav-bar;
 			transition: all 0.2s ease;
 			vertical-align: middle;
 		}
@@ -28,7 +28,7 @@
 	.bpa-nav-logo {
 		background-color: $color-major;
 		float: left;
-		padding: 0 ($margin-nav-bar * 2);
+		padding: 0 $margin-nav-bar;
 	}
 
 	.bpa-nav-support {

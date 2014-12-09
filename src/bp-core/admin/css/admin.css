@@ -60,7 +60,7 @@
   text-align: right; }
   .bpa-nav li {
     display: inline-block;
-    margin: 0 5px 0 0;
+    margin: 0 10px 0 0;
     line-height: 60px;
     text-align: left; }
     .bpa-nav li:after {
@@ -71,7 +71,7 @@
       margin-right: 0; }
     .bpa-nav li .bpa-button {
       border-radius: 2px;
-      padding: 5px 10px;
+      padding: 10px;
       transition: all 0.2s ease;
       vertical-align: middle; }
   .bpa-nav .bpa-nav-logo {
