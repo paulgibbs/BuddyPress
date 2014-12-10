@@ -1,11 +1,11 @@
 .bpa-elevator-pitch {
-	margin: 50px $dashboard-margin;
+	margin: 25px $dashboard-margin;
 	color: $color-major-contrast;
 
 	h1 {
+		font-size: 19px;
 		font-weight: 100;
-		//text-align: center;
-		line-height: 42px;
+		line-height: 1.6;
 		margin: 0;
 	}
 }
@@ -78,6 +78,11 @@
 	.bpa-elevator-pitch {
 		margin: 50px auto 50px;
 		width: 70%;
+
+		h1 {
+			line-height: 42px;
+			//text-align: center;
+		}
 	}
 
 	.bpa-credits {

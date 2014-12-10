@@ -1,5 +1,5 @@
 .bpa-content {
-	margin: 50px $dashboard-margin;
+	margin: 25px $dashboard-margin;
 	//color: $color-major-contrast;
 }
 
@@ -46,5 +46,12 @@
 
 	a {
 		color: inherit;
+	}
+}
+
+
+@media only screen and (min-width: 783px) {
+	.bpa-content {
+		margin: 50px $dashboard-margin;
 	}
 }

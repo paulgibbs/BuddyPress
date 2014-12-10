@@ -57,11 +57,9 @@
 
 .bpa-nav {
   background-color: #B93E00;
-  float: left;
   margin: 0;
-  padding: 0 15px;
+  padding: 0;
   width: 100%;
-  text-align: right;
   height: 46px; }
   .bpa-nav li {
     display: inline-block;
@@ -85,19 +83,26 @@
     background-color: #D84800;
     float: left;
     padding: 0 10px; }
+    .bpa-nav .bpa-nav-logo a {
+      display: none; }
 
 @media only screen and (min-width: 783px) {
   .bpa-nav {
-    height: auto; }
+    float: left;
+    height: auto;
+    padding: 0 15px;
+    text-align: right; }
     .bpa-nav li {
       line-height: 60px; }
+    .bpa-nav .bpa-nav-logo a {
+      display: inline; }
     .bpa-nav .bpa-nav-docs, .bpa-nav .bpa-nav-support {
       display: inline-block; }
     .bpa-nav .bpa-nav-support {
       margin-right: 60px; } }
 
 .bpa-content {
-  margin: 50px 15px; }
+  margin: 25px 15px; }
 
 .bpa-button-major {
   display: inline-block;
@@ -131,12 +136,17 @@
   .bpa-buttons a {
     color: inherit; }
 
+@media only screen and (min-width: 783px) {
+  .bpa-content {
+    margin: 50px 15px; } }
+
 .bpa-elevator-pitch {
-  margin: 50px 15px;
+  margin: 25px 15px;
   color: #FFF; }
   .bpa-elevator-pitch h1 {
+    font-size: 19px;
     font-weight: 100;
-    line-height: 42px;
+    line-height: 1.6;
     margin: 0; }
 
 .bpa-button-activity {
@@ -186,5 +196,7 @@
   .bpa-elevator-pitch {
     margin: 50px auto 50px;
     width: 70%; }
+    .bpa-elevator-pitch h1 {
+      line-height: 42px; }
   .bpa-credits {
     width: 70%; } }
