@@ -39,6 +39,46 @@
 }
 
 
+/**
+ * Small screens: Unhide the BP toolbar item.
+ *
+ * The selector weight is required to override wp-admin's CSS, and
+ * most of these styles have also been copied from wp-admin's CSS.
+ */
+@media screen and (max-width: 782px) {
+	#wpcontent #wpadminbar #wp-admin-bar-bp-about {
+		display: block;
+
+		> .ab-item {
+			color: #999;
+			padding: 0;
+			position: relative;
+			width: 52px;
+
+			.ab-icon {
+				height: 46px;
+				padding: 0;
+				text-align: center;
+				vertical-align: top;
+				width: 52px;
+
+				&:before {
+					color: #45BBE6;
+					font: 28px/1 'dashicons' !important;
+					top: -3px;
+				}
+			}
+		}
+	}
+
+	// Hide the BP nav bar.
+	.bpa-header {
+		display: none;
+	}
+}
+
+
+
 // Small + large tablets
 @media only screen and (min-width: 783px) {
 	.bpa-nav {

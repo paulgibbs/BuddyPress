@@ -174,6 +174,9 @@ class BP_Admin {
 		// Add settings
 		add_action( 'bp_register_admin_settings', array( $this, 'register_admin_settings' ) );
 
+		// Add links to the admin bar
+		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menus' ), 70 );
+
 		// Add a description of new BuddyPress tools in the available tools page
 		add_action( 'tool_box', 'bp_core_admin_available_tools_intro' );
 		add_action( 'bp_network_tool_box', 'bp_core_admin_available_tools_intro' );
@@ -407,6 +410,35 @@ class BP_Admin {
 		    add_settings_field( 'bp-disable-avatar-uploads', __( 'Profile Photo Uploads',   'buddypress' ), 'bp_admin_setting_callback_avatar_uploads',   'buddypress', $avatar_setting );
 		    register_setting  ( 'buddypress',         'bp-disable-avatar-uploads',   'intval'                                                                                    );
 		}
+	}
+
+	/**
+	 * Add items to the WordPress Toolbar.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar As passed to 'admin_bar_menu'.
+	 * @since BuddyPress (2.2.0)
+	 */
+	public function admin_bar_menus( $wp_admin_bar ) {
+		if ( ! bp_current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Dashboard (top-level item)
+		$wp_admin_bar->add_node( array(
+			'id'    => 'bp-about',
+			'href'  => esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ),
+			'title' => '<span class="ab-icon"></span>',
+			'meta'  => array( 'title' => __( 'About BuddyPress', 'buddypress' ), ),
+		) );
+
+		// Mum
+		$wp_admin_bar->add_node( array(
+			'id'     => 'bp-mum',
+			'parent' => 'bp-about',
+
+			'href'   => esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ),
+			'title'  => _x( 'BssuddyPress Dashboard', 'Dashboard page title', 'buddypress' ),
+		) );
 	}
 
 	/**

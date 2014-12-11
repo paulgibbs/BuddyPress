@@ -397,6 +397,23 @@ body.branch-3-7.settings_page_bp-components tr.members.active td.plugin-title sp
 	right: 0;
 }
 
+#wp-admin-bar-bp-about {
+	display: none;
+}
+#wp-admin-bar-bp-about .ab-icon:before {
+	content: '\f448';
+	top: 2px;
+}
+#wpadminbar #wp-admin-bar-bp-about > .ab-item {
+	padding: 0 7px;
+}
+#wpadminbar #wp-admin-bar-bp-about > .ab-item .ab-icon {
+	width: 15px;
+	height: 20px;
+	padding: 6px 0 5px;
+}
+
+
 /* HiDPI
 ------------------------------------------------------------------------------*/
 
