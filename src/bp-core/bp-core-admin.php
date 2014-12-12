@@ -423,7 +423,7 @@ class BP_Admin {
 			return;
 		}
 
-		// Dashboard (top-level item)
+		// Dashboard (top-level menu item).
 		$wp_admin_bar->add_node( array(
 			'id'    => 'bp-about',
 			'href'  => esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ),
@@ -431,13 +431,42 @@ class BP_Admin {
 			'meta'  => array( 'title' => __( 'About BuddyPress', 'buddypress' ), ),
 		) );
 
-		// Mum
-		$wp_admin_bar->add_node( array(
-			'id'     => 'bp-mum',
-			'parent' => 'bp-about',
+		// Second-level menu items.
+		$nav_items = array(
+			array(
+				'group' => 'external',
+				'href'  => __( 'https://codex.buddypress.org/', 'buddypress' ),
+				'id'    => 'bp-codex',
+				'name'  => _x( 'Documentation', 'dashboard nav menu item', 'buddypress' ),
+			),
+			array(
+				'group' => 'external',
+				'href' => __( 'https://buddypress.org/support/', 'buddypress' ),
+				'id'   => 'bp-support-forums',
+				'name' => _x( 'Support Forums', 'dashboard nav menu item', 'buddypress' ),
+			)
+		);
+		$nav_items = array_merge(
+			bp_core_get_admin_tabs(),
+			$nav_items
+		);
 
-			'href'   => esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ),
-			'title'  => _x( 'BssuddyPress Dashboard', 'Dashboard page title', 'buddypress' ),
+		foreach ( $nav_items as $item ) {
+			$wp_admin_bar->add_node( array(
+				'href'   => esc_url_raw( $item['href'] ),
+				'id'     => $item['id'],
+				'parent' => isset( $item['group'] ) ? 'bp-about-external' : 'bp-about',
+				'title'  => $item['name'],
+			) );
+		}
+
+		// Adding the menu group last means its contents are listed below the other items.
+		$wp_admin_bar->add_group( array(
+			'parent' => 'bp-about',
+			'id'     => 'bp-about-external',
+			'meta'   => array(
+				'class' => 'ab-sub-secondary',
+			),
 		) );
 	}
 
