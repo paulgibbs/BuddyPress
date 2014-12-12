@@ -107,7 +107,7 @@
         vertical-align: top;
         width: 52px; }
         #wpcontent #wpadminbar #wp-admin-bar-bp-about > .ab-item .ab-icon:before {
-          color: #45BBE6;
+          color: #D84800;
           font: 28px/1 'dashicons' !important;
           top: -3px; }
   .bpa-header {
@@ -168,7 +168,7 @@
     margin: 50px 15px; } }
 
 .bpa-elevator-pitch {
-  margin: 25px 15px;
+  margin: 20px 15px;
   color: #FFF; }
   .bpa-elevator-pitch h1 {
     font-size: 19px;
