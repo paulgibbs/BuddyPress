@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			</li>
 
 			<li class="bpa-nav-docs">
-				<a class="bpa-button" href="https://codex.buddypress.org/" target="_new"><?php _e( 'Documentation', 'buddypress' ); ?></a>
+				<a class="bpa-button" href="<?php esc_attr_e( 'https://codex.buddypress.org/', 'buddypress' ); ?>"><?php _ex( 'Documentation', 'dashboard nav menu item', 'buddypress' ); ?></a>
 			</li>
 
 			<li class="bpa-nav-support">
-				<a class="bpa-button" href="https://buddypress.org/support/" target="_new"><?php _e( 'Support', 'buddypress' ); ?></a>
+				<a class="bpa-button" href="<?php esc_attr_e( 'https://buddypress.org/support/', 'buddypress' ); ?>"><?php _ex( 'Support', 'dashboard nav menu item', 'buddypress' ); ?></a>
 			</li>
 
 			<?php
