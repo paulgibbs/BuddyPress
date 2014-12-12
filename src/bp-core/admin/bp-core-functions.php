@@ -359,17 +359,20 @@ function bp_core_admin_tabs( $active_tab = '' ) {
  */
 function bp_core_get_admin_tabs( $active_tab = '' ) {
 	$tabs = array(
-		'0' => array(
+		array(
 			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), 'admin.php' ) ),
-			'name' => __( 'Components', 'buddypress' )
+			'id'   => 'bp-components',
+			'name' => _x( 'Components', 'dashboard nav menu item', 'buddypress' ),
 		),
-		'1' => array(
+		array(
 			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) ),
-			'name' => __( 'Pages', 'buddypress' )
+			'id'   => 'bp-pages',
+			'name' => _x( 'Pages', 'dashboard nav menu item', 'buddypress' ),
 		),
-		'2' => array(
+		array(
 			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-settings' ), 'admin.php' ) ),
-			'name' => __( 'Settings', 'buddypress' )
+			'id'   => 'bp-settings',
+			'name' => _x( 'Settings', 'dashboard nav menu item', 'buddypress' ),
 		),
 	);
 
@@ -380,9 +383,10 @@ function bp_core_get_admin_tabs( $active_tab = '' ) {
 		wp_enqueue_script( 'thickbox' );
 		wp_enqueue_style( 'thickbox' );
 
-		$tabs['3'] = array(
+		$tabs[] = array(
 			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bb-forums-setup'  ), 'admin.php' ) ),
-			'name' => __( 'Forums', 'buddypress' )
+			'id'   => 'bp-legacy-forums',
+			'name' => _x( 'Forums', 'dashboard nav menu item', 'buddypress' ),
 		);
 	}
 
