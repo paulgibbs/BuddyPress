@@ -23,6 +23,7 @@
   text-decoration: none; }
   .bpa-button:hover {
     background-color: #FFF;
+    color: #D84800;
     border-bottom: 0 !important; }
 
 .bpa-button-activity h3 {
