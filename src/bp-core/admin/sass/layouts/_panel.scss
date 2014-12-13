@@ -3,7 +3,7 @@
 	margin-bottom: 10px;
 	background-color: $color-primary-dark;
 	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
-	border-bottom: 1px solid $color-primary-dark;
+	border-bottom: 1px solid darken($color-primary-dark, 5%);
 
 	h1 {
 		font-size: 19px;
@@ -17,5 +17,6 @@
 @media only screen and (min-width: 783px) {
 	.bpa-panel {
 		background-color: $color-primary;
+		border-bottom: 1px solid darken($color-primary, 5%);
 	}
 }

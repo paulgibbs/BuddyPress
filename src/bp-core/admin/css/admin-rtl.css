@@ -131,7 +131,7 @@
   margin-bottom: 10px;
   background-color: #D84800;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid #D84800; }
+  border-bottom: 1px solid #bf4000; }
   .bpa-panel h1 {
     font-size: 19px;
     font-weight: 100;
@@ -141,7 +141,8 @@
 
 @media only screen and (min-width: 783px) {
   .bpa-panel {
-    background-color: #FD5400; } }
+    background-color: #FD5400;
+    border-bottom: 1px solid #e44800; } }
 
 .bpa-content {
   padding: 15px;
