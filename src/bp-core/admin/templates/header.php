@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div class="bpa-header clearfix">
 	<nav role="navigation">
 		<ul class="bpa-nav">
-			<li class="bpa-nav-logo">
+			<li class="bpa-nav-logo current-menu-item">
 				<a href="<?php echo esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ); ?>"><?php _e( 'BuddyPress', 'buddypress' ); ?></a>
 			</li>
 

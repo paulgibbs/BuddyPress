@@ -34,7 +34,7 @@ $font-size-header-logo: 20px;
 
 	&:hover {
 		background-color: $color-major-contrast;
-		color: $color-major;
+		border-bottom: 0 !important;
 	}
 }
 

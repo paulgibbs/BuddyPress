@@ -23,7 +23,7 @@
   text-decoration: none; }
   .bpa-button:hover {
     background-color: #FFF;
-    color: #D84800; }
+    border-bottom: 0 !important; }
 
 .bpa-button-activity h3 {
   text-transform: uppercase; }
@@ -41,9 +41,6 @@
 #wpbody {
   background-color: #FAFAED; }
 
-#wpbody-content {
-  background-color: #D84800; }
-
 @media screen and (max-width: 782px) {
   .auto-fold #wpcontent {
     padding-right: 0; } }
@@ -56,7 +53,7 @@
     display: table; }
 
 .bpa-nav {
-  background-color: #B93E00;
+  background-color: #D84800;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -80,9 +77,7 @@
   .bpa-nav .bpa-nav-docs, .bpa-nav .bpa-nav-support {
     display: none; }
   .bpa-nav .bpa-nav-logo {
-    background-color: #D84800;
-    float: right;
-    padding: 0 10px; }
+    float: right; }
     .bpa-nav .bpa-nav-logo a {
       display: none; }
 
@@ -121,6 +116,8 @@
     text-align: left; }
     .bpa-nav li {
       line-height: 60px; }
+    .bpa-nav .current-menu-item a {
+      border-bottom: 2px solid #FD5400; }
     .bpa-nav .bpa-nav-logo a {
       display: inline; }
     .bpa-nav .bpa-nav-docs, .bpa-nav .bpa-nav-support {
@@ -129,7 +126,11 @@
       margin-left: 60px; } }
 
 .bpa-content {
-  margin: 25px 15px; }
+  padding: 25px 15px;
+  background-color: #FD5400;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba(0, 0, 0, 0.12); }
+  .bpa-content h2 {
+    margin: 0; }
 
 .bpa-button-major {
   display: inline-block;
@@ -165,11 +166,12 @@
 
 @media only screen and (min-width: 783px) {
   .bpa-content {
-    margin: 20px 15px; } }
+    padding: 20px 15px; } }
 
 .bpa-elevator-pitch {
-  margin: 20px 15px;
-  color: #FFF; }
+  padding: 20px 15px;
+  color: #FFF;
+  background-color: #D84800; }
   .bpa-elevator-pitch h1 {
     font-size: 19px;
     font-weight: 100;
@@ -221,7 +223,8 @@
 
 @media only screen and (min-width: 783px) {
   .bpa-elevator-pitch {
-    margin: 20px 15px; }
+    background-color: #FD5400;
+    padding: 20px 15px 0; }
     .bpa-elevator-pitch h1 {
       line-height: 1.6; }
   .bpa-credits {

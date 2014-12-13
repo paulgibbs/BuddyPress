@@ -30,9 +30,7 @@
 	}
 
 	.bpa-nav-logo {
-		background-color: $color-major;
 		float: left;
-		padding: 0 $margin-nav-bar;
 
 		a { display: none; }
 	}
@@ -63,7 +61,7 @@
 				width: 52px;
 
 				&:before {
-					color: $color-major;
+					color: $color-complementary;
 					font: 28px/1 'dashicons' !important;
 					top: -3px;
 				}
@@ -89,6 +87,10 @@
 
 		li {
 			line-height: 60px;
+		}
+
+		.current-menu-item a {
+			border-bottom: $ink-width solid $color-major;
 		}
 
 		.bpa-nav-logo {

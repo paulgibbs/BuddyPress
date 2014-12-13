@@ -1,6 +1,7 @@
 .bpa-elevator-pitch {
-	margin: 20px $dashboard-margin;
+	padding: 20px $dashboard-margin;
 	color: $color-major-contrast;
+	background-color: $color-complementary;
 
 	h1 {
 		font-size: 19px;
@@ -76,7 +77,8 @@
 
 @media only screen and (min-width: 783px) {
 	.bpa-elevator-pitch {
-		margin: 20px 15px;
+		background-color: $color-major;
+		padding: 20px 15px 0;
 
 		h1 {
 			line-height: 1.6;

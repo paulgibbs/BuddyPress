@@ -1,6 +1,11 @@
 .bpa-content {
-	margin: 25px $dashboard-margin;
-	//color: $color-major-contrast;
+	padding: 25px $dashboard-margin;
+	background-color: $color-major;
+	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba( 0, 0, 0, 0.12);
+
+	h2 {
+		margin: 0;
+	}
 }
 
 .bpa-button-major {
@@ -52,6 +57,6 @@
 
 @media only screen and (min-width: 783px) {
 	.bpa-content {
-		margin: 20px $dashboard-margin;
+		padding: 20px $dashboard-margin;
 	}
 }
