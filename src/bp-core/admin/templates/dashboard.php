@@ -20,7 +20,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	<p><?php _e( 'Like many social networks, each member has their own profile. Members are able to edit their profile and enter details about themselves. As a site administrator, you create and manage the available <strong>Profile Fields</strong> for your community.', 'buddypress' ); ?></p>
 </article>
 
-<div class="bpa-buttons">
+<!--<div class="bpa-buttons">
 	<div class="bpa-button-major bpa-button-activity">
 		<a href="<?php echo esc_url( bp_get_admin_url( 'admin.php?page=bp-activity' ) ); ?>">
 			<div class="bpa-button-major-icon"></div>
@@ -40,7 +40,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 			</div>
 		</a>
 	</div>
-</div>
+</div>-->
 
 <!--
 <div class="bpa-credits">
