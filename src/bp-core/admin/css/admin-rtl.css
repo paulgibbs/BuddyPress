@@ -165,7 +165,7 @@
 
 @media only screen and (min-width: 783px) {
   .bpa-content {
-    margin: 50px 15px; } }
+    margin: 20px 15px; } }
 
 .bpa-elevator-pitch {
   margin: 20px 15px;
@@ -221,9 +221,8 @@
 
 @media only screen and (min-width: 783px) {
   .bpa-elevator-pitch {
-    margin: 50px auto 50px;
-    width: 70%; }
+    margin: 20px 15px; }
     .bpa-elevator-pitch h1 {
-      line-height: 42px; }
+      line-height: 1.6; }
   .bpa-credits {
     width: 70%; } }
