@@ -1,13 +1,14 @@
 .bpa-elevator-pitch {
 	padding: 20px $dashboard-margin;
-	color: $color-major-contrast;
 	background-color: $color-complementary;
+	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba( 0, 0, 0, 0.12);
 
 	h1 {
 		font-size: 19px;
 		font-weight: 100;
 		line-height: 1.6;
 		margin: 0;
+		color: $color-major-contrast;
 	}
 }
 
@@ -78,11 +79,6 @@
 @media only screen and (min-width: 783px) {
 	.bpa-elevator-pitch {
 		background-color: $color-major;
-		padding: 20px 15px 0;
-
-		h1 {
-			line-height: 1.6;
-		}
 	}
 
 	.bpa-credits {

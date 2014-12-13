@@ -127,8 +127,7 @@
 
 .bpa-content {
   padding: 25px 15px;
-  background-color: #FD5400;
-  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba(0, 0, 0, 0.12); }
+  background-color: #FAFAED; }
   .bpa-content h2 {
     margin: 0; }
 
@@ -170,13 +169,14 @@
 
 .bpa-elevator-pitch {
   padding: 20px 15px;
-  color: #FFF;
-  background-color: #D84800; }
+  background-color: #D84800;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba(0, 0, 0, 0.12); }
   .bpa-elevator-pitch h1 {
     font-size: 19px;
     font-weight: 100;
     line-height: 1.6;
-    margin: 0; }
+    margin: 0;
+    color: #FFF; }
 
 .bpa-button-activity {
   margin-right: 15px; }
@@ -223,9 +223,6 @@
 
 @media only screen and (min-width: 783px) {
   .bpa-elevator-pitch {
-    background-color: #FD5400;
-    padding: 20px 15px 0; }
-    .bpa-elevator-pitch h1 {
-      line-height: 1.6; }
+    background-color: #FD5400; }
   .bpa-credits {
     width: 70%; } }
