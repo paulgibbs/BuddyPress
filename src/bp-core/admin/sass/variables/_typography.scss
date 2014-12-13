@@ -8,7 +8,7 @@ $font-size-header-logo: 19px;
 
 .bpa-header,
 .bpa-header a {
-	color: $color-major-contrast;
+	color: $color-primary-contrast;
 }
 
 .bpa-nav-logo {
@@ -26,13 +26,13 @@ $font-size-header-logo: 19px;
 }
 
 .bpa-button {
-	color: $color-major-contrast;
+	color: $color-primary-contrast;
 	font-size: $font-size-header-nav;
 	text-decoration: none;
 
 	&:hover {
-		background-color: $color-major-contrast;
-		color: $color-complementary;
+		background-color: $color-primary-contrast;
+		color: $color-primary-dark;
 		border-bottom: 0 !important;
 	}
 }

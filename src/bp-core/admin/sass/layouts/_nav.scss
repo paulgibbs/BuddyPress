@@ -1,5 +1,5 @@
 .bpa-nav {
-	background-color: $color-complementary;
+	background-color: $color-primary-dark;
 	margin: 0;
 	padding: 0;
 	width: 100%;
@@ -61,7 +61,7 @@
 				width: 52px;
 
 				&:before {
-					color: $color-complementary;
+					color: $color-primary-dark;
 					font: 28px/1 'dashicons' !important;
 					top: -3px;
 				}
@@ -90,7 +90,7 @@
 		}
 
 		.current-menu-item a {
-			border-bottom: $ink-width solid $color-major;
+			border-bottom: $ink-width solid $color-primary;
 		}
 
 		.bpa-nav-logo {
