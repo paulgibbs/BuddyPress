@@ -127,7 +127,7 @@
       margin-right: 60px; } }
 
 .bpa-panel {
-  padding: 20px 15px;
+  padding: 10px 15px;
   margin-bottom: 10px;
   background-color: #D84800;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba(0, 0, 0, 0.12); }
@@ -143,7 +143,7 @@
     background-color: #FD5400; } }
 
 .bpa-content {
-  padding: 25px 15px;
+  padding: 15px;
   background-color: #FAFAED; }
   .bpa-content h2 {
     margin: 0; }
