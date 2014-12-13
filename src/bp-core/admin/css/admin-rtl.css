@@ -180,9 +180,7 @@
   .bpa-buttons a {
     color: inherit; }
 
-@media only screen and (min-width: 783px) {
-  .bpa-content {
-    padding: 20px 15px; } }
+@media only screen and (min-width: 783px) { }
 
 .bpa-button-activity {
   margin-left: 15px; }
