@@ -125,6 +125,21 @@
     .bpa-nav .bpa-nav-support {
       margin-right: 60px; } }
 
+.bpa-panel {
+  padding: 20px 15px;
+  background-color: #D84800;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba(0, 0, 0, 0.12); }
+  .bpa-panel h1 {
+    font-size: 19px;
+    font-weight: 100;
+    line-height: 1.6;
+    margin: 0;
+    color: #FFF; }
+
+@media only screen and (min-width: 783px) {
+  .bpa-panel {
+    background-color: #FD5400; } }
+
 .bpa-content {
   padding: 25px 15px;
   background-color: #FAFAED; }
@@ -166,17 +181,6 @@
 @media only screen and (min-width: 783px) {
   .bpa-content {
     padding: 20px 15px; } }
-
-.bpa-elevator-pitch {
-  padding: 20px 15px;
-  background-color: #D84800;
-  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba(0, 0, 0, 0.12); }
-  .bpa-elevator-pitch h1 {
-    font-size: 19px;
-    font-weight: 100;
-    line-height: 1.6;
-    margin: 0;
-    color: #FFF; }
 
 .bpa-button-activity {
   margin-right: 15px; }
@@ -222,7 +226,5 @@
   display: block; }
 
 @media only screen and (min-width: 783px) {
-  .bpa-elevator-pitch {
-    background-color: #FD5400; }
   .bpa-credits {
     width: 70%; } }

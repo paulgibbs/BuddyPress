@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 list( $display_version ) = explode( '-', bp_get_version() );
 ?>
 
-<div class="bpa-elevator-pitch">
+<div class="bpa-panel">
 	<h1><?php _e( 'Welcome! BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and&nbsp;more.', 'buddypress' ); ?></h1>
 </div>
 
