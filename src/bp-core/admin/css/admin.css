@@ -19,7 +19,7 @@
 
 .bpa-button {
   color: #FFF;
-  font-size: 12px;
+  font-size: 13px;
   text-decoration: none; }
   .bpa-button:hover {
     background-color: #FFF;
@@ -116,7 +116,7 @@
     padding: 0 15px;
     text-align: right; }
     .bpa-nav li {
-      line-height: 60px; }
+      line-height: 61px; }
     .bpa-nav .current-menu-item a {
       border-bottom: 2px solid #FD5400; }
     .bpa-nav .bpa-nav-logo a {
