@@ -2,7 +2,8 @@
 	padding: 10px $dashboard-margin;
 	margin-bottom: 10px;
 	background-color: $color-primary-dark;
-	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba( 0, 0, 0, 0.12);
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid $color-primary-dark;
 
 	h1 {
 		font-size: 19px;

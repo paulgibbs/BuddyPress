@@ -11,9 +11,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 </div>
 
 <div class="bpa-content">
-	<h2><?php
-		/* translators: idiom meaning "this is important, read (or do) it first". */
-		_e( 'First things first', 'buddypress' );
+	<h2><?php _e( 'Getting Started', 'buddypress' );
 	?></h2>
 	<p>We&#8217;ve activated our two most popular modules so you can start enjoying BuddyPress immediately; Activity Streams and Profile Fields.
 	<p><?php _e( '<strong>Activity Streams</strong> provide a central place for your community to share, discuss, and comment. Activity Streams also provide Twitter-style @mentions and favoriting.', 'buddypress' ); ?></p>
