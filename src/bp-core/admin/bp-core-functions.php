@@ -362,7 +362,7 @@ function bp_core_get_admin_tabs( $active_tab = '' ) {
 		array(
 			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), 'admin.php' ) ),
 			'id'   => 'bp-components',
-			'name' => _x( 'Components', 'dashboard nav menu item', 'buddypress' ),
+			'name' => _x( 'Modules', 'dashboard nav menu item', 'buddypress' ),
 		),
 		array(
 			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) ),
