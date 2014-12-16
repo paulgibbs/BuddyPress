@@ -13,8 +13,14 @@ list( $display_version ) = explode( '-', bp_get_version() );
 <div class="bpa-content">
 	<h2><?php _e( 'For Newcomers', 'buddypress' ); ?></h2>
 	<p><?php _e( 'The best way to start enjoying BuddyPress is to switch on only a few of its features (or &ldquo;modules&rdquo;) until your community finds its feet. The two most popular modules are <strong>Activity Streams</strong> and <strong>Profile Fields</strong>, so they&#8217;ve already been activated for you. Between them, they provide key features that are common among modern social networking sites.', 'buddypress' ); ?></p>
-	<p><?php _e( 'Activity Streams provide a central place for your community to share, discuss, and comment. Activity Streams also provide Twitter-style @mentions and favoriting. The Profile Fields module allows you to define and manage the available profile fields that your community can use to describe themselves.', 'buddypress' ); ?></p>
-	<p>To learn more about the rest of the features in BuddyPress, <a href="#">go to the Modules screen</a>.</p>
+	<p><?php _e( 'Activity Streams provide a central place for your community to share, discuss, and comment; it also provides Twitter-style @mentions and favoriting. The Profile Fields module allows you to define and manage the available profile fields that members of your community can use to describe themselves.', 'buddypress' ); ?></p>
+	<p><?php
+	printf(
+		__( 'To learn more about these modules and everything else in BuddyPress, go to the <a href="%s">Modules screen</a> and consult the <a href="%s">documentation</a>.', 'buddypress' ),
+		esc_url( bp_get_admin_url( 'admin.php?page=bp-components' ) ),
+		esc_url( 'https://codex.buddypress.org/buddypress-components-and-features/' )
+	);
+	?></p>
 
 	<h2><?php _e( 'For Old Hands', 'buddypress' ); ?></h2>
 </article>
