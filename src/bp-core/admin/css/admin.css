@@ -151,6 +151,8 @@
   .bpa-content h2 {
     color: #727272;
     margin: 0; }
+  .bpa-content p {
+    font-size: 14px; }
 
 .bpa-button-major {
   display: inline-block;
