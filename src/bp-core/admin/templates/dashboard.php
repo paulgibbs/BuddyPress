@@ -7,15 +7,16 @@ list( $display_version ) = explode( '-', bp_get_version() );
 ?>
 
 <div class="bpa-panel">
-	<h1><?php _e( 'Welcome! BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and&nbsp;more.', 'buddypress' ); ?></h1>
+	<h1><?php printf( __( 'Welcome to BuddyPress %s, and its all-new Dashboard!', 'buddypress' ), $display_version ); ?></h1>
 </div>
 
 <div class="bpa-content">
-	<h2><?php _e( 'Getting Started', 'buddypress' );
-	?></h2>
-	<p>We&#8217;ve activated our two most popular modules so you can start enjoying BuddyPress immediately; Activity Streams and Profile Fields.
-	<p><?php _e( '<strong>Activity Streams</strong> provide a central place for your community to share, discuss, and comment. Activity Streams also provide Twitter-style @mentions and favoriting.', 'buddypress' ); ?></p>
-	<p><?php _e( 'Like many social networks, each member has their own profile. Members are able to edit their profile and enter details about themselves. As a site administrator, you create and manage the available <strong>Profile Fields</strong> for your community.', 'buddypress' ); ?></p>
+	<h2><?php _e( 'For Newcomers', 'buddypress' ); ?></h2>
+	<p><?php _e( 'The best way to start enjoying BuddyPress is to switch on only a few of its features (or &ldquo;modules&rdquo;) until your community finds its feet. The two most popular modules are <strong>Activity Streams</strong> and <strong>Profile Fields</strong>, so they&#8217;ve already been activated for you. Between them, they provide key features that are common among modern social networking sites.', 'buddypress' ); ?></p>
+	<p><?php _e( 'Activity Streams provide a central place for your community to share, discuss, and comment. Activity Streams also provide Twitter-style @mentions and favoriting. The Profile Fields module allows you to define and manage the available profile fields that your community can use to describe themselves.', 'buddypress' ); ?></p>
+	<p>To learn more about the rest of the features in BuddyPress, <a href="#">go to the Modules screen</a>.</p>
+
+	<h2><?php _e( 'For Old Hands', 'buddypress' ); ?></h2>
 </article>
 
 <!--<div class="bpa-buttons">
