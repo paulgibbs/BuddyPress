@@ -5,7 +5,11 @@
 
 	h2 {
 		color: #727272;
-		margin: 0;
+		margin-top: ($dashboard-margin * 2);
+
+		&:first-child {
+			margin-top: 0;
+		}
 	}
 
 	p {
