@@ -223,8 +223,8 @@ class BP_Admin {
 
 		// Changed in BP 1.6 . See bp_core_admin_backpat_menu()
 		$hooks[] = add_menu_page(
-			__( 'BuddyPress', 'buddypress' ),
-			__( 'BuddyPress', 'buddypress' ),
+			_x( 'BuddyPress', 'Dashboard page title', 'buddypress' ),
+			_x( 'BuddyPress', 'Dashboard menu title', 'buddypress' ),
 			$this->capability,
 			'bp-general-settings',
 			'bp_core_admin_backpat_menu',
@@ -233,8 +233,8 @@ class BP_Admin {
 
 		$hooks[] = add_submenu_page(
 			'bp-general-settings',
-			__( 'BuddyPress Help', 'buddypress' ),
-			__( 'Help', 'buddypress' ),
+			_x( 'BuddyPress Help', 'Dashboard page title', 'buddypress' ),
+			_x( 'Help', 'Dashboard menu title', 'buddypress' ),
 			$this->capability,
 			'bp-general-settings',
 			'bp_core_admin_backpat_page'
@@ -243,8 +243,8 @@ class BP_Admin {
 		// Add the option pages
 		$hooks[] = add_submenu_page(
 			$this->settings_page,
-			__( 'BuddyPress Components', 'buddypress' ),
-			__( 'BuddyPress', 'buddypress' ),
+			_x( 'BuddyPress Components', 'Dashboard page title', 'buddypress' ),
+			_x( 'BuddyPress', 'Dashboard menu title', 'buddypress' ),
 			$this->capability,
 			'bp-components',
 			'bp_core_admin_components_settings'
@@ -252,8 +252,8 @@ class BP_Admin {
 
 		$hooks[] = add_submenu_page(
 			$this->settings_page,
-			__( 'BuddyPress Pages', 'buddypress' ),
-			__( 'BuddyPress Pages', 'buddypress' ),
+			_x( 'BuddyPress Pages', 'Dashboard page title', 'buddypress' ),
+			_x( 'BuddyPress Pages', 'Dashboard menu title', 'buddypress' ),
 			$this->capability,
 			'bp-page-settings',
 			'bp_core_admin_slugs_settings'
@@ -261,8 +261,8 @@ class BP_Admin {
 
 		$hooks[] = add_submenu_page(
 			$this->settings_page,
-			__( 'BuddyPress Settings', 'buddypress' ),
-			__( 'BuddyPress Settings', 'buddypress' ),
+			_x( 'BuddyPress Settings', 'Dashboard page title', 'buddypress' ),
+			_x( 'BuddyPress Settings', 'Dashboard menu title', 'buddypress' ),
 			$this->capability,
 			'bp-settings',
 			'bp_core_admin_settings'
@@ -274,8 +274,8 @@ class BP_Admin {
 			$tools_parent = 'network-tools';
 
 			$hooks[] = add_menu_page(
-				__( 'Tools', 'buddypress' ),
-				__( 'Tools', 'buddypress' ),
+				_x( 'Tools', 'Dashboard page title', 'buddypress' ),
+				_x( 'Tools', 'Dashboard menu title', 'buddypress' ),
 				$this->capability,
 				$tools_parent,
 				'bp_core_tools_top_level_item',
@@ -285,8 +285,8 @@ class BP_Admin {
 
 			$hooks[] = add_submenu_page(
 				$tools_parent,
-				__( 'Available Tools', 'buddypress' ),
-				__( 'Available Tools', 'buddypress' ),
+				_x( 'Available Tools', 'Dashboard page title', 'buddypress' ),
+				_x( 'Available Tools', 'Dashboard menu title', 'buddypress' ),
 				$this->capability,
 				'available-tools',
 				'bp_core_admin_available_tools_page'
@@ -297,8 +297,8 @@ class BP_Admin {
 
 		$hooks[] = add_submenu_page(
 			$tools_parent,
-			__( 'BuddyPress Tools', 'buddypress' ),
-			__( 'BuddyPress', 'buddypress' ),
+			_x( 'BuddyPress Tools', 'Dashboard page title', 'buddypress' ),
+			_x( 'BuddyPress', 'Dashboard menu title', 'buddypress' ),
 			$this->capability,
 			'bp-tools',
 			'bp_core_admin_tools'
