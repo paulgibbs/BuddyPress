@@ -214,7 +214,7 @@ class BP_Admin {
 		add_dashboard_page(
 			_x( 'BuddyPress Dashboard', 'Dashboard page title', 'buddypress' ),
 			_x( 'BuddyPress', 'Dashboard menu title', 'buddypress' ),
-			'manage_options',
+			$this->capability,
 			'bp-about',
 			array( $this, 'dashboard_screen' )
 		);
