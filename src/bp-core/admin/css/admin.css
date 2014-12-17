@@ -149,6 +149,8 @@
   padding: 15px;
   background-color: #FAFAFA;
   color: #212121; }
+  .bpa-content a {
+    color: #D84800; }
   .bpa-content h2 {
     color: #727272;
     font-weight: 100;

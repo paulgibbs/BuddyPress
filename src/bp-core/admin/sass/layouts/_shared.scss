@@ -3,6 +3,10 @@
 	background-color: $color-background;
 	color: #212121;
 
+	a {
+		color: $color-background-link;
+	}
+
 	h2 {
 		color: #727272;
 		font-weight: 100;
