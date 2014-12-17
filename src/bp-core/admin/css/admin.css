@@ -126,14 +126,14 @@
     .bpa-nav .bpa-nav-support {
       margin-right: 60px; } }
 
-.bpa-panel {
+#wpbody-content .bpa-panel {
   padding: 10px 15px;
   margin-bottom: 10px;
   background-color: #D84800;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid #bf4000;
-  color: #FFF; }
-  .bpa-panel h1 {
+  color: #040404; }
+  #wpbody-content .bpa-panel h1 {
     font-size: 19px;
     font-weight: 100;
     line-height: 1.6;
@@ -142,7 +142,8 @@
 @media only screen and (min-width: 783px) {
   .bpa-panel {
     background-color: #FD5400;
-    border-bottom: 1px solid #e44800; } }
+    border-bottom: 1px solid #e44800;
+    color: #FFF; } }
 
 .bpa-content {
   padding: 15px;
