@@ -426,7 +426,7 @@ class BP_Admin {
 		// Dashboard (top-level menu item).
 		$wp_admin_bar->add_node( array(
 			'id'    => 'bp-about',
-			'href'  => esc_url( bp_get_admin_url( 'index.php?page=bp-about' ) ),
+			'href'  => esc_url_raw( bp_get_admin_url( 'index.php?page=bp-about' ) ),
 			'title' => '<span class="ab-icon"></span>',
 			'meta'  => array( 'title' => __( 'About BuddyPress', 'buddypress' ), ),
 		) );
