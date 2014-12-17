@@ -17,16 +17,16 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	<p><?php
 	printf(
 		__( 'To learn more about these modules and everything else in BuddyPress, go to the <a href="%s">Modules screen</a> and consult the <a href="%s">documentation</a>.', 'buddypress' ),
-		esc_url( bp_get_admin_url( 'admin.php?page=bp-components' ) ),
-		esc_url( 'https://codex.buddypress.org/buddypress-components-and-features/' )
+		esc_url_raw( bp_get_admin_url( 'admin.php?page=bp-components' ) ),
+		esc_url_raw( 'https://codex.buddypress.org/buddypress-components-and-features/' )
 	);
 	?></p>
 
 	<h2><?php _e( 'For Old Hands', 'buddypress' ); ?></h2>
 	<p><?php _e( 'Welcome to the new-look BuddyPress Dashboard. While everything remains in the same place as before, this represents the first step towards a refreshed and mobile-friendly admin interface for BuddyPress.', 'buddypress' ); ?></p>
 	<p><?php printf(
-		__( 'Learn about the changes in this release of BuddyPress on the <a href="#">&ldquo;What&#8217;s new?&rdquo;</a> screen.', 'buddypress' ),
-		esc_url( bp_get_admin_url( 'admin.php?page=bp-changelog' ) )
+		__( 'Learn about the changes in this release of BuddyPress on the <a href="%s">&ldquo;What&#8217;s new?&rdquo;</a> screen.', 'buddypress' ),
+		esc_url_raw( bp_get_admin_url( 'admin.php?page=bp-changelog' ) )
 	);
 	?></p>
 </article>
