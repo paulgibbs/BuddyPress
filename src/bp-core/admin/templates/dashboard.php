@@ -7,7 +7,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 ?>
 
 <div class="bpa-panel">
-	<h1><?php printf( __( 'Welcome to BuddyPress %s, and its all-new Dashboard!', 'buddypress' ), $display_version ); ?></h1>
+	<h1><?php printf( __( 'Welcome to BuddyPress %s!', 'buddypress' ), $display_version ); ?></h1>
 </div>
 
 <div class="bpa-content">
@@ -23,6 +23,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	?></p>
 
 	<h2><?php _e( 'For Old Hands', 'buddypress' ); ?></h2>
+	<p></p>
 </article>
 
 <!--<div class="bpa-buttons">
