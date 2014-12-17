@@ -10,7 +10,7 @@
 
 .bpa-nav-logo a {
   color: #FFF;
-  font-size: 19px;
+  font-size: 20px;
   text-decoration: none;
   vertical-align: middle; }
 .bpa-nav-logo:before {
@@ -137,7 +137,7 @@
   border-bottom: 1px solid #e44800;
   color: #1E1E1E; }
   #wpbody-content .bpa-panel h1 {
-    font-size: 19px;
+    font-size: 20px;
     font-weight: 100;
     line-height: 1.6;
     margin: 64px 0 0; }
@@ -161,7 +161,7 @@
     .bpa-content h2:first-child {
       margin-top: 0; }
   .bpa-content p {
-    font-size: 14px; }
+    font-size: 15px; }
 
 .bpa-button-major {
   display: inline-block;
