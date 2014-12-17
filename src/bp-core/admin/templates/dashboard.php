@@ -25,8 +25,8 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	<h2><?php _e( 'For Old Hands', 'buddypress' ); ?></h2>
 	<p><?php _e( 'Welcome to the new-look BuddyPress Dashboard. While everything remains in the same place as before, this represents the first step towards a refreshed and mobile-friendly admin interface for BuddyPress.', 'buddypress' ); ?></p>
 	<p><?php printf(
-		__( 'Learn about the changes in this release of BuddyPRess on the new <a href="#">thingy screen</a>.', 'buddypress' ),
-		esc_url( '#' )
+		__( 'Learn about the changes in this release of BuddyPress on the <a href="#">&ldquo;What&#8217;s new?&rdquo;</a> screen.', 'buddypress' ),
+		esc_url( bp_get_admin_url( 'admin.php?page=bp-changelog' ) )
 	);
 	?></p>
 </article>
