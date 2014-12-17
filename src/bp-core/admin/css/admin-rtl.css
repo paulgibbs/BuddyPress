@@ -131,13 +131,13 @@
   margin-bottom: 10px;
   background-color: #D84800;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid #bf4000; }
+  border-bottom: 1px solid #bf4000;
+  color: #FFF; }
   .bpa-panel h1 {
     font-size: 19px;
     font-weight: 100;
     line-height: 1.6;
-    margin: 64px 0 0;
-    color: #FFF; }
+    margin: 64px 0 0; }
 
 @media only screen and (min-width: 783px) {
   .bpa-panel {
