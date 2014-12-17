@@ -6,23 +6,25 @@
   -moz-osx-font-smoothing: grayscale; }
 
 .bpa-header, .bpa-header a {
-  color: #FFF; }
+  color: #040404; }
 
 .bpa-nav-logo a {
+  color: #FFF;
   font-size: 19px;
   text-decoration: none;
   vertical-align: middle; }
 .bpa-nav-logo:before {
+  color: #FFF;
   content: "\f448";
   font: normal 30px/1 'dashicons';
   vertical-align: middle; }
 
 .bpa-button {
-  color: #FFF;
-  font-size: 13px;
+  color: #1E1E1E;
+  font-size: 14px;
   text-decoration: none; }
   .bpa-button:hover {
-    background-color: #FFF;
+    background-color: #1E1E1E;
     color: #D84800;
     border-bottom: 0 !important; }
 
@@ -117,8 +119,6 @@
     text-align: right; }
     .bpa-nav li {
       line-height: 61px; }
-    .bpa-nav .current-menu-item a {
-      border-bottom: 2px solid #FD5400; }
     .bpa-nav .bpa-nav-logo a {
       display: inline; }
     .bpa-nav .bpa-nav-docs, .bpa-nav .bpa-nav-support {
@@ -132,18 +132,18 @@
   background-color: #FD5400;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid #e44800;
-  color: #FFF; }
+  color: #1E1E1E; }
   #wpbody-content .bpa-panel h1 {
     font-size: 19px;
-    font-weight: 100;
+    font-weight: 400;
     line-height: 1.6;
     margin: 64px 0 0; }
 
 @media only screen and (min-width: 783px) {
-  .bpa-panel {
-    background-color: #D84800;
-    border-bottom: 1px solid #bf4000;
-    color: #040404; } }
+  #wpbody-content .bpa-panel {
+    background-color: #FD5400;
+    border-bottom: 1px solid #e44800;
+    color: #1E1E1E; } }
 
 .bpa-content {
   padding: 15px;

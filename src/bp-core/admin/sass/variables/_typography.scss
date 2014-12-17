@@ -1,4 +1,4 @@
-$font-size-header-nav: 13px;
+$font-size-header-nav: 14px;
 $font-size-header-logo: 19px;
 
 .bpa-nav-logo:before {
@@ -8,17 +8,19 @@ $font-size-header-logo: 19px;
 
 .bpa-header,
 .bpa-header a {
-	color: $color-primary-contrast;
+	color: $color-secondary-contrast;
 }
 
 .bpa-nav-logo {
 	a {
+		color: #FFF;
 		font-size: $font-size-header-logo;
 		text-decoration: none;
 		vertical-align: middle;
 	}
 
 	&:before {
+		color: #FFF;
 		content: "\f448";
 		font: normal 30px/1 'dashicons';
 		vertical-align: middle;
