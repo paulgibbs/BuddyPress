@@ -7,7 +7,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 ?>
 
 <div class="bpa-panel">
-	<h1><?php printf( __( 'Welcome to BuddyPress %s!', 'buddypress' ), $display_version ); ?></h1>
+	<h1><?php printf( __( 'Welcome to BuddyPress %s', 'buddypress' ), $display_version ); ?></h1>
 </div>
 
 <div class="bpa-content">
@@ -23,8 +23,12 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	?></p>
 
 	<h2><?php _e( 'For Old Hands', 'buddypress' ); ?></h2>
-	<p>Welcome to the new-look BuddyPress Dashboard. While everything remains in the same place as before, this represents the first step towards a refreshed and mobile-first admin interface for BuddyPress.</p>
-	<p>The changelog for this release now <a href="#">has its own screen</a>.</p>
+	<p><?php _e( 'Welcome to the new-look BuddyPress Dashboard. While everything remains in the same place as before, this represents the first step towards a refreshed and mobile-friendly admin interface for BuddyPress.', 'buddypress' ); ?></p>
+	<p><?php printf(
+		__( 'Learn about the changes in this release of BuddyPRess on the new <a href="#">thingy screen</a>.', 'buddypress' ),
+		esc_url( '#' )
+	);
+	?></p>
 </article>
 
 <!--<div class="bpa-buttons">
