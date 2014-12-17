@@ -243,7 +243,7 @@ class BP_Admin {
 		// Add the option pages
 		$hooks[] = add_submenu_page(
 			$this->settings_page,
-			__( 'BuddyPress Modules', 'buddypress' ),
+			__( 'BuddyPress Components', 'buddypress' ),
 			__( 'BuddyPress', 'buddypress' ),
 			$this->capability,
 			'bp-components',
