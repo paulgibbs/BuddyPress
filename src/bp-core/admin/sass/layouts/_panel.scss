@@ -1,9 +1,9 @@
 .bpa-panel {
 	padding: 10px $dashboard-margin;
 	margin-bottom: 10px;
-	background-color: $color-primary-dark;
+	background-color: $color-secondary;
 	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
-	border-bottom: 1px solid darken($color-primary-dark, 5%);
+	border-bottom: 1px solid darken($color-secondary, 5%);
 	color: $color-primary-contrast;
 
 	h1 {
