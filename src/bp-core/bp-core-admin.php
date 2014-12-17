@@ -435,7 +435,7 @@ class BP_Admin {
 		$nav_items = array(
 			array(
 				'group' => 'external',
-				'href' => esc_url_raw( bp_get_admin_url( 'index.php?page=bp-changelog' ) ),
+				'href' => esc_url_raw( bp_get_admin_url( 'admin.php?page=bp-changelog' ) ),
 				'id'   => 'bp-changelog',
 				'name' => _x( 'What&#8217;s New?', 'dashboard nav menu item', 'buddypress' ),
 			),
