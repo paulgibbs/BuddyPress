@@ -435,6 +435,12 @@ class BP_Admin {
 		$nav_items = array(
 			array(
 				'group' => 'external',
+				'href' => esc_url_raw( bp_get_admin_url( 'index.php?page=bp-changelog' ) ),
+				'id'   => 'bp-changelog',
+				'name' => _x( 'What&#8217;s New?', 'dashboard nav menu item', 'buddypress' ),
+			),
+			array(
+				'group' => 'external',
 				'href'  => __( 'https://codex.buddypress.org/', 'buddypress' ),
 				'id'    => 'bp-codex',
 				'name'  => _x( 'Documentation', 'dashboard nav menu item', 'buddypress' ),
@@ -444,7 +450,7 @@ class BP_Admin {
 				'href' => __( 'https://buddypress.org/support/', 'buddypress' ),
 				'id'   => 'bp-support-forums',
 				'name' => _x( 'Support Forums', 'dashboard nav menu item', 'buddypress' ),
-			)
+			),
 		);
 		$nav_items = array_merge(
 			bp_core_get_admin_tabs(),
