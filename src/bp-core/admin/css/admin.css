@@ -135,7 +135,7 @@
   color: #1E1E1E; }
   #wpbody-content .bpa-panel h1 {
     font-size: 19px;
-    font-weight: 400;
+    font-weight: 100;
     line-height: 1.6;
     margin: 64px 0 0; }
 
@@ -151,6 +151,7 @@
   color: #212121; }
   .bpa-content h2 {
     color: #727272;
+    font-weight: 100;
     margin-top: 30px; }
     .bpa-content h2:first-child {
       margin-top: 0; }
