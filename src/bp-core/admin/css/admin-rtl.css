@@ -44,6 +44,9 @@
 #wpbody {
   background-color: #FAFAFA; }
 
+#wpbody-content {
+  padding-bottom: 0; }
+
 @media screen and (max-width: 782px) {
   .auto-fold #wpcontent {
     padding-right: 0; } }

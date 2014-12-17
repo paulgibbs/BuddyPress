@@ -17,6 +17,10 @@
 	background-color: $color-background;
 }
 
+#wpbody-content {
+	padding-bottom: 0;
+}
+
 // Small
 @media screen and (max-width: 782px) {
 	.auto-fold #wpcontent {
