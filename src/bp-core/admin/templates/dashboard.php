@@ -23,7 +23,8 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	?></p>
 
 	<h2><?php _e( 'For Old Hands', 'buddypress' ); ?></h2>
-	<p></p>
+	<p>Welcome to the new-look BuddyPress Dashboard. While everything remains in the same place as before, this represents the first step towards a refreshed and mobile-first admin interface for BuddyPress.</p>
+	<p>The changelog for this release now <a href="#">has its own screen</a>.</p>
 </article>
 
 <!--<div class="bpa-buttons">
