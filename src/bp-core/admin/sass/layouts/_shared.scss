@@ -31,6 +31,13 @@
 	}
 }
 
+.bpa-content-half {
+	float: left;
+	width: 50%;
+
+	+ .bpa-content-half:after { @include clearfix(); }
+}
+
 .bpa-button-major {
 	display: inline-block;
 	background-color: $color-background;

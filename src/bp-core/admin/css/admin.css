@@ -168,6 +168,14 @@
     .bpa-content ul li {
       margin-left: 30px; }
 
+.bpa-content-half {
+  float: left;
+  width: 50%; }
+  .bpa-content-half + .bpa-content-half:after {
+    clear: both;
+    content: "";
+    display: table; }
+
 .bpa-button-major {
   display: inline-block;
   background-color: #FAFAFA;
