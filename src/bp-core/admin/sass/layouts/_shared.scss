@@ -9,20 +9,25 @@
 .bpa-content {
 	padding: $dashboard-margin;
 	background-color: $color-background;
-	color: #212121;
+	color: $color-body;
 
 	a {
 		color: $color-background-link;
 	}
 
 	h2 {
-		color: #727272;
+		color: $color-heading;
 		font-weight: 100;
 		margin-top: ($dashboard-margin * 2);
 
 		&:first-child {
 			margin-top: 0;
 		}
+	}
+
+	h3 {
+		color: $color-subheading;
+		font-weight: 100;
 	}
 
 	p {

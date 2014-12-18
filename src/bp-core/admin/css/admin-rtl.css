@@ -163,11 +163,14 @@
   .bpa-content a {
     color: #D84800; }
   .bpa-content h2 {
-    color: #727272;
+    color: #555;
     font-weight: 100;
     margin-top: 30px; }
     .bpa-content h2:first-child {
       margin-top: 0; }
+  .bpa-content h3 {
+    color: #727272;
+    font-weight: 100; }
   .bpa-content p {
     font-size: 15px; }
   .bpa-content ul {
