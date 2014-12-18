@@ -2,8 +2,12 @@
  * Content blocks
  */
 
-.bpa-content-container:after {
-	@include clearfix();
+.bp-admin .bpa-content-container {
+	background-color: #FFF;
+	border-top: 1px solid darken($color-background, 5%);
+	border-bottom: 1px solid darken($color-background, 5%);
+
+	&:after { @include clearfix(); }
 }
 
 .bpa-content {

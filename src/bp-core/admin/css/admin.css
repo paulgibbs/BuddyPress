@@ -151,10 +151,14 @@
 /**
  * Content blocks
  */
-.bpa-content-container:after {
-  clear: both;
-  content: "";
-  display: table; }
+.bp-admin .bpa-content-container {
+  background-color: #FFF;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed; }
+  .bp-admin .bpa-content-container:after {
+    clear: both;
+    content: "";
+    display: table; }
 
 .bpa-content {
   padding: 15px;
@@ -302,3 +306,6 @@
 @media only screen and (min-width: 783px) {
   .bpa-credits {
     width: 70%; } }
+
+.bpa-section-enhancements {
+  margin-top: 15px; }

@@ -2,7 +2,6 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// &#8217;  == apostrophe
 list( $display_version ) = explode( '-', bp_get_version() );
 ?>
 
@@ -10,12 +9,12 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	<h1><?php printf( 'What&#8217;s new in BuddyPress %s? A revamped @mentions interface, a new profile field type, performance improvements, and many interesting things for developers.', $display_version ); ?></h1>
 </div>
 
-<div class="bpa-content">
+<div class="bpa-content bpa-section-mentions">
 	<h2>Revamped @mentions Interface</h2>
 	<p>Forget the old days of trying to remember someone&#8217;s username when you want to @mention them in a conversation! With BuddyPress 2.1, type a <code>@</code> when leaving a status update or commenting on an activity item or blog post, and the new suggestions panel will open.</p>
 </div>
 
-<div class="bpa-content bpa-content-container">
+<div class="bpa-content bpa-content-container bpa-section-improvements">
 	<h2>Continuous Improvement</h2>
 
 	<div class="bpa-content-third">
@@ -34,7 +33,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	</div>
 </div>
 
-<div class="bpa-content bpa-content-container">
+<div class="bpa-content bpa-content-container bpa-section-enhancements">
 	<h2>Enhancements for Plugin &amp; Theme Developers</h2>
 
 	<div class="bpa-content-half">
