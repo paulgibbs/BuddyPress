@@ -170,7 +170,8 @@
       margin-top: 0; }
   .bpa-content h3 {
     color: #727272;
-    font-weight: 100; }
+    font-weight: 100;
+    margin-top: 0; }
   .bpa-content p {
     font-size: 15px; }
   .bpa-content ul {
@@ -182,10 +183,14 @@
 .bpa-content-half {
   float: left;
   width: 50%; }
-  .bpa-content-half + .bpa-content-half:after {
-    clear: both;
-    content: "";
-    display: table; }
+  .bpa-content-half p:first-child {
+    margin-top: 0; }
+  .bpa-content-half + .bpa-content-half {
+    padding-left: 15px; }
+    .bpa-content-half + .bpa-content-half:after {
+      clear: both;
+      content: "";
+      display: table; }
 
 .bpa-content-third {
   float: left;

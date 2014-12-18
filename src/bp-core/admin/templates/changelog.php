@@ -7,7 +7,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 ?>
 
 <div class="bpa-panel">
-	<h1><?php printf( 'What&#8217;s new in BuddyPress %s? A revamped @mentions interface, new profile field type, performance improvements, and many interesting things for developers.', $display_version ); ?></h1>
+	<h1><?php printf( 'What&#8217;s new in BuddyPress %s? A revamped @mentions interface, a new profile field type, performance improvements, and many interesting things for developers.', $display_version ); ?></h1>
 </div>
 
 <div class="bpa-content">

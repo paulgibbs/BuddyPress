@@ -28,6 +28,7 @@
 	h3 {
 		color: $color-subheading;
 		font-weight: 100;
+		margin-top: 0;
 	}
 
 	p {
@@ -48,7 +49,12 @@
 	float: left;
 	width: 50%;
 
-	+ .bpa-content-half:after { @include clearfix(); }
+	p:first-child { margin-top: 0; }
+
+	+ .bpa-content-half {
+		padding-left: $dashboard-margin;
+		&:after { @include clearfix(); }
+	}
 }
 
 .bpa-content-third {
@@ -128,3 +134,4 @@
 		color: inherit;
 	}
 }
+
