@@ -15,7 +15,7 @@ list( $display_version ) = explode( '-', bp_get_version() );
 	<p>Forget the old days of trying to remember someone&#8217;s username when you want to @mention them in a conversation! With BuddyPress 2.1, type a <code>@</code> when leaving a status update or commenting on an activity item or blog post, and the new suggestions panel will open.</p>
 </div>
 
-<div class="bpa-content">
+<div class="bpa-content clearfix">
 	<h2>Continuous Improvement</h2>
 
 	<div class="bpa-content-third">
