@@ -268,6 +268,15 @@ class BP_Admin {
 			'bp_core_admin_settings'
 		);
 
+		$hooks[] = add_submenu_page(
+			'admin.php',
+			_x( "BuddyPress: what's new?", 'Dashboard page title', 'buddypress' ),
+			_x( 'BuddyPress Changelog', 'Dashboard menu title', 'buddypress' ),
+			$this->capability,
+			'bp-changelog',
+			array( $this, 'changelog_screen' )
+		);
+
 		// For consistency with non-Multisite, we add a Tools menu in
 		// the Network Admin as a home for our Tools panel
 		if ( is_multisite() && bp_core_do_network_admin() ) {
@@ -523,7 +532,7 @@ class BP_Admin {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// Dashboard screen
-		if ( $current_screen === 'dashboard_page_bp-about' ) {
+		if ( in_array( $current_screen, array( 'admin_page_bp-changelog', 'dashboard_page_bp-about', ), true ) ) {
 			wp_enqueue_style( 'bp-admin-css', "{$this->css_url}admin{$min}.css", array(), bp_get_version() );
 			wp_style_add_data( 'bp-admin-css', 'rtl', true );
 
@@ -557,6 +566,19 @@ class BP_Admin {
 
 		$this->load_template( 'header' );
 		$this->load_template( 'dashboard' );
+		$this->load_template( 'footer' );
+	}
+
+	/**
+	 * Output the changelog screen.
+	 *
+	 * @since BuddyPress (2.2.0)
+	 */
+	public function changelog_screen() {
+		$this->current_screen_id = 'changelog';
+
+		$this->load_template( 'header' );
+		$this->load_template( 'changelog' );
 		$this->load_template( 'footer' );
 	}
 

@@ -895,7 +895,7 @@ function bp_core_admin_user_spammed_js() {
  * @return string Updated body classes.
  */
 function bp_get_the_admin_body_class( $body_class ) {
-	if ( get_current_screen()->id === 'dashboard_page_bp-about' ) {
+	if ( in_array( get_current_screen()->id, array( 'admin_page_bp-changelog', 'dashboard_page_bp-about', ), true ) ) {
 		$body_class .= ' bp-admin';
 	}
 
