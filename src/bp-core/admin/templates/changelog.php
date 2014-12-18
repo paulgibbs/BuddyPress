@@ -8,6 +8,28 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 </div>
 
 <div class="bpa-content">
-	<h2>Hello World</h2>
-	<p>Hello World</p>
+	<h2>Heading</h2>
+	<ul>
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+	</ul>
+</div>
+
+<div class="bpa-content bpa-content-half">
+	<h2>Heading</h2>
+	<ul>
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+	</ul>
+</div>
+
+<div class="bpa-content bpa-content-half">
+	<h2>Heading</h2>
+	<ul>
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+	</ul>
 </div>
