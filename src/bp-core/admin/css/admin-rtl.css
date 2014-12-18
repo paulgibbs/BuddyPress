@@ -130,7 +130,7 @@
       margin-left: 40px; } }
 
 #wpbody-content .bpa-panel {
-  padding: 10px 15px;
+  padding: 64px 15px 10px;
   margin-bottom: 10px;
   background-color: #FD5400;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
@@ -140,7 +140,7 @@
     font-size: 20px;
     font-weight: 100;
     line-height: 1.6;
-    margin: 64px 0 0; }
+    margin: 0; }
 
 @media only screen and (min-width: 783px) {
   #wpbody-content .bpa-panel {
