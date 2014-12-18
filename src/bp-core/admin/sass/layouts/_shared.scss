@@ -1,3 +1,7 @@
+/**
+ * Content blocks
+ */
+
 .bpa-content {
 	padding: $dashboard-margin;
 	background-color: $color-background;
@@ -37,6 +41,18 @@
 
 	+ .bpa-content-half:after { @include clearfix(); }
 }
+
+.bpa-content-third {
+	float: left;
+	width: 33%;
+
+	+ .bpa-content-third + .bpa-content-third:after { @include clearfix(); }
+}
+
+
+/**
+ * Buttons
+ */
 
 .bpa-button-major {
 	display: inline-block;
@@ -82,8 +98,4 @@
 	a {
 		color: inherit;
 	}
-}
-
-
-@media only screen and (min-width: 783px) {
 }
