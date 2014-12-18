@@ -162,6 +162,11 @@
       margin-top: 0; }
   .bpa-content p {
     font-size: 15px; }
+  .bpa-content ul {
+    list-style-position: inside;
+    list-style-type: square; }
+    .bpa-content ul li {
+      margin-left: 30px; }
 
 .bpa-button-major {
   display: inline-block;

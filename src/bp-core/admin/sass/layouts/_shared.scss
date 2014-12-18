@@ -20,6 +20,15 @@
 	p {
 		font-size: 15px;
 	}
+
+	ul {
+		list-style-position: inside;
+		list-style-type: square;
+
+		li {
+			margin-left: ($dashboard-margin * 2);
+		}
+	}
 }
 
 .bpa-button-major {
