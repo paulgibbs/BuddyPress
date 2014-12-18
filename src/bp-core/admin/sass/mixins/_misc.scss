@@ -4,7 +4,3 @@
 	content: "";
 	display: table;
 }
-
-.clearfix:after {
-	@include clearfix();
-}

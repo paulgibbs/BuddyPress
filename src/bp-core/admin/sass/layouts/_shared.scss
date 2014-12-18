@@ -2,6 +2,10 @@
  * Content blocks
  */
 
+.bpa-content-container:after {
+	@include clearfix();
+}
+
 .bpa-content {
 	padding: $dashboard-margin;
 	background-color: $color-background;

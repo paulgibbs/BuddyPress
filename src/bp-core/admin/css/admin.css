@@ -31,11 +31,6 @@
 .bpa-button-activity h3 {
   text-transform: uppercase; }
 
-.clearfix:after {
-  clear: both;
-  content: "";
-  display: table; }
-
 *, *:before, *:after {
   box-sizing: border-box; }
 
@@ -156,6 +151,11 @@
 /**
  * Content blocks
  */
+.bpa-content-container:after {
+  clear: both;
+  content: "";
+  display: table; }
+
 .bpa-content {
   padding: 15px;
   background-color: #FAFAFA;
