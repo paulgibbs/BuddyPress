@@ -4,6 +4,10 @@
 	box-sizing: border-box;
 }
 
+html {
+	background-color: $color-background !important;
+}
+
 #wpcontent {
 	margin-left: 160px;
 	padding: 0;
