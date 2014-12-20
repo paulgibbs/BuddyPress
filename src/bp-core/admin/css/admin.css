@@ -6,7 +6,7 @@
   -moz-osx-font-smoothing: grayscale; }
 
 .bpa-header, .bpa-header a {
-  color: #040404; }
+  color: #FFF; }
 
 .bpa-nav-logo a {
   color: #FFF;
@@ -24,7 +24,7 @@
   font-size: 14px;
   text-decoration: none; }
   .bpa-button:hover {
-    background-color: #1E1E1E;
+    background-color: #FFF;
     color: #D84800;
     border-bottom: 0 !important; }
 
