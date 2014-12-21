@@ -627,3 +627,20 @@ function bp_is_activity_heartbeat_active( $default = true ) {
 function bp_get_theme_package_id( $default = 'legacy' ) {
 	return apply_filters( 'bp_get_theme_package_id', bp_get_option( '_bp_theme_package_id', $default ) );
 }
+
+/**
+ * Is BP's Open Graph support enabled?
+ *
+ * @return bool True to enable.
+ * @since BuddyPress (2.3.0)
+ */
+function bp_is_opengraph_support_enabled() {
+
+	/**
+	 * Filters whether or not BP's Open Graph support is enabled.
+	 *
+	 * @param bool True to enable.
+	 * @since BuddyPress (2.3.0)
+	 */
+	return (bool) apply_filters( 'bp_is_opengraph_support_enabled', true );
+}

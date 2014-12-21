@@ -2727,3 +2727,61 @@ function bp_nav_menu( $args = array() ) {
 		return $nav_menu;
 	}
 }
+
+/**
+ * Add Open Graph tags for BuddyPress content to the current page.
+ *
+ * @since BuddyPress (2.3.0)
+ */
+function bp_opengraph_tags() {
+	if ( ! bp_is_opengraph_support_enabled() || bp_is_blog_page() ) {
+		return;
+	}
+
+	/**
+	 * Filter the Open Graph tags to be output to the current page.
+	 *
+	 * Each component will likely want to set 'og:title' and 'og:description' properties.
+	 *
+	 * @param array $value Key/value pairs of Open Graph tags for the current page.
+	 * @since BuddyPress (2.3.0)
+	 */
+	$tags = apply_filters( 'bp_opengraph_tags', array(
+		'og:type' => 'object',
+		'og:url'  => bp_get_canonical_url(),
+	) );
+
+	if ( empty( $tags ) ) {
+		return;
+	}
+
+	foreach ( $tag as $property => $value ) {
+		if ( ! $value ) {
+			continue;
+		}
+
+		printf( '<meta property="%s" content="%s" />', esc_attr( $property ), esc_attr( $value ) );
+	}
+}
+add_action( 'bp_head', 'bp_opengraph_tags' );
+
+/**
+ * Filter the document's namespace and add the Open Graph namespace.
+ *
+ * @param string $namespace Existing document namespaces.
+ * @return string
+ * @since BuddyPress (2.3.0)
+ */
+function bp_add_opengraph_namespace( $namespace ) {
+	if ( ! bp_is_opengraph_support_enabled() ) {
+		return;
+	}
+
+	$og = 'prefix="og: http://ogp.me/ns#"';
+	if ( strpos( strtolower( $namespace ), $og ) === false ) {
+		$namespace .= " $og";
+	}
+
+	return $namespace;
+}
+add_filter( 'language_attributes', 'bp_add_opengraph_namespace' );
