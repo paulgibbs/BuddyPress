@@ -2755,7 +2755,7 @@ function bp_opengraph_tags() {
 		return;
 	}
 
-	foreach ( $tag as $property => $value ) {
+	foreach ( $tags as $property => $value ) {
 		if ( ! $value ) {
 			continue;
 		}
