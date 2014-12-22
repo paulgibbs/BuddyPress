@@ -2761,7 +2761,7 @@ function bp_opengraph_tags() {
 			continue;
 		}
 
-		printf( '<meta property="%s" content="%s" />', esc_attr( $property ), esc_attr( $value ) );
+		printf( '<meta property="%s" content="%s" />' . PHP_EOL, esc_attr( $property ), esc_attr( $value ) );
 	}
 }
 add_action( 'bp_head', 'bp_opengraph_tags' );
