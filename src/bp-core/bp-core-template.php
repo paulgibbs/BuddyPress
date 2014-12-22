@@ -2764,7 +2764,7 @@ function bp_opengraph_tags() {
 		printf( '<meta property="%s" content="%s" />' . PHP_EOL, esc_attr( $property ), esc_attr( $value ) );
 	}
 }
-add_action( 'bp_head', 'bp_opengraph_tags' );
+add_action( 'bp_head', 'bp_opengraph_tags', 2 );
 
 /**
  * Filter the document's namespace and add the Open Graph namespace.
