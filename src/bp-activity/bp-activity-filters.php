@@ -640,3 +640,36 @@ function bp_activity_heartbeat_strings( $strings = array() ) {
 	return $strings;
 }
 add_filter( 'bp_core_get_js_strings', 'bp_activity_heartbeat_strings', 10, 1 );
+
+/**
+ * Add Open Graph tags for Activity content.
+ *
+ * @since BuddyPress (2.3.0)
+ */
+function bp_activity_opengraph_tags( $tags ) {
+	if ( ! bp_is_activity_component() ) {
+		return $tags;
+	}
+
+ 	// User activity screens
+	if ( bp_is_user_activity() ) {
+
+	// Directory
+	} elseif ( bp_is_activity_directory() ) {
+
+	// Group activity screens
+	} elseif ( bp_is_group_activity() ) {
+
+	// Single activity item
+	} elseif ( bp_is_single_activity() ) {
+	}
+
+	//'og:title' and 'og:description'
+	/*$tags = apply_filters( 'bp_opengraph_tags', array(
+		'og:type' => 'object',
+		'og:url'  => bp_get_canonical_url(),
+	) );*/
+
+	return $tags;
+}
+add_filter( 'bp_opengraph_tags', 'bp_activity_opengraph_tags' );
