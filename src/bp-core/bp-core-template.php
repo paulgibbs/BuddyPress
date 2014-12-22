@@ -2747,8 +2747,9 @@ function bp_opengraph_tags() {
 	 * @since BuddyPress (2.3.0)
 	 */
 	$tags = apply_filters( 'bp_opengraph_tags', array(
-		'og:type' => 'object',
-		'og:url'  => bp_get_canonical_url(),
+		'og:title' => trim( bp_modify_page_title( '', '|' ), '| \t\n\r\0\x0B' ),
+		'og:type'  => 'object',
+		'og:url'   => bp_get_canonical_url(),
 	) );
 
 	if ( empty( $tags ) ) {
