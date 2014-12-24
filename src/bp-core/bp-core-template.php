@@ -2738,6 +2738,8 @@ function bp_opengraph_tags() {
 		return;
 	}
 
+	$slash = current_theme_supports( 'html5' ) ? '' : ' /';
+
 	/**
 	 * Filter the Open Graph tags to be output to the current page.
 	 *
@@ -2747,9 +2749,10 @@ function bp_opengraph_tags() {
 	 * @since BuddyPress (2.3.0)
 	 */
 	$tags = apply_filters( 'bp_opengraph_tags', array(
-		'og:title' => trim( bp_modify_page_title( '', '|' ), "| \t\n\r\0\x0B" ),
-		'og:type'  => 'object',
-		'og:url'   => bp_get_canonical_url(),
+		'og:site_name' => get_bloginfo( 'name' ),
+		'og:title'     => trim( bp_modify_page_title( '', '|' ), "| \t\n\r\0\x0B" ),
+		'og:type'      => 'object',
+		'og:url'       => bp_get_canonical_url(),
 	) );
 
 	if ( empty( $tags ) ) {
@@ -2761,7 +2764,7 @@ function bp_opengraph_tags() {
 			continue;
 		}
 
-		printf( '<meta property="%s" content="%s" />' . PHP_EOL, esc_attr( $property ), esc_attr( $value ) );
+		printf( '<meta property="%s" content="%s"%s>' . PHP_EOL, esc_attr( $property ), esc_attr( $value ), $slash );
 	}
 }
 add_action( 'bp_head', 'bp_opengraph_tags', 2 );
