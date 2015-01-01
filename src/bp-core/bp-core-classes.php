@@ -2832,6 +2832,8 @@ abstract class BP_Media_Extractor {
 		preg_match_all( '#href=(["\'])([^"\'])+\1#i', $richtext, $matches );
 
 		if ( ! empty( $matches[1] ) ) {
+			$matches[1] = array_unique( $matches[1] );
+
 			foreach ( $matches[1] as $link_src ) {
 
 				// Skip data URIs.
@@ -2890,8 +2892,9 @@ abstract class BP_Media_Extractor {
 		preg_match_all( '#src=(["\'])([^"\'])+\1#i', $richtext, $matches );
 
 		if ( ! empty( $matches[1] ) ) {
-			foreach ( $matches[1] as $image_src ) {
+			$matches[1] = array_unique( $matches[1] );
 
+			foreach ( $matches[1] as $image_src ) {
 				// Skip data URIs.
 				if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
 					continue;
