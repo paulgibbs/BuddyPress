@@ -2806,12 +2806,12 @@ abstract class BP_Media_Extractor {
 	 * Extract images from `<img>` tags in a block of text.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_images( $richtext, $plantext, $extra_args = array() ) {
+	protected static function extract_images( $richtext, $plaintext, $extra_args = array() ) {
 		$data = array( 'has' => array(), 'images' => array() );
 
 		// Matches: src="text" and src='text'
@@ -2878,7 +2878,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * Extract images from Posts with a Featured Image or Gallery.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -2920,7 +2920,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * Extract a Post's featured image.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -2939,7 +2939,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * Extract images from galleries inside a WordPress post.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
