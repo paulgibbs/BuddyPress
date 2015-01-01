@@ -2924,7 +2924,14 @@ abstract class BP_Media_Extractor {
 					continue;
 				}
 
-				$data['images'][] = array( 'source' => 'html', 'url' => esc_url_raw( $image_src ), );
+				$data['images'][] = array(
+					'source' => 'html',
+					'url'    => esc_url_raw( $image_src ),
+
+					// The image resolution isn't available, but we need to set the keys anyway.
+					'height' => 0,
+					'width'  => 0,
+				);
 			}
 		}
 
