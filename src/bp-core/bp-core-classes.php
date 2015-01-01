@@ -2884,9 +2884,11 @@ abstract class BP_Media_Extractor {
 			}
 		}
 
-
+		// Build results
 		foreach ( $mentions as $user_id => $mention_name ) {
 			$mention = array( 'name' => strtolower( $mention_name ) );
+
+			// If the Activity component is active, store the User ID, too.
 			if ( bp_is_active( 'activity' ) ) {
 				$mention['ID'] = (int) $user_id;
 			}
