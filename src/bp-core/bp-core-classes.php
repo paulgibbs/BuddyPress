@@ -2802,6 +2802,10 @@ abstract class BP_Media_Extractor {
 			$extracted = array_merge( $extracted, self::extract_images( $richtext, $plaintext, $extra_args ) );
 		}
 
+		// Extract shortcodes.
+		if ( self::SHORTCODES & $what_to_extract ) {
+			$extracted = array_merge( $extracted, self::extract_shortcodes( $richtext, $plaintext, $extra_args ) );
+		}
 	}
 
 
@@ -2901,6 +2905,47 @@ abstract class BP_Media_Extractor {
 
 		$data['has']['images'] = count( $data['images'] );
 		return $data;
+	}
+
+	/**
+	 * Extract shortcodes from a block of text.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
+		$data   = array( 'has' => array(), 'shortcodes' => array() );
+		$counts = array();
+		$types  = array();
+
+ 		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
+
+		if ( ! empty( $matches[2] ) ) {
+			foreach( $matches[2] as $shortcode ) {
+				$shortcode_type = sanitize_key( $shortcode );
+				$types[]        = $shortcode_type;
+
+				if ( ! isset( $counts[ $shortcode_type ] ) ) {
+					$counts[ $shortcode_type ] = 0;
+				}
+
+				// Track how many times this kind of shortcode appears.
+				$counts[ $shortcode_type ]++;
+			}
+		}
+
+		if ( ! empty( $types ) ) {
+			$types = array_unique( $types );
+
+			foreach ( $types as $type => $count ) {
+				$data['shortcodes'][ $type ] = array( 'count' => $counts[ $type ] );
+			}
+		}
+
+		$data['has']['shortcodes'] = count( $data['shortcodes'] );
 	}
 
 
