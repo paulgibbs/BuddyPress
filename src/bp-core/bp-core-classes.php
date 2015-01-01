@@ -2865,17 +2865,33 @@ abstract class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected static function extract_mentions( $richtext, $plaintext, $extra_args = array() ) {
-		$data = array( 'has' => array(), 'mentions' => array() );
+		$data     = array( 'has' => array(), 'mentions' => array() );
+		$mentions = array();
 
-		// Matches: @mention
-		preg_match_all( '#\b@(\w+)\b#i', $plaintext, $matches );
-
-		if ( ! empty( $matches[1] ) ) {
-			$matches[1] = array_unique( array_map( 'strtolower', $matches[1] ) );
-
-			foreach ( $matches[1] as $at_name ) {
-				$data['mentions'][] = array( 'name' => strtolower( $at_name ) );
+		// If the Activity component is active, use it to parse @mentions.
+		if ( bp_is_active( 'activity' ) ) {
+			$mentions = bp_activity_find_mentions( $plaintext );
+			if ( ! $mentions ) {
+				$mentions = array();
 			}
+
+		// If the Activity component is disabled, instead do a basic parse.
+		} else {
+			preg_match_all( '/[@]+([A-Za-z0-9-_\.@]+)\b/', $plaintext, $matches );
+
+			if ( ! empty( $matches[1] ) ) {
+				$mentions = array_unique( array_map( 'strtolower', $matches[1] ) );
+			}
+		}
+
+
+		foreach ( $mentions as $user_id => $mention_name ) {
+			$mention = array( 'name' => strtolower( $mention_name ) );
+			if ( bp_is_active( 'activity' ) ) {
+				$mention['ID'] = (int) $user_id;
+			}
+
+			$data['mentions'][] = $mention;
 		}
 
 		$data['has']['mentions'] = count( $data['mentions'] );
