@@ -2806,6 +2806,11 @@ abstract class BP_Media_Extractor {
 		if ( self::SHORTCODES & $what_to_extract ) {
 			$extracted = array_merge( $extracted, self::extract_shortcodes( $richtext, $plaintext, $extra_args ) );
 		}
+
+		// Extract oEmbeds.
+		if ( self::EMBEDS & $what_to_extract ) {
+			$extracted = array_merge( $extracted, self::extract_embeds( $richtext, $plaintext, $extra_args ) );
+		}
 	}
 
 
@@ -2921,6 +2926,7 @@ abstract class BP_Media_Extractor {
 		$counts = array();
 		$types  = array();
 
+		// Match any registered WordPress shortcodes.
  		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
 
 		if ( ! empty( $matches[2] ) ) {
@@ -2946,6 +2952,55 @@ abstract class BP_Media_Extractor {
 		}
 
 		$data['has']['shortcodes'] = count( $data['shortcodes'] );
+		return $data;
+	}
+
+	/**
+	 * Extract shortcodes from a block of text.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_embeds( $richtext, $plaintext, $extra_args = array() ) {
+		$data   = array( 'has' => array(), 'embeds' => array() );
+		$embeds = array();
+
+		if ( ! function_exists( '_wp_oembed_get_object' ) ) {
+			require( ABSPATH . WPINC . '/class-oembed.php' );
+		}
+
+
+		// Matches any links on their own lines. They may be oEmbeds.
+		preg_match_all( '#^\s*(https?://[^\s"]+)\s*$#im', $richtext, $matches );
+
+		if ( ! empty( $matches[1] ) ) {
+			$oembed = _wp_oembed_get_object();
+
+			foreach ( $matches[1] as $link ) {
+				foreach ( $oembed->providers as $matchmask => $oembed_data ) {
+					list( , $is_regex ) = $oembed_data;
+
+					// Turn asterisk-type provider URLs into regexs.
+					if ( ! $is_regex ) {
+						$matchmask = '#' . str_replace( '___wildcard___', '(.+)', preg_quote( str_replace( '*', '___wildcard___', $matchmask ), '#' ) ) . '#i';
+						$matchmask = preg_replace( '|^#http\\\://|', '#https?\://', $matchmask );
+					}
+
+					// Check whether this "link" is really an oEmbed.
+					if ( preg_match( $matchmask, $link ) ) {
+						$link             = explode( '://', $link );
+						$data['embeds'][] = array( 'url' => $link[1] );
+
+						break;
+					}
+				}
+			}
+		}
+
+		$data['has']['embeds'] = count( $data['embeds'] );
 		return $data;
 	}
 
