@@ -2924,7 +2924,6 @@ abstract class BP_Media_Extractor {
 	protected static function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
 		$data   = array( 'has' => array(), 'shortcodes' => array() );
 		$counts = array();
-		$types  = array();
 
 		// Match any registered WordPress shortcodes.
  		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
@@ -2932,7 +2931,6 @@ abstract class BP_Media_Extractor {
 		if ( ! empty( $matches[2] ) ) {
 			foreach( $matches[2] as $shortcode ) {
 				$shortcode_type = sanitize_key( $shortcode );
-				$types[]        = $shortcode_type;
 
 				if ( ! isset( $counts[ $shortcode_type ] ) ) {
 					$counts[ $shortcode_type ] = 0;
@@ -2946,7 +2944,7 @@ abstract class BP_Media_Extractor {
 		if ( ! empty( $types ) ) {
 			$types = array_unique( $types );
 
-			foreach ( $types as $type => $count ) {
+			foreach ( $counts as $type => $count ) {
 				$data['shortcodes'][ $type ] = array( 'count' => $counts[ $type ] );
 			}
 		}
