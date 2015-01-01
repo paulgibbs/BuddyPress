@@ -2833,7 +2833,7 @@ abstract class BP_Media_Extractor {
 		$data = array( 'has' => array(), 'links' => array() );
 
 		// Matches: href="text" and href='text'
-		preg_match_all( '#href=(["\'])([^"\'])+\1#i', $richtext, $matches );
+		preg_match_all( '#href=(["\'])([^"\']+)\1#i', $richtext, $matches );
 
 		if ( ! empty( $matches[1] ) ) {
 			$matches[1] = array_unique( $matches[1] );
@@ -2893,7 +2893,7 @@ abstract class BP_Media_Extractor {
 		$data = array( 'has' => array(), 'images' => array() );
 
 		// Matches: src="text" and src='text'
-		preg_match_all( '#src=(["\'])([^"\'])+\1#i', $richtext, $matches );
+		preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $matches );
 
 		if ( ! empty( $matches[1] ) ) {
 			$matches[1] = array_unique( $matches[1] );
