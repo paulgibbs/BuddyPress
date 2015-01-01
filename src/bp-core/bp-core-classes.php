@@ -2783,33 +2783,33 @@ abstract class BP_Media_Extractor {
 	 * @return array|WP_Error
 	 * @since BuddyPress (2.3.0)
 	 */
-	static public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
+	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
 		$extracted = array();
-		$plaintext = self::prepare_content( $richtext );
+		$plaintext = $this->prepare_content( $richtext );
 
 		// Extract links.
 		if ( self::LINKS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, self::extract_links( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, $this->extract_links( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract mentions.
 		if ( self::MENTIONS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, self::extract_mentions( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, $this->extract_mentions( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract images.
 		if ( self::IMAGES & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, self::extract_images( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, $this->extract_images( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract shortcodes.
 		if ( self::SHORTCODES & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, self::extract_shortcodes( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, $this->extract_shortcodes( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract oEmbeds.
 		if ( self::EMBEDS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, self::extract_embeds( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, $this->extract_embeds( $richtext, $plaintext, $extra_args ) );
 		}
 
 		return $extracted;
@@ -2831,7 +2831,7 @@ abstract class BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_links( $richtext, $plaintext, $extra_args = array() ) {
+	protected function extract_links( $richtext, $plaintext, $extra_args = array() ) {
 		$data = array( 'has' => array(), 'links' => array() );
 
 		// Matches: href="text" and href='text'
@@ -2864,7 +2864,7 @@ abstract class BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_mentions( $richtext, $plaintext, $extra_args = array() ) {
+	protected function extract_mentions( $richtext, $plaintext, $extra_args = array() ) {
 		$data     = array( 'has' => array(), 'mentions' => array() );
 		$mentions = array();
 
@@ -2909,7 +2909,7 @@ abstract class BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_images( $richtext, $plaintext, $extra_args = array() ) {
+	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
 		$data = array( 'has' => array(), 'images' => array() );
 
 		// Matches: src="text" and src='text'
@@ -2941,7 +2941,7 @@ abstract class BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
+	protected function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
 		$data   = array( 'has' => array(), 'shortcodes' => array() );
 		$counts = array();
 
@@ -2980,7 +2980,7 @@ abstract class BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_embeds( $richtext, $plaintext, $extra_args = array() ) {
+	protected function extract_embeds( $richtext, $plaintext, $extra_args = array() ) {
 		$data   = array( 'has' => array(), 'embeds' => array() );
 		$embeds = array();
 
@@ -3039,7 +3039,7 @@ abstract class BP_Media_Extractor {
 	 * @return string
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function prepare_content( $content ) {
+	protected function prepare_content( $content ) {
 		return strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
 	}
 }
@@ -3059,7 +3059,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * @return array|WP_Error
 	 * @since BuddyPress (2.3.0)
 	 */
-	static public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
+	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
 		if ( empty( $extra_args['post'] ) || ! is_a( $extra_args['post'], 'WP_Post' ) ) {
 			return new WP_Error( 'invalid_post' );
 		}
@@ -3076,10 +3076,10 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_images( $richtext, $plaintext, $extra_args = array() ) {
+	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
 		$existing_images = parent::extract_images( $richtext, $plaintext, $extra_args );
 		$featured_images = self::extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
-		$galleries       = self::extract_images_from_galleries( $richtext, $plaintext, $extra_args );
+		$galleries       = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
 
 		// Featured images (aka thumbnails).
 		if ( ! empty( $featured_images ) ) {
@@ -3118,7 +3118,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
+	protected function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
 		$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
 		if ( ! $thumb ) {
 			return array();
@@ -3137,7 +3137,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected static function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
+	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
 		$images = get_post_galleries_images( $extra_args['post'] );
 		if ( empty( $images ) ) {
 			return array();
