@@ -2890,7 +2890,7 @@ abstract class BP_Media_Extractor {
 
 			// If the Activity component is active, store the User ID, too.
 			if ( bp_is_active( 'activity' ) ) {
-				$mention['ID'] = (int) $user_id;
+				$mention['user_id'] = (int) $user_id;
 			}
 
 			$data['mentions'][] = $mention;
