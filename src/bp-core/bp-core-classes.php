@@ -3143,6 +3143,6 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			return array();
 		}
 
-		return wp_list_pluck( $images, 'src' );
+		return array_shift( $images );
 	}
 }
