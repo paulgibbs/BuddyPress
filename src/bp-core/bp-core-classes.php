@@ -3082,9 +3082,14 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		$galleries       = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
 
 		// Featured images (aka thumbnails).
-		if ( $featured_image ) {
+		if ( ! empty( $featured_image ) ) {
 			$new_images             = array( 'images' => array() );
-			$new_images['images'][] = array( 'source' => 'featured_images', 'url' => esc_url_raw( $featured_image ), );
+			$new_images['images'][] = array(
+				'source' => 'featured_images',
+				'url'    => esc_url_raw( $featured_image[0] ),
+				'width'  => $featured_image[1],
+				'height' => $featured_image[2],
+			);
 
 			$new_images['has']['featured_images'] = count( $new_images['images'] );
 			$existing_images = array_merge_recursive( $existing_images, $new_images );
@@ -3122,7 +3127,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			return array();
 		}
 
-		list( $image ) = wp_get_attachment_image_src( $thumb, 'full' );
+		$image = wp_get_attachment_image_src( $thumb, 'full' );
 		return $image;
 	}
 
