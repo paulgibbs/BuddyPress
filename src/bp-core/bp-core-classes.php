@@ -2946,6 +2946,7 @@ abstract class BP_Media_Extractor {
 		}
 
 		$data['has']['shortcodes'] = count( $data['shortcodes'] );
+		return $data;
 	}
 
 
