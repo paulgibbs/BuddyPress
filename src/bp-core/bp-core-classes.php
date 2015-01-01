@@ -2789,27 +2789,27 @@ abstract class BP_Media_Extractor {
 
 		// Extract links.
 		if ( self::LINKS & $what_to_extract ) {
-			$extracted = array_merge( $extracted, self::extract_links( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, self::extract_links( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract mentions.
 		if ( self::MENTIONS & $what_to_extract ) {
-			$extracted = array_merge( $extracted, self::extract_mentions( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, self::extract_mentions( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract images.
 		if ( self::IMAGES & $what_to_extract ) {
-			$extracted = array_merge( $extracted, self::extract_images( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, self::extract_images( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract shortcodes.
 		if ( self::SHORTCODES & $what_to_extract ) {
-			$extracted = array_merge( $extracted, self::extract_shortcodes( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, self::extract_shortcodes( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract oEmbeds.
 		if ( self::EMBEDS & $what_to_extract ) {
-			$extracted = array_merge( $extracted, self::extract_embeds( $richtext, $plaintext, $extra_args ) );
+			$extracted = array_merge_recursive( $extracted, self::extract_embeds( $richtext, $plaintext, $extra_args ) );
 		}
 
 		return $extracted;
