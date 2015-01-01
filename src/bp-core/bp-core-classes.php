@@ -2977,7 +2977,8 @@ abstract class BP_Media_Extractor {
 		preg_match_all( '#^\s*(https?://[^\s"]+)\s*$#im', $richtext, $matches );
 
 		if ( ! empty( $matches[1] ) ) {
-			$oembed = _wp_oembed_get_object();
+			$matches[1] = array_unique( $matches[1] );
+			$oembed     = _wp_oembed_get_object();
 
 			foreach ( $matches[1] as $link ) {
 				foreach ( $oembed->providers as $matchmask => $oembed_data ) {
