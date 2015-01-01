@@ -3078,17 +3078,15 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 */
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
 		$existing_images = parent::extract_images( $richtext, $plaintext, $extra_args );
-		$featured_images = self::extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
+		$featured_image  = $this->extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
 		$galleries       = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
 
 		// Featured images (aka thumbnails).
-		if ( ! empty( $featured_images ) ) {
-			$new_images = array( 'images' => array() );
-			foreach ( $featured_images as $image_src ) {
-				$new_images['images'][] = array( 'url' => esc_url_raw( $image_src ) );
-			}
+		if ( $featured_image ) {
+			$new_images             = array( 'images' => array() );
+			$new_images['images'][] = array( 'url' => esc_url_raw( $featured_image ) );
 
-			$new_images['has']['featured_images'] = count( $new_images['images'] );
+			$new_images['has']['featured_image'] = count( $new_images['images'] );
 			$existing_images = array_merge_recursive( $existing_images, $new_images );
 		}
 
