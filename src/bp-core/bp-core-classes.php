@@ -2981,6 +2981,11 @@ abstract class BP_Media_Extractor {
 			$oembed     = _wp_oembed_get_object();
 
 			foreach ( $matches[1] as $link ) {
+				// Skip data URIs.
+				if ( strtolower( substr( $link, 0, 5 ) ) === 'data:' ) {
+					continue;
+				}
+
 				foreach ( $oembed->providers as $matchmask => $oembed_data ) {
 					list( , $is_regex ) = $oembed_data;
 
