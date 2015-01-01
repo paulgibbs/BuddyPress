@@ -2787,6 +2787,13 @@ abstract class BP_Media_Extractor {
 		$extracted = array();
 		$plaintext = self::prepare_content( $richtext );
 
+		// Extract links.
+		if ( self::LINKS & $what_to_extract ) {
+			$what_to_extract = $what_to_extract - self::LINKS;
+
+			$extracted = array_merge( $extracted, self::extract_links( $richtext, $plaintext, $extra_args ) );
+		}
+
 		// Extract images.
 		if ( self::IMAGES & $what_to_extract ) {
 			$what_to_extract = $what_to_extract - self::IMAGES;
@@ -2803,7 +2810,38 @@ abstract class BP_Media_Extractor {
 	 */
 
 	/**
-	 * Extract images from `<img>` tags in a block of text.
+	 * Extract `<a href>` tags from a block of text.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_links( $richtext, $plaintext, $extra_args = array() ) {
+		$data = array( 'has' => array(), 'links' => array() );
+
+		// Matches: href="text" and href='text'
+		preg_match_all( '#href=(["\'])([^"\'])+\1#i', $richtext, $matches );
+
+		if ( ! empty( $matches[1] ) ) {
+			foreach ( $matches[1] as $link_src ) {
+
+				// Skip data URIs.
+				if ( strtolower( substr( $link_src, 0, 5 ) ) === 'data:' ) {
+					continue;
+				}
+
+				$data['links'][] = array( 'url' => esc_url_raw( $link_src ) );
+			}
+		}
+
+		$data['has']['links'] = count( $data['links'] );
+		return $data;
+	}
+
+	/**
+	 * Extract images from `<img src>` tags in a block of text.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
