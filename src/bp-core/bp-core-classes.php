@@ -3112,7 +3112,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 				}
 			}
 
-			$new_images['has']['galleries'] = count( $new_images['images'] );
+			$new_images['has']['galleries'] = count( $galleries );
 			$existing_images = array_merge_recursive( $existing_images, $new_images );
 		}
 
