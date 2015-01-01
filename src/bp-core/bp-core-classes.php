@@ -2754,3 +2754,202 @@ class BP_Members_Suggestions extends BP_Suggestions {
 		return apply_filters( 'bp_members_suggestions_get_suggestions', $results, $this );
 	}
 }
+
+/**
+ * Extracts metadata about types of content in some kind of block of text.
+ *
+ * @since BuddyPress (2.3.0)
+ */
+abstract class BP_Media_Extractor {
+	/**
+	 * Bitmasks to filter media type.
+	 *
+	 * @var int
+	 */
+	const ALL        = 255;
+	const LINKS      = 1;
+	const MENTIONS   = 2;
+	const IMAGES     = 4;
+	const SHORTCODES = 8;
+	const EMBEDS     = 16;
+
+
+	/**
+	 * Extract content metadata from a block of text.
+	 *
+	 * @param string $richtext
+	 * @param int $what_to_extract A mask of content types to extract. Defaults to BP_Media_Extractor::ALL.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array|WP_Error
+	 * @since BuddyPress (2.3.0)
+	 */
+	static public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
+		$extracted = array();
+		$plaintext = self::prepare_content( $richtext );
+
+		// Extract images.
+ 		if ( self::IMAGES & $what_to_extract ) {
+			$what_to_extract = $what_to_extract - self::IMAGES;
+ 	
+ 			$extracted = array_merge( $extracted, self::extract_images( $richtext, $plaintext, $extra_args ) );
+		}
+	}
+
+
+	/**
+	 * Content type specific extraction methods.
+	 *
+	 * You shouldn't need to use these directly; most of the time, just use extract().
+	 */
+
+	/**
+	 * Extract images from `<img>` tags in a block of text.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_images( $richtext, $plantext, $extra_args = array() ) {
+		$data = array( 'has' => array(), 'images' => array() );
+
+		// Matches: src="text" and src='text'
+		preg_match_all( '#src=(["\'])([^"\'])+\1#i', $richtext, $matches );
+
+		if ( ! empty( $matches[1] ) ) {
+			foreach ( $matches[1] as $image_src ) {
+
+				// Skip data URIs.
+				if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
+					continue;
+				}
+
+				$data['images'][] = array( 'url' => esc_url_raw( $image_src ) );
+			}
+		}
+
+		$data['has']['images'] = count( $data['images'] );
+		return $data;
+	}
+
+
+	/**
+	 * Helpers and utility methods.
+	 */
+
+	/**
+	 * Sanitise and format the $content to help with the content extraction.
+	 * HTML tags and shortcodes are removed, and HTML entities are decoded.
+	 *
+	 * @param string $content
+	 * @return string
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function prepare_content( $content ) {
+		return strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
+	}
+}
+
+/**
+ * Extracts metadata about types of content in a Post.
+ *
+ * @since BuddyPress (2.3.0)
+ */
+class BP_Media_Extractor_Post extends BP_Media_Extractor {
+	/**
+	 * Extract metadata from a WordPress post.
+	 *
+	 * @param string $richtext
+	 * @param int $what_to_extract A mask of content types to extract. Defaults to BP_Media_Extractor::ALL.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array|WP_Error
+	 * @since BuddyPress (2.3.0)
+	 */
+	static public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
+		if ( empty( $extra_args['post'] ) || ! is_a( $extra_args['post'], 'WP_Post' ) ) {
+			return new WP_Error( 'invalid_post' );
+		}
+
+		return parent::extract( $post->post_content, $what_to_extract, $extra_args );
+	}
+
+	/**
+	 * Extract images from Posts with a Featured Image or Gallery.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_images( $richtext, $plaintext, $extra_args = array() ) {
+		$existing_images = parent::extract_images( $richtext, $plaintext, $extra_args );
+		$featured_images = self::extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
+		$galleries       = self::extract_images_from_galleries( $richtext, $plaintext, $extra_args );
+
+		// Featured images (aka thumbnails).
+		if ( ! empty( $featured_images ) ) {
+			$new_images = array( 'images' => array() );
+			foreach ( $featured_images as $image_src ) {
+				$new_images['images'][] = array( 'url' => esc_url_raw( $image_src ) );
+			}
+
+			$new_images['has']['featured_images'] = count( $new_images['images'] );
+			$existing_images = array_merge_recursive( $existing_images, $new_images );
+		}
+
+		// Galleries.
+		if ( ! empty( $galleries ) ) {
+			$new_images = array( 'images' => array() );
+			foreach ( $galleries as $image_src ) {
+				$new_images['images'][] = array( 'url' => esc_url_raw( $image_src ) );
+			}
+
+			$new_images['has']['galleries'] = count( $new_images['images'] );
+			$existing_images = array_merge_recursive( $existing_images, $new_images );
+		}
+
+		// Update image count.
+		$existing_images['has']['images'] = count( $existing_images['images'] );
+
+		return $existing_images;
+	}
+
+	/**
+	 * Extract a Post's featured image.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
+		$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
+		if ( ! $thumb ) {
+			return array();
+		}
+
+		list( $image ) = wp_get_attachment_image_src( $thumb, 'full' );
+		return $image;
+	}
+
+	/**
+	 * Extract images from galleries inside a WordPress post.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plantext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
+		$images = get_post_galleries_images( $extra_args['post'] );
+		if ( empty( $images ) ) {
+			return array();
+		}
+
+		return wp_list_pluck( $images, 'src' );
+	}
+}
