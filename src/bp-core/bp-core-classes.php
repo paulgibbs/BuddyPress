@@ -2961,9 +2961,7 @@ abstract class BP_Media_Extractor {
 			}
 		}
 
-		if ( ! empty( $types ) ) {
-			$types = array_unique( $types );
-
+		if ( ! empty( $counts ) ) {
 			foreach ( $counts as $type => $count ) {
 				$data['shortcodes'][ $type ] = array( 'count' => $counts[ $type ] );
 			}
