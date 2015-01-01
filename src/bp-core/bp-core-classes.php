@@ -3042,7 +3042,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			return new WP_Error( 'invalid_post' );
 		}
 
-		return parent::extract( $post->post_content, $what_to_extract, $extra_args );
+		return parent::extract( $extra_args['post']->post_content, $what_to_extract, $extra_args );
 	}
 
 	/**
