@@ -835,7 +835,7 @@ jq(document).ready( function() {
 
 	/* When a navigation tab is clicked - e.g. | All Groups | My Groups | */
 	jq('div.item-list-tabs').on( 'click', function(event) {
-		if ( jq(this).hasClass('no-ajax') )  {
+		if ( jq(this).hasClass('no-ajax')  || jq( event.target ).hasClass('no-ajax') )  {
 			return;
 		}
 
@@ -1205,7 +1205,7 @@ jq(document).ready( function() {
 	});
 
 	/* Add / Remove friendship buttons */
-	jq( '#members-dir-list, #members-group-list' ).on('click', '.friendship-button a', function() {
+	jq( '#members-dir-list, #members-group-list, #item-header' ).on('click', '.friendship-button a', function() {
 		jq(this).parent().addClass('loading');
 		var fid   = jq(this).attr('id'),
 			nonce   = jq(this).attr('href'),

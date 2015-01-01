@@ -310,10 +310,7 @@ class BP_Groups_Template {
 		// Build pagination links
 		if ( (int) $this->total_group_count && (int) $this->pag_num ) {
 			$pag_args = array(
-				$page_arg => '%#%',
-				'num'     => $this->pag_num,
-				'sortby'  => $this->sort_by,
-				'order'   => $this->order,
+				$page_arg => '%#%'
 			);
 
 			if ( defined( 'DOING_AJAX' ) && true === (bool) DOING_AJAX ) {
@@ -322,8 +319,14 @@ class BP_Groups_Template {
 				$base = '';
 			}
 
+			$add_args = array(
+				'num'     => $this->pag_num,
+				'sortby'  => $this->sort_by,
+				'order'   => $this->order,
+			);
+
 			if ( ! empty( $search_terms ) ) {
-				$pag_args['s'] = $search_terms;
+				$add_args['s'] = urlencode( $search_terms );
 			}
 
 			$this->pag_links = paginate_links( array(
@@ -333,7 +336,8 @@ class BP_Groups_Template {
 				'current'   => $this->pag_page,
 				'prev_text' => _x( '&larr;', 'Group pagination previous text', 'buddypress' ),
 				'next_text' => _x( '&rarr;', 'Group pagination next text', 'buddypress' ),
-				'mid_size'  => 1
+				'mid_size'  => 1,
+				'add_args'  => $add_args,
 			) );
 		}
 	}
@@ -2850,13 +2854,67 @@ function bp_group_create_button() {
 			'component'  => 'groups',
 			'link_text'  => __( 'Create a Group', 'buddypress' ),
 			'link_title' => __( 'Create a Group', 'buddypress' ),
-			'link_class' => 'button group-create bp-title-button',
+			'link_class' => 'group-create no-ajax',
 			'link_href'  => trailingslashit( bp_get_root_domain() ) . trailingslashit( bp_get_groups_root_slug() ) . trailingslashit( 'create' ),
 			'wrapper'    => false,
 		);
 
 		return bp_get_button( apply_filters( 'bp_get_group_create_button', $button_args ) );
 	}
+
+/**
+ * Output the Create a Group nav item.
+ *
+ * @since BuddyPress (2.2.0)
+ */
+function bp_group_create_nav_item() {
+	echo bp_get_group_create_nav_item();
+}
+
+	/**
+	 * Get the Create a Group nav item.
+	 *
+	 * @since BuddyPress (2.2.0)
+	 *
+	 * @return string
+	 */
+	function bp_get_group_create_nav_item() {
+		// Get the create a group button
+		$create_group_button = bp_get_group_create_button();
+
+		// Make sure the button is available
+		if ( empty( $create_group_button ) ) {
+			return;
+		}
+
+		$output = '<li id="group-create-nav">' . $create_group_button . '</li>';
+
+		return apply_filters( 'bp_get_group_create_nav_item', $output );
+	}
+
+/**
+ * Checks if a specific theme is still filtering the Groups directory title
+ * if so, transform the title button into a Groups directory nav item.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @uses   bp_group_create_nav_item() to output the create a Group nav item
+ * @return string HTML Output
+ */
+function bp_group_backcompat_create_nav_item() {
+	// Bail if the Groups nav item is already used by bp-legacy
+	if ( has_action( 'bp_groups_directory_group_filter', 'bp_legacy_theme_group_create_nav', 999 ) ) {
+		return;
+	}
+
+	// Bail if the theme is not filtering the Groups directory title
+	if ( ! has_filter( 'bp_groups_directory_header' ) ) {
+		return;
+	}
+
+	bp_group_create_nav_item();
+}
+add_action( 'bp_groups_directory_group_filter', 'bp_group_backcompat_create_nav_item', 1000 );
 
 /**
  * Prints a message if the group is not visible to the current user (it is a
@@ -3038,13 +3096,14 @@ class BP_Groups_Group_Members_Template {
 		}
 
 		$this->pag_links = paginate_links( array(
-			'base' => add_query_arg( array( 'mlpage' => '%#%' ), $base_url ),
-			'format' => '',
-			'total' => !empty( $this->pag_num ) ? ceil( $this->total_member_count / $this->pag_num ) : $this->total_member_count,
-			'current' => $this->pag_page,
+			'base'      => add_query_arg( array( 'mlpage' => '%#%' ), $base_url ),
+			'format'    => '',
+			'total'     => ! empty( $this->pag_num ) ? ceil( $this->total_member_count / $this->pag_num ) : $this->total_member_count,
+			'current'   => $this->pag_page,
 			'prev_text' => '&larr;',
 			'next_text' => '&rarr;',
-			'mid_size' => 1
+			'mid_size'  => 1,
+			'add_args'  => array(),
 		));
 	}
 
@@ -4069,13 +4128,14 @@ class BP_Groups_Membership_Requests_Template {
 		}
 
 		$this->pag_links = paginate_links( array(
-			'base' => add_query_arg( 'mrpage', '%#%' ),
-			'format' => '',
-			'total' => ceil( $this->total_request_count / $this->pag_num ),
-			'current' => $this->pag_page,
+			'base'      => add_query_arg( 'mrpage', '%#%' ),
+			'format'    => '',
+			'total'     => ceil( $this->total_request_count / $this->pag_num ),
+			'current'   => $this->pag_page,
 			'prev_text' => '&larr;',
 			'next_text' => '&rarr;',
-			'mid_size' => 1
+			'mid_size'  => 1,
+			'add_args'  => array(),
 		) );
 	}
 
@@ -4321,6 +4381,7 @@ class BP_Groups_Invite_Template {
 				'prev_text' => '&larr;',
 				'next_text' => '&rarr;',
 				'mid_size'  => 1,
+				'add_args'  => array(),
 			) );
 		} else {
 			$this->pag_links = '';
@@ -4386,10 +4447,6 @@ class BP_Groups_Invite_Template {
 		if ( bp_is_active( 'groups' ) ) {
 			$total_groups = BP_Groups_Member::total_group_count( $user_id );
 			$this->invite->user->total_groups = sprintf( _n( '%d group', '%d groups', $total_groups, 'buddypress' ), $total_groups );
-		}
-
-		if ( bp_is_active( 'friends' ) ) {
-			$this->invite->user->total_friends = BP_Friends_Friendship::total_friend_count( $user_id );
 		}
 
 		if ( bp_is_active( 'friends' ) ) {
