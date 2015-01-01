@@ -3083,7 +3083,8 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 
 		// Featured images (aka thumbnails).
 		if ( ! empty( $featured_image ) ) {
-			$new_images             = array( 'images' => array() );
+			$new_images = array( 'images' => array() );
+
 			$new_images['images'][] = array(
 				'source' => 'featured_images',
 				'url'    => esc_url_raw( $featured_image[0] ),
@@ -3098,8 +3099,17 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		// Galleries.
 		if ( ! empty( $galleries ) ) {
 			$new_images = array( 'images' => array() );
-			foreach ( $galleries as $image_src ) {
-				$new_images['images'][] = array( 'source' => 'galleries', 'url' => esc_url_raw( $image_src ), );
+
+			foreach ( $galleries as $gallery ) {
+				foreach ( $gallery as $image ) {
+					$new_images['images'][] = array(
+						'gallery_id' => $image['gallery_id'],
+						'source'     => 'galleries',
+						'url'        => esc_url_raw( $image['url'] ),
+						'width'      => $image['width'],
+						'height'     => $image['height'],
+					);
+				}
 			}
 
 			$new_images['has']['galleries'] = count( $new_images['images'] );
@@ -3141,11 +3151,33 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
-		$images = get_post_galleries_images( $extra_args['post'] );
-		if ( empty( $images ) ) {
+		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
+		$galleries = get_post_galleries( $extra_args['post'], false );
+		if ( empty( $galleries ) ) {
 			return array();
 		}
 
-		return array_shift( $images );
+		$galleries_data = array();
+
+		foreach ( $galleries as $gallery_id => $gallery ) {
+			$data = array();
+			$ids  = wp_parse_id_list( $gallery['ids'] );
+
+			foreach ( $ids as $image_id ) {
+				$image = wp_get_attachment_image_src( $image_id, 'full' );
+
+				$data[] = array(
+					'url'    => $image[0],
+					'width'  => $image[1],
+					'height' => $image[2],
+
+					'gallery_id' => 1 + $gallery_id,
+				);
+			}
+
+			$galleries_data[] = $data;
+		}
+
+		return $galleries_data;
 	}
 }
