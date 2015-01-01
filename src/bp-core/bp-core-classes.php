@@ -2794,6 +2794,13 @@ abstract class BP_Media_Extractor {
 			$extracted = array_merge( $extracted, self::extract_links( $richtext, $plaintext, $extra_args ) );
 		}
 
+		// Extract mentions.
+		if ( self::MENTIONS & $what_to_extract ) {
+			$what_to_extract = $what_to_extract - self::MENTIONS;
+
+			$extracted = array_merge( $extracted, self::extract_mentions( $richtext, $plaintext, $extra_args ) );
+		}
+
 		// Extract images.
 		if ( self::IMAGES & $what_to_extract ) {
 			$what_to_extract = $what_to_extract - self::IMAGES;
@@ -2837,6 +2844,33 @@ abstract class BP_Media_Extractor {
 		}
 
 		$data['has']['links'] = count( $data['links'] );
+		return $data;
+	}
+
+	/**
+	 * Extract @mentions tags from a block of text.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected static function extract_mentions( $richtext, $plaintext, $extra_args = array() ) {
+		$data = array( 'has' => array(), 'mentions' => array() );
+
+		// Matches: @mention
+		preg_match_all( '#\b@(\w+)\b#i', $plaintext, $matches );
+
+		if ( ! empty( $matches[1] ) ) {
+			$matches[1] = array_unique( array_map( 'strtolower', $matches[1] ) );
+
+			foreach ( $matches[1] as $at_name ) {
+				$data['mentions'][] = array( 'name' => strtolower( $at_name ) );
+			}
+		}
+
+		$data['has']['mentions'] = count( $data['mentions'] );
 		return $data;
 	}
 
