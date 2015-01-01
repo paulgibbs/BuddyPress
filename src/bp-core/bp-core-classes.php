@@ -2788,10 +2788,10 @@ abstract class BP_Media_Extractor {
 		$plaintext = self::prepare_content( $richtext );
 
 		// Extract images.
- 		if ( self::IMAGES & $what_to_extract ) {
+		if ( self::IMAGES & $what_to_extract ) {
 			$what_to_extract = $what_to_extract - self::IMAGES;
- 	
- 			$extracted = array_merge( $extracted, self::extract_images( $richtext, $plaintext, $extra_args ) );
+
+			$extracted = array_merge( $extracted, self::extract_images( $richtext, $plaintext, $extra_args ) );
 		}
 	}
 
