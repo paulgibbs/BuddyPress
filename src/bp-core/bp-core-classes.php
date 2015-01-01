@@ -2811,6 +2811,8 @@ abstract class BP_Media_Extractor {
 		if ( self::EMBEDS & $what_to_extract ) {
 			$extracted = array_merge( $extracted, self::extract_embeds( $richtext, $plaintext, $extra_args ) );
 		}
+
+		return $extracted;
 	}
 
 
