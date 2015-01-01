@@ -3188,7 +3188,8 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		return $galleries_data;
 	}
 }
-=======
+
+/**
  * Base class for creating query classes that generate SQL fragments for filtering results based on recursive query params.
  *
  * @since BuddyPress (2.2.0)
