@@ -2835,10 +2835,10 @@ abstract class BP_Media_Extractor {
 		// Matches: href="text" and href='text'
 		preg_match_all( '#href=(["\'])([^"\']+)\1#i', $richtext, $matches );
 
-		if ( ! empty( $matches[1] ) ) {
-			$matches[1] = array_unique( $matches[1] );
+		if ( ! empty( $matches[2] ) ) {
+			$matches[2] = array_unique( $matches[2] );
 
-			foreach ( $matches[1] as $link_src ) {
+			foreach ( $matches[2] as $link_src ) {
 
 				// Skip data URIs.
 				if ( strtolower( substr( $link_src, 0, 5 ) ) === 'data:' ) {
@@ -2895,10 +2895,10 @@ abstract class BP_Media_Extractor {
 		// Matches: src="text" and src='text'
 		preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $matches );
 
-		if ( ! empty( $matches[1] ) ) {
-			$matches[1] = array_unique( $matches[1] );
+		if ( ! empty( $matches[2] ) ) {
+			$matches[2] = array_unique( $matches[2] );
 
-			foreach ( $matches[1] as $image_src ) {
+			foreach ( $matches[2] as $image_src ) {
 				// Skip data URIs.
 				if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
 					continue;
