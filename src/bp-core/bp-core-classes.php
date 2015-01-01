@@ -2924,7 +2924,7 @@ abstract class BP_Media_Extractor {
 					continue;
 				}
 
-				$data['images'][] = array( 'url' => esc_url_raw( $image_src ) );
+				$data['images'][] = array( 'source' => 'html', 'url' => esc_url_raw( $image_src ), );
 			}
 		}
 
@@ -3084,9 +3084,9 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		// Featured images (aka thumbnails).
 		if ( $featured_image ) {
 			$new_images             = array( 'images' => array() );
-			$new_images['images'][] = array( 'url' => esc_url_raw( $featured_image ) );
+			$new_images['images'][] = array( 'source' => 'featured_images', 'url' => esc_url_raw( $featured_image ), );
 
-			$new_images['has']['featured_image'] = count( $new_images['images'] );
+			$new_images['has']['featured_images'] = count( $new_images['images'] );
 			$existing_images = array_merge_recursive( $existing_images, $new_images );
 		}
 
@@ -3094,7 +3094,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		if ( ! empty( $galleries ) ) {
 			$new_images = array( 'images' => array() );
 			foreach ( $galleries as $image_src ) {
-				$new_images['images'][] = array( 'url' => esc_url_raw( $image_src ) );
+				$new_images['images'][] = array( 'source' => 'galleries', 'url' => esc_url_raw( $image_src ), );
 			}
 
 			$new_images['has']['galleries'] = count( $new_images['images'] );
