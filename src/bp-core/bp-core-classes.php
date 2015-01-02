@@ -2760,7 +2760,7 @@ class BP_Members_Suggestions extends BP_Suggestions {
  *
  * @since BuddyPress (2.3.0)
  */
-abstract class BP_Media_Extractor {
+class BP_Media_Extractor {
 	/**
 	 * Bitmasks to filter media type.
 	 *
