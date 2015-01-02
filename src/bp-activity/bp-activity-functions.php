@@ -1843,20 +1843,15 @@ function bp_activity_post_type_publish( $post_id = 0, $post = null, $user_id = 0
 		'recorded_time'     => $post->post_date_gmt,
 	);
 
-	// Remove large images and replace them with just one image thumbnail.
-	if ( ! empty( $activity_args['content'] ) ) {
-		$activity_args['content'] = bp_activity_thumbnail_content_images( $activity_args['content'], $activity_args['primary_link'], $activity_args );
-	}
-
 	if ( ! empty( $activity_args['content'] ) ) {
 		// Create the excerpt.
-		$activity_excerpt = bp_create_excerpt( $activity_args['content'] );
+		$activity_summary = bp_activity_create_summary( $activity_args['content'] );
 
 		// Backward compatibility filter for blog posts.
 		if ( 'blogs' == $activity_post_object->component_id )  {
-			$activity_args['content'] = apply_filters( 'bp_blogs_record_activity_content', $activity_excerpt, $activity_args['content'], $activity_args, $post->post_type );
+			$activity_args['content'] = apply_filters( 'bp_blogs_record_activity_content', $activity_summary, $activity_args['content'], $activity_args, $post->post_type );
 		} else {
-			$activity_args['content'] = $activity_excerpt;
+			$activity_args['content'] = $activity_summary;
 		}
 	}
 
@@ -1928,17 +1923,13 @@ function bp_activity_post_type_update( $post = null ) {
 	$activity = new BP_Activity_Activity( $activity_id );
 
 	if ( ! empty( $post->post_content ) ) {
-		// Make sure to update the thumbnail image.
-		$post_content = bp_activity_thumbnail_content_images( $post->post_content, $activity->primary_link, (array) $activity );
-
-		// Generate an excerpt.
-		$activity_excerpt = bp_create_excerpt( $post_content );
+		$activity_summary = bp_activity_create_summary( $post->post_content );
 
 		// Backward compatibility filter for the blogs component.
 		if ( 'blogs' == $activity_post_object->component_id ) {
-			$activity->content = apply_filters( 'bp_blogs_record_activity_content', $activity_excerpt, $post_content, (array) $activity, $post->post_type );
+			$activity->content = apply_filters( 'bp_blogs_record_activity_content', $activity_summary, $post->post_content, (array) $activity, $post->post_type );
 		} else {
-			$activity->content = $activity_excerpt;
+			$activity->content = $activity_summary;
 		}
 	}
 
