@@ -3020,7 +3020,6 @@ class BP_Media_Extractor {
 
 					// Check whether this "link" is really an oEmbed.
 					if ( preg_match( $matchmask, $link ) ) {
-						$link             = explode( '://', $link );
 						$data['embeds'][] = array( 'url' => $link[1] );
 
 						break;
