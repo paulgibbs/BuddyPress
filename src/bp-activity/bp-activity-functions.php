@@ -1845,7 +1845,7 @@ function bp_activity_post_type_publish( $post_id = 0, $post = null, $user_id = 0
 
 	if ( ! empty( $activity_args['content'] ) ) {
 		// Create the excerpt.
-		$activity_summary = bp_activity_create_summary( $activity_args['content'] );
+		$activity_summary = bp_activity_create_summary( $activity_args['content'], $activity_args );
 
 		// Backward compatibility filter for blog posts.
 		if ( 'blogs' == $activity_post_object->component_id )  {
@@ -1923,7 +1923,7 @@ function bp_activity_post_type_update( $post = null ) {
 	$activity = new BP_Activity_Activity( $activity_id );
 
 	if ( ! empty( $post->post_content ) ) {
-		$activity_summary = bp_activity_create_summary( $post->post_content );
+		$activity_summary = bp_activity_create_summary( $post->post_content, (array) $activity );
 
 		// Backward compatibility filter for the blogs component.
 		if ( 'blogs' == $activity_post_object->component_id ) {
@@ -2524,6 +2524,8 @@ function bp_activity_hide_user_activity( $user_id ) {
  * through the content, grabs the first image and converts it to a thumbnail,
  * and removes the rest of the images from the string.
  *
+ * As of BuddyPress 2.3, this function is no longer in use.
+ *
  * @since BuddyPress (1.2.0)
  *
  * @uses esc_attr()
@@ -2586,6 +2588,132 @@ function bp_activity_thumbnail_content_images( $content, $link = false, $args = 
 	 * @param array  $args Arguments passed into function creating the activity update.
 	 */
 	return apply_filters( 'bp_activity_thumbnail_content_images', $content, $matches, $args );
+}
+
+/**
+ * Create a rich summary of an activity item's content for the activity stream.
+ *
+ * More than just a simple excerpt, this could contain oEmbeds and other types of media.
+ * Currently, it's only used for blog post items, but it will probably be used for all types of
+ * activity in the future.
+ *
+ * @param string $content The content of the activity item.
+ * @param array $activity_args The data passed to bp_activity_add() or the values from an Activity obj.
+ * @return string
+ * @since BuddyPress (2.3.0)
+ */
+function bp_activity_create_summary( $content, $activity ) {
+	$extractor_args = array();
+
+	// New blog posts.
+	if ( $activity['type'] === 'new_blog_post' ) {
+		$extractor_args['post'] = get_post( $activity['secondary_item_id'] );
+		$extractor_class        = 'BP_Media_Extractor_Post';
+
+	// Everything else.
+	} else {
+		$extractor_class = 'BP_Media_Extractor';
+	}
+
+	/**
+	 * Filter the class name of the media extractor when creating an Activity summary.
+	 *
+	 * Use this filter to change the media extractor used to extract media info for the activity item.
+	 *
+	 * @param string $extractor_class Class name.
+	 * @param string $content The content of the activity item.
+	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
+	 * @since BuddyPress (2.3.0)
+	 */
+	$extractor_class = apply_filters( 'bp_activity_create_summary_extractor_class', $extractor_class, $content, $activity );
+	$extractor       = new $extractor_class();
+
+	/**
+	 * Filter the arguments passed to the media extractor when creating an Activity summary.
+	 *
+	 * @param array $extractor_args Array of bespoke data for the media extractor.
+	 * @param string $content The content of the activity item.
+	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
+	 * @since BuddyPress (2.3.0)
+	 */
+	$extractor_args = apply_filters( 'bp_activity_create_summary_extractor_args', $extractor_args, $content, $activity );
+
+
+	// Extract media information from the $content.
+	$media = $extractor->extract( $content, BP_Media_Extractor::ALL, $extractor_args );
+
+	$para_count     = substr_count( strtolower( wpautop( $content ) ), '<p>' );
+	$has_feat_image = ! empty( $media['has']['featured_images'] ) && $media['has']['featured_images'] > 1;
+	$has_galleries  = ! empty( $media['has']['galleries'] )       && $media['has']['galleries'] > 1;
+	$has_images     = ! empty( $media['has']['images'] )          && $media['has']['images'] > 1;
+	$has_embeds     = false;
+
+	if ( ! empty( $media['has']['embeds'] ) ) {
+		$has_embeds = $media['has']['embeds'] > 0;
+
+		// Embeds must be subtracted from the paragraph count.
+		$para_count -= count( $media['has']['embeds'] );
+	}
+
+	$extracted_media = array();
+	$use_media_type  = '';
+	$image_source    = '';
+
+	// If it's a short article and there's an embed, use it.
+	if ( $para_count <= 2 && $has_embeds ) {
+		$use_media_type = 'embeds';
+	}
+
+	// Otherwise, try to use an image.
+	if ( ! $use_media_type && $has_images ) {
+		$use_media_type = 'images';
+		$image_source   = 'html';
+	
+		// Featured Image > Galleries > inline <img>.
+		if ( $has_feat_image ) {
+			$image_source = 'featured_images';
+
+		} elseif ( $has_galleries ) {
+			$image_source = 'galleries';
+		}
+	}
+	
+	// Extract an item from the $media results.
+	if ( $use_media_type ) {
+		if ( $use_media_type === 'images' ) {
+			$extracted_media = wp_list_filter( $media[ $use_media_type ], array( 'source' => $image_source ) );
+			$extracted_media = $extracted_media[0];
+		} else {
+			$extracted_media = $media[ $use_media_type ][0];
+		}
+
+		/**
+		 * Filter the results of the media extractor when creating an Activity summary.
+		 *
+		 * @param array $extracted_media Extracted media item.
+		 * @param string $content The content of the activity item.
+		 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
+		 * @param array $media Complete results from the media extraction.
+		 * @param string $use_media_type The kind of media item that was preferentially extracted.
+		 * @param string $image_source If $use_media_type was "images", the preferential source of the image.
+		 *               Otherwise empty.
+		 * @since BuddyPress (2.3.0)
+		 */
+		$extracted_media = apply_filters(
+			'bp_activity_create_summary_extractor_result',
+			$extracted_media,
+			$content,
+			$activity,
+			$media,
+			$use_media_type,
+			$image_source
+		);
+	}
+
+	// somehow generate a text excerpt to go with these.
+	$retval = time() . PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
+
+	return apply_filters( 'bp_activity_create_summary', $retval, $content, $activity, $use_media_type, $image_source, $extracted_media );
 }
 
 /**
