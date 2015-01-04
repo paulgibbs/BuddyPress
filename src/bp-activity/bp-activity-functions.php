@@ -2648,10 +2648,9 @@ function bp_activity_create_summary( $content, $activity ) {
 	$has_images     = ! empty( $media['has']['images'] )          && $media['has']['images'] > 1;
 	$has_embeds     = false;
 
+	// Embeds must be subtracted from the paragraph count.
 	if ( ! empty( $media['has']['embeds'] ) ) {
 		$has_embeds = $media['has']['embeds'] > 0;
-
-		// Embeds must be subtracted from the paragraph count.
 		$para_count -= count( $media['has']['embeds'] );
 	}
 
