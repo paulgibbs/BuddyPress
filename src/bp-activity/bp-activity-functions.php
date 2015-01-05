@@ -2644,9 +2644,9 @@ function bp_activity_create_summary( $content, $activity ) {
 	$media = $extractor->extract( $content, BP_Media_Extractor::ALL, $args );
 
 	$para_count     = substr_count( strtolower( wpautop( $content ) ), '<p>' );
-	$has_feat_image = ! empty( $media['has']['featured_images'] ) && $media['has']['featured_images'] > 1;
-	$has_galleries  = ! empty( $media['has']['galleries'] )       && $media['has']['galleries'] > 1;
-	$has_images     = ! empty( $media['has']['images'] )          && $media['has']['images'] > 1;
+	$has_feat_image = ! empty( $media['has']['featured_images'] ) && $media['has']['featured_images'];
+	$has_galleries  = ! empty( $media['has']['galleries'] )       && $media['has']['galleries'];
+	$has_images     = ! empty( $media['has']['images'] )          && $media['has']['images'];
 	$has_embeds     = false;
 
 	// Embeds must be subtracted from the paragraph count.
@@ -2677,7 +2677,7 @@ function bp_activity_create_summary( $content, $activity ) {
 			$image_source = 'galleries';
 		}
 	}
-	
+
 	// Extract an item from the $media results.
 	if ( $use_media_type ) {
 		if ( $use_media_type === 'images' ) {
