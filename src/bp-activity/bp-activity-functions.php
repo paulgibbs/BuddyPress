@@ -2717,7 +2717,7 @@ function bp_activity_create_summary( $content, $activity ) {
 	if ( $use_media_type === 'embeds' ) {
 		$summary .= PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
 	} elseif ( $use_media_type === 'images' ) {
-		$summary .= $extracted_media['url'];
+		$summary .= sprintf( '<img src="%s">', esc_url( $extracted_media['url'] );
 	}
 
 	return apply_filters( 'bp_activity_create_summary', $summary, $content, $activity );
