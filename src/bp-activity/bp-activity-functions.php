@@ -2607,8 +2607,8 @@ function bp_activity_create_summary( $content, $activity ) {
 
 	// New blog posts.
 	if ( $activity['type'] === 'new_blog_post' ) {
-		$args['post']    = get_post( $activity['secondary_item_id'] );
-		$extractor = 'BP_Media_Extractor_Post';
+		$args['post'] = get_post( $activity['secondary_item_id'] );
+		$extractor    = 'BP_Media_Extractor_Post';
 
 	// Everything else.
 	} else {
@@ -2634,13 +2634,15 @@ function bp_activity_create_summary( $content, $activity ) {
 	 * @param array $args Array of bespoke data for the media extractor.
 	 * @param string $content The content of the activity item.
 	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
+	 * @param BP_Media_Extractor $extractor The media extractor object.
 	 * @since BuddyPress (2.3.0)
 	 */
-	$args = apply_filters( 'bp_activity_create_summary_extractor_args', $args, $content, $activity );
+	$args = apply_filters( 'bp_activity_create_summary_extractor_args', $args, $content, $activity, $extractor );
 
 
 	// Extract media information from the $content.
 	$media = $extractor->extract( $content, BP_Media_Extractor::ALL, $args );
+	die(var_dump($media));
 
 	$para_count     = substr_count( strtolower( wpautop( $content ) ), '<p>' );
 	$has_feat_image = ! empty( $media['has']['featured_images'] ) && $media['has']['featured_images'] > 1;
@@ -2709,10 +2711,17 @@ function bp_activity_create_summary( $content, $activity ) {
 		);
 	}
 
-	// somehow generate a text excerpt to go with these.
-	$retval = time() . PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
+	// Generate a text excerpt for this Activity item.
+	$summary = strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
+	$summary = preg_replace( '#^\s*(https?://[^\s"]+)\s*$#im', '', $summary );
 
-	return apply_filters( 'bp_activity_create_summary', $retval, $content, $activity );
+	if ( $use_media_type === 'embeds' ) {
+		$summary = PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
+	} elseif ( $use_media_type === 'images' ) {
+		$summary = $extracted_media['url'];
+	}
+
+	return apply_filters( 'bp_activity_create_summary', $summary, $content, $activity );
 }
 
 /**
