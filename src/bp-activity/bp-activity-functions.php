@@ -2642,7 +2642,6 @@ function bp_activity_create_summary( $content, $activity ) {
 
 	// Extract media information from the $content.
 	$media = $extractor->extract( $content, BP_Media_Extractor::ALL, $args );
-	die(var_dump($media));
 
 	$para_count     = substr_count( strtolower( wpautop( $content ) ), '<p>' );
 	$has_feat_image = ! empty( $media['has']['featured_images'] ) && $media['has']['featured_images'] > 1;
@@ -2716,9 +2715,9 @@ function bp_activity_create_summary( $content, $activity ) {
 	$summary = preg_replace( '#^\s*(https?://[^\s"]+)\s*$#im', '', $summary );
 
 	if ( $use_media_type === 'embeds' ) {
-		$summary = PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
+		$summary .= PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
 	} elseif ( $use_media_type === 'images' ) {
-		$summary = $extracted_media['url'];
+		$summary .= $extracted_media['url'];
 	}
 
 	return apply_filters( 'bp_activity_create_summary', $summary, $content, $activity );
