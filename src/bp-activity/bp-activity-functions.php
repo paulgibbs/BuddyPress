@@ -2710,9 +2710,9 @@ function bp_activity_create_summary( $content, $activity ) {
 		);
 	}
 
-	// Generate a text excerpt for this activity item.
+	// Generate a text excerpt for this activity item (remove shortcode URLs).
 	$summary = strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
-	$summary = preg_replace( '#^\s*(https?://[^\s"]+)\s*$#im', '', $summary );  // Remove embeds.
+	$summary = bp_create_excerpt( preg_replace( '#^\s*(https?://[^\s"]+)\s*$#im', '', $summary ) );
 
 	if ( $use_media_type === 'embeds' ) {
 		$summary .= PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
