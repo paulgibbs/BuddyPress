@@ -2720,7 +2720,17 @@ function bp_activity_create_summary( $content, $activity ) {
 		$summary .= sprintf( '<img src="%s">', esc_url( $extracted_media['url'] );
 	}
 
-	return apply_filters( 'bp_activity_create_summary', $summary, $content, $activity );
+	/**
+	 * Filters the newly-generated summary for the activity item.
+	 *
+	 * @since BuddyPress (2.3.0)
+	 *
+	 * @param string $summary The activity summary.
+	 * @param string $content $content The original content of the activity item.
+	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
+	 * @param array $extracted_media Extracted media item used to generate this summary.
+	 */
+	return apply_filters( 'bp_activity_create_summary', $summary, $content, $activity, $extracted_media );
 }
 
 /**
