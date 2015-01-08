@@ -2682,9 +2682,9 @@ function bp_activity_create_summary( $content, $activity ) {
 	if ( $use_media_type ) {
 		if ( $use_media_type === 'images' ) {
 			$extracted_media = wp_list_filter( $media[ $use_media_type ], array( 'source' => $image_source ) );
-			$extracted_media = $extracted_media[0];
+			$extracted_media = array_shift( $extracted_media );
 		} else {
-			$extracted_media = $media[ $use_media_type ][0];
+			$extracted_media = array_shift( $media[ $use_media_type ] );
 		}
 
 		/**
