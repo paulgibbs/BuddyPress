@@ -3167,7 +3167,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 
 		foreach ( $galleries as $gallery_id => $gallery ) {
 			$data = array();
-			$ids  = wp_parse_id_list( $gallery['ids'] );
+			$ids  = wp_parse_id_list( $gallery['src'] );
 
 			foreach ( $ids as $image_id ) {
 				$image = wp_get_attachment_image_src( $image_id, 'full' );
