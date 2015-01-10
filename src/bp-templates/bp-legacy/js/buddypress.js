@@ -5,7 +5,7 @@ var jq = jQuery;
 // Global variable to prevent multiple AJAX requests
 var bp_ajax_request = null;
 
-// Global variables to temporarly store newest activities
+// Global variables to temporarily store newest activities
 var newest_activities = '';
 var activity_last_recorded  = 0;
 
@@ -71,7 +71,7 @@ jq(document).ready( function() {
 		// to avoid inconsistencies with the heartbeat integration
 		if ( $activity_all.length  ) {
 			if ( ! $activity_all.hasClass( 'selected' ) ) {
-				// reset to everyting
+				// reset to everything
 				jq( '#activity-filter-select select' ).val( '-1' );
 				$activity_all.children( 'a' ).trigger( 'click' );
 			} else if ( '-1' !== jq( '#activity-filter-select select' ).val() ) {
@@ -616,7 +616,7 @@ jq(document).ready( function() {
 							}
 						}
 
-						/* Preceeding whitespace breaks output with jQuery 1.9.0 */
+						/* Preceding whitespace breaks output with jQuery 1.9.0 */
 						var the_comment = jq.trim( response );
 
 						activity_comments.children('ul').append( jq( the_comment ).hide().fadeIn( 200 ) );
@@ -820,7 +820,7 @@ jq(document).ready( function() {
 			template = null;
 
 			// The Group Members page specifies its own template
-			if ( 'members' === object && 'groups' === css_id[1] ) {
+			if ( event.currentTarget.className === 'groups-members-search' ) {
 				object = 'group_members';
 				template = 'groups/single/members';
 			}
@@ -889,6 +889,8 @@ jq(document).ready( function() {
 		$gm_search = jq( '.groups-members-search input' );
 		if ( $gm_search.length ) {
 			search_terms = $gm_search.val();
+			object = 'members';
+			scope = 'groups';
 		}
 
 		// On the Groups Members page, we specify a template
@@ -952,6 +954,7 @@ jq(document).ready( function() {
 			$gm_search = jq( '.groups-members-search input' );
 			if ( $gm_search.length ) {
 				search_terms = $gm_search.val();
+				object = 'members';
 			}
 
 			// On the Groups Members page, we specify a template
@@ -1558,7 +1561,7 @@ jq(document).ready( function() {
 		}
 	});
 
-	/* Make sure a 'Bulk Action' is selected before submiting the messages bulk action form */
+	/* Make sure a 'Bulk Action' is selected before submitting the messages bulk action form */
 	jq('#messages-bulk-manage').attr('disabled', 'disabled');
 
 	/* Remove the disabled attribute from the messages form submit button when bulk action has a value */
@@ -1579,7 +1582,7 @@ jq(document).ready( function() {
 		}
 	});
 
-	/* Make sure a 'Bulk Action' is selected before submiting the form */
+	/* Make sure a 'Bulk Action' is selected before submitting the form */
 	jq('#notification-bulk-manage').attr('disabled', 'disabled');
 
 	/* Remove the disabled attribute from the form submit button when bulk action has a value */

@@ -105,7 +105,7 @@ class BP_Members_Admin {
 		$this->js_url    = trailingslashit( $this->admin_url . 'js'  ); // Admin CSS URL
 
 		// Capability depends on config
-		$this->capability = bp_core_do_network_admin() ? 'manage_network_options' : 'manage_options';
+		$this->capability = bp_core_do_network_admin() ? 'manage_network_users' : 'edit_users';
 
 		// The Edit Profile Screen id
 		$this->user_page = '';
@@ -144,7 +144,7 @@ class BP_Members_Admin {
 
 		// When BuddyPress is not network activated, only Super Admin can moderate signups
 		if ( ! empty( $this->subsite_activated ) ) {
-			$this->capability = 'manage_network_options';
+			$this->capability = 'manage_network_users';
 		}
 	}
 
@@ -217,17 +217,11 @@ class BP_Members_Admin {
 	 * @return int
 	 */
 	private function get_user_id() {
-
-		// No user ID to start
-		$user_id = 0;
+		$user_id = get_current_user_id();
 
 		// We'll need a user ID when not on the user admin
 		if ( ! empty( $_GET['user_id'] ) ) {
 			$user_id = $_GET['user_id'];
-
-		// Assume the current user ID
-		} else {
-			$user_id = get_current_user_id();
 		}
 
 		return intval( $user_id );
@@ -329,7 +323,7 @@ class BP_Members_Admin {
 			case 1 :
 				$notice = array(
 					'class'   => 'error',
-					'message' => __( 'An error occured while trying to update the profile.', 'buddypress' )
+					'message' => __( 'An error occurred while trying to update the profile.', 'buddypress' )
 				);
 				break;
 			case 2:
@@ -608,7 +602,7 @@ class BP_Members_Admin {
 			return;
 		}
 
-		// Add the user ID to query agruments when not editing yourself
+		// Add the user ID to query arguments when not editing yourself
 		if ( false === $this->is_self_profile ) {
 			$query_args = array( 'user_id' => $user->ID );
 		} else {
@@ -955,7 +949,7 @@ class BP_Members_Admin {
 			return;
 		}
 
-		// Bail if user has not been activated yet (how didy ou get here?)
+		// Bail if user has not been activated yet (how did you get here?)
 		if ( isset( $user->user_status ) && ( 2 == $user->user_status ) ) : ?>
 
 			<p class="not-activated"><?php esc_html_e( 'User account has not yet been activated', 'buddypress' ); ?></p><br/>
@@ -1143,7 +1137,7 @@ class BP_Members_Admin {
 		 * fishy with the POST request, so we can fail silently.
 		 */
 		if ( bp_set_member_type( $user_id, $member_type ) ) {
-			// @todo Success messages can't be posted because other stuff happens on the pageload.
+			// @todo Success messages can't be posted because other stuff happens on the page load.
 		}
 	}
 
@@ -1415,7 +1409,7 @@ class BP_Members_Admin {
 				'id'      => 'bp-signups-overview',
 				'title'   => __( 'Overview', 'buddypress' ),
 				'content' =>
-				'<p>' . __( 'This is the admininistration screen for pending accounts on your site.', 'buddypress' ) . '</p>' .
+				'<p>' . __( 'This is the administration screen for pending accounts on your site.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'From the screen options, you can customize the displayed columns and the pagination of this screen.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'You can reorder the list of your pending accounts by clicking on the Username, Email or Registered column headers.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'Using the search form, you can find pending accounts more easily. The Username and Email fields will be included in the search.', 'buddypress' ) . '</p>'
@@ -1470,7 +1464,7 @@ class BP_Members_Admin {
 				bp_core_redirect( $redirect_to );
 
 			// Handle activated accounts
-			} else if ( 'do_activate' == $doaction ) {
+			} elseif ( 'do_activate' == $doaction ) {
 
 				// nonce check
 				check_admin_referer( 'signups_activate' );
@@ -1497,7 +1491,7 @@ class BP_Members_Admin {
 				bp_core_redirect( $redirect_to );
 
 			// Handle sign-ups delete
-			} else if ( 'do_delete' == $doaction ) {
+			} elseif ( 'do_delete' == $doaction ) {
 
 				// nonce check
 				check_admin_referer( 'signups_delete' );
@@ -1867,7 +1861,7 @@ class BP_Members_Admin {
 	 * @param string $action Delete, activate, or resend activation link.
 	 */
 	public function signups_admin_manage( $action = '' ) {
-		if ( ! is_super_admin() || empty( $action ) ) {
+		if ( ! current_user_can( $this->capability ) || empty( $action ) ) {
 			die( '-1' );
 		}
 
@@ -1875,7 +1869,7 @@ class BP_Members_Admin {
 		$ids = false;
 		if ( ! empty( $_POST['allsignups'] ) ) {
 			$ids = wp_parse_id_list( $_POST['allsignups'] );
-		} else if ( ! empty( $_GET['signup_id'] ) ) {
+		} elseif ( ! empty( $_GET['signup_id'] ) ) {
 			$ids = absint( $_GET['signup_id'] );
 		}
 
