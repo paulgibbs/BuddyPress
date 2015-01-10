@@ -233,7 +233,7 @@ class BP_Groups_Template {
 
 		if ( 'invites' == $type ) {
 			$this->groups = groups_get_invites_for_user( $user_id, $this->pag_num, $this->pag_page, $exclude );
-		} else if ( 'single-group' == $type ) {
+		} elseif ( 'single-group' == $type ) {
 			$this->single_group = true;
 
 			if ( groups_get_current_group() ) {
@@ -279,7 +279,7 @@ class BP_Groups_Template {
 			$this->total_group_count = (int) $this->groups['total'];
 			$this->group_count       = (int) $this->groups['total'];
 			$this->groups            = $this->groups['groups'];
-		} else if ( 'single-group' == $type ) {
+		} elseif ( 'single-group' == $type ) {
 			if ( empty( $group->id ) ) {
 				$this->total_group_count = 0;
 				$this->group_count       = 0;
@@ -710,9 +710,9 @@ function bp_group_type( $group = false ) {
 
 		if ( 'public' == $group->status ) {
 			$type = __( "Public Group", "buddypress" );
-		} else if ( 'hidden' == $group->status ) {
+		} elseif ( 'hidden' == $group->status ) {
 			$type = __( "Hidden Group", "buddypress" );
-		} else if ( 'private' == $group->status ) {
+		} elseif ( 'private' == $group->status ) {
 			$type = __( "Private Group", "buddypress" );
 		} else {
 			$type = ucwords( $group->status ) . ' ' . __( 'Group', 'buddypress' );
@@ -1862,7 +1862,7 @@ function bp_group_get_invite_status( $group_id = false ) {
 		if ( isset( $bp->groups->current_group->id ) ) {
 			// Default to the current group first
 			$group_id = $bp->groups->current_group->id;
-		} else if ( isset( $groups_template->group->id ) ) {
+		} elseif ( isset( $groups_template->group->id ) ) {
 			// Then see if we're in the loop
 			$group_id = $groups_template->group->id;
 		} else {
@@ -1881,58 +1881,70 @@ function bp_group_get_invite_status( $group_id = false ) {
 }
 
 /**
- * Can the logged-in user send invitations in the specified group?
+ * Can a user send invitations in the specified group?
  *
  * @since BuddyPress (1.5.0)
+ * @since BuddyPress (2.2.0) Added the $user_id parameter.
  *
- * @param int $group_id Optional. The ID of the group whose status you want to
- *        check. Default: the ID of the current group.
- * @return bool $can_send_invites
+ * @param int $group_id The group ID to check.
+ * @param int $user_id  The user ID to check.
+ * @return bool
  */
-function bp_groups_user_can_send_invites( $group_id = false ) {
-	global $bp;
-
+function bp_groups_user_can_send_invites( $group_id = 0, $user_id = 0 ) {
 	$can_send_invites = false;
 	$invite_status    = false;
 
-	if ( is_user_logged_in() ) {
-		if ( bp_current_user_can( 'bp_moderate' ) ) {
-			// Super admins can always send invitations
+	// If $user_id isn't specified, we check against the logged-in user.
+	if ( ! $user_id ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	// If $group_id isn't specified, use existing one if available.
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	if ( $user_id ) {
+		// Users with the 'bp_moderate' cap can always send invitations
+		if ( user_can( $user_id, 'bp_moderate' ) ) {
 			$can_send_invites = true;
-
 		} else {
-			// If no $group_id is provided, default to the current group id
-			if ( !$group_id )
-				$group_id = isset( $bp->groups->current_group->id ) ? $bp->groups->current_group->id : 0;
-
-			// If no group has been found, bail
-			if ( !$group_id )
-				return false;
-
 			$invite_status = bp_group_get_invite_status( $group_id );
-			if ( !$invite_status )
-				return false;
 
 			switch ( $invite_status ) {
 				case 'admins' :
-					if ( groups_is_user_admin( bp_loggedin_user_id(), $group_id ) )
+					if ( groups_is_user_admin( $user_id, $group_id ) ) {
 						$can_send_invites = true;
+					}
 					break;
 
 				case 'mods' :
-					if ( groups_is_user_mod( bp_loggedin_user_id(), $group_id ) || groups_is_user_admin( bp_loggedin_user_id(), $group_id ) )
+					if ( groups_is_user_mod( $user_id, $group_id ) || groups_is_user_admin( $user_id, $group_id ) ) {
 						$can_send_invites = true;
+					}
 					break;
 
 				case 'members' :
-					if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) )
+					if ( groups_is_user_member( $user_id, $group_id ) ) {
 						$can_send_invites = true;
+					}
 					break;
 			}
 		}
 	}
 
-	return apply_filters( 'bp_groups_user_can_send_invites', $can_send_invites, $group_id, $invite_status );
+	/**
+	 * Filters whether a user can send invites in a group.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 * @since BuddyPress (2.2.0) Added the $user_id parameter.
+	 *
+	 * @param bool $can_send_invites Whether the user can send invites
+	 * @param int  $group_id         The group ID being checked
+	 * @param bool $invite_status    The group's current invite status
+	 * @param int  $user_id          The user ID being checked
+	 */
+	return apply_filters( 'bp_groups_user_can_send_invites', $can_send_invites, $group_id, $invite_status, $user_id );
 }
 
 /**
@@ -2857,6 +2869,7 @@ function bp_group_create_button() {
 			'link_class' => 'group-create no-ajax',
 			'link_href'  => trailingslashit( bp_get_root_domain() ) . trailingslashit( bp_get_groups_root_slug() ) . trailingslashit( 'create' ),
 			'wrapper'    => false,
+			'block_self' => false,
 		);
 
 		return bp_get_button( apply_filters( 'bp_get_group_create_button', $button_args ) );
@@ -2934,7 +2947,7 @@ function bp_group_status_message( $group = null ) {
  		if ( ! bp_group_has_requested_membership() ) {
 			if ( is_user_logged_in() && bp_group_is_invited() ) {
 				$message = __( 'You must accept your pending invitation before you can access this private group.', 'buddypress' );
-			} else if ( is_user_logged_in() ) {
+			} elseif ( is_user_logged_in() ) {
 				$message = __( 'This is a private group and you must request group membership in order to join.', 'buddypress' );
 			} else {
 				$message = __( 'This is a private group. To join you must be a registered site member and request group membership.', 'buddypress' );
@@ -4455,7 +4468,7 @@ class BP_Groups_Invite_Template {
 
 		$this->invite->user->total_blogs = null;
 
-		$this->invite->group_id = $group_id; // Globaled in bp_group_has_invites()
+		$this->invite->group_id = $group_id; // Global'ed in bp_group_has_invites()
 
 		if ( 0 == $this->current_invite ) // loop has just started
 			do_action('loop_start');

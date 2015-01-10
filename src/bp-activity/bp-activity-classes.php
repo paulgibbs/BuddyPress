@@ -169,7 +169,7 @@ class BP_Activity_Activity {
 
 		// If no callback is available, use the literal string from
 		// the database row
-		} else if ( ! empty( $row->action ) ) {
+		} elseif ( ! empty( $row->action ) ) {
 			$this->action = $row->action;
 
 		// Provide a fallback to avoid PHP notices
@@ -348,8 +348,13 @@ class BP_Activity_Activity {
 		if ( ! empty( $r['scope'] ) ) {
 			$scope_query = self::get_scope_query_sql( $r['scope'], $r );
 
+			// Add our SQL conditions if matches were found
 			if ( ! empty( $scope_query['sql'] ) ) {
 				$where_conditions['scope_query_sql'] = $scope_query['sql'];
+
+			// No matches, so we should alter the SQL statement to match nothing
+			} else {
+				$where_conditions['scope_no_results'] = '0 = 1';
 			}
 
 			// override some arguments if needed
@@ -498,7 +503,7 @@ class BP_Activity_Activity {
 		 *
 		 * @param bool                 Whether to use legacy structure or not.
 		 * @param BP_Activity_Activity Current method being called.
-		 * @param array                $r Parsed arguments pased into method.
+		 * @param array                $r Parsed arguments passed into method.
 		 */
 		if ( apply_filters( 'bp_use_legacy_activity_query', false, __METHOD__, $r ) ) {
 
@@ -834,7 +839,7 @@ class BP_Activity_Activity {
 	 * A scope is a predetermined set of activity arguments.  This method is used
 	 * to grab these activity arguments and override any existing args if needed.
 	 *
-	 * Can handle multple scopes.
+	 * Can handle multiple scopes.
 	 *
 	 * @since BuddyPress (2.2.0)
 	 *
@@ -867,89 +872,31 @@ class BP_Activity_Activity {
 		foreach ( $scopes as $scope ) {
 			$scope_args = array();
 
-			switch ( $scope ) {
-				case 'just-me' :
-					$scope_args = array(
-						'column' => 'user_id',
-						'value'  => $r['user_id']
-					);
-
-					$scope_args['override']['display_comments'] = 'stream';
-
-					// wipe out the user ID
-					$scope_args['override']['filter']['user_id'] = 0;
-
-					break;
-
-				case 'favorites':
-					$favs = bp_activity_get_user_favorites( $r['user_id'] );
-					if ( empty( $favs ) ) {
-						return $scope_args;
-					}
-
-					$scope_args = array(
-						'column'  => 'id',
-						'compare' => 'IN',
-						'value'   => (array) $favs
-					);
-					$scope_args['override']['display_comments']  = true;
-
-					// wipe out the user ID
-					$scope_args['override']['filter']['user_id'] = 0;
-
-					break;
-
-				case 'mentions':
-					// Are mentions disabled?
-					if ( ! bp_activity_do_mentions() ) {
-						return $scope_args;
-					}
-
-					$scope_args = array(
-						'column'  => 'content',
-						'compare' => 'LIKE',
-
-						// Start search at @ symbol and stop search at closing tag delimiter.
-						'value'   => '@' . bp_activity_get_user_mentionname( $r['user_id'] ) . '<'
-					);
-
-					// wipe out current search terms if any
-					// this is so the 'mentions' scope can be combined with other scopes
-					$scope_args['override']['search_terms'] = false;
-
-					$scope_args['override']['display_comments'] = 'stream';
-					$scope_args['override']['filter']['user_id'] = 0;
-
-					break;
-
-				default :
-					/**
-					 * Plugins can hook here to set their activity arguments for custom scopes.
-					 *
-					 * This is a dynamic filter based on the activity scope. eg:
-					 *   - 'bp_activity_set_groups_scope_args'
-					 *   - 'bp_activity_set_friends_scope_args'
-					 *
-					 * To see how this filter is used, plugin devs should check out:
-					 *   - bp_groups_filter_activity_scope() - used for 'groups' scope
-					 *   - bp_friends_filter_activity_scope() - used for 'friends' scope
-					 *
-					 * @since BuddyPress (2.2.0)
-					 *
-					 *  @param array {
-					 *     Activity query clauses.
-					 *
-					 *     @type array {
-					 *         Activity arguments for your custom scope.
-					 *         See {@link BP_Activity_Query::_construct()} for more details.
-					 *     }
-					 *     @type array $override Optional. Override existing activity arguments passed by $r.
-					 * }
-					 * @param array $r Current activity arguments passed in BP_Activity_Activity::get()
-					 */
-					$scope_args = apply_filters( "bp_activity_set_{$scope}_scope_args", array(), $r );
-					break;
-			}
+			/**
+			 * Plugins can hook here to set their activity arguments for custom scopes.
+			 *
+			 * This is a dynamic filter based on the activity scope. eg:
+			 *   - 'bp_activity_set_groups_scope_args'
+			 *   - 'bp_activity_set_friends_scope_args'
+			 *
+			 * To see how this filter is used, plugin devs should check out:
+			 *   - bp_groups_filter_activity_scope() - used for 'groups' scope
+			 *   - bp_friends_filter_activity_scope() - used for 'friends' scope
+			 *
+			 * @since BuddyPress (2.2.0)
+			 *
+			 *  @param array {
+			 *     Activity query clauses.
+			 *
+			 *     @type array {
+			 *         Activity arguments for your custom scope.
+			 *         See {@link BP_Activity_Query::_construct()} for more details.
+			 *     }
+			 *     @type array $override Optional. Override existing activity arguments passed by $r.
+			 * }
+			 * @param array $r Current activity arguments passed in BP_Activity_Activity::get()
+			 */
+			$scope_args = apply_filters( "bp_activity_set_{$scope}_scope_args", array(), $r );
 
 			if ( ! empty( $scope_args ) ) {
 				// merge override properties from other scopes
@@ -1277,7 +1224,7 @@ class BP_Activity_Activity {
 			$comments = false;
 
 		// A true cache miss
-		} else if ( empty( $comments ) ) {
+		} elseif ( empty( $comments ) ) {
 
 			// Select the user's fullname with the query
 			if ( bp_is_active( 'xprofile' ) ) {
@@ -1408,7 +1355,7 @@ class BP_Activity_Activity {
 	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
-	 * @param int $parent_id ID of an activty or activity comment.
+	 * @param int $parent_id ID of an activity or activity comment.
 	 * @param int $left Node boundary start for activity or activity comment.
 	 * @return int Right node boundary of activity or activity comment.
 	 */
@@ -1444,7 +1391,7 @@ class BP_Activity_Activity {
 	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
-	 * @param int $parent_id ID of an activty or activity comment.
+	 * @param int $parent_id ID of an activity or activity comment.
 	 * @return object Numerically indexed array of child comments.
 	 */
 	public static function get_child_comments( $parent_id ) {
@@ -1799,7 +1746,6 @@ class BP_Activity_Query extends BP_Recursive_Query {
 	 * @param string $alias An existing table alias that is compatible with the current query clause.
 	 *               Default: 'a'. BP_Activity_Activity::get() uses 'a', so we default to that.
 	 * @return string SQL fragment to append to the main WHERE clause.
-	 * }
 	 */
 	public function get_sql( $alias = 'a' ) {
 		if ( ! empty( $alias ) ) {
@@ -1936,9 +1882,9 @@ class BP_Activity_Query extends BP_Recursive_Query {
 	 * @param  array $q Clause to check.
 	 * @return bool
 	 */
-        protected function is_first_order_clause( $query ) {
+	protected function is_first_order_clause( $query ) {
 		return isset( $query['column'] ) || isset( $query['value'] );
-        }
+	}
 
 	/**
 	 * Validates a column name parameter.

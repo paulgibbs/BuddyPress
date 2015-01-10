@@ -278,7 +278,7 @@ class BP_User_Query {
 				if ( 'newest' == $type ) {
 					$sql['orderby'] = "ORDER BY u.user_id";
 					$sql['order'] = "DESC";
-				} else if ( 'random' == $type ) {
+				} elseif ( 'random' == $type ) {
 					$sql['orderby'] = "ORDER BY rand()";
 				} else {
 					$sql['orderby'] = "ORDER BY u.date_recorded";
@@ -600,7 +600,6 @@ class BP_User_Query {
 	 *
 	 * @since BuddyPress (1.7.0)
 	 *
-	 * @global BuddyPress $bp Global BuddyPress settings object.
 	 * @global WPDB $wpdb Global WordPress database access object.
 	 */
 	public function populate_extras() {
@@ -624,8 +623,6 @@ class BP_User_Query {
 
 		// Turn user ID's into a query-usable, comma separated value
 		$user_ids_sql = implode( ',', wp_parse_id_list( $this->user_ids ) );
-
-		$bp = buddypress();
 
 		/**
 		 * Use this action to independently populate your own custom extras.
@@ -664,7 +661,7 @@ class BP_User_Query {
 			$this->results[$uindex]->total_friend_count = 0;
 		}
 
-		// Create, prepare, and run the seperate usermeta query
+		// Create, prepare, and run the separate usermeta query
 		$user_metas = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_key, meta_value FROM {$wpdb->usermeta} WHERE meta_key IN (%s,%s) AND user_id IN ({$user_ids_sql})", $total_friend_count_key, $bp_latest_update_key ) );
 
 		// The $members_template global expects the index key to be different
@@ -1832,7 +1829,7 @@ class BP_Core_Notification {
 	 * @global wpdb $wpdb WordPress database object
 	 * @param string $item_id The item id that they notifications are to be for.
 	 * @param string $component_name The component that the notifications are to be from.
-	 * @param string $component_action The action that the notificationsa are to be from.
+	 * @param string $component_action The action that the notifications are to be from.
 	 * @param string $secondary_item_id Optional secondary item id that the notifications are to have.
 	 * @static
 	 */
@@ -2035,7 +2032,7 @@ class BP_Button {
 
 			// No button if viewing your own profile (and not in
 			// a members loop)
-			} else if ( bp_is_my_profile() ) {
+			} elseif ( bp_is_my_profile() ) {
 				return false;
 			}
 		}
@@ -2329,7 +2326,6 @@ class BP_Walker_Nav_Menu extends Walker_Nav_Menu {
 		if ( empty( $elements ) ) // nothing to walk
 			return $output;
 
-		$id_field     = $this->db_fields['id'];
 		$parent_field = $this->db_fields['parent'];
 
 		// flat display
@@ -3266,7 +3262,7 @@ abstract class BP_Recursive_Query {
                 foreach ( $query as $key => $clause ) {
                         if ( 'relation' === $key ) {
                                 $relation = $query['relation'];
-                        } else if ( is_array( $clause ) ) {
+                        } elseif ( is_array( $clause ) ) {
                                 // This is a first-order clause
                                 if ( $this->is_first_order_clause( $clause ) ) {
                                         $clause_sql = $this->get_sql_for_clause( $clause, $query );
@@ -3274,7 +3270,7 @@ abstract class BP_Recursive_Query {
                                         $where_count = count( $clause_sql['where'] );
                                         if ( ! $where_count ) {
                                                 $sql_chunks['where'][] = '';
-                                        } else if ( 1 === $where_count ) {
+                                        } elseif ( 1 === $where_count ) {
                                                 $sql_chunks['where'][] = $clause_sql['where'][0];
                                         } else {
                                                 $sql_chunks['where'][] = '( ' . implode( ' AND ', $clause_sql['where'] ) . ' )';
@@ -3337,11 +3333,11 @@ abstract class BP_Recursive_Query {
 			if ( 'relation' === $key ) {
 				$relation = $query;
 
-			} else if ( ! is_array( $query ) ) {
+			} elseif ( ! is_array( $query ) ) {
 				continue;
 
 			// First-order clause.
-			} else if ( $this->is_first_order_clause( $query ) ) {
+			} elseif ( $this->is_first_order_clause( $query ) ) {
 				if ( isset( $query['value'] ) && array() === $query['value'] ) {
 					unset( $query['value'] );
 				}
@@ -3371,7 +3367,7 @@ abstract class BP_Recursive_Query {
 		 * This value will not actually be used to join clauses, but it
 		 * simplifies the logic around combining key-only queries.
 		 */
-		} else if ( 1 === count( $clean_queries ) ) {
+		} elseif ( 1 === count( $clean_queries ) ) {
 			$clean_queries['relation'] = 'OR';
 
 		// Default to AND.
