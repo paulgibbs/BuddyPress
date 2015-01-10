@@ -3161,13 +3161,37 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 
 		$galleries_data = array();
 
+		/**
+		 * There are two variants of gallery shortcode.
+		 *
+		 * One kind specifies the image (post) IDs via an `ids` parameter.
+		 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
+		 */
 		foreach ( $galleries as $gallery_id => $gallery ) {
 			$data = array();
-			$ids  = wp_parse_id_list( $gallery['src'] );
 
-			foreach ( $ids as $image_id ) {
-				$image = wp_get_attachment_image_src( $image_id, 'full' );
+			// ids= variant.
+			if ( isset( $gallery['ids'] ) ) {
+				$images = wp_parse_id_list( $gallery['ids'] );
 
+			// post_parent variant.
+			} else {
+				$images = wp_parse_id_list(
+					get_children( array(
+						'fields'         => 'ids',
+						'order'          => 'ASC',
+						'orderby'        => 'menu_order ID',
+						'post_mime_type' => 'image',
+						'post_parent'    => $extra_args['post']->ID,
+						'post_status'    => 'inherit',
+						'post_type'      => 'attachment',
+					) )
+				);
+			}
+
+			// Extract the data we need from each image in this gallery.
+			foreach ( $images as $image_id ) {
+				$image  = wp_get_attachment_image_src( $image_id, 'full' );
 				$data[] = array(
 					'url'    => $image[0],
 					'width'  => $image[1],
