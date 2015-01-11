@@ -2916,7 +2916,7 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract images from `<img src>` tags in a block of text.
+	 * Extract images from `<img src>` tags, and galleries, in a block of text.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
@@ -2925,21 +2925,21 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
-		$data = array( 'has' => array(), 'images' => array() );
+		$media     = array( 'has' => array(), 'images' => array() );
+		$galleries = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
+		preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
-		// Matches: src="text" and src='text'
-		preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $matches );
+		// <img>.
+		if ( ! empty( $img_srcs[2] ) ) {
+			$img_srcs[2] = array_unique( $img_srcs[2] );
 
-		if ( ! empty( $matches[2] ) ) {
-			$matches[2] = array_unique( $matches[2] );
-
-			foreach ( $matches[2] as $image_src ) {
+			foreach ( $img_srcs[2] as $image_src ) {
 				// Skip data URIs.
 				if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
 					continue;
 				}
 
-				$data['images'][] = array(
+				$media['images'][] = array(
 					'source' => 'html',
 					'url'    => esc_url_raw( $image_src ),
 
@@ -2950,6 +2950,24 @@ class BP_Media_Extractor {
 			}
 		}
 
+		// Galleries.
+		if ( ! empty( $galleries ) ) {
+			foreach ( $galleries as $gallery ) {
+				foreach ( $gallery as $image ) {
+					$media['images'][] = array(
+						'gallery_id' => $image['gallery_id'],
+						'source'     => 'galleries',
+						'url'        => esc_url_raw( $image['url'] ),
+						'width'      => $image['width'],
+						'height'     => $image['height'],
+					);
+				}
+			}
+
+			$media['has']['galleries'] = count( $galleries );
+		}
+
+		// Update image count.
 		$data['has']['images'] = count( $data['images'] );
 		return $data;
 	}
@@ -3047,6 +3065,59 @@ class BP_Media_Extractor {
 		return $data;
 	}
 
+	/**
+	 * Extract images from galleries inside a WordPress post.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
+		$fake_post              = new WP_Post();
+		$fake_post->the_content = $richtext;
+
+		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
+		$galleries = get_post_galleries( $fake_post, false );
+		if ( empty( $galleries ) ) {
+			return array();
+		}
+
+		$galleries_data = array();
+
+		/**
+		 * There are two variants of gallery shortcode; only the first is handled here.
+		 *
+		 * One kind specifies the image (post) IDs via an `ids` parameter.
+		 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
+		 */
+		foreach ( $galleries as $gallery_id => $gallery ) {
+			$data   = array();
+			$images = array();
+
+			// ids= variant.
+			if ( isset( $gallery['ids'] ) ) {
+				$images = wp_parse_id_list( $gallery['ids'] );
+			}
+
+			// Extract the data we need from each image in this gallery.
+			foreach ( $images as $image_id ) {
+				$image  = wp_get_attachment_image_src( $image_id, 'full' );
+				$data[] = array(
+					'url'    => $image[0],
+					'width'  => $image[1],
+					'height' => $image[2],
+
+					'gallery_id' => 1 + $gallery_id,
+				);
+			}
+
+			$galleries_data[] = $data;
+		}
+
+		return $galleries_data;
+	}
 
 	/**
 	 * Helpers and utility methods.
@@ -3089,7 +3160,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract images from Posts with a Featured Image or Gallery.
+	 *  Extract images from `<img src>` tags, galleries, and featured images, in a block of text.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
@@ -3100,7 +3171,6 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
 		$existing_images = parent::extract_images( $richtext, $plaintext, $extra_args );
 		$featured_image  = $this->extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
-		$galleries       = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
 
 		// Featured images (aka thumbnails).
 		if ( ! empty( $featured_image ) ) {
@@ -3114,26 +3184,6 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			);
 
 			$new_images['has']['featured_images'] = count( $new_images['images'] );
-			$existing_images = array_merge_recursive( $existing_images, $new_images );
-		}
-
-		// Galleries.
-		if ( ! empty( $galleries ) ) {
-			$new_images = array( 'images' => array() );
-
-			foreach ( $galleries as $gallery ) {
-				foreach ( $gallery as $image ) {
-					$new_images['images'][] = array(
-						'gallery_id' => $image['gallery_id'],
-						'source'     => 'galleries',
-						'url'        => esc_url_raw( $image['url'] ),
-						'width'      => $image['width'],
-						'height'     => $image['height'],
-					);
-				}
-			}
-
-			$new_images['has']['galleries'] = count( $galleries );
 			$existing_images = array_merge_recursive( $existing_images, $new_images );
 		}
 
