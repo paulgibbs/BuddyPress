@@ -2783,6 +2783,25 @@ class BP_Media_Extractor {
 		$extracted = array();
 		$plaintext = $this->make_plaintext_content( $richtext );
 
+		/**
+		 * Shared arguments.
+		 */
+
+		// Image height.
+		if ( isset( $extra_args['height'] ) ) {
+			$extra_args['height'] = (int) $extra_args['height'];
+		}
+
+		// Image width.
+		if ( isset( $extra_args['width'] ) ) {
+			$extra_args['width'] = (int) $extra_args['width'];
+		}
+
+
+		/**
+		 * Media extraction.
+		 */
+
 		// Extract links.
 		if ( self::LINKS & $what_to_extract ) {
 			$extracted = array_merge_recursive( $extracted, $this->extract_links( $richtext, $plaintext, $extra_args ) );
