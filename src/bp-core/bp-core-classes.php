@@ -2781,7 +2781,7 @@ class BP_Media_Extractor {
 	 */
 	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
 		$extracted = array();
-		$plaintext = $this->prepare_content( $richtext );
+		$plaintext = $this->make_plaintext_content( $richtext );
 
 		// Extract links.
 		if ( self::LINKS & $what_to_extract ) {
@@ -3041,7 +3041,7 @@ class BP_Media_Extractor {
 	 * @return string
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected function prepare_content( $content ) {
+	protected function make_plaintext_content( $content ) {
 		return strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
 	}
 }
