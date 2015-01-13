@@ -2783,20 +2783,6 @@ class BP_Media_Extractor {
 		$extracted = array();
 		$plaintext = $this->make_plaintext_content( $richtext );
 
-		/**
-		 * Shared arguments.
-		 */
-
-		// Image height.
-		if ( isset( $extra_args['height'] ) ) {
-			$extra_args['height'] = (int) $extra_args['height'];
-		}
-
-		// Image width.
-		if ( isset( $extra_args['width'] ) ) {
-			$extra_args['width'] = (int) $extra_args['width'];
-		}
-
 
 		/**
 		 * Media extraction.
@@ -3084,7 +3070,24 @@ class BP_Media_Extractor {
 			return array();
 		}
 
+		// Validate the size of the images requested.
+		if ( isset( $extra_args['width'] ) ) {
+			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+			}
+
+			if ( ctype_digit( $extra_args['width'] ) ) {
+				$image_size = array( $extra_args['width'], $extra_args['height'] );
+			} else {
+				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+			}
+		} else {
+			$image_size = 'full';
+		}
+
 		$galleries_data = array();
+
 
 		/**
 		 * There are two variants of gallery shortcode; only the first is handled here.
@@ -3103,7 +3106,7 @@ class BP_Media_Extractor {
 
 			// Extract the data we need from each image in this gallery.
 			foreach ( $images as $image_id ) {
-				$image  = wp_get_attachment_image_src( $image_id, 'full' );
+				$image  = wp_get_attachment_image_src( $image_id, $image_size );
 				$data[] = array(
 					'url'    => $image[0],
 					'width'  => $image[1],
@@ -3208,7 +3211,23 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			return array();
 		}
 
-		$image = wp_get_attachment_image_src( $thumb, 'full' );
+		// Validate the size of the images requested.
+		if ( isset( $extra_args['width'] ) ) {
+			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+			}
+
+			if ( ctype_digit( $extra_args['width'] ) ) {
+				$image_size = array( $extra_args['width'], $extra_args['height'] );
+			} else {
+				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+			}
+		} else {
+			$image_size = 'full';
+		}
+
+		$image = wp_get_attachment_image_src( $thumb, $image_size );
 		return $image;
 	}
 
@@ -3228,7 +3247,24 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			return array();
 		}
 
+		// Validate the size of the images requested.
+		if ( isset( $extra_args['width'] ) ) {
+			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+			}
+
+			if ( ctype_digit( $extra_args['width'] ) ) {
+				$image_size = array( $extra_args['width'], $extra_args['height'] );
+			} else {
+				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+			}
+		} else {
+			$image_size = 'full';
+		}
+
 		$galleries_data = array();
+
 
 		/**
 		 * There are two variants of gallery shortcode.
@@ -3260,7 +3296,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 
 			// Extract the data we need from each image in this gallery.
 			foreach ( $images as $image_id ) {
-				$image  = wp_get_attachment_image_src( $image_id, 'full' );
+				$image  = wp_get_attachment_image_src( $image_id, $image_size );
 				$data[] = array(
 					'url'    => $image[0],
 					'width'  => $image[1],
