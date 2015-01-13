@@ -2968,8 +2968,8 @@ class BP_Media_Extractor {
 		}
 
 		// Update image count.
-		$data['has']['images'] = count( $data['images'] );
-		return $data;
+		$media['has']['images'] = count( $media['images'] );
+		return $media;
 	}
 
 	/**
