@@ -2603,7 +2603,10 @@ function bp_activity_thumbnail_content_images( $content, $link = false, $args = 
  * @since BuddyPress (2.3.0)
  */
 function bp_activity_create_summary( $content, $activity ) {
-	$args = array();
+	$args = array(
+		'width' => isset( $GLOBALS['content_width'] ) ? (int) $GLOBALS['content_width'] : 'medium',
+	);
+
 
 	// New blog posts.
 	if ( $activity['type'] === 'new_blog_post' ) {
