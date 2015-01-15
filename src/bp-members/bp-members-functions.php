@@ -10,7 +10,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Check for the existence of a Members directory page.
@@ -2391,7 +2391,7 @@ add_action( 'bp_init', 'bp_core_wpsignup_redirect' );
 function bp_stop_live_spammer() {
 	// if we're on the login page, stop now to prevent redirect loop
 	$is_login = false;
-	if ( isset( $_GLOBALS['pagenow'] ) && false !== strpos( $GLOBALS['pagenow'], 'wp-login.php' ) ) {
+	if ( isset( $GLOBALS['pagenow'] ) && ( false !== strpos( $GLOBALS['pagenow'], 'wp-login.php' ) ) ) {
 		$is_login = true;
 	} elseif ( isset( $_SERVER['SCRIPT_NAME'] ) && false !== strpos( $_SERVER['SCRIPT_NAME'], 'wp-login.php' ) ) {
 		$is_login = true;
