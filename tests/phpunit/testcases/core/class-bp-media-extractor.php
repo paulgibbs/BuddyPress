@@ -29,7 +29,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		<a href='https://example.com'>Testing a regular link.</a>
 		<strong>But we should throw in some markup and maybe even an <img src='http://example.com/image.gif'>.
 		<a href='http://example.com/'><img src='http://example.com/image-in-a-link.gif' /></a></strong>.
-		It definitely does not like <img src='data:1234567890A'>data URIs</img>.
+		It definitely does not like <img src='data:1234567890A'>data URIs</img>. @
 
 		The parser only extracts wp_allowed_protocols() protocols, not something like <a href='phone:004400'>phone</a>.
 
@@ -41,6 +41,8 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
+
+		$this->factory->user->create( array( 'user_login' => 'paulgibbs' ) );
 	}
 
 	public function tearDown() {
@@ -52,8 +54,59 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 * General.
 	 */
 
-	// check types/ints, strings, etc
-	public function test_check_media_extraction_return_types() {}
+	public function test_check_media_extraction_return_types() {
+		$media = self::$media_extractor->extract( self::$richtext );
+
+		foreach ( array( 'has', 'embeds', 'images', 'links', 'mentions', 'shortcodes' ) as $key ) {
+			$this->assertArrayHasKey( $key, $media, $key );
+			$this->assertInternalType( 'array', $media[ $key ] );
+		}
+
+		foreach ( $media['has'] as $item ) {
+			$this->assertInternalType( 'int', $item );
+		}
+
+		foreach ( $media['links'] as $item ) {
+			$this->assertArrayHasKey( 'url', $item );
+			$this->assertInternalType( 'string', $item['url'] );
+			$this->assertNotEmpty( $item['url'] );
+		}
+
+		foreach ( $media['mentions'] as $item ) {
+			$this->assertArrayHasKey( 'name', $item );
+			$this->assertInternalType( 'string', $item['name'] );
+			$this->assertNotEmpty( $item['name'] );
+		}
+
+		foreach ( $media['images'] as $item ) {
+			$this->assertArrayHasKey( 'height', $item );
+			$this->assertInternalType( 'int', $item['height'] );
+
+			$this->assertArrayHasKey( 'width', $item );
+			$this->assertInternalType( 'int', $item['width'] );
+
+			$this->assertArrayHasKey( 'source', $item );
+			$this->assertInternalType( 'string', $item['source'] );
+			$this->assertNotEmpty( $item['source'] );
+
+			$this->assertArrayHasKey( 'url', $item );
+			$this->assertInternalType( 'string', $item['url'] );
+			$this->assertNotEmpty( $item['url'] );
+		}
+
+		foreach ( $media['shortcodes'] as $shortcode_type => $shortcode ) {
+			foreach ( $shortcode as $item ) {
+				$this->assertArrayHasKey( 'count', $item );
+				$this->assertInternalType( 'int', $item['count'] );
+			}
+		}
+
+		foreach ( $media['embeds'] as $item ) {
+			$this->assertArrayHasKey( 'url', $item );
+			$this->assertInternalType( 'string', $item['url'] );
+			$this->assertNotEmpty( $item['url'] );
+		}
+	}
 
 	// "has" counts, etc
 	public function test_check_media_extraction_return_counts() {}
