@@ -58,7 +58,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$media = self::$media_extractor->extract( self::$richtext );
 
 		foreach ( array( 'has', 'embeds', 'images', 'links', 'mentions', 'shortcodes' ) as $key ) {
-			$this->assertArrayHasKey( $key, $media, $key );
+			$this->assertArrayHasKey( $key, $media );
 			$this->assertInternalType( 'array', $media[ $key ] );
 		}
 
@@ -109,10 +109,23 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	}
 
 	// "has" counts, etc
-	public function test_check_media_extraction_return_counts() {}
+	public function test_check_media_extraction_counts_are_correct() {
+		$media = self::$media_extractor->extract( self::$richtext );
+
+		foreach ( $media['has'] as $type => $total ) {
+			$this->assertTrue( count( $media[ $type ] ) === $total, "Difference with the 'has' count for {$type}." );
+		}
+	}
 
 
-	public function test_extract_multiple_media_types_from_content() {}
+	public function test_extract_multiple_media_types_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::LINKS | BP_Media_Extractor::MENTIONS );
+
+		$this->assertArrayHasKey( 'has', $media );
+		$this->assertArrayHasKey( 'links', $media );
+		$this->assertArrayHasKey( 'mentions', $media );
+		$this->assertArrayNotHasKey( 'shortcodes', $media );
+	}
 
 
 	/**
@@ -120,7 +133,15 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 */
 
 	// both quote styles
-	public function test_extract_links_from_content() {}
+	public function test_extract_links_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::LINKS );
+
+		$this->assertCount( 2, $media );
+		$this->assertArrayHasKey( 'has', $media );
+		$this->assertArrayHasKey( 'links', $media );
+
+		$this->assertArrayHasKey( 'links', $media['has'] );
+	}
 
 	// non-https? links, empty links, data: URIs
 	public function test_extract_no_links_from_content_with_invalid_links() {}
@@ -139,7 +160,15 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 * Shortcodes extraction.
 	 */
 
-	public function test_extract_shortcodes_from_content() {}
+	public function test_extract_shortcodes_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::SHORTCODES );
+
+		$this->assertCount( 2, $media );
+		$this->assertArrayHasKey( 'has', $media );
+		$this->assertArrayHasKey( 'shortcodes', $media );
+
+		$this->assertArrayHasKey( 'shortcodes', $media['has'] );
+	}
 
 	public function test_extract_no_shortcodes_from_content_with_unregistered_shortcodes() {}
 
@@ -148,8 +177,15 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 * oEmbeds extraction.
 	 */
 
-	// wildcard and non-wildcard versions
-	public function test_extract_oembeds_from_content() {}
+	public function test_extract_oembeds_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::EMBEDS );
+
+		$this->assertCount( 2, $media );
+		$this->assertArrayHasKey( 'has', $media );
+		$this->assertArrayHasKey( 'embeds', $media );
+
+		$this->assertArrayHasKey( 'embeds', $media['has'] );
+	}
 
 
 	/**
