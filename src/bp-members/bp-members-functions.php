@@ -714,7 +714,8 @@ function bp_core_get_total_member_count() {
 function bp_core_get_active_member_count() {
 	global $wpdb;
 
-	if ( !$count = get_transient( 'bp_active_member_count' ) ) {
+	$count = get_transient( 'bp_active_member_count' );
+	if ( false === $count ) {
 		$bp = buddypress();
 
 		// Avoid a costly join by splitting the lookup
@@ -2479,19 +2480,17 @@ function bp_register_member_type( $member_type, $args = array() ) {
 		'labels' => array(),
 	), 'register_member_type' );
 
-	$type = (object) $r;
-
 	// Store the post type name as data in the object (not just as the array key).
-	$type->name = $member_type;
+	$r['name'] = $member_type;
 
 	// Make sure the relevant labels have been filled in.
-	$default_name = isset( $r['labels']['name'] ) ? $r['labels']['name'] : ucfirst( $type->name );
+	$default_name = isset( $r['labels']['name'] ) ? $r['labels']['name'] : ucfirst( $r['name'] );
 	$r['labels'] = array_merge( array(
 		'name'          => $default_name,
 		'singular_name' => $default_name,
 	), $r['labels'] );
 
-	$bp->members->types[ $member_type ] = $type;
+	$bp->members->types[ $member_type ] = $type = (object) $r;
 
 	/**
 	 * Fires after a member type is registered.
@@ -2511,7 +2510,7 @@ function bp_register_member_type( $member_type, $args = array() ) {
  *
  * @since BuddyPress (2.2.0)
  *
- * @param  string $post_type The name of the member type.
+ * @param  string $member_type The name of the member type.
  * @return object A member type object.
  */
 function bp_get_member_type_object( $member_type ) {
@@ -2542,8 +2541,6 @@ function bp_get_member_type_object( $member_type ) {
  */
 function bp_get_member_types( $args = array(), $output = 'names', $operator = 'and' ) {
 	$types = buddypress()->members->types;
-
-	$field = 'names' == $output ? 'name' : false;
 
 	$types = wp_filter_object_list( $types, $args, $operator );
 
