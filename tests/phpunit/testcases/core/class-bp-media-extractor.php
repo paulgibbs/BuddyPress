@@ -3,7 +3,42 @@
  * @group core
  * @group BP_Media_Extractor
  */
-class BP_Tests_BP_User_Query_TestCases extends BP_UnitTestCase {
+class BP_Tests_Media_Extractor extends BP_UnitTestCase {
+	public static $media_extractor      = null;
+	public static $post_media_extractor = null;
+	public static $richtext             = '';
+
+
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
+
+		self::$media_extractor      = new BP_Media_Extractor();
+		self::$post_media_extractor = new BP_Media_Extractor_Post();
+
+		self::$richtext = "Hello world.
+
+		This sample text is used to test the media extractor parsing class. @paulgibbs thinks it's pretty cool.
+		Another thing really cool is this @youtube:
+
+		https://www.youtube.com/watch?v=2mjvfnUAfyo
+
+		This video is literally out of the world, but uses a different protocol to the embed above:
+
+		http://www.youtube.com/watch?v=KaOC9danxNo
+
+		<a href='https://example.com'>Testing a regular link.</a>
+		<strong>But we should throw in some markup and maybe even an <img src='http://example.com/image.gif'>.
+		<a href='http://example.com/'><img src='http://example.com/image-in-a-link.gif' /></a></strong>.
+		It definitely does not like <img src='data:1234567890A'>data URIs</img>.
+
+		The parser only extracts wp_allowed_protocols() protocols, not something like <a href='phone:004400'>phone</a>.
+
+		[caption]Here is a caption shortcode.[/caption]
+
+		There are two types of [gallery] shortcodes; one like that, and another with [gallery ids='100, 101, 102'].
+		";
+	}
+
 	public function setUp() {
 		parent::setUp();
 	}
