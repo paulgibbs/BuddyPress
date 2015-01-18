@@ -3061,8 +3061,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
-		$fake_post              = new WP_Post();
-		$fake_post->the_content = $richtext;
+		$fake_post = new WP_Post( (object) array( 'post_content' => $richtext ) );
 
 		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
 		$galleries = get_post_galleries( $fake_post, false );
