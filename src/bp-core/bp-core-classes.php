@@ -2842,7 +2842,11 @@ class BP_Media_Extractor {
 			$matches[2] = array_unique( $matches[2] );
 
 			foreach ( $matches[2] as $link_src ) {
-				$data['links'][] = array( 'url' => esc_url_raw( $link_src ) );
+				$link_src = esc_url_raw( $link_src );
+
+				if ( $link_src ) {
+					$data['links'][] = array( 'url' => $link_src );
+				}
 			}
 		}
 
@@ -2919,9 +2923,14 @@ class BP_Media_Extractor {
 					continue;
 				}
 
+				$image_src = esc_url_raw( $image_src );
+				if ( ! $image_src ) {
+					continue;
+				}
+
 				$media['images'][] = array(
 					'source' => 'html',
-					'url'    => esc_url_raw( $image_src ),
+					'url'    => $image_src,
 
 					// The image resolution isn't available, but we need to set the keys anyway.
 					'height' => 0,
@@ -2934,10 +2943,15 @@ class BP_Media_Extractor {
 		if ( ! empty( $galleries ) ) {
 			foreach ( $galleries as $gallery ) {
 				foreach ( $gallery as $image ) {
+					$image_url = esc_url_raw( $image['url'] );
+					if ( ! $image_url ) {
+						continue;
+					}
+
 					$media['images'][] = array(
 						'gallery_id' => $image['gallery_id'],
 						'source'     => 'galleries',
-						'url'        => esc_url_raw( $image['url'] ),
+						'url'        => $image_url,
 						'width'      => $image['width'],
 						'height'     => $image['height'],
 					);
@@ -3170,11 +3184,16 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 
 		// Featured images (aka thumbnails).
 		if ( ! empty( $featured_image ) ) {
+			$image_url = esc_url_raw( $featured_image[0] );
+			if ( ! $image_url ) {
+				continue;
+			}
+
 			$new_images = array( 'images' => array() );
 
 			$new_images['images'][] = array(
 				'source' => 'featured_images',
-				'url'    => esc_url_raw( $featured_image[0] ),
+				'url'    => $image_url,
 				'width'  => $featured_image[1],
 				'height' => $featured_image[2],
 			);
