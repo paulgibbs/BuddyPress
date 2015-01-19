@@ -2842,12 +2842,6 @@ class BP_Media_Extractor {
 			$matches[2] = array_unique( $matches[2] );
 
 			foreach ( $matches[2] as $link_src ) {
-
-				// Skip data URIs.
-				if ( strtolower( substr( $link_src, 0, 5 ) ) === 'data:' ) {
-					continue;
-				}
-
 				$data['links'][] = array( 'url' => esc_url_raw( $link_src ) );
 			}
 		}
