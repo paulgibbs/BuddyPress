@@ -45,10 +45,6 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->factory->user->create( array( 'user_login' => 'paulgibbs' ) );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 
 	/**
 	 * General.
@@ -94,11 +90,9 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 			$this->assertNotEmpty( $item['url'] );
 		}
 
-		foreach ( $media['shortcodes'] as $shortcode_type => $shortcode ) {
-			foreach ( $shortcode as $item ) {
-				$this->assertArrayHasKey( 'count', $item );
-				$this->assertInternalType( 'int', $item['count'] );
-			}
+		foreach ( $media['shortcodes'] as $shortcode_type => $item ) {
+			$this->assertArrayHasKey( 'count', $item );
+			$this->assertInternalType( 'int', $item['count'] );
 		}
 
 		foreach ( $media['embeds'] as $item ) {
@@ -108,7 +102,6 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		}
 	}
 
-	// "has" counts, etc
 	public function test_check_media_extraction_counts_are_correct() {
 		$media = self::$media_extractor->extract( self::$richtext );
 
@@ -121,7 +114,6 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	public function test_extract_multiple_media_types_from_content() {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::LINKS | BP_Media_Extractor::MENTIONS );
 
-		$this->assertArrayHasKey( 'has', $media );
 		$this->assertArrayHasKey( 'links', $media );
 		$this->assertArrayHasKey( 'mentions', $media );
 		$this->assertArrayNotHasKey( 'shortcodes', $media );
@@ -132,28 +124,52 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 * Link extraction.
 	 */
 
-	// both quote styles
 	public function test_extract_links_from_content() {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::LINKS );
 
-		$this->assertCount( 2, $media );
-		$this->assertArrayHasKey( 'has', $media );
 		$this->assertArrayHasKey( 'links', $media );
-
-		$this->assertArrayHasKey( 'links', $media['has'] );
+		$this->assertSame( 2, $media['has']['links'] );
 	}
 
-	// non-https? links, empty links, data: URIs
-	public function test_extract_no_links_from_content_with_invalid_links() {}
+	public function test_extract_no_links_from_content_with_invalid_links() {
+		$richtext = "This is some sample text, with links, but not the kinds we want.		
+		<a href=''>Empty links should be ignore<a/> and
+		<a href='phone:004400'>weird protocols should be ignored, too</a>.
+		";
+
+		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::LINKS );
+		$this->assertSame( 0, $media['has']['links'] );
+	}
 
 
 	/**
 	 * at-mentions extraction.
 	 */
 
-	public function test_extract_mentions_from_content_with_activity_enabled() {}
+	public function test_extract_mentions_from_content_with_activity_enabled() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::MENTIONS );
+		$this->assertSame( 'paulgibbs', $media['mentions'][0]['name'] );
+		$this->assertArrayHasKey( 'user_id', $media['mentions'][0] );
+	}
 
-	public function test_extract_mentions_from_content_with_activity_disabled() {}
+	public function test_extract_mentions_from_content_with_activity_disabled() {
+		$was_activity_enabled = false;
+
+		// Temporarily disable the Activity component.
+		if ( isset( buddypress()->active_components['activity'] ) ) {
+			unset( buddypress()->active_components['activity'] );
+			$was_activity_enabled = true;
+		}
+
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::MENTIONS );
+		$this->assertSame( 'paulgibbs', $media['mentions'][0]['name'] );
+		$this->assertArrayNotHasKey( 'user_id', $media['mentions'][0] );
+
+		// Turn activity back on.
+		if ( $was_activity_enabled ) {
+			buddypress()->active_components['activity'] = 1;
+		}
+	}
 
 
 	/**
@@ -163,14 +179,16 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	public function test_extract_shortcodes_from_content() {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::SHORTCODES );
 
-		$this->assertCount( 2, $media );
-		$this->assertArrayHasKey( 'has', $media );
 		$this->assertArrayHasKey( 'shortcodes', $media );
-
-		$this->assertArrayHasKey( 'shortcodes', $media['has'] );
+		$this->assertSame( 2, $media['has']['shortcodes'] );
 	}
 
-	public function test_extract_no_shortcodes_from_content_with_unregistered_shortcodes() {}
+	public function test_extract_no_shortcodes_from_content_with_unregistered_shortcodes() {
+		$richtext = 'This sammple text has some made-up [fake]shortcodes[/fake].';
+
+		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::SHORTCODES );
+		$this->assertSame( 0, $media['has']['shortcodes'] );
+	}
 
 
 	/**
@@ -180,11 +198,8 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	public function test_extract_oembeds_from_content() {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::EMBEDS );
 
-		$this->assertCount( 2, $media );
-		$this->assertArrayHasKey( 'has', $media );
 		$this->assertArrayHasKey( 'embeds', $media );
-
-		$this->assertArrayHasKey( 'embeds', $media['has'] );
+		$this->assertSame( 2, $media['has']['embeds'] );
 	}
 
 
@@ -193,10 +208,24 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 */
 
 	// both quote styles
-	public function test_extract_images_from_content_with_src_tags() {}
+	public function test_extract_images_from_content_with_src_tags() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES );
+
+		$this->assertArrayHasKey( 'images', $media );
+		$images = wp_list_filter( $media['images'], array( 'source' => 'html' ) );
+		$this->assertCount( 2, $images );
+	}
 
 	// empty src attributes, data: URIs
-	public function test_extract_no_images_from_content_with_invalid_src_tags() {}
+	public function test_extract_no_images_from_content_with_invalid_src_tags() {
+		$richtext = 'This sample text will contain images with invalid src tags, like this:
+		<img src="data://abcd"> or <img src="phone://0123" />.
+		';
+
+		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::IMAGES );
+		$this->assertArrayHasKey( 'images', $media );
+		$this->assertSame( 0, $media['has']['images'] );
+	}
 
 
 	/**
