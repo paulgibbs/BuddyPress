@@ -114,8 +114,8 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	public function test_extract_multiple_media_types_from_content() {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::LINKS | BP_Media_Extractor::MENTIONS );
 
-		$this->assertArrayHasKey( 'links', $media );
-		$this->assertArrayHasKey( 'mentions', $media );
+		$this->assertNotEmpty( $media['links'] );
+		$this->assertNotEmpty( $media['mentions'] );
 		$this->assertArrayNotHasKey( 'shortcodes', $media );
 	}
 
