@@ -297,7 +297,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertCount( 3, $media );
 
 		for ( $i = 1; $i <= 3; $i++ ) {
-			$this->assertSame( 'http://' . WP_TESTS_DOMAIN . "/wp-content/uploads/image{$i}.jpg", $media[ $i ]['url'] );
+			$this->assertSame( 'http://' . WP_TESTS_DOMAIN . "/wp-content/uploads/image{$i}.jpg", $media[ $i - 1 ]['url'] );
 		}
 	}
 
