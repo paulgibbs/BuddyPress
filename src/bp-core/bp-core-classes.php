@@ -2978,6 +2978,22 @@ abstract class BP_Recursive_Query {
 /**
  * Extracts metadata about types of content in some kind of block of text.
  *
+ * There are six supported types: (everything), links, mentions, images, shortcodes, embeds.
+ *
+ * Links:      <a href="http://example.com">
+ * Mentions:   @name
+ *             If the Activity component is enabled, we use it to parse out any @names. A consequence
+ *             to note is that the "name" mentioned must match a real user account. If it's a made-up
+ *             @name, then it isn't extracted.
+ *             If the Activity component is disabled, any @name is extracted (both those matching
+ *             real accounts, and those made-up).
+ * Images:     <img src="image.gif">, [gallery], [gallery ids="2,3"], featured images (Post thumbnails).
+ *             If an extracted image is in the Media Library, then its resolution will be included.
+ * Shortcodes: Extracts limited information from any (registered) shortcodes.
+ *             This includes any shortcodes indirectly covered by any of the other media extraction types.
+ *             For example, [gallery].
+ * Embeds:     Extracts any URL matching a registered oEmbed handler.
+ *
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor {
