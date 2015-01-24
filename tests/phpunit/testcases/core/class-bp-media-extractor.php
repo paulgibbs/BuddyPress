@@ -225,10 +225,10 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES );
 
 		$this->assertArrayHasKey( 'images', $media );
-		$images = array_values( wp_list_filter( $media['images'], array( 'source' => 'html' ) ) );
+		$media = array_values( wp_list_filter( $media['images'], array( 'source' => 'html' ) ) );
 	
-		$this->assertSame( 'http://example.com/image.gif',           $media['images'][0]['url'] );
-		$this->assertSame( 'http://example.com/image-in-a-link.gif', $media['images'][1]['url'] );
+		$this->assertSame( 'http://example.com/image.gif',           $media[0]['url'] );
+		$this->assertSame( 'http://example.com/image-in-a-link.gif', $media[1]['url'] );
 	}
 
 	// empty src attributes, data: URIs
@@ -303,9 +303,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 	public function test_extract_no_images_from_content_with_invalid_galleries_variant_no_ids() {
 		$post_id = $this->factory->post->create( array( 'post_content' => self::$richtext ) );
-
-		// Extract the gallery images.
-		$media = self::$post_media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES, array(
+		$media   = self::$post_media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
@@ -316,9 +314,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 	public function test_extract_no_images_from_content_with_invalid_galleries_variant_ids() {
 		$post_id = $this->factory->post->create( array( 'post_content' => '[gallery ids="117,4529"]' ) );
-
-		// Extract the gallery images.
-		$media = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
+		$media   = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
@@ -332,7 +328,35 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 * Images extraction (thumbnail).
 	 */
 
-	public function test_extract_images_from_content_with_thumbnail() {}
+	public function test_extract_no_images_from_content_with_featured_image() {
+		$post_id      = $this->factory->post->create( array( 'post_content' => self::$richtext ) );
+		$thumbnail_id = $this->factory->attachment->create_object( 'image.jpg', $post_id, array(
+			'post_mime_type' => 'image/jpeg',
+			'post_type'      => 'attachment'
+		) );
+		set_post_thumbnail( $post_id, $thumbnail_id );
 
-	public function test_extract_no_images_from_content_without_thumbnail() {}
+
+		// Extract the gallery images.
+		$media = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
+			'post' => get_post( $post_id ),
+		) );
+
+		$this->assertArrayHasKey( 'images', $media );
+		$media = array_values( wp_list_filter( $media['images'], array( 'source' => 'featured_images' ) ) );
+		$this->assertCount( 1, $media );
+
+		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/image.jpg', $media[0]['url'] );
+	}
+
+	public function test_extract_images_from_content_without_featured_image() {
+		$post_id = $this->factory->post->create( array( 'post_content' => self::$richtext ) );
+		$media   = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
+			'post' => get_post( $post_id ),
+		) );
+
+		$this->assertArrayHasKey( 'images', $media );
+		$media = array_values( wp_list_filter( $media['images'], array( 'source' => 'featured_images' ) ) );
+		$this->assertCount( 0, $media );
+	}
 }
