@@ -458,38 +458,4 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 		global $wpdb;
 		$wpdb->query( 'COMMIT;' );
 	}
-
-	/**
-	 * Helper method to sideload a file from /tests/phpunit/assets/ into WordPress' uploads folder.
-	 *
-	 * @param string $filename File in /tests/phpunit/assets/ to sideload. 
-	 * @param int $parent_post_id Optional; post_parent ID.
-	 * @return int Attachment post ID.
-	 */
-	public function _sideload_media_asset( $filename, $parent_post_id = 0 ) {
-		// "Upload" the file.
-		$filename = BP_TESTS_DIR . '/assets/' . sanitize_file_name( $filename );
-		$upload   = wp_upload_bits( basename( $filename ), null, file_get_contents( $filename ) );
-
-		// Sideload the asset.
-		$mime = wp_check_filetype( $upload['file'] );
-		if ( $mime ) {
-			$type = $mime['type'];
-		} else {
-			$type = '';
-		}
-	
-		$attachment = array(
-			'guid'           => $upload['url'],
-			'post_content'   => '',
-			'post_mime_type' => $type,
-			'post_title'     => basename( $upload['file'] ),
-			'post_type'      => 'attachment',
-		);
-
-		$id = wp_insert_attachment( $attachment, $upload['file'], $parent_post_id );
-		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
-
-		return $id;
-	}
 }
