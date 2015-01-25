@@ -44,6 +44,13 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		The following shortcode should be picked up by the shortcode extractor, but not the audio extractor, because
 		it has an unrecognised file extension (for an audio file). [audio src='http://example.com/not_audio.gif']
 		<a href='http://example.com/more_audio.mp3'>This should be picked up, too</a>.
+
+		Video shortcodes:
+		[video src='http://example.com/source.ogv']
+		[video src='http://example.com/source.webm' loop='on' autoplay='off' preload='metadata']
+
+		The following shortcode should be picked up by the shortcode extractor, but not the video extractor, because
+		it has an unrecognised file extension (for a video file). [video src='http://example.com/not_video.mp3']
 		";
 	}
 
@@ -435,5 +442,30 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::AUDIO );
 		$this->assertSame( 0, $media['has']['audio'] );
+	}
+
+
+	/**
+	 * Video extraction.
+	 */
+
+	public function test_extract_video_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::VIDEOS );
+
+		$this->assertArrayHasKey( 'videos', $media );
+		$this->assertCount( 2, $media['videos'] );
+
+		$this->assertSame( 'shortcodes', $media['videos'][0]['source'] );
+		$this->assertSame( 'shortcodes', $media['videos'][1]['source'] );
+
+		$this->assertSame( 'http://example.com/source.ogv',  $media['videos'][0]['url'] );
+		$this->assertSame( 'http://example.com/source.webm', $media['videos'][1]['url'] );
+	}
+
+	public function test_extract_no_video_from_invalid_content() {
+		$richtext = '[video src="http://example.com/not_video.mp3"]';
+		$media    = self::$media_extractor->extract( $richtext, BP_Media_Extractor::VIDEOS );
+
+		$this->assertSame( 0, $media['has']['videos'] );
 	}
 }
