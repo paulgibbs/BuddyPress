@@ -3331,6 +3331,7 @@ class BP_Media_Extractor {
 		$audios = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
 		$links  = $this->extract_links( $richtext, $plaintext, $extra_args );
 
+		$audio_types = wp_get_audio_extensions();
 
 		// [audio]
 		$audios = wp_list_filter( $audios['shortcodes'], array( 'type' => 'audio' ) );
@@ -3357,16 +3358,14 @@ class BP_Media_Extractor {
 		}
 
 		// <a href="*.mp3"> tags
-		$audio_types = wp_get_audio_extensions();
 		foreach ( $audio_types as $extension ) {
 			$extension = '.' . $extension;
 
 			foreach ( $links['links'] as $link ) {
-				$path = parse_url( $link['url'], PHP_URL_PATH );
-				$path = untrailingslashit( $path['path'] );
+				$path = untrailingslashit( parse_url( $link['url'], PHP_URL_PATH ) );
 
 				// Check this URL's file extension matches that of an accepted audio format.
-				if ( substr( $path, -4 ) !== $extension ) {
+				if ( ! $path || substr( $path, -4 ) !== $extension ) {
 					continue;
 				}
 
