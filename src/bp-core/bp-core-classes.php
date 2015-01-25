@@ -3220,28 +3220,22 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'shortcodes' => array() );
-		$counts = array();
+		$data = array( 'has' => array(), 'shortcodes' => array() );
 
 		// Match any registered WordPress shortcodes.
  		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
 
 		if ( ! empty( $matches[2] ) ) {
-			foreach( $matches[2] as $shortcode ) {
-				$shortcode_type = sanitize_key( $shortcode );
+			foreach ( $matches[2] as $i => $shortcode_name ) {
+				$attrs = shortcode_parse_atts( $matches[3][ $i ] );
+				$attrs = ( ! $attrs ) ? array() : $attrs;
 
-				if ( ! isset( $counts[ $shortcode_type ] ) ) {
-					$counts[ $shortcode_type ] = 0;
-				}
+				$shortcode               = array();
+				$shortcode['attributes'] = $attrs;             // Attributes
+				$shortcode['content']    = $matches[5][ $i ];  // Content
+				$shortcode['type']       = $shortcode_name;    // Shortcode
 
-				// Track how many times this kind of shortcode appears.
-				$counts[ $shortcode_type ]++;
-			}
-		}
-
-		if ( ! empty( $counts ) ) {
-			foreach ( $counts as $type => $count ) {
-				$data['shortcodes'][ $type ] = array( 'count' => $counts[ $type ] );
+				$data['shortcodes'][] = $shortcode;
 			}
 		}
 
