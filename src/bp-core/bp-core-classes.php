@@ -3013,7 +3013,7 @@ class BP_Media_Extractor {
 	const SHORTCODES = 8;
 	const EMBEDS     = 16;
 	const AUDIO      = 32;
-	const VIDEO      = 64;
+	const VIDEOS     = 64;
 
 
 	/**
@@ -3065,7 +3065,7 @@ class BP_Media_Extractor {
 		}
 
 		// Extract video.
-		if ( self::VIDEO & $what_to_extract ) {
+		if ( self::VIDEOS & $what_to_extract ) {
 			$extracted = array_merge_recursive( $extracted, $this->extract_video( $richtext, $plaintext, $extra_args ) );
 		}
 
@@ -3340,6 +3340,7 @@ class BP_Media_Extractor {
 
 		$audio_types = wp_get_audio_extensions();
 
+
 		// [audio]
 		$audios = wp_list_filter( $audios['shortcodes'], array( 'type' => 'audio' ) );
 		foreach ( $audios as $audio ) {
@@ -3402,10 +3403,12 @@ class BP_Media_Extractor {
 		$data   = array( 'has' => array(), 'videos' => array() );
 		$videos = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
 
-		$audio_types = wp_get_video_extensions();
+		$video_types = wp_get_video_extensions();
+
 
 		// [video]
-		$videos = wp_list_filter( $videos['shortcodes'], array( 'type' => 'videos' ) );
+		$videos = wp_list_filter( $videos['shortcodes'], array( 'type' => 'video' ) );
+
 		foreach ( $videos as $video ) {
 			if ( empty( $video['attributes']['src'] ) ) {
 				continue;
@@ -3417,7 +3420,7 @@ class BP_Media_Extractor {
 				$extension = '.' . $extension;
 
 				// Check this URL's file extension matches that of an accepted video format (-5 for webm).
-				if ( ! $path || substr( $path, -4 ) !== $extension || substr( $path, -5 ) !== $extension ) {
+				if ( ! $path || ( substr( $path, -4 ) !== $extension && substr( $path, -5 ) !== $extension ) ) {
 					continue;
 				}
 
