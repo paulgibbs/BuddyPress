@@ -33,7 +33,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 		The parser only extracts wp_allowed_protocols() protocols, not something like <a href='phone:004400'>phone</a>.
 
-		[caption]Here is a caption shortcode.[/caption]
+		[caption id='example']Here is a caption shortcode.[/caption]
 
 		There are two types of [gallery] shortcodes; one like that, and another with IDs specified.
 
