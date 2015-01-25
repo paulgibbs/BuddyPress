@@ -123,9 +123,15 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 	public function test_check_media_extraction_counts_are_correct() {
 		$media = self::$media_extractor->extract( self::$richtext );
+		$types = array_keys( $media );
 
-		foreach ( $media['has'] as $type => $total ) {
-			$this->assertTrue( count( $media[ $type ] ) === $total, "Difference with the 'has' count for {$type}." );
+		foreach ( $types as $type ) {
+			if ( $type === 'has' ) {
+				continue;
+			}
+
+			$this->assertArrayHasKey( $type, $media['has'] );
+			$this->assertSame( count( $media[ $type ] ), $media['has'][ $type ], "Difference with the 'has' count for {$type}." );
 		}
 	}
 
