@@ -36,6 +36,8 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		[caption]Here is a caption shortcode.[/caption]
 
 		There are two types of [gallery] shortcodes; one like that, and another with IDs specified.
+
+		Audio shortcodes: [audio src='source.mp3'] [audio src='source.mp3' loop='on' autoplay='off' preload='metadata'].
 		";
 	}
 
@@ -106,6 +108,8 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 			$this->assertInternalType( 'string', $item['url'] );
 			$this->assertNotEmpty( $item['url'] );
 		}
+
+		//djpaultodo - audio
 	}
 
 	public function test_check_media_extraction_counts_are_correct() {
@@ -358,5 +362,21 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertArrayHasKey( 'images', $media );
 		$media = array_values( wp_list_filter( $media['images'], array( 'source' => 'featured_images' ) ) );
 		$this->assertCount( 0, $media );
+	}
+
+
+	/**
+	 * Audio extraction.
+	 */
+
+	public function test_extract_audio_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::AUDIO );
+
+		$this->assertArrayHasKey( 'audio', $media );
+		$this->assertSame( 1, $media['audio']['caption']['count'] );
+		$this->assertSame( 1, $media['audio']['gallery']['count'] );
+	}
+
+	public function txxxxxest_extract_no_shortcodes_from_content_with_unregistered_shortcodes() {
 	}
 }
