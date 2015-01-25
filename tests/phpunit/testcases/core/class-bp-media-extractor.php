@@ -429,7 +429,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertSame( 'http://example.com/more_audio.mp3', $media['audio'][2]['url'] );
 	}
 
-	public function test_extract_no_audio_from_content() {
+	public function test_extract_no_audio_from_invalid_content() {
 		$richtext = '[audio src="http://example.com/not_audio.gif"]
 		<a href="http://example.com/more_not_audio.mp33">Hello</a>.';
 
