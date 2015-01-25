@@ -2989,7 +2989,7 @@ abstract class BP_Recursive_Query {
  *             real accounts, and those made-up).
  * Images:     <img src="image.gif">, [gallery], [gallery ids="2,3"], featured images (Post thumbnails).
  *             If an extracted image is in the Media Library, then its resolution will be included.
- * Shortcodes: Extract limited information about any (registered) shortcodes.
+ * Shortcodes: Extract information about any (registered) shortcodes.
  *             This includes any shortcodes indirectly covered by any of the other media extraction types.
  *             For example, [gallery].
  * Embeds:     Extract any URL matching a registered oEmbed handler.
@@ -3101,6 +3101,13 @@ class BP_Media_Extractor {
 	/**
 	 * Extract @mentions tags from a block of text.
 	 *
+	 * If the Activity component is enabled, we use it to parse out any @names. A consequence
+	 * to note is that the "name" mentioned must match a real user account. If it's a made-up
+	 * @name, then it isn't extracted.
+	 *
+	 * If the Activity component is disabled, any @name is extracted (both those matching
+	 * real accounts, and those made-up).
+	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
@@ -3145,6 +3152,8 @@ class BP_Media_Extractor {
 
 	/**
 	 * Extract images from `<img src>` tags, and galleries, in a block of text.
+	 *
+	 * If an extracted image is in the Media Library, then its resolution will be included.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
@@ -3213,6 +3222,9 @@ class BP_Media_Extractor {
 	/**
 	 * Extract shortcodes from a block of text.
 	 *
+	 * This includes any shortcodes indirectly covered by any of the other media extraction types.
+	 * For example, [gallery] and [audio].
+	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
@@ -3245,7 +3257,7 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract shortcodes from a block of text.
+	 * Extract any URL matching a registered oEmbeds handler from a block of text.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
