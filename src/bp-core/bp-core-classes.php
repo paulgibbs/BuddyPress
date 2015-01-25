@@ -3339,10 +3339,21 @@ class BP_Media_Extractor {
 				continue;
 			}
 
-			$data['audio'][] = array(
-				'source' => 'shortcodes',
-				'url'    => esc_url_raw( $audio['attributes']['src'] ),
-			);
+			$path = untrailingslashit( parse_url( $audio['attributes']['src'], PHP_URL_PATH ) );
+
+			foreach ( $audio_types as $extension ) {
+				$extension = '.' . $extension;
+
+				// Check this URL's file extension matches that of an accepted audio format.
+				if ( ! $path || substr( $path, -4 ) !== $extension ) {
+					continue;
+				}
+
+				$data['audio'][] = array(
+					'source' => 'shortcodes',
+					'url'    => esc_url_raw( $audio['attributes']['src'] ),
+				);
+			}
 		}
 
 		// <a href="*.mp3"> tags
