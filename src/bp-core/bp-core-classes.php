@@ -3057,6 +3057,11 @@ class BP_Media_Extractor {
 			$extracted = array_merge_recursive( $extracted, $this->extract_embeds( $richtext, $plaintext, $extra_args ) );
 		}
 
+		// Extract audio.
+		if ( self::AUDIO & $what_to_extract ) {
+			$extracted = array_merge_recursive( $extracted, $this->extract_audio( $richtext, $plaintext, $extra_args ) );
+		}
+
 		return $extracted;
 	}
 
@@ -3311,6 +3316,66 @@ class BP_Media_Extractor {
 	}
 
 	/**
+	 * Extract audio from [audio] shortcodes, and `<a href="*.mp3">` tags, in a block of text.
+	 *
+	 * See wp_get_audio_extensions() for supported audio formats.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected function extract_audio( $richtext, $plaintext, $extra_args = array() ) {
+		$data   = array( 'has' => array(), 'audio' => array() );
+		$audios = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
+		$links  = $this->extract_links( $richtext, $plaintext, $extra_args );
+
+
+		// [audio]
+		$audios = wp_list_filter( $audios['shortcodes'], array( 'type' => 'audio' ) );
+		foreach ( $audios as $audio ) {
+			if ( empty( $audio['attributes']['src'] ) ) {
+				continue;
+			}
+
+			$data['audio'][] = array(
+				'source' => 'shortcodes',
+				'url'    => esc_url_raw( $audio['attributes']['src'] ),
+			);
+		}
+
+		// <a href="*.mp3"> tags
+		$audio_types = wp_get_audio_extensions();
+		foreach ( $audio_types as $extension ) {
+			$extension = '.' . $extension;
+
+			foreach ( $links['links'] as $link ) {
+				$path = parse_url( $link['url'], PHP_URL_PATH );
+				$path = untrailingslashit( $path['path'] );
+
+				// Check this URL's file extension matches that of an accepted audio format.
+				if ( substr( $path, -4 ) !== $extension ) {
+					continue;
+				}
+
+				$data['audio'][] = array(
+					'source' => 'html',
+					'url'    => esc_url_raw( $link['url'] ),
+				);
+			}
+		}
+
+		$data['has']['audio'] = count( $data['audio'] );
+		return $data;
+	}
+
+
+	/**
+	 * Helpers and utility methods.
+	 */
+
+	/**
 	 * Extract images from galleries inside a WordPress post.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
@@ -3379,10 +3444,6 @@ class BP_Media_Extractor {
 
 		return $galleries_data;
 	}
-
-	/**
-	 * Helpers and utility methods.
-	 */
 
 	/**
 	 * Sanitise and format the $content to help with the content extraction.
