@@ -61,7 +61,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	public function test_check_media_extraction_return_types() {
 		$media = self::$media_extractor->extract( self::$richtext );
 
-		foreach ( array( 'has', 'embeds', 'images', 'links', 'mentions', 'shortcodes' ) as $key ) {
+		foreach ( array( 'has', 'embeds', 'images', 'links', 'mentions', 'shortcodes', 'audio' ) as $key ) {
 			$this->assertArrayHasKey( $key, $media );
 			$this->assertInternalType( 'array', $media[ $key ] );
 		}
@@ -118,7 +118,15 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 			$this->assertNotEmpty( $item['url'] );
 		}
 
-		//djpaultodo - audio
+		foreach ( $media['audio'] as $item ) {
+			$this->assertArrayHasKey( 'url', $item );
+			$this->assertInternalType( 'string', $item['url'] );
+			$this->assertNotEmpty( $item['url'] );
+
+			$this->assertArrayHasKey( 'source', $item );
+			$this->assertInternalType( 'string', $item['source'] );
+			$this->assertNotEmpty( $item['source'] );
+		}
 	}
 
 	public function test_check_media_extraction_counts_are_correct() {
