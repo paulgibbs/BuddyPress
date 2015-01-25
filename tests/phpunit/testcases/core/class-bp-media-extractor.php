@@ -99,8 +99,17 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		}
 
 		foreach ( $media['shortcodes'] as $shortcode_type => $item ) {
-			$this->assertArrayHasKey( 'count', $item );
-			$this->assertInternalType( 'int', $item['count'] );
+			$this->assertArrayHasKey( 'attributes', $item );
+			$this->assertInternalType( 'array', $item['attributes'] );
+
+			$this->assertArrayHasKey( 'content', $item );
+			$this->assertInternalType( 'string', $item['content'] );
+
+			$this->assertArrayHasKey( 'type', $item );
+			$this->assertInternalType( 'string', $item['type'] );
+
+			$this->assertArrayHasKey( 'original', $item );
+			$this->assertInternalType( 'string', $item['original'] );
 		}
 
 		foreach ( $media['embeds'] as $item ) {
@@ -195,12 +204,28 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::SHORTCODES );
 
 		$this->assertArrayHasKey( 'shortcodes', $media );
-		$this->assertSame( 1, $media['shortcodes']['caption']['count'] );
-		$this->assertSame( 1, $media['shortcodes']['gallery']['count'] );
+
+		$this->assertSame( 'caption', $media['shortcodes'][0]['type'] );
+		$this->assertSame( 'Here is a caption shortcode.', $media['shortcodes'][0]['content'] );
+		$this->assertSame( 'example', $media['shortcodes'][0]['attributes']['id'] );
+
+		$this->assertSame( 'gallery', $media['shortcodes'][1]['type'] );
+		$this->assertEmpty( $media['shortcodes'][1]['content'] );
+
+		$this->assertSame( 'audio', $media['shortcodes'][2]['type'] );
+		$this->assertEmpty( $media['shortcodes'][2]['content'] );
+		$this->assertSame( 'source.mp3', $media['shortcodes'][2]['attributes']['src'] );
+
+		$this->assertSame( 'audio', $media['shortcodes'][3]['type'] );
+		$this->assertEmpty( $media['shortcodes'][3]['content'] );
+		$this->assertSame( 'source.mp3', $media['shortcodes'][3]['attributes']['src'] );
+		$this->assertSame( 'on', $media['shortcodes'][3]['attributes']['loop'] );
+		$this->assertSame( 'off', $media['shortcodes'][3]['attributes']['autoplay'] );
+		$this->assertSame( 'metadata', $media['shortcodes'][3]['attributes']['preload'] );
 	}
 
 	public function test_extract_no_shortcodes_from_content_with_unregistered_shortcodes() {
-		$richtext = 'This sammple text has some made-up [fake]shortcodes[/fake].';
+		$richtext = 'This sample text has some made-up [fake]shortcodes[/fake].';
 
 		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::SHORTCODES );
 		$this->assertSame( 0, $media['has']['shortcodes'] );
