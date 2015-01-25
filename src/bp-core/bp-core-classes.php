@@ -2995,6 +2995,8 @@ abstract class BP_Recursive_Query {
  * Embeds:     Extract any URL matching a registered oEmbed handler.
  * Audio:      <a href="*.mp3"">, [audio]
  *             See wp_get_audio_extensions() for supported audio formats.
+ * Video:      [video]
+ *             See wp_get_video_extensions() for supported video formats.
  *
  * @since BuddyPress (2.3.0)
  */
@@ -3060,6 +3062,11 @@ class BP_Media_Extractor {
 		// Extract audio.
 		if ( self::AUDIO & $what_to_extract ) {
 			$extracted = array_merge_recursive( $extracted, $this->extract_audio( $richtext, $plaintext, $extra_args ) );
+		}
+
+		// Extract video.
+		if ( self::VIDEO & $what_to_extract ) {
+			$extracted = array_merge_recursive( $extracted, $this->extract_video( $richtext, $plaintext, $extra_args ) );
 		}
 
 		return $extracted;
@@ -3380,6 +3387,50 @@ class BP_Media_Extractor {
 		return $data;
 	}
 
+	/**
+	 * Extract video from [video] shortcodes.
+	 *
+	 * See wp_get_video_extensions() for supported audio formats.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected function extract_video( $richtext, $plaintext, $extra_args = array() ) {
+		$data   = array( 'has' => array(), 'videos' => array() );
+		$videos = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
+
+		$audio_types = wp_get_video_extensions();
+
+		// [video]
+		$videos = wp_list_filter( $videos['shortcodes'], array( 'type' => 'videos' ) );
+		foreach ( $videos as $video ) {
+			if ( empty( $video['attributes']['src'] ) ) {
+				continue;
+			}
+
+			$path = untrailingslashit( parse_url( $video['attributes']['src'], PHP_URL_PATH ) );
+
+			foreach ( $video_types as $extension ) {
+				$extension = '.' . $extension;
+
+				// Check this URL's file extension matches that of an accepted video format (-5 for webm).
+				if ( ! $path || substr( $path, -4 ) !== $extension || substr( $path, -5 ) !== $extension ) {
+					continue;
+				}
+
+				$data['videos'][] = array(
+					'source' => 'shortcodes',
+					'url'    => esc_url_raw( $video['attributes']['src'] ),
+				);
+			}
+		}
+
+		$data['has']['videos'] = count( $data['videos'] );
+		return $data;
+	}
 
 	/**
 	 * Helpers and utility methods.
