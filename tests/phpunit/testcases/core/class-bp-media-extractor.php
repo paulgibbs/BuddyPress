@@ -33,9 +33,24 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 		The parser only extracts wp_allowed_protocols() protocols, not something like <a href='phone:004400'>phone</a>.
 
-		[caption]Here is a caption shortcode.[/caption]
+		[caption id='example']Here is a caption shortcode.[/caption]
 
 		There are two types of [gallery] shortcodes; one like that, and another with IDs specified.
+
+		Audio shortcodes:
+		[audio src='http://example.com/source.mp3'] 
+		[audio src='http://example.com/source.wav' loop='on' autoplay='off' preload='metadata'].
+
+		The following shortcode should be picked up by the shortcode extractor, but not the audio extractor, because
+		it has an unrecognised file extension (for an audio file). [audio src='http://example.com/not_audio.gif']
+		<a href='http://example.com/more_audio.mp3'>This should be picked up, too</a>.
+
+		Video shortcodes:
+		[video src='http://example.com/source.ogv']
+		[video src='http://example.com/source.webm' loop='on' autoplay='off' preload='metadata']
+
+		The following shortcode should be picked up by the shortcode extractor, but not the video extractor, because
+		it has an unrecognised file extension (for a video file). [video src='http://example.com/not_video.mp3']
 		";
 	}
 
@@ -59,7 +74,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	public function test_check_media_extraction_return_types() {
 		$media = self::$media_extractor->extract( self::$richtext );
 
-		foreach ( array( 'has', 'embeds', 'images', 'links', 'mentions', 'shortcodes' ) as $key ) {
+		foreach ( array( 'has', 'embeds', 'images', 'links', 'mentions', 'shortcodes', 'audio' ) as $key ) {
 			$this->assertArrayHasKey( $key, $media );
 			$this->assertInternalType( 'array', $media[ $key ] );
 		}
@@ -97,8 +112,17 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		}
 
 		foreach ( $media['shortcodes'] as $shortcode_type => $item ) {
-			$this->assertArrayHasKey( 'count', $item );
-			$this->assertInternalType( 'int', $item['count'] );
+			$this->assertArrayHasKey( 'attributes', $item );
+			$this->assertInternalType( 'array', $item['attributes'] );
+
+			$this->assertArrayHasKey( 'content', $item );
+			$this->assertInternalType( 'string', $item['content'] );
+
+			$this->assertArrayHasKey( 'type', $item );
+			$this->assertInternalType( 'string', $item['type'] );
+
+			$this->assertArrayHasKey( 'original', $item );
+			$this->assertInternalType( 'string', $item['original'] );
 		}
 
 		foreach ( $media['embeds'] as $item ) {
@@ -106,13 +130,29 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 			$this->assertInternalType( 'string', $item['url'] );
 			$this->assertNotEmpty( $item['url'] );
 		}
+
+		foreach ( $media['audio'] as $item ) {
+			$this->assertArrayHasKey( 'url', $item );
+			$this->assertInternalType( 'string', $item['url'] );
+			$this->assertNotEmpty( $item['url'] );
+
+			$this->assertArrayHasKey( 'source', $item );
+			$this->assertInternalType( 'string', $item['source'] );
+			$this->assertNotEmpty( $item['source'] );
+		}
 	}
 
 	public function test_check_media_extraction_counts_are_correct() {
 		$media = self::$media_extractor->extract( self::$richtext );
+		$types = array_keys( $media );
 
-		foreach ( $media['has'] as $type => $total ) {
-			$this->assertTrue( count( $media[ $type ] ) === $total, "Difference with the 'has' count for {$type}." );
+		foreach ( $types as $type ) {
+			if ( $type === 'has' ) {
+				continue;
+			}
+
+			$this->assertArrayHasKey( $type, $media['has'] );
+			$this->assertSame( count( $media[ $type ] ), $media['has'][ $type ], "Difference with the 'has' count for {$type}." );
 		}
 	}
 
@@ -191,12 +231,28 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::SHORTCODES );
 
 		$this->assertArrayHasKey( 'shortcodes', $media );
-		$this->assertSame( 1, $media['shortcodes']['caption']['count'] );
-		$this->assertSame( 1, $media['shortcodes']['gallery']['count'] );
+
+		$this->assertSame( 'caption', $media['shortcodes'][0]['type'] );
+		$this->assertSame( 'Here is a caption shortcode.', $media['shortcodes'][0]['content'] );
+		$this->assertSame( 'example', $media['shortcodes'][0]['attributes']['id'] );
+
+		$this->assertSame( 'gallery', $media['shortcodes'][1]['type'] );
+		$this->assertEmpty( $media['shortcodes'][1]['content'] );
+
+		$this->assertSame( 'audio', $media['shortcodes'][2]['type'] );
+		$this->assertEmpty( $media['shortcodes'][2]['content'] );
+		$this->assertSame( 'http://example.com/source.mp3', $media['shortcodes'][2]['attributes']['src'] );
+
+		$this->assertSame( 'audio', $media['shortcodes'][3]['type'] );
+		$this->assertEmpty( $media['shortcodes'][3]['content'] );
+		$this->assertSame( 'http://example.com/source.wav', $media['shortcodes'][3]['attributes']['src'] );
+		$this->assertSame( 'on', $media['shortcodes'][3]['attributes']['loop'] );
+		$this->assertSame( 'off', $media['shortcodes'][3]['attributes']['autoplay'] );
+		$this->assertSame( 'metadata', $media['shortcodes'][3]['attributes']['preload'] );
 	}
 
 	public function test_extract_no_shortcodes_from_content_with_unregistered_shortcodes() {
-		$richtext = 'This sammple text has some made-up [fake]shortcodes[/fake].';
+		$richtext = 'This sample text has some made-up [fake]shortcodes[/fake].';
 
 		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::SHORTCODES );
 		$this->assertSame( 0, $media['has']['shortcodes'] );
@@ -358,5 +414,58 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertArrayHasKey( 'images', $media );
 		$media = array_values( wp_list_filter( $media['images'], array( 'source' => 'featured_images' ) ) );
 		$this->assertCount( 0, $media );
+	}
+
+
+	/**
+	 * Audio extraction.
+	 */
+
+	public function test_extract_audio_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::AUDIO );
+
+		$this->assertArrayHasKey( 'audio', $media );
+		$this->assertCount( 3, $media['audio'] );
+
+		$this->assertSame( 'shortcodes', $media['audio'][0]['source'] );
+		$this->assertSame( 'shortcodes', $media['audio'][1]['source'] );
+		$this->assertSame( 'html',       $media['audio'][2]['source'] );
+
+		$this->assertSame( 'http://example.com/source.mp3',     $media['audio'][0]['url'] );
+		$this->assertSame( 'http://example.com/source.wav',     $media['audio'][1]['url'] );
+		$this->assertSame( 'http://example.com/more_audio.mp3', $media['audio'][2]['url'] );
+	}
+
+	public function test_extract_no_audio_from_invalid_content() {
+		$richtext = '[audio src="http://example.com/not_audio.gif"]
+		<a href="http://example.com/more_not_audio.mp33">Hello</a>.';
+
+		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::AUDIO );
+		$this->assertSame( 0, $media['has']['audio'] );
+	}
+
+
+	/**
+	 * Video extraction.
+	 */
+
+	public function test_extract_video_from_content() {
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::VIDEOS );
+
+		$this->assertArrayHasKey( 'videos', $media );
+		$this->assertCount( 2, $media['videos'] );
+
+		$this->assertSame( 'shortcodes', $media['videos'][0]['source'] );
+		$this->assertSame( 'shortcodes', $media['videos'][1]['source'] );
+
+		$this->assertSame( 'http://example.com/source.ogv',  $media['videos'][0]['url'] );
+		$this->assertSame( 'http://example.com/source.webm', $media['videos'][1]['url'] );
+	}
+
+	public function test_extract_no_video_from_invalid_content() {
+		$richtext = '[video src="http://example.com/not_video.mp3"]';
+		$media    = self::$media_extractor->extract( $richtext, BP_Media_Extractor::VIDEOS );
+
+		$this->assertSame( 0, $media['has']['videos'] );
 	}
 }

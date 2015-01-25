@@ -2978,6 +2978,26 @@ abstract class BP_Recursive_Query {
 /**
  * Extracts metadata about types of content in some kind of block of text.
  *
+ * The supported types are: (everything), links, mentions, images, shortcodes, embeds, audio, video.
+ *
+ * Links:      <a href="http://example.com">
+ * Mentions:   @name
+ *             If the Activity component is enabled, we use it to parse out any @names. A consequence
+ *             to note is that the "name" mentioned must match a real user account. If it's a made-up
+ *             @name, then it isn't extracted.
+ *             If the Activity component is disabled, any @name is extracted (both those matching
+ *             real accounts, and those made-up).
+ * Images:     <img src="image.gif">, [gallery], [gallery ids="2,3"], featured images (Post thumbnails).
+ *             If an extracted image is in the Media Library, then its resolution will be included.
+ * Shortcodes: Extract information about any (registered) shortcodes.
+ *             This includes any shortcodes indirectly covered by any of the other media extraction types.
+ *             For example, [gallery].
+ * Embeds:     Extract any URL matching a registered oEmbed handler.
+ * Audio:      <a href="*.mp3"">, [audio]
+ *             See wp_get_audio_extensions() for supported audio formats.
+ * Video:      [video]
+ *             See wp_get_video_extensions() for supported video formats.
+ *
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor {
@@ -2992,6 +3012,8 @@ class BP_Media_Extractor {
 	const IMAGES     = 4;
 	const SHORTCODES = 8;
 	const EMBEDS     = 16;
+	const AUDIO      = 32;
+	const VIDEOS     = 64;
 
 
 	/**
@@ -3035,6 +3057,16 @@ class BP_Media_Extractor {
 		// Extract oEmbeds.
 		if ( self::EMBEDS & $what_to_extract ) {
 			$extracted = array_merge_recursive( $extracted, $this->extract_embeds( $richtext, $plaintext, $extra_args ) );
+		}
+
+		// Extract audio.
+		if ( self::AUDIO & $what_to_extract ) {
+			$extracted = array_merge_recursive( $extracted, $this->extract_audio( $richtext, $plaintext, $extra_args ) );
+		}
+
+		// Extract video.
+		if ( self::VIDEOS & $what_to_extract ) {
+			$extracted = array_merge_recursive( $extracted, $this->extract_video( $richtext, $plaintext, $extra_args ) );
 		}
 
 		return $extracted;
@@ -3081,6 +3113,13 @@ class BP_Media_Extractor {
 	/**
 	 * Extract @mentions tags from a block of text.
 	 *
+	 * If the Activity component is enabled, we use it to parse out any @names. A consequence
+	 * to note is that the "name" mentioned must match a real user account. If it's a made-up
+	 * @name, then it isn't extracted.
+	 *
+	 * If the Activity component is disabled, any @name is extracted (both those matching
+	 * real accounts, and those made-up).
+	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
@@ -3125,6 +3164,8 @@ class BP_Media_Extractor {
 
 	/**
 	 * Extract images from `<img src>` tags, and galleries, in a block of text.
+	 *
+	 * If an extracted image is in the Media Library, then its resolution will be included.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
@@ -3193,6 +3234,9 @@ class BP_Media_Extractor {
 	/**
 	 * Extract shortcodes from a block of text.
 	 *
+	 * This includes any shortcodes indirectly covered by any of the other media extraction types.
+	 * For example, [gallery] and [audio].
+	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
@@ -3200,28 +3244,23 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'shortcodes' => array() );
-		$counts = array();
+		$data = array( 'has' => array(), 'shortcodes' => array() );
 
 		// Match any registered WordPress shortcodes.
  		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
 
 		if ( ! empty( $matches[2] ) ) {
-			foreach( $matches[2] as $shortcode ) {
-				$shortcode_type = sanitize_key( $shortcode );
+			foreach ( $matches[2] as $i => $shortcode_name ) {
+				$attrs = shortcode_parse_atts( $matches[3][ $i ] );
+				$attrs = ( ! $attrs ) ? array() : $attrs;
 
-				if ( ! isset( $counts[ $shortcode_type ] ) ) {
-					$counts[ $shortcode_type ] = 0;
-				}
+				$shortcode               = array();
+				$shortcode['attributes'] = $attrs;             // Attributes
+				$shortcode['content']    = $matches[5][ $i ];  // Content
+				$shortcode['type']       = $shortcode_name;    // Shortcode
+				$shortcode['original']   = $matches[0][ $i ];  // Entire shortcode
 
-				// Track how many times this kind of shortcode appears.
-				$counts[ $shortcode_type ]++;
-			}
-		}
-
-		if ( ! empty( $counts ) ) {
-			foreach ( $counts as $type => $count ) {
-				$data['shortcodes'][ $type ] = array( 'count' => $counts[ $type ] );
+				$data['shortcodes'][] = $shortcode;
 			}
 		}
 
@@ -3230,7 +3269,7 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract shortcodes from a block of text.
+	 * Extract any URL matching a registered oEmbeds handler from a block of text.
 	 *
 	 * @param string $richtext Content to operate on (probably HTML).
 	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
@@ -3282,6 +3321,123 @@ class BP_Media_Extractor {
 		$data['has']['embeds'] = count( $data['embeds'] );
 		return $data;
 	}
+
+	/**
+	 * Extract audio from [audio] shortcodes, and `<a href="*.mp3">` tags, in a block of text.
+	 *
+	 * See wp_get_audio_extensions() for supported audio formats.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected function extract_audio( $richtext, $plaintext, $extra_args = array() ) {
+		$data   = array( 'has' => array(), 'audio' => array() );
+		$audios = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
+		$links  = $this->extract_links( $richtext, $plaintext, $extra_args );
+
+		$audio_types = wp_get_audio_extensions();
+
+
+		// [audio]
+		$audios = wp_list_filter( $audios['shortcodes'], array( 'type' => 'audio' ) );
+		foreach ( $audios as $audio ) {
+			if ( empty( $audio['attributes']['src'] ) ) {
+				continue;
+			}
+
+			$path = untrailingslashit( parse_url( $audio['attributes']['src'], PHP_URL_PATH ) );
+
+			foreach ( $audio_types as $extension ) {
+				$extension = '.' . $extension;
+
+				// Check this URL's file extension matches that of an accepted audio format.
+				if ( ! $path || substr( $path, -4 ) !== $extension ) {
+					continue;
+				}
+
+				$data['audio'][] = array(
+					'source' => 'shortcodes',
+					'url'    => esc_url_raw( $audio['attributes']['src'] ),
+				);
+			}
+		}
+
+		// <a href="*.mp3"> tags
+		foreach ( $audio_types as $extension ) {
+			$extension = '.' . $extension;
+
+			foreach ( $links['links'] as $link ) {
+				$path = untrailingslashit( parse_url( $link['url'], PHP_URL_PATH ) );
+
+				// Check this URL's file extension matches that of an accepted audio format.
+				if ( ! $path || substr( $path, -4 ) !== $extension ) {
+					continue;
+				}
+
+				$data['audio'][] = array(
+					'source' => 'html',
+					'url'    => esc_url_raw( $link['url'] ),
+				);
+			}
+		}
+
+		$data['has']['audio'] = count( $data['audio'] );
+		return $data;
+	}
+
+	/**
+	 * Extract video from [video] shortcodes.
+	 *
+	 * See wp_get_video_extensions() for supported audio formats.
+	 *
+	 * @param string $richtext Content to operate on (probably HTML).
+	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected function extract_video( $richtext, $plaintext, $extra_args = array() ) {
+		$data   = array( 'has' => array(), 'videos' => array() );
+		$videos = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
+
+		$video_types = wp_get_video_extensions();
+
+
+		// [video]
+		$videos = wp_list_filter( $videos['shortcodes'], array( 'type' => 'video' ) );
+
+		foreach ( $videos as $video ) {
+			if ( empty( $video['attributes']['src'] ) ) {
+				continue;
+			}
+
+			$path = untrailingslashit( parse_url( $video['attributes']['src'], PHP_URL_PATH ) );
+
+			foreach ( $video_types as $extension ) {
+				$extension = '.' . $extension;
+
+				// Check this URL's file extension matches that of an accepted video format (-5 for webm).
+				if ( ! $path || ( substr( $path, -4 ) !== $extension && substr( $path, -5 ) !== $extension ) ) {
+					continue;
+				}
+
+				$data['videos'][] = array(
+					'source' => 'shortcodes',
+					'url'    => esc_url_raw( $video['attributes']['src'] ),
+				);
+			}
+		}
+
+		$data['has']['videos'] = count( $data['videos'] );
+		return $data;
+	}
+
+	/**
+	 * Helpers and utility methods.
+	 */
 
 	/**
 	 * Extract images from galleries inside a WordPress post.
@@ -3352,10 +3508,6 @@ class BP_Media_Extractor {
 
 		return $galleries_data;
 	}
-
-	/**
-	 * Helpers and utility methods.
-	 */
 
 	/**
 	 * Sanitise and format the $content to help with the content extraction.
