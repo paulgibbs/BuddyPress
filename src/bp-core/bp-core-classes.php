@@ -3234,6 +3234,7 @@ class BP_Media_Extractor {
 				$shortcode['attributes'] = $attrs;             // Attributes
 				$shortcode['content']    = $matches[5][ $i ];  // Content
 				$shortcode['type']       = $shortcode_name;    // Shortcode
+				$shortcode['original']   = $matches[0][ $i ];  // Entire shortcode
 
 				$data['shortcodes'][] = $shortcode;
 			}
