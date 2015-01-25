@@ -234,11 +234,11 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 		$this->assertSame( 'audio', $media['shortcodes'][2]['type'] );
 		$this->assertEmpty( $media['shortcodes'][2]['content'] );
-		$this->assertSame( 'source.mp3', $media['shortcodes'][2]['attributes']['src'] );
+		$this->assertSame( 'http://example.com/source.mp3', $media['shortcodes'][2]['attributes']['src'] );
 
 		$this->assertSame( 'audio', $media['shortcodes'][3]['type'] );
 		$this->assertEmpty( $media['shortcodes'][3]['content'] );
-		$this->assertSame( 'source.mp3', $media['shortcodes'][3]['attributes']['src'] );
+		$this->assertSame( 'http://example.com/source.wav', $media['shortcodes'][3]['attributes']['src'] );
 		$this->assertSame( 'on', $media['shortcodes'][3]['attributes']['loop'] );
 		$this->assertSame( 'off', $media['shortcodes'][3]['attributes']['autoplay'] );
 		$this->assertSame( 'metadata', $media['shortcodes'][3]['attributes']['preload'] );
