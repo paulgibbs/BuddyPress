@@ -37,7 +37,13 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 		There are two types of [gallery] shortcodes; one like that, and another with IDs specified.
 
-		Audio shortcodes: [audio src='source.mp3'] [audio src='source.mp3' loop='on' autoplay='off' preload='metadata'].
+		Audio shortcodes:
+		[audio src='http://example.com/source.mp3'] 
+		[audio src='http://example.com/source.wav' loop='on' autoplay='off' preload='metadata'].
+
+		The following shortcode should be picked up by the shortcode extractor, but not the audio extractor, because
+		it has an unrecognised file extension (for an audio file). [audio src='http://example.com/not_audio.gif']
+		<a href='http://example.com/more_audio.mp3'>This should be picked up, too</a>.
 		";
 	}
 
@@ -408,14 +414,26 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	 * Audio extraction.
 	 */
 
-	public function texxxxxst_extract_audio_from_content() {
+	public function test_extract_audio_from_content() {
 		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::AUDIO );
 
 		$this->assertArrayHasKey( 'audio', $media );
-		$this->assertSame( 1, $media['audio']['caption']['count'] );
-		$this->assertSame( 1, $media['audio']['gallery']['count'] );
+		$this->assertCount( 3, $media['audio'] );
+
+		$this->assertSame( 'shortcodes', $media['audio'][0]['source'] );
+		$this->assertSame( 'shortcodes', $media['audio'][1]['source'] );
+		$this->assertSame( 'html',       $media['audio'][2]['source'] );
+
+		$this->assertSame( 'http://example.com/source.mp3',     $media['audio'][0]['url'] );
+		$this->assertSame( 'http://example.com/source.wav',     $media['audio'][1]['url'] );
+		$this->assertSame( 'http://example.com/more_audio.mp3', $media['audio'][2]['url'] );
 	}
 
-	public function txxxxxest_extract_no_shortcodes_from_content_with_unregistered_shortcodes() {
+	public function test_extract_no_audio_from_content() {
+		$richtext = '[audio src="http://example.com/not_audio.gif"]
+		<a href="http://example.com/more_not_audio.mp33">Hello</a>.';
+
+		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::AUDIO );
+		$this->assertSame( 0, $media['has']['audio'] );
 	}
 }
