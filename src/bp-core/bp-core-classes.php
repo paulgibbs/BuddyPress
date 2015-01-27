@@ -2976,9 +2976,10 @@ abstract class BP_Recursive_Query {
 }
 
 /**
- * Extracts metadata about types of content in some kind of block of text.
+ * Extracts media from text.
  *
- * The supported types are: (everything), links, mentions, images, shortcodes, embeds, audio, video.
+ * The supported types are links, mentions, images, shortcodes, embeds, audio, video, and "all".
+ * This is what each type extracts:
  *
  * Links:      <a href="http://example.com">
  * Mentions:   @name
@@ -3002,8 +3003,9 @@ abstract class BP_Recursive_Query {
  */
 class BP_Media_Extractor {
 	/**
-	 * Bitmasks to filter media type.
+	 * Media type.
 	 *
+	 * @since BuddyPress (2.3.0)
 	 * @var int
 	 */
 	const ALL        = 255;
@@ -3017,10 +3019,10 @@ class BP_Media_Extractor {
 
 
 	/**
-	 * Extract content metadata from a block of text.
+	 * Extract media from text.
 	 *
-	 * @param string $richtext
-	 * @param int $what_to_extract A mask of content types to extract. Defaults to BP_Media_Extractor::ALL.
+	 * @param string $richtext Content to parse.
+	 * @param int $what_to_extract Media type to extract (optional).
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array|WP_Error
 	 * @since BuddyPress (2.3.0)
@@ -3080,10 +3082,10 @@ class BP_Media_Extractor {
 	 */
 
 	/**
-	 * Extract `<a href>` tags from a block of text.
+	 * Extract `<a href>` tags from text.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3111,17 +3113,15 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract @mentions tags from a block of text.
+	 * Extract @mentions tags from text.
 	 *
-	 * If the Activity component is enabled, we use it to parse out any @names. A consequence
-	 * to note is that the "name" mentioned must match a real user account. If it's a made-up
-	 * @name, then it isn't extracted.
+	 * If the Activity component is enabled, it is used to parse @mentions.
+	 * The mentioned "name" must match a user account, otherwise it is discarded.
 	 *
-	 * If the Activity component is disabled, any @name is extracted (both those matching
-	 * real accounts, and those made-up).
+	 * If the Activity component is disabled, any @mentions are extracted.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3163,12 +3163,12 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract images from `<img src>` tags, and galleries, in a block of text.
+	 * Extract images from `<img src>` tags and galleries, from text.
 	 *
-	 * If an extracted image is in the Media Library, then its resolution will be included.
+	 * If an image is in the Media Library, then its resolution is included in the results.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3232,13 +3232,13 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract shortcodes from a block of text.
+	 * Extract shortcodes from text.
 	 *
-	 * This includes any shortcodes indirectly covered by any of the other media extraction types.
+	 * This includes any shortcodes indirectly used by other media extraction types.
 	 * For example, [gallery] and [audio].
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3269,10 +3269,10 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract any URL matching a registered oEmbeds handler from a block of text.
+	 * Extract any URL, matching a registered oEmbed endpoint, from text.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3323,14 +3323,13 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract audio from [audio] shortcodes, and `<a href="*.mp3">` tags, in a block of text.
+	 * Extract [audio] shortcodes and `<a href="*.mp3">` tags, from text.
 	 *
-	 * See wp_get_audio_extensions() for supported audio formats.
-	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
+	 * @see wp_get_audio_extensions() for supported audio formats.
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_audio( $richtext, $plaintext, $extra_args = array() ) {
@@ -3389,14 +3388,13 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract video from [video] shortcodes.
+	 * Extract [video] shortcodes from text.
 	 *
-	 * See wp_get_video_extensions() for supported audio formats.
-	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
+	 * @see wp_get_video_extensions() for supported video formats.
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_video( $richtext, $plaintext, $extra_args = array() ) {
@@ -3435,15 +3433,16 @@ class BP_Media_Extractor {
 		return $data;
 	}
 
+
 	/**
 	 * Helpers and utility methods.
 	 */
 
 	/**
-	 * Extract images from galleries inside a WordPress post.
+	 * Extract images in [galleries] shortcodes from text.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3510,7 +3509,8 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Sanitise and format the $content to help with the content extraction.
+	 * Sanitize and format raw content to prepare for content extraction.
+	 *
 	 * HTML tags and shortcodes are removed, and HTML entities are decoded.
 	 *
 	 * @param string $content
@@ -3523,16 +3523,16 @@ class BP_Media_Extractor {
 }
 
 /**
- * Extracts metadata about types of content in a Post.
+ * Extracts media from a Post.
  *
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	/**
-	 * Extract metadata from a WordPress post.
+	 * Extract media from text.
 	 *
 	 * @param string $richtext
-	 * @param int $what_to_extract A mask of content types to extract. Defaults to BP_Media_Extractor::ALL.
+	 * @param int $what_to_extract Media type to extract (optional).
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array|WP_Error
 	 * @since BuddyPress (2.3.0)
@@ -3546,10 +3546,10 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	}
 
 	/**
-	 *  Extract images from `<img src>` tags, galleries, and featured images, in a block of text.
+	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3585,10 +3585,10 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract a Post's featured image.
+	 * Extract a featured image from a Post.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3620,10 +3620,10 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract images from galleries inside a WordPress post.
+	 * Extract images in [galleries] shortcodes from a Post.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
