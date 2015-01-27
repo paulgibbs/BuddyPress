@@ -3024,7 +3024,7 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param int $what_to_extract Media type to extract (optional).
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return WP_Error|array {
+	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $audio
 	 *         @type int $embeds
