@@ -3024,7 +3024,62 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param int $what_to_extract Media type to extract (optional).
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array|WP_Error
+	 * @return WP_Error|array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $audio
+	 *         @type int $embeds
+	 *         @type int $images
+	 *         @type int $links
+	 *         @type int $mentions
+	 *         @type int $shortcodes
+	 *         @type int $video
+	 *     }
+	 *     @type array $audio Extracted audio. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Either "html" or "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 *     @type array $embeds Extracted oEmbeds. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url oEmbed link.
+	 *     }
+	 *     @type array $images Extracted images. {
+	 *         Array of extracted media.
+	 *
+	 *         @type int $gallery_id Gallery ID. Optional, not always set.
+	 *         @type int $height Width of image. If unknown, set to 0.
+	 *         @type string $source Media source. Either "html" or "galleries".
+	 *         @type string $url Link to image.
+	 *         @type int $width Width of image. If unknown, set to 0.
+	 *     }
+	 *     @type array $links Extracted URLs. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url Link.
+	 *     }
+	 *     @type array $mentions Extracted mentions. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $name @mention.
+	 *         @type string $user_id User ID. Optional, only set if Activity component enabled.
+	 *     }
+	 *     @type array $shortcodes Extracted shortcodes. {
+	 *         Array of extracted media.
+	 *
+	 *         @type array $attributes Key/value pairs of the shortcodes attributes (if any).
+	 *         @type string $content Text wrapped by the shortcode.
+	 *         @type string $type Shortcode type.
+	 *         @type string $oringal The entire shortcode.
+	 *     }
+	 *     @type array $videos Extracted video. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Currently only "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
@@ -3087,7 +3142,19 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $links
+	 *         @type int $mentions
+	 *         @type int $shortcodes
+	 *         @type int $video
+	 *     }
+	 *     @type array $links Extracted URLs. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url Link.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_links( $richtext, $plaintext, $extra_args = array() ) {
@@ -3123,7 +3190,17 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $mentions
+	 *     }
+	 *     @type array $mentions Extracted mentions. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $name @mention.
+	 *         @type string $user_id User ID. Optional, only set if Activity component enabled.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_mentions( $richtext, $plaintext, $extra_args = array() ) {
@@ -3170,7 +3247,20 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $images
+	 *     }
+	 *     @type array $images Extracted images. {
+	 *         Array of extracted media.
+	 *
+	 *         @type int $gallery_id Gallery ID. Optional, not always set.
+	 *         @type int $height Width of image. If unknown, set to 0.
+	 *         @type string $source Media source. Either "html" or "galleries".
+	 *         @type string $url Link to image.
+	 *         @type int $width Width of image. If unknown, set to 0.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
@@ -3240,7 +3330,19 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $shortcodes
+	 *     }
+	 *     @type array $shortcodes Extracted shortcodes. {
+	 *         Array of extracted media.
+	 *
+	 *         @type array $attributes Key/value pairs of the shortcodes attributes (if any).
+	 *         @type string $content Text wrapped by the shortcode.
+	 *         @type string $type Shortcode type.
+	 *         @type string $oringal The entire shortcode.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
@@ -3274,7 +3376,16 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $embeds
+	 *     }
+	 *     @type array $embeds Extracted oEmbeds. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url oEmbed link.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_embeds( $richtext, $plaintext, $extra_args = array() ) {
@@ -3328,7 +3439,17 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $audio
+	 *     }
+	 *     @type array $audio Extracted audio. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Either "html" or "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 * }
 	 * @see wp_get_audio_extensions() for supported audio formats.
 	 * @since BuddyPress (2.3.0)
 	 */
@@ -3393,7 +3514,17 @@ class BP_Media_Extractor {
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $video
+	 *     }
+	 *     @type array $videos Extracted video. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Currently only "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 * }
 	 * @see wp_get_video_extensions() for supported video formats.
 	 * @since BuddyPress (2.3.0)
 	 */
