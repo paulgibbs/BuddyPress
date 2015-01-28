@@ -3158,7 +3158,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_links( $richtext, $plaintext, $extra_args = array() ) {
-		$data = array( 'has' => array(), 'links' => array() );
+		$data = array( 'has' => array( 'links' => 0 ), 'links' => array() );
 
 		// Matches: href="text" and href='text'
 		preg_match_all( '#href=(["\'])([^"\']+)\1#i', $richtext, $matches );
@@ -3204,7 +3204,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_mentions( $richtext, $plaintext, $extra_args = array() ) {
-		$data     = array( 'has' => array(), 'mentions' => array() );
+		$data     = array( 'has' => array( 'mentions' => 0 ), 'mentions' => array() );
 		$mentions = array();
 
 		// If the Activity component is active, use it to parse @mentions.
@@ -3264,7 +3264,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
-		$media     = array( 'has' => array(), 'images' => array() );
+		$media     = array( 'has' => array( 'images' => 0 ), 'images' => array() );
 		$galleries = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
 		preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
@@ -3346,7 +3346,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
-		$data = array( 'has' => array(), 'shortcodes' => array() );
+		$data = array( 'has' => array( 'shortcodes' => 0 ), 'shortcodes' => array() );
 
 		// Match any registered WordPress shortcodes.
  		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
@@ -3389,7 +3389,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_embeds( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'embeds' => array() );
+		$data   = array( 'has' => array( 'embeds' => 0 ), 'embeds' => array() );
 		$embeds = array();
 
 		if ( ! function_exists( '_wp_oembed_get_object' ) ) {
@@ -3454,7 +3454,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_audio( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'audio' => array() );
+		$data   = array( 'has' => array( 'audio' => 0 ), 'audio' => array() );
 		$audios = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
 		$links  = $this->extract_links( $richtext, $plaintext, $extra_args );
 
@@ -3529,7 +3529,7 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_video( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'videos' => array() );
+		$data   = array( 'has' => array( 'videos' => 0 ), 'videos' => array() );
 		$videos = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
 
 		$video_types = wp_get_video_extensions();
