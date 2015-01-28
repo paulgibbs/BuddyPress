@@ -3145,9 +3145,6 @@ class BP_Media_Extractor {
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $links
-	 *         @type int $mentions
-	 *         @type int $shortcodes
-	 *         @type int $video
 	 *     }
 	 *     @type array $links Extracted URLs. {
 	 *         Array of extracted media.
@@ -3161,16 +3158,18 @@ class BP_Media_Extractor {
 		$data = array( 'has' => array( 'links' => 0 ), 'links' => array() );
 
 		// Matches: href="text" and href='text'
-		preg_match_all( '#href=(["\'])([^"\']+)\1#i', $richtext, $matches );
+		if ( stripos( $richtext, 'href=' ) !== false ) {
+			preg_match_all( '#href=(["\'])([^"\']+)\1#i', $richtext, $matches );
 
-		if ( ! empty( $matches[2] ) ) {
-			$matches[2] = array_unique( $matches[2] );
+			if ( ! empty( $matches[2] ) ) {
+				$matches[2] = array_unique( $matches[2] );
 
-			foreach ( $matches[2] as $link_src ) {
-				$link_src = esc_url_raw( $link_src );
+				foreach ( $matches[2] as $link_src ) {
+					$link_src = esc_url_raw( $link_src );
 
-				if ( $link_src ) {
-					$data['links'][] = array( 'url' => $link_src );
+					if ( $link_src ) {
+						$data['links'][] = array( 'url' => $link_src );
+					}
 				}
 			}
 		}
@@ -3216,10 +3215,12 @@ class BP_Media_Extractor {
 
 		// If the Activity component is disabled, instead do a basic parse.
 		} else {
-			preg_match_all( '/[@]+([A-Za-z0-9-_\.@]+)\b/', $plaintext, $matches );
+			if ( strpos( $plaintext, '@' ) !== false ) {
+				preg_match_all( '/[@]+([A-Za-z0-9-_\.@]+)\b/', $plaintext, $matches );
 
-			if ( ! empty( $matches[1] ) ) {
-				$mentions = array_unique( array_map( 'strtolower', $matches[1] ) );
+				if ( ! empty( $matches[1] ) ) {
+					$mentions = array_unique( array_map( 'strtolower', $matches[1] ) );
+				}
 			}
 		}
 
@@ -3266,54 +3267,57 @@ class BP_Media_Extractor {
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
 		$media     = array( 'has' => array( 'images' => 0 ), 'images' => array() );
 		$galleries = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
-		preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
-		// <img>.
-		if ( ! empty( $img_srcs[2] ) ) {
-			$img_srcs[2] = array_unique( $img_srcs[2] );
+		if ( stripos( $richtext, 'src=' ) !== false ) {
+			preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
-			foreach ( $img_srcs[2] as $image_src ) {
-				// Skip data URIs.
-				if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
-					continue;
-				}
+			// <img>.
+			if ( ! empty( $img_srcs[2] ) ) {
+				$img_srcs[2] = array_unique( $img_srcs[2] );
 
-				$image_src = esc_url_raw( $image_src );
-				if ( ! $image_src ) {
-					continue;
-				}
+				foreach ( $img_srcs[2] as $image_src ) {
+					// Skip data URIs.
+					if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
+						continue;
+					}
 
-				$media['images'][] = array(
-					'source' => 'html',
-					'url'    => $image_src,
-
-					// The image resolution isn't available, but we need to set the keys anyway.
-					'height' => 0,
-					'width'  => 0,
-				);
-			}
-		}
-
-		// Galleries.
-		if ( ! empty( $galleries ) ) {
-			foreach ( $galleries as $gallery ) {
-				foreach ( $gallery as $image ) {
-					$image_url = esc_url_raw( $image['url'] );
-					if ( ! $image_url ) {
+					$image_src = esc_url_raw( $image_src );
+					if ( ! $image_src ) {
 						continue;
 					}
 
 					$media['images'][] = array(
-						'gallery_id' => $image['gallery_id'],
-						'source'     => 'galleries',
-						'url'        => $image_url,
-						'width'      => $image['width'],
-						'height'     => $image['height'],
+						'source' => 'html',
+						'url'    => $image_src,
+
+						// The image resolution isn't available, but we need to set the keys anyway.
+						'height' => 0,
+						'width'  => 0,
 					);
 				}
 			}
 
-			$media['has']['galleries'] = count( $galleries );
+			// Galleries.
+			if ( ! empty( $galleries ) ) {
+				foreach ( $galleries as $gallery ) {
+					foreach ( $gallery as $image ) {
+						$image_url = esc_url_raw( $image['url'] );
+						if ( ! $image_url ) {
+							continue;
+						}
+
+						$media['images'][] = array(
+							'gallery_id' => $image['gallery_id'],
+							'source'     => 'galleries',
+							'url'        => $image_url,
+							'width'      => $image['width'],
+							'height'     => $image['height'],
+						);
+					}
+				}
+
+				$media['has']['galleries'] = count( $galleries );
+			}
 		}
 
 		// Update image count.
@@ -3349,20 +3353,22 @@ class BP_Media_Extractor {
 		$data = array( 'has' => array( 'shortcodes' => 0 ), 'shortcodes' => array() );
 
 		// Match any registered WordPress shortcodes.
- 		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
+		if ( stripos( $richtext, 'src=' ) !== false ) {
+	 		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
 
-		if ( ! empty( $matches[2] ) ) {
-			foreach ( $matches[2] as $i => $shortcode_name ) {
-				$attrs = shortcode_parse_atts( $matches[3][ $i ] );
-				$attrs = ( ! $attrs ) ? array() : $attrs;
+			if ( ! empty( $matches[2] ) ) {
+				foreach ( $matches[2] as $i => $shortcode_name ) {
+					$attrs = shortcode_parse_atts( $matches[3][ $i ] );
+					$attrs = ( ! $attrs ) ? array() : $attrs;
 
-				$shortcode               = array();
-				$shortcode['attributes'] = $attrs;             // Attributes
-				$shortcode['content']    = $matches[5][ $i ];  // Content
-				$shortcode['type']       = $shortcode_name;    // Shortcode
-				$shortcode['original']   = $matches[0][ $i ];  // Entire shortcode
+					$shortcode               = array();
+					$shortcode['attributes'] = $attrs;             // Attributes
+					$shortcode['content']    = $matches[5][ $i ];  // Content
+					$shortcode['type']       = $shortcode_name;    // Shortcode
+					$shortcode['original']   = $matches[0][ $i ];  // Entire shortcode
 
-				$data['shortcodes'][] = $shortcode;
+					$data['shortcodes'][] = $shortcode;
+				}
 			}
 		}
 
@@ -3398,32 +3404,34 @@ class BP_Media_Extractor {
 
 
 		// Matches any links on their own lines. They may be oEmbeds.
-		preg_match_all( '#^\s*(https?://[^\s"]+)\s*$#im', $richtext, $matches );
+		if ( stripos( $richtext, 'http' ) !== false ) {
+			preg_match_all( '#^\s*(https?://[^\s"]+)\s*$#im', $richtext, $matches );
 
-		if ( ! empty( $matches[1] ) ) {
-			$matches[1] = array_unique( $matches[1] );
-			$oembed     = _wp_oembed_get_object();
+			if ( ! empty( $matches[1] ) ) {
+				$matches[1] = array_unique( $matches[1] );
+				$oembed     = _wp_oembed_get_object();
 
-			foreach ( $matches[1] as $link ) {
-				// Skip data URIs.
-				if ( strtolower( substr( $link, 0, 5 ) ) === 'data:' ) {
-					continue;
-				}
-
-				foreach ( $oembed->providers as $matchmask => $oembed_data ) {
-					list( , $is_regex ) = $oembed_data;
-
-					// Turn asterisk-type provider URLs into regexs.
-					if ( ! $is_regex ) {
-						$matchmask = '#' . str_replace( '___wildcard___', '(.+)', preg_quote( str_replace( '*', '___wildcard___', $matchmask ), '#' ) ) . '#i';
-						$matchmask = preg_replace( '|^#http\\\://|', '#https?\://', $matchmask );
+				foreach ( $matches[1] as $link ) {
+					// Skip data URIs.
+					if ( strtolower( substr( $link, 0, 5 ) ) === 'data:' ) {
+						continue;
 					}
 
-					// Check whether this "link" is really an oEmbed.
-					if ( preg_match( $matchmask, $link ) ) {
-						$data['embeds'][] = array( 'url' => $link );
+					foreach ( $oembed->providers as $matchmask => $oembed_data ) {
+						list( , $is_regex ) = $oembed_data;
 
-						break;
+						// Turn asterisk-type provider URLs into regexs.
+						if ( ! $is_regex ) {
+							$matchmask = '#' . str_replace( '___wildcard___', '(.+)', preg_quote( str_replace( '*', '___wildcard___', $matchmask ), '#' ) ) . '#i';
+							$matchmask = preg_replace( '|^#http\\\://|', '#https?\://', $matchmask );
+						}
+
+						// Check whether this "link" is really an oEmbed.
+						if ( preg_match( $matchmask, $link ) ) {
+							$data['embeds'][] = array( 'url' => $link );
+
+							break;
+						}
 					}
 				}
 			}
