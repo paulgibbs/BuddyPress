@@ -3666,58 +3666,56 @@ class BP_Media_Extractor {
 		$fake_post = new WP_Post( (object) array( 'post_content' => $richtext ) );
 
 		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
-		$galleries = get_post_galleries( $fake_post, false );
-		if ( empty( $galleries ) ) {
-			return array();
-		}
-
-		// Validate the size of the images requested.
-		if ( isset( $extra_args['width'] ) ) {
-			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
-				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
-			}
-
-			if ( ctype_digit( $extra_args['width'] ) ) {
-				$image_size = array( $extra_args['width'], $extra_args['height'] );
-			} else {
-				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
-			}
-		} else {
-			$image_size = 'full';
-		}
-
+		$galleries      = get_post_galleries( $fake_post, false );
 		$galleries_data = array();
+	
+		if ( ! empty( $galleries ) ) {
+			// Validate the size of the images requested.
+			if ( isset( $extra_args['width'] ) ) {
+				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+					// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+				}
 
-
-		/**
-		 * There are two variants of gallery shortcode; only the first is handled here.
-		 *
-		 * One kind specifies the image (post) IDs via an `ids` parameter.
-		 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
-		 */
-		foreach ( $galleries as $gallery_id => $gallery ) {
-			$data   = array();
-			$images = array();
-
-			// ids= variant.
-			if ( isset( $gallery['ids'] ) ) {
-				$images = wp_parse_id_list( $gallery['ids'] );
+				if ( ctype_digit( $extra_args['width'] ) ) {
+					$image_size = array( $extra_args['width'], $extra_args['height'] );
+				} else {
+					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				}
+			} else {
+				$image_size = 'full';
 			}
 
-			// Extract the data we need from each image in this gallery.
-			foreach ( $images as $image_id ) {
-				$image  = wp_get_attachment_image_src( $image_id, $image_size );
-				$data[] = array(
-					'url'    => $image[0],
-					'width'  => $image[1],
-					'height' => $image[2],
 
-					'gallery_id' => 1 + $gallery_id,
-				);
+			/**
+			 * There are two variants of gallery shortcode; only the first is handled here.
+			 *
+			 * One kind specifies the image (post) IDs via an `ids` parameter.
+			 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
+			 */
+			foreach ( $galleries as $gallery_id => $gallery ) {
+				$data   = array();
+				$images = array();
+
+				// ids= variant.
+				if ( isset( $gallery['ids'] ) ) {
+					$images = wp_parse_id_list( $gallery['ids'] );
+				}
+
+				// Extract the data we need from each image in this gallery.
+				foreach ( $images as $image_id ) {
+					$image  = wp_get_attachment_image_src( $image_id, $image_size );
+					$data[] = array(
+						'url'    => $image[0],
+						'width'  => $image[1],
+						'height' => $image[2],
+
+						'gallery_id' => 1 + $gallery_id,
+					);
+				}
+
+				$galleries_data[] = $data;
 			}
-
-			$galleries_data[] = $data;
 		}
 
 		/**
@@ -3839,27 +3837,27 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 */
 	protected function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
 		$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
-		if ( ! $thumb ) {
-			return array();
-		}
+		$image = array();
 
-		// Validate the size of the images requested.
-		if ( isset( $extra_args['width'] ) ) {
-			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
-				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
-			}
+		if ( $thumb ) {
+			// Validate the size of the images requested.
+			if ( isset( $extra_args['width'] ) ) {
+				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+					// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+				}
 
-			if ( ctype_digit( $extra_args['width'] ) ) {
-				$image_size = array( $extra_args['width'], $extra_args['height'] );
+				if ( ctype_digit( $extra_args['width'] ) ) {
+					$image_size = array( $extra_args['width'], $extra_args['height'] );
+				} else {
+					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				}
 			} else {
-				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				$image_size = 'full';
 			}
-		} else {
-			$image_size = 'full';
-		}
 
-		$image = wp_get_attachment_image_src( $thumb, $image_size );
+			$image = wp_get_attachment_image_src( $thumb, $image_size );
+		}
 
 		/**
 		 * Filters featured images extracted from a WordPress Post.
@@ -3884,71 +3882,68 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 */
 	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args = array() ) {
 		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
-		$galleries = get_post_galleries( $extra_args['post'], false );
-		if ( empty( $galleries ) ) {
-			return array();
-		}
-
-		// Validate the size of the images requested.
-		if ( isset( $extra_args['width'] ) ) {
-			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
-				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
-			}
-
-			if ( ctype_digit( $extra_args['width'] ) ) {
-				$image_size = array( $extra_args['width'], $extra_args['height'] );
-			} else {
-				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
-			}
-		} else {
-			$image_size = 'full';
-		}
-
+		$galleries      = get_post_galleries( $extra_args['post'], false );
 		$galleries_data = array();
 
+		if ( ! empty( $galleries ) ) {
+			// Validate the size of the images requested.
+			if ( isset( $extra_args['width'] ) ) {
+				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+					// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+				}
 
-		/**
-		 * There are two variants of gallery shortcode.
-		 *
-		 * One kind specifies the image (post) IDs via an `ids` parameter.
-		 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
-		 */
-		foreach ( $galleries as $gallery_id => $gallery ) {
-			$data = array();
-
-			// ids= variant.
-			if ( isset( $gallery['ids'] ) ) {
-				$images = wp_parse_id_list( $gallery['ids'] );
-
-			// post_parent variant.
+				if ( ctype_digit( $extra_args['width'] ) ) {
+					$image_size = array( $extra_args['width'], $extra_args['height'] );
+				} else {
+					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				}
 			} else {
-				$images = wp_parse_id_list(
-					get_children( array(
-						'fields'         => 'ids',
-						'order'          => 'ASC',
-						'orderby'        => 'menu_order ID',
-						'post_mime_type' => 'image',
-						'post_parent'    => $extra_args['post']->ID,
-						'post_status'    => 'inherit',
-						'post_type'      => 'attachment',
-					) )
-				);
+				$image_size = 'full';
 			}
 
-			// Extract the data we need from each image in this gallery.
-			foreach ( $images as $image_id ) {
-				$image  = wp_get_attachment_image_src( $image_id, $image_size );
-				$data[] = array(
-					'url'    => $image[0],
-					'width'  => $image[1],
-					'height' => $image[2],
+			/**
+			 * There are two variants of gallery shortcode.
+			 *
+			 * One kind specifies the image (post) IDs via an `ids` parameter.
+			 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
+			 */
+			foreach ( $galleries as $gallery_id => $gallery ) {
+				$data = array();
 
-					'gallery_id' => 1 + $gallery_id,
-				);
+				// ids= variant.
+				if ( isset( $gallery['ids'] ) ) {
+					$images = wp_parse_id_list( $gallery['ids'] );
+
+				// post_parent variant.
+				} else {
+					$images = wp_parse_id_list(
+						get_children( array(
+							'fields'         => 'ids',
+							'order'          => 'ASC',
+							'orderby'        => 'menu_order ID',
+							'post_mime_type' => 'image',
+							'post_parent'    => $extra_args['post']->ID,
+							'post_status'    => 'inherit',
+							'post_type'      => 'attachment',
+						) )
+					);
+				}
+
+				// Extract the data we need from each image in this gallery.
+				foreach ( $images as $image_id ) {
+					$image  = wp_get_attachment_image_src( $image_id, $image_size );
+					$data[] = array(
+						'url'    => $image[0],
+						'width'  => $image[1],
+						'height' => $image[2],
+
+						'gallery_id' => 1 + $gallery_id,
+					);
+				}
+
+				$galleries_data[] = $data;
 			}
-
-			$galleries_data[] = $data;
 		}
 
 		/** This filter is documented in bp-core/bp-core-classes.php */
