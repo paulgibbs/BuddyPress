@@ -3878,11 +3878,11 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
+	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args = array() ) {
 		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
 		$galleries = get_post_galleries( $extra_args['post'], false );
 		if ( empty( $galleries ) ) {
