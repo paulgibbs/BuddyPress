@@ -3171,7 +3171,8 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['links'] = count( $data['links'] );
-		return $data;
+
+		return apply_filters( 'bp_media_extractor_links', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3233,7 +3234,8 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['mentions'] = count( $data['mentions'] );
-		return $data;
+
+		return apply_filters( 'bp_media_extractor_mentions', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3318,7 +3320,8 @@ class BP_Media_Extractor {
 
 		// Update image count.
 		$media['has']['images'] = count( $media['images'] );
-		return $media;
+
+		return apply_filters( 'bp_media_extractor_images', $media, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3369,7 +3372,8 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['shortcodes'] = count( $data['shortcodes'] );
-		return $data;
+
+		return apply_filters( 'bp_media_extractor_shortcodes', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3434,7 +3438,8 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['embeds'] = count( $data['embeds'] );
-		return $data;
+
+		return apply_filters( 'bp_media_extractor_embeds', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3509,7 +3514,8 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['audio'] = count( $data['audio'] );
-		return $data;
+	
+		return apply_filters( 'bp_media_extractor_audio', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3565,7 +3571,8 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['videos'] = count( $data['videos'] );
-		return $data;
+
+		return apply_filters( 'bp_media_extractor_videos', $data, $richtext, $plaintext, $extra_args );
 	}
 
 
@@ -3640,7 +3647,7 @@ class BP_Media_Extractor {
 			$galleries_data[] = $data;
 		}
 
-		return $galleries_data;
+		return apply_filters( 'bp_media_extractor_galleries', $galleries_data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3717,7 +3724,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		// Update image count.
 		$existing_images['has']['images'] = count( $existing_images['images'] );
 
-		return $existing_images;
+		return apply_filters( 'bp_media_extractor_post_images', $existing_images, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3752,7 +3759,8 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		}
 
 		$image = wp_get_attachment_image_src( $thumb, $image_size );
-		return $image;
+
+		return apply_filters( 'bp_media_extractor_post_featured_images', $image, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3833,6 +3841,6 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			$galleries_data[] = $data;
 		}
 
-		return $galleries_data;
+		return apply_filters( 'bp_media_extractor_post_galleries', $galleries_data, $richtext, $plaintext, $extra_args );
 	}
 }
