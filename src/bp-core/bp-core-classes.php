@@ -3024,7 +3024,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param int $what_to_extract Media type to extract (optional).
-	 * @param array $extra_args Contains data that an implementation might need beyond the defaults (optional).
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $audio
@@ -3137,7 +3137,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $links
@@ -3185,7 +3185,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $mentions
@@ -3245,7 +3245,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $images
@@ -3332,7 +3332,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $shortcodes
@@ -3381,7 +3381,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $embeds
@@ -3447,7 +3447,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $audio
@@ -3523,7 +3523,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $video
@@ -3585,7 +3585,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
@@ -3676,7 +3676,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 *
 	 * @param string $richtext
 	 * @param int $what_to_extract Media type to extract (optional).
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array|WP_Error
 	 * @since BuddyPress (2.3.0)
 	 */
@@ -3693,7 +3693,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
