@@ -2976,9 +2976,10 @@ abstract class BP_Recursive_Query {
 }
 
 /**
- * Extracts metadata about types of content in some kind of block of text.
+ * Extracts media from text.
  *
- * The supported types are: (everything), links, mentions, images, shortcodes, embeds, audio, video.
+ * The supported types are links, mentions, images, shortcodes, embeds, audio, video, and "all".
+ * This is what each type extracts:
  *
  * Links:      <a href="http://example.com">
  * Mentions:   @name
@@ -3002,8 +3003,9 @@ abstract class BP_Recursive_Query {
  */
 class BP_Media_Extractor {
 	/**
-	 * Bitmasks to filter media type.
+	 * Media type.
 	 *
+	 * @since BuddyPress (2.3.0)
 	 * @var int
 	 */
 	const ALL        = 255;
@@ -3017,12 +3019,67 @@ class BP_Media_Extractor {
 
 
 	/**
-	 * Extract content metadata from a block of text.
+	 * Extract media from text.
 	 *
-	 * @param string $richtext
-	 * @param int $what_to_extract A mask of content types to extract. Defaults to BP_Media_Extractor::ALL.
+	 * @param string $richtext Content to parse.
+	 * @param int $what_to_extract Media type to extract (optional).
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array|WP_Error
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $audio
+	 *         @type int $embeds
+	 *         @type int $images
+	 *         @type int $links
+	 *         @type int $mentions
+	 *         @type int $shortcodes
+	 *         @type int $video
+	 *     }
+	 *     @type array $audio Extracted audio. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Either "html" or "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 *     @type array $embeds Extracted oEmbeds. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url oEmbed link.
+	 *     }
+	 *     @type array $images Extracted images. {
+	 *         Array of extracted media.
+	 *
+	 *         @type int $gallery_id Gallery ID. Optional, not always set.
+	 *         @type int $height Width of image. If unknown, set to 0.
+	 *         @type string $source Media source. Either "html" or "galleries".
+	 *         @type string $url Link to image.
+	 *         @type int $width Width of image. If unknown, set to 0.
+	 *     }
+	 *     @type array $links Extracted URLs. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url Link.
+	 *     }
+	 *     @type array $mentions Extracted mentions. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $name @mention.
+	 *         @type string $user_id User ID. Optional, only set if Activity component enabled.
+	 *     }
+	 *     @type array $shortcodes Extracted shortcodes. {
+	 *         Array of extracted media.
+	 *
+	 *         @type array $attributes Key/value pairs of the shortcodes attributes (if any).
+	 *         @type string $content Text wrapped by the shortcode.
+	 *         @type string $type Shortcode type.
+	 *         @type string $oringal The entire shortcode.
+	 *     }
+	 *     @type array $videos Extracted video. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Currently only "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
@@ -3080,28 +3137,39 @@ class BP_Media_Extractor {
 	 */
 
 	/**
-	 * Extract `<a href>` tags from a block of text.
+	 * Extract `<a href>` tags from text.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $links
+	 *     }
+	 *     @type array $links Extracted URLs. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url Link.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_links( $richtext, $plaintext, $extra_args = array() ) {
-		$data = array( 'has' => array(), 'links' => array() );
+		$data = array( 'has' => array( 'links' => 0 ), 'links' => array() );
 
 		// Matches: href="text" and href='text'
-		preg_match_all( '#href=(["\'])([^"\']+)\1#i', $richtext, $matches );
+		if ( stripos( $richtext, 'href=' ) !== false ) {
+			preg_match_all( '#href=(["\'])([^"\']+)\1#i', $richtext, $matches );
 
-		if ( ! empty( $matches[2] ) ) {
-			$matches[2] = array_unique( $matches[2] );
+			if ( ! empty( $matches[2] ) ) {
+				$matches[2] = array_unique( $matches[2] );
 
-			foreach ( $matches[2] as $link_src ) {
-				$link_src = esc_url_raw( $link_src );
+				foreach ( $matches[2] as $link_src ) {
+					$link_src = esc_url_raw( $link_src );
 
-				if ( $link_src ) {
-					$data['links'][] = array( 'url' => $link_src );
+					if ( $link_src ) {
+						$data['links'][] = array( 'url' => $link_src );
+					}
 				}
 			}
 		}
@@ -3111,23 +3179,31 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract @mentions tags from a block of text.
+	 * Extract @mentions tags from text.
 	 *
-	 * If the Activity component is enabled, we use it to parse out any @names. A consequence
-	 * to note is that the "name" mentioned must match a real user account. If it's a made-up
-	 * @name, then it isn't extracted.
+	 * If the Activity component is enabled, it is used to parse @mentions.
+	 * The mentioned "name" must match a user account, otherwise it is discarded.
 	 *
-	 * If the Activity component is disabled, any @name is extracted (both those matching
-	 * real accounts, and those made-up).
+	 * If the Activity component is disabled, any @mentions are extracted.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $mentions
+	 *     }
+	 *     @type array $mentions Extracted mentions. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $name @mention.
+	 *         @type string $user_id User ID. Optional, only set if Activity component enabled.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_mentions( $richtext, $plaintext, $extra_args = array() ) {
-		$data     = array( 'has' => array(), 'mentions' => array() );
+		$data     = array( 'has' => array( 'mentions' => 0 ), 'mentions' => array() );
 		$mentions = array();
 
 		// If the Activity component is active, use it to parse @mentions.
@@ -3139,10 +3215,12 @@ class BP_Media_Extractor {
 
 		// If the Activity component is disabled, instead do a basic parse.
 		} else {
-			preg_match_all( '/[@]+([A-Za-z0-9-_\.@]+)\b/', $plaintext, $matches );
+			if ( strpos( $plaintext, '@' ) !== false ) {
+				preg_match_all( '/[@]+([A-Za-z0-9-_\.@]+)\b/', $plaintext, $matches );
 
-			if ( ! empty( $matches[1] ) ) {
-				$mentions = array_unique( array_map( 'strtolower', $matches[1] ) );
+				if ( ! empty( $matches[1] ) ) {
+					$mentions = array_unique( array_map( 'strtolower', $matches[1] ) );
+				}
 			}
 		}
 
@@ -3163,67 +3241,83 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract images from `<img src>` tags, and galleries, in a block of text.
+	 * Extract images from `<img src>` tags and galleries, from text.
 	 *
-	 * If an extracted image is in the Media Library, then its resolution will be included.
+	 * If an image is in the Media Library, then its resolution is included in the results.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $images
+	 *     }
+	 *     @type array $images Extracted images. {
+	 *         Array of extracted media.
+	 *
+	 *         @type int $gallery_id Gallery ID. Optional, not always set.
+	 *         @type int $height Width of image. If unknown, set to 0.
+	 *         @type string $source Media source. Either "html" or "galleries".
+	 *         @type string $url Link to image.
+	 *         @type int $width Width of image. If unknown, set to 0.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
-		$media     = array( 'has' => array(), 'images' => array() );
+		$media     = array( 'has' => array( 'images' => 0 ), 'images' => array() );
 		$galleries = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
-		preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
-		// <img>.
-		if ( ! empty( $img_srcs[2] ) ) {
-			$img_srcs[2] = array_unique( $img_srcs[2] );
+		if ( stripos( $richtext, 'src=' ) !== false ) {
+			preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
-			foreach ( $img_srcs[2] as $image_src ) {
-				// Skip data URIs.
-				if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
-					continue;
-				}
+			// <img>.
+			if ( ! empty( $img_srcs[2] ) ) {
+				$img_srcs[2] = array_unique( $img_srcs[2] );
 
-				$image_src = esc_url_raw( $image_src );
-				if ( ! $image_src ) {
-					continue;
-				}
+				foreach ( $img_srcs[2] as $image_src ) {
+					// Skip data URIs.
+					if ( strtolower( substr( $image_src, 0, 5 ) ) === 'data:' ) {
+						continue;
+					}
 
-				$media['images'][] = array(
-					'source' => 'html',
-					'url'    => $image_src,
-
-					// The image resolution isn't available, but we need to set the keys anyway.
-					'height' => 0,
-					'width'  => 0,
-				);
-			}
-		}
-
-		// Galleries.
-		if ( ! empty( $galleries ) ) {
-			foreach ( $galleries as $gallery ) {
-				foreach ( $gallery as $image ) {
-					$image_url = esc_url_raw( $image['url'] );
-					if ( ! $image_url ) {
+					$image_src = esc_url_raw( $image_src );
+					if ( ! $image_src ) {
 						continue;
 					}
 
 					$media['images'][] = array(
-						'gallery_id' => $image['gallery_id'],
-						'source'     => 'galleries',
-						'url'        => $image_url,
-						'width'      => $image['width'],
-						'height'     => $image['height'],
+						'source' => 'html',
+						'url'    => $image_src,
+
+						// The image resolution isn't available, but we need to set the keys anyway.
+						'height' => 0,
+						'width'  => 0,
 					);
 				}
 			}
 
-			$media['has']['galleries'] = count( $galleries );
+			// Galleries.
+			if ( ! empty( $galleries ) ) {
+				foreach ( $galleries as $gallery ) {
+					foreach ( $gallery as $image ) {
+						$image_url = esc_url_raw( $image['url'] );
+						if ( ! $image_url ) {
+							continue;
+						}
+
+						$media['images'][] = array(
+							'gallery_id' => $image['gallery_id'],
+							'source'     => 'galleries',
+							'url'        => $image_url,
+							'width'      => $image['width'],
+							'height'     => $image['height'],
+						);
+					}
+				}
+
+				$media['has']['galleries'] = count( $galleries );
+			}
 		}
 
 		// Update image count.
@@ -3232,35 +3326,49 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract shortcodes from a block of text.
+	 * Extract shortcodes from text.
 	 *
-	 * This includes any shortcodes indirectly covered by any of the other media extraction types.
+	 * This includes any shortcodes indirectly used by other media extraction types.
 	 * For example, [gallery] and [audio].
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $shortcodes
+	 *     }
+	 *     @type array $shortcodes Extracted shortcodes. {
+	 *         Array of extracted media.
+	 *
+	 *         @type array $attributes Key/value pairs of the shortcodes attributes (if any).
+	 *         @type string $content Text wrapped by the shortcode.
+	 *         @type string $type Shortcode type.
+	 *         @type string $oringal The entire shortcode.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_shortcodes( $richtext, $plaintext, $extra_args = array() ) {
-		$data = array( 'has' => array(), 'shortcodes' => array() );
+		$data = array( 'has' => array( 'shortcodes' => 0 ), 'shortcodes' => array() );
 
 		// Match any registered WordPress shortcodes.
- 		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
+		if ( stripos( $richtext, 'src=' ) !== false ) {
+	 		preg_match_all( '/' . get_shortcode_regex() . '/s', $richtext, $matches );
 
-		if ( ! empty( $matches[2] ) ) {
-			foreach ( $matches[2] as $i => $shortcode_name ) {
-				$attrs = shortcode_parse_atts( $matches[3][ $i ] );
-				$attrs = ( ! $attrs ) ? array() : $attrs;
+			if ( ! empty( $matches[2] ) ) {
+				foreach ( $matches[2] as $i => $shortcode_name ) {
+					$attrs = shortcode_parse_atts( $matches[3][ $i ] );
+					$attrs = ( ! $attrs ) ? array() : $attrs;
 
-				$shortcode               = array();
-				$shortcode['attributes'] = $attrs;             // Attributes
-				$shortcode['content']    = $matches[5][ $i ];  // Content
-				$shortcode['type']       = $shortcode_name;    // Shortcode
-				$shortcode['original']   = $matches[0][ $i ];  // Entire shortcode
+					$shortcode               = array();
+					$shortcode['attributes'] = $attrs;             // Attributes
+					$shortcode['content']    = $matches[5][ $i ];  // Content
+					$shortcode['type']       = $shortcode_name;    // Shortcode
+					$shortcode['original']   = $matches[0][ $i ];  // Entire shortcode
 
-				$data['shortcodes'][] = $shortcode;
+					$data['shortcodes'][] = $shortcode;
+				}
 			}
 		}
 
@@ -3269,16 +3377,25 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract any URL matching a registered oEmbeds handler from a block of text.
+	 * Extract any URL, matching a registered oEmbed endpoint, from text.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $embeds
+	 *     }
+	 *     @type array $embeds Extracted oEmbeds. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $url oEmbed link.
+	 *     }
+	 * }
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_embeds( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'embeds' => array() );
+		$data   = array( 'has' => array( 'embeds' => 0 ), 'embeds' => array() );
 		$embeds = array();
 
 		if ( ! function_exists( '_wp_oembed_get_object' ) ) {
@@ -3287,32 +3404,34 @@ class BP_Media_Extractor {
 
 
 		// Matches any links on their own lines. They may be oEmbeds.
-		preg_match_all( '#^\s*(https?://[^\s"]+)\s*$#im', $richtext, $matches );
+		if ( stripos( $richtext, 'http' ) !== false ) {
+			preg_match_all( '#^\s*(https?://[^\s"]+)\s*$#im', $richtext, $matches );
 
-		if ( ! empty( $matches[1] ) ) {
-			$matches[1] = array_unique( $matches[1] );
-			$oembed     = _wp_oembed_get_object();
+			if ( ! empty( $matches[1] ) ) {
+				$matches[1] = array_unique( $matches[1] );
+				$oembed     = _wp_oembed_get_object();
 
-			foreach ( $matches[1] as $link ) {
-				// Skip data URIs.
-				if ( strtolower( substr( $link, 0, 5 ) ) === 'data:' ) {
-					continue;
-				}
-
-				foreach ( $oembed->providers as $matchmask => $oembed_data ) {
-					list( , $is_regex ) = $oembed_data;
-
-					// Turn asterisk-type provider URLs into regexs.
-					if ( ! $is_regex ) {
-						$matchmask = '#' . str_replace( '___wildcard___', '(.+)', preg_quote( str_replace( '*', '___wildcard___', $matchmask ), '#' ) ) . '#i';
-						$matchmask = preg_replace( '|^#http\\\://|', '#https?\://', $matchmask );
+				foreach ( $matches[1] as $link ) {
+					// Skip data URIs.
+					if ( strtolower( substr( $link, 0, 5 ) ) === 'data:' ) {
+						continue;
 					}
 
-					// Check whether this "link" is really an oEmbed.
-					if ( preg_match( $matchmask, $link ) ) {
-						$data['embeds'][] = array( 'url' => $link );
+					foreach ( $oembed->providers as $matchmask => $oembed_data ) {
+						list( , $is_regex ) = $oembed_data;
 
-						break;
+						// Turn asterisk-type provider URLs into regexs.
+						if ( ! $is_regex ) {
+							$matchmask = '#' . str_replace( '___wildcard___', '(.+)', preg_quote( str_replace( '*', '___wildcard___', $matchmask ), '#' ) ) . '#i';
+							$matchmask = preg_replace( '|^#http\\\://|', '#https?\://', $matchmask );
+						}
+
+						// Check whether this "link" is really an oEmbed.
+						if ( preg_match( $matchmask, $link ) ) {
+							$data['embeds'][] = array( 'url' => $link );
+
+							break;
+						}
 					}
 				}
 			}
@@ -3323,18 +3442,27 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract audio from [audio] shortcodes, and `<a href="*.mp3">` tags, in a block of text.
+	 * Extract [audio] shortcodes and `<a href="*.mp3">` tags, from text.
 	 *
-	 * See wp_get_audio_extensions() for supported audio formats.
-	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $audio
+	 *     }
+	 *     @type array $audio Extracted audio. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Either "html" or "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 * }
+	 * @see wp_get_audio_extensions() for supported audio formats.
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_audio( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'audio' => array() );
+		$data   = array( 'has' => array( 'audio' => 0 ), 'audio' => array() );
 		$audios = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
 		$links  = $this->extract_links( $richtext, $plaintext, $extra_args );
 
@@ -3389,18 +3517,27 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract video from [video] shortcodes.
+	 * Extract [video] shortcodes from text.
 	 *
-	 * See wp_get_video_extensions() for supported audio formats.
-	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * @return array {
+	 *     @type array $has Extracted media counts. {
+	 *         @type int $video
+	 *     }
+	 *     @type array $videos Extracted video. {
+	 *         Array of extracted media.
+	 *
+	 *         @type string $source Media source. Currently only "shortcodes".
+	 *         @type string $url Link to audio.
+	 *     }
+	 * }
+	 * @see wp_get_video_extensions() for supported video formats.
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_video( $richtext, $plaintext, $extra_args = array() ) {
-		$data   = array( 'has' => array(), 'videos' => array() );
+		$data   = array( 'has' => array( 'videos' => 0 ), 'videos' => array() );
 		$videos = $this->extract_shortcodes( $richtext, $plaintext, $extra_args );
 
 		$video_types = wp_get_video_extensions();
@@ -3435,15 +3572,16 @@ class BP_Media_Extractor {
 		return $data;
 	}
 
+
 	/**
 	 * Helpers and utility methods.
 	 */
 
 	/**
-	 * Extract images from galleries inside a WordPress post.
+	 * Extract images in [galleries] shortcodes from text.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3510,7 +3648,8 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Sanitise and format the $content to help with the content extraction.
+	 * Sanitize and format raw content to prepare for content extraction.
+	 *
 	 * HTML tags and shortcodes are removed, and HTML entities are decoded.
 	 *
 	 * @param string $content
@@ -3523,16 +3662,16 @@ class BP_Media_Extractor {
 }
 
 /**
- * Extracts metadata about types of content in a Post.
+ * Extracts media from a Post.
  *
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	/**
-	 * Extract metadata from a WordPress post.
+	 * Extract media from text.
 	 *
 	 * @param string $richtext
-	 * @param int $what_to_extract A mask of content types to extract. Defaults to BP_Media_Extractor::ALL.
+	 * @param int $what_to_extract Media type to extract (optional).
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array|WP_Error
 	 * @since BuddyPress (2.3.0)
@@ -3546,10 +3685,10 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	}
 
 	/**
-	 *  Extract images from `<img src>` tags, galleries, and featured images, in a block of text.
+	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3585,10 +3724,10 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract a Post's featured image.
+	 * Extract a featured image from a Post.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
@@ -3620,10 +3759,10 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract images from galleries inside a WordPress post.
+	 * Extract images in [galleries] shortcodes from a Post.
 	 *
-	 * @param string $richtext Content to operate on (probably HTML).
-	 * @param string $plaintext Plain text version of $richtext with all markup and shortcodes removed.
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
 	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
