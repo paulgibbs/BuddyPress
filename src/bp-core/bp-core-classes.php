@@ -3022,7 +3022,7 @@ class BP_Media_Extractor {
 	/**
 	 * Extract media from text.
 	 *
-	 * @param string $richtext Content to parse.
+	 * @param string|WP_Post $richtext Content to parse.
 	 * @param int $what_to_extract Media type to extract (optional).
 	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
@@ -3084,8 +3084,16 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
-		$media     = array();
+		$media = array();
+
+		// Support passing a WordPress Post for the $richtext parameter.
+		if ( is_a( $richtext, 'WP_Post' ) ) {
+			$extra_args['post'] = $richtext;
+			$richtext           = $extra_args['post']->post_content;
+		}
+
 		$plaintext = $this->strip_markup( $richtext );
+
 
 		// Extract links.
 		if ( self::LINKS & $what_to_extract ) {
@@ -3663,10 +3671,14 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args = array() ) {
-		$fake_post = new WP_Post( (object) array( 'post_content' => $richtext ) );
+		if ( ! isset( $extra_args['post'] ) || ! is_a( $extra_args['post'], 'WP_Post' ) ) {
+			$post = new WP_Post( (object) array( 'post_content' => $richtext ) );
+		} else {
+			$post = $extra_args['post'];
+		}
 
-		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
-		$galleries      = get_post_galleries( $fake_post, false );
+		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original image.
+		$galleries      = get_post_galleries( $post, false );
 		$galleries_data = array();
 	
 		if ( ! empty( $galleries ) ) {
@@ -3682,6 +3694,7 @@ class BP_Media_Extractor {
 				} else {
 					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
 				}
+
 			} else {
 				$image_size = 'full';
 			}
@@ -3759,23 +3772,6 @@ class BP_Media_Extractor {
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor_Post extends BP_Media_Extractor {
-	/**
-	 * Extract media from text.
-	 *
-	 * @param string $richtext
-	 * @param int $what_to_extract Media type to extract (optional).
-	 * @param array $extra_args Bespoke data for a particular extractor (optional).
-	 * @return array|WP_Error
-	 * @since BuddyPress (2.3.0)
-	 */
-	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
-		if ( empty( $extra_args['post'] ) || ! is_a( $extra_args['post'], 'WP_Post' ) ) {
-			return new WP_Error( 'invalid_post' );
-		}
-
-		return parent::extract( $extra_args['post']->post_content, $what_to_extract, $extra_args );
-	}
-
 	/**
 	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
 	 *
