@@ -2976,7 +2976,7 @@ abstract class BP_Recursive_Query {
 }
 
 /**
- * Extracts media from text.
+ * Extracts media from text. Use {@link extract()}.
  *
  * The supported types are links, mentions, images, shortcodes, embeds, audio, video, and "all".
  * This is what each type extracts:
@@ -2999,6 +2999,7 @@ abstract class BP_Recursive_Query {
  * Video:      [video]
  *             See wp_get_video_extensions() for supported video formats.
  *
+ * @see BP_Media_Extractor::extract() Use this to extract media.
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor {
@@ -3133,7 +3134,7 @@ class BP_Media_Extractor {
 	/**
 	 * Content type specific extraction methods.
 	 *
-	 * You shouldn't need to use these directly; most of the time, just use extract().
+	 * You shouldn't need to use these directly; just use {@link BP_Media_Extractor::extract()}.
 	 */
 
 	/**
@@ -3582,11 +3583,11 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
+	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args = array() ) {
 		$fake_post = new WP_Post( (object) array( 'post_content' => $richtext ) );
 
 		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
