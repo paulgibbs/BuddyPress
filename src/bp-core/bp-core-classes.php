@@ -3122,7 +3122,17 @@ class BP_Media_Extractor {
 			$media = array_merge_recursive( $media, $this->extract_video( $richtext, $plaintext, $extra_args ) );
 		}
 
-		return apply_filters( 'bp_media_extractor_extract', $media, $richtext, $what_to_extract, $extra_args );
+		/**
+		 * Filters media extracted from text.
+		 *
+		 * @param array $media Extracted media. See {@link BP_Media_Extractor::extract()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param int $what_to_extract Media type to extract.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_extract', $media, $richtext, $what_to_extract, $extra_args, $plaintext );
 	}
 
 
@@ -3172,6 +3182,15 @@ class BP_Media_Extractor {
 
 		$data['has']['links'] = count( $data['links'] );
 
+		/**
+		 * Filters links extracted from text.
+		 *
+		 * @param array $data Extracted links. See {@link BP_Media_Extractor::extract_links()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_links', $data, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3185,7 +3204,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Bespoke data for a particular extractor (optional).
+	 * @param array $extra_args Bespoke data for a particular extractor.
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $mentions
@@ -3235,6 +3254,15 @@ class BP_Media_Extractor {
 
 		$data['has']['mentions'] = count( $data['mentions'] );
 
+		/**
+		 * Filters @mentions extracted from text.
+		 *
+		 * @param array $data Extracted @mentions. See {@link BP_Media_Extractor::extract_mentions()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor (optional).
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_mentions', $data, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3321,6 +3349,15 @@ class BP_Media_Extractor {
 		// Update image count.
 		$media['has']['images'] = count( $media['images'] );
 
+		/**
+		 * Filters images extracted from text.
+		 *
+		 * @param array $media Extracted images. See {@link BP_Media_Extractor::extract_images()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_images', $media, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3373,6 +3410,15 @@ class BP_Media_Extractor {
 
 		$data['has']['shortcodes'] = count( $data['shortcodes'] );
 
+		/**
+		 * Filters shortcodes extracted from text.
+		 *
+		 * @param array $data Extracted shortcodes. See {@link BP_Media_Extractor::extract_shortcodes()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_shortcodes', $data, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3439,6 +3485,15 @@ class BP_Media_Extractor {
 
 		$data['has']['embeds'] = count( $data['embeds'] );
 
+		/**
+		 * Filters embeds extracted from text.
+		 *
+		 * @param array $data Extracted embeds. See {@link BP_Media_Extractor::extract_embeds()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_embeds', $data, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3514,7 +3569,16 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['audio'] = count( $data['audio'] );
-	
+
+		/**
+		 * Filters audio extracted from text.
+		 *
+		 * @param array $data Extracted audio. See {@link BP_Media_Extractor::extract_audio()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_audio', $data, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3572,6 +3636,15 @@ class BP_Media_Extractor {
 
 		$data['has']['videos'] = count( $data['videos'] );
 
+		/**
+		 * Filters videos extracted from text.
+		 *
+		 * @param array $data Extracted videos. See {@link BP_Media_Extractor::extract_videos()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_videos', $data, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3647,6 +3720,15 @@ class BP_Media_Extractor {
 			$galleries_data[] = $data;
 		}
 
+		/**
+		 * Filters image galleries extracted from text.
+		 *
+		 * @param array $galleries_data Galleries. See {@link BP_Media_Extractor::extract_images_from_galleries()}.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_galleries', $galleries_data, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3661,6 +3743,14 @@ class BP_Media_Extractor {
 	 */
 	protected function strip_markup( $richtext, $richtext ) {
 		$plaintext = strip_shortcodes( html_entity_decode( strip_tags( $richtext ) ) );
+
+		/**
+		 * Filters the generated plain text version of the content passed to the extractor.
+		 *
+		 * @param array $plaintext Generated plain text.
+		 * @param string $richtext Original content
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_strip_markup', $plaintext, $richtext );
 	}
 }
@@ -3724,6 +3814,17 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		// Update image count.
 		$existing_images['has']['images'] = count( $existing_images['images'] );
 
+		/**
+		 * Filters images extracted from text.
+		 *
+		 * Similar to "bp_media_extractor_post_images" but this filter includes featured images in the results.
+		 *
+		 * @param array $existing_images Extracted images. See {@link BP_Media_Extractor::extract_images()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_post_images', $existing_images, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3760,6 +3861,15 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 
 		$image = wp_get_attachment_image_src( $thumb, $image_size );
 
+		/**
+		 * Filters featured images extracted from a WordPress Post.
+		 *
+		 * @param array $image Extracted images. See {@link BP_Media_Extractor_Post::extract_images()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
 		return apply_filters( 'bp_media_extractor_post_featured_images', $image, $richtext, $plaintext, $extra_args );
 	}
 
@@ -3841,6 +3951,7 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 			$galleries_data[] = $data;
 		}
 
-		return apply_filters( 'bp_media_extractor_post_galleries', $galleries_data, $richtext, $plaintext, $extra_args );
+		/** This filter is documented in bp-core/bp-core-classes.php */
+		return apply_filters( 'bp_media_extractor_galleries', $galleries_data, $richtext, $plaintext, $extra_args );
 	}
 }
