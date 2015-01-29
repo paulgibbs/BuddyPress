@@ -3739,7 +3739,7 @@ class BP_Media_Extractor {
 	 * @return string
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected function strip_markup( $richtext, $richtext ) {
+	protected function strip_markup( $richtext ) {
 		$plaintext = strip_shortcodes( html_entity_decode( strip_tags( $richtext ) ) );
 
 		/**
