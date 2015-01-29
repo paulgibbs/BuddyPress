@@ -3024,7 +3024,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param int $what_to_extract Media type to extract (optional).
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Contains data that an implementation might need beyond the defaults (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $audio
@@ -3084,50 +3084,45 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
-		$extracted = array();
-		$plaintext = $this->make_plaintext_content( $richtext );
-
-
-		/**
-		 * Media extraction.
-		 */
+		$media     = array();
+		$plaintext = $this->strip_markup( $richtext );
 
 		// Extract links.
 		if ( self::LINKS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_links( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_links( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract mentions.
 		if ( self::MENTIONS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_mentions( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_mentions( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract images.
 		if ( self::IMAGES & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_images( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_images( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract shortcodes.
 		if ( self::SHORTCODES & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_shortcodes( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_shortcodes( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract oEmbeds.
 		if ( self::EMBEDS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_embeds( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_embeds( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract audio.
 		if ( self::AUDIO & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_audio( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_audio( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract video.
 		if ( self::VIDEOS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_video( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_video( $richtext, $plaintext, $extra_args ) );
 		}
 
-		return $extracted;
+		return apply_filters( 'bp_media_extractor_extract', $media, $richtext, $what_to_extract, $extra_args );
 	}
 
 
