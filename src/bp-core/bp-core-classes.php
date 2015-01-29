@@ -3322,28 +3322,28 @@ class BP_Media_Extractor {
 					);
 				}
 			}
+		}
 
-			// Galleries.
-			if ( ! empty( $galleries ) ) {
-				foreach ( $galleries as $gallery ) {
-					foreach ( $gallery as $image ) {
-						$image_url = esc_url_raw( $image['url'] );
-						if ( ! $image_url ) {
-							continue;
-						}
-
-						$media['images'][] = array(
-							'gallery_id' => $image['gallery_id'],
-							'source'     => 'galleries',
-							'url'        => $image_url,
-							'width'      => $image['width'],
-							'height'     => $image['height'],
-						);
+		// Galleries.
+		if ( ! empty( $galleries ) ) {
+			foreach ( $galleries as $gallery ) {
+				foreach ( $gallery as $image ) {
+					$image_url = esc_url_raw( $image['url'] );
+					if ( ! $image_url ) {
+						continue;
 					}
-				}
 
-				$media['has']['galleries'] = count( $galleries );
+					$media['images'][] = array(
+						'gallery_id' => $image['gallery_id'],
+						'source'     => 'galleries',
+						'url'        => $image_url,
+						'width'      => $image['width'],
+						'height'     => $image['height'],
+					);
+				}
 			}
+
+			$media['has']['galleries'] = count( $galleries );
 		}
 
 		// Update image count.
