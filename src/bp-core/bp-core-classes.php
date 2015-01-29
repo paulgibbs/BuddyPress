@@ -3648,12 +3648,13 @@ class BP_Media_Extractor {
 	 *
 	 * HTML tags and shortcodes are removed, and HTML entities are decoded.
 	 *
-	 * @param string $content
+	 * @param string $richtext
 	 * @return string
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected function make_plaintext_content( $content ) {
-		return strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
+	protected function strip_markup( $richtext, $richtext ) {
+		$plaintext = strip_shortcodes( html_entity_decode( strip_tags( $richtext ) ) );
+		return apply_filters( 'bp_media_extractor_strip_markup', $plaintext, $richtext );
 	}
 }
 
