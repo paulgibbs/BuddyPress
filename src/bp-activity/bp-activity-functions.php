@@ -2685,7 +2685,8 @@ function bp_activity_create_summary( $content, $activity ) {
 	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
 	 * @since BuddyPress (2.3.0)
 	 */
-	$extractor = new apply_filters( 'bp_activity_create_summary_extractor_class', 'BP_Media_Extractor', $content, $activity );
+	$extractor = apply_filters( 'bp_activity_create_summary_extractor_class', 'BP_Media_Extractor', $content, $activity );
+	$extractor = new $extractor;
 
 	/**
 	 * Filter the arguments passed to the media extractor when creating an Activity summary.
