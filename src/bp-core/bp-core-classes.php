@@ -3744,6 +3744,51 @@ class BP_Media_Extractor {
 	}
 
 	/**
+	 * Extract the featured image from a Post.
+	 *
+	 * @param string $richtext Content to parse.
+	 * @param string $plaintext Sanitized version of the content.
+	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
+	 * @return array
+	 * @since BuddyPress (2.3.0)
+	 */
+	protected function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
+		$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
+		$image = array();
+
+		if ( $thumb ) {
+			// Validate the size of the images requested.
+			if ( isset( $extra_args['width'] ) ) {
+				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+					// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+				}
+
+				if ( ctype_digit( $extra_args['width'] ) ) {
+					$image_size = array( $extra_args['width'], $extra_args['height'] );
+				} else {
+					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				}
+			} else {
+				$image_size = 'full';
+			}
+
+			$image = wp_get_attachment_image_src( $thumb, $image_size );
+		}
+
+		/**
+		 * Filters featured images extracted from a WordPress Post.
+		 *
+		 * @param array $image Extracted images. See {@link BP_Media_Extractor_Post::extract_images()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_featured_images', $image, $richtext, $plaintext, $extra_args );
+	}
+
+	/**
 	 * Sanitize and format raw content to prepare for content extraction.
 	 *
 	 * HTML tags and shortcodes are removed, and HTML entities are decoded.
@@ -3772,6 +3817,8 @@ class BP_Media_Extractor {
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor_Post extends BP_Media_Extractor {
+	//djpaultodo we are here and are refactoring this class to use wp_post. see if this can be
+	//merged into the parent class so we can make it static again. yay?
 	/**
 	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
 	 *
@@ -3820,51 +3867,6 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 		 * @since BuddyPress (2.3.0)
 		 */
 		return apply_filters( 'bp_media_extractor_post_images', $existing_images, $richtext, $plaintext, $extra_args );
-	}
-
-	/**
-	 * Extract a featured image from a Post.
-	 *
-	 * @param string $richtext Content to parse.
-	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
-	 * @return array
-	 * @since BuddyPress (2.3.0)
-	 */
-	protected function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
-		$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
-		$image = array();
-
-		if ( $thumb ) {
-			// Validate the size of the images requested.
-			if ( isset( $extra_args['width'] ) ) {
-				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-					// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
-					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
-				}
-
-				if ( ctype_digit( $extra_args['width'] ) ) {
-					$image_size = array( $extra_args['width'], $extra_args['height'] );
-				} else {
-					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
-				}
-			} else {
-				$image_size = 'full';
-			}
-
-			$image = wp_get_attachment_image_src( $thumb, $image_size );
-		}
-
-		/**
-		 * Filters featured images extracted from a WordPress Post.
-		 *
-		 * @param array $image Extracted images. See {@link BP_Media_Extractor_Post::extract_images()} for format.
-		 * @param string $richtext Content to parse.
-		 * @param string $plaintext Copy of $richtext without any markup.
-		 * @param array $extra_args Bespoke data for a particular extractor.
-		 * @since BuddyPress (2.3.0)
-		 */
-		return apply_filters( 'bp_media_extractor_post_featured_images', $image, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
