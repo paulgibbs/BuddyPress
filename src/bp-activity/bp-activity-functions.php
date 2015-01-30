@@ -2703,6 +2703,11 @@ function bp_activity_create_summary( $content, $activity ) {
 	// Extract media information from the $content.
 	$media = $extractor->extract( $content, BP_Media_Extractor::ALL, $args );
 
+	// If we converted $content to an object earlier, flip it back to a string.
+	if ( is_a( $content, 'WP_Post' ) ) {
+		$content = $content->post_content;
+	}
+
 	$para_count     = substr_count( strtolower( wpautop( $content ) ), '<p>' );
 	$has_audio      = ! empty( $media['has']['audio'] )           && $media['has']['audio'];
 	$has_videos     = ! empty( $media['has']['videos'] )          && $media['has']['videos'];
@@ -2727,7 +2732,7 @@ function bp_activity_create_summary( $content, $activity ) {
 			$use_media_type = 'embeds';
 		} elseif ( $has_audio ) {
 			$use_media_type = 'audio';
-		} elseif ( $has_video ) {
+		} elseif ( $has_videos ) {
 			$use_media_type = 'videos';
 		}
 	}
@@ -2759,7 +2764,7 @@ function bp_activity_create_summary( $content, $activity ) {
 		 * Filter the results of the media extractor when creating an Activity summary.
 		 *
 		 * @param array $extracted_media Extracted media item. See {@link BP_Media_Extractor::extract()} for format.
-		 * @param string|WP_Post $content Content of the activity item, or Post object if activity type is "new_blog_post".
+		 * @param string $content Content of the activity item.
 		 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
 		 * @param array $media All results from the media extraction. See {@link BP_Media_Extractor::extract()} for format.
 		 * @param string $use_media_type The kind of media item that was preferentially extracted.
@@ -2794,7 +2799,7 @@ function bp_activity_create_summary( $content, $activity ) {
 	 * Filters the newly-generated summary for the activity item.
 	 *
 	 * @param string $summary Activity summary HTML.
-	 * @param string $content $content Content of the activity item, or Post object if activity type is "new_blog_post".
+	 * @param string $content $content Content of the activity item.
 	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
 	 * @param array $extracted_media Media item extracted. See {@link BP_Media_Extractor::extract()} for format.
 	 * @since BuddyPress (2.3.0)

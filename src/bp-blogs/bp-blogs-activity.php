@@ -377,7 +377,7 @@ function bp_blogs_record_activity( $args = '' ) {
 		 * @param string $value Content for the activity stream.
 		 * @param array  $r     Array of arguments used for the activity stream item.
 		 */
-		$r['content'] = apply_filters( 'bp_blogs_record_activity_content', bp_activity_create_summary( $r['content'] ), $r['content'], $r );
+		$r['content'] = apply_filters( 'bp_blogs_record_activity_content', bp_activity_create_summary( $r['content'], $r ), $r['content'], $r );
 	}
 
 	// Check for an existing entry and update if one exists.
