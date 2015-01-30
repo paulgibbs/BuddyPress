@@ -3275,7 +3275,7 @@ class BP_Media_Extractor {
 	}
 
 	/**
-	 * Extract images from `<img src>` tags and galleries, from text.
+	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
 	 *
 	 * If an image is in the Media Library, then its resolution is included in the results.
 	 *
@@ -3299,9 +3299,13 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
-		$media     = array( 'has' => array( 'images' => 0 ), 'images' => array() );
-		$galleries = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
+		$media = array( 'has' => array( 'images' => 0 ), 'images' => array() );
 
+		$featured_image = $this->extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
+		$galleries      = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
+
+
+		// `<img src>` tags.
 		if ( stripos( $richtext, 'src=' ) !== false ) {
 			preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
@@ -3354,8 +3358,25 @@ class BP_Media_Extractor {
 			$media['has']['galleries'] = count( $galleries );
 		}
 
+		// Featured images (aka thumbnails).
+		if ( ! empty( $featured_image ) ) {
+			$image_url = esc_url_raw( $featured_image[0] );
+
+			if ( $image_url ) {
+				$media['images'][] = array(
+					'source' => 'featured_images',
+					'url'    => $image_url,
+					'width'  => $featured_image[1],
+					'height' => $featured_image[2],
+				);
+
+				$media['has']['featured_images'] = 1;
+			}
+		}
+
 		// Update image count.
 		$media['has']['images'] = count( $media['images'] );
+
 
 		/**
 		 * Filters images extracted from text.
@@ -3699,20 +3720,34 @@ class BP_Media_Extractor {
 				$image_size = 'full';
 			}
 
-
 			/**
-			 * There are two variants of gallery shortcode; only the first is handled here.
+			 * There are two variants of gallery shortcode.
 			 *
 			 * One kind specifies the image (post) IDs via an `ids` parameter.
 			 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
 			 */
+
 			foreach ( $galleries as $gallery_id => $gallery ) {
 				$data   = array();
 				$images = array();
 
-				// ids= variant.
+				// Gallery ids= variant.
 				if ( isset( $gallery['ids'] ) ) {
 					$images = wp_parse_id_list( $gallery['ids'] );
+
+				// Gallery post_parent variant.
+				} elseif ( isset( $extra_args['post'] ) ) {
+					$images = wp_parse_id_list(
+						get_children( array(
+							'fields'         => 'ids',
+							'order'          => 'ASC',
+							'orderby'        => 'menu_order ID',
+							'post_mime_type' => 'image',
+							'post_parent'    => $extra_args['post']->ID,
+							'post_status'    => 'inherit',
+							'post_type'      => 'attachment',
+						) )
+					);
 				}
 
 				// Extract the data we need from each image in this gallery.
@@ -3753,8 +3788,12 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
-		$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
 		$image = array();
+		$thumb = 0;
+
+		if ( isset( $extra_args['post'] ) ) {
+			$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
+		}
 
 		if ( $thumb ) {
 			// Validate the size of the images requested.
@@ -3817,58 +3856,6 @@ class BP_Media_Extractor {
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor_Post extends BP_Media_Extractor {
-	//djpaultodo we are here and are refactoring this class to use wp_post. see if this can be
-	//merged into the parent class so we can make it static again. yay?
-	/**
-	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
-	 *
-	 * @param string $richtext Content to parse.
-	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Bespoke data for a particular extractor (optional).
-	 * @return array
-	 * @since BuddyPress (2.3.0)
-	 */
-	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
-		$existing_images = parent::extract_images( $richtext, $plaintext, $extra_args );
-		$featured_image  = $this->extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
-
-		// Featured images (aka thumbnails).
-		if ( ! empty( $featured_image ) ) {
-			$image_url = esc_url_raw( $featured_image[0] );
-			if ( ! $image_url ) {
-				continue;
-			}
-
-			$new_images = array( 'images' => array() );
-
-			$new_images['images'][] = array(
-				'source' => 'featured_images',
-				'url'    => $image_url,
-				'width'  => $featured_image[1],
-				'height' => $featured_image[2],
-			);
-
-			$new_images['has']['featured_images'] = count( $new_images['images'] );
-			$existing_images = array_merge_recursive( $existing_images, $new_images );
-		}
-
-		// Update image count.
-		$existing_images['has']['images'] = count( $existing_images['images'] );
-
-		/**
-		 * Filters images extracted from text.
-		 *
-		 * Similar to "bp_media_extractor_post_images" but this filter includes featured images in the results.
-		 *
-		 * @param array $existing_images Extracted images. See {@link BP_Media_Extractor::extract_images()} for format.
-		 * @param string $richtext Content to parse.
-		 * @param string $plaintext Copy of $richtext without any markup.
-		 * @param array $extra_args Bespoke data for a particular extractor.
-		 * @since BuddyPress (2.3.0)
-		 */
-		return apply_filters( 'bp_media_extractor_post_images', $existing_images, $richtext, $plaintext, $extra_args );
-	}
-
 	/**
 	 * Extract images in [galleries] shortcodes from a Post.
 	 *
