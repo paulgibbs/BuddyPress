@@ -3705,8 +3705,9 @@ class BP_Media_Extractor {
 		if ( ! empty( $galleries ) ) {
 			// Validate the size of the images requested.
 			if ( isset( $extra_args['width'] ) ) {
+
+				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
 				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-					// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
 					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
 				}
 
