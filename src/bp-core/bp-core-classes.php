@@ -2976,7 +2976,7 @@ abstract class BP_Recursive_Query {
 }
 
 /**
- * Extracts media from text.
+ * Extracts media from text. Use {@link extract()}.
  *
  * The supported types are links, mentions, images, shortcodes, embeds, audio, video, and "all".
  * This is what each type extracts:
@@ -2999,6 +2999,7 @@ abstract class BP_Recursive_Query {
  * Video:      [video]
  *             See wp_get_video_extensions() for supported video formats.
  *
+ * @see BP_Media_Extractor::extract() Use this to extract media.
  * @since BuddyPress (2.3.0)
  */
 class BP_Media_Extractor {
@@ -3021,9 +3022,9 @@ class BP_Media_Extractor {
 	/**
 	 * Extract media from text.
 	 *
-	 * @param string $richtext Content to parse.
+	 * @param string|WP_Post $richtext Content to parse.
 	 * @param int $what_to_extract Media type to extract (optional).
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $audio
@@ -3083,57 +3084,70 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
-		$extracted = array();
-		$plaintext = $this->make_plaintext_content( $richtext );
+		$media = array();
 
+		// Support passing a WordPress Post for the $richtext parameter.
+		if ( is_a( $richtext, 'WP_Post' ) ) {
+			$extra_args['post'] = $richtext;
+			$richtext           = $extra_args['post']->post_content;
+		}
 
-		/**
-		 * Media extraction.
-		 */
+		$plaintext = $this->strip_markup( $richtext );
+
 
 		// Extract links.
 		if ( self::LINKS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_links( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_links( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract mentions.
 		if ( self::MENTIONS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_mentions( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_mentions( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract images.
 		if ( self::IMAGES & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_images( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_images( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract shortcodes.
 		if ( self::SHORTCODES & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_shortcodes( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_shortcodes( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract oEmbeds.
 		if ( self::EMBEDS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_embeds( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_embeds( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract audio.
 		if ( self::AUDIO & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_audio( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_audio( $richtext, $plaintext, $extra_args ) );
 		}
 
 		// Extract video.
 		if ( self::VIDEOS & $what_to_extract ) {
-			$extracted = array_merge_recursive( $extracted, $this->extract_video( $richtext, $plaintext, $extra_args ) );
+			$media = array_merge_recursive( $media, $this->extract_video( $richtext, $plaintext, $extra_args ) );
 		}
 
-		return $extracted;
+		/**
+		 * Filters media extracted from text.
+		 *
+		 * @param array $media Extracted media. See {@link BP_Media_Extractor::extract()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param int $what_to_extract Media type to extract.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_extract', $media, $richtext, $what_to_extract, $extra_args, $plaintext );
 	}
 
 
 	/**
 	 * Content type specific extraction methods.
 	 *
-	 * You shouldn't need to use these directly; most of the time, just use extract().
+	 * You shouldn't need to use these directly; just use {@link BP_Media_Extractor::extract()}.
 	 */
 
 	/**
@@ -3141,7 +3155,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $links
@@ -3175,7 +3189,17 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['links'] = count( $data['links'] );
-		return $data;
+
+		/**
+		 * Filters links extracted from text.
+		 *
+		 * @param array $data Extracted links. See {@link BP_Media_Extractor::extract_links()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_links', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3188,7 +3212,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor.
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $mentions
@@ -3237,17 +3261,27 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['mentions'] = count( $data['mentions'] );
-		return $data;
+
+		/**
+		 * Filters @mentions extracted from text.
+		 *
+		 * @param array $data Extracted @mentions. See {@link BP_Media_Extractor::extract_mentions()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor (optional).
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_mentions', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
-	 * Extract images from `<img src>` tags and galleries, from text.
+	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
 	 *
 	 * If an image is in the Media Library, then its resolution is included in the results.
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $images
@@ -3265,9 +3299,13 @@ class BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
-		$media     = array( 'has' => array( 'images' => 0 ), 'images' => array() );
-		$galleries = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
+		$media = array( 'has' => array( 'images' => 0 ), 'images' => array() );
 
+		$featured_image = $this->extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
+		$galleries      = $this->extract_images_from_galleries( $richtext, $plaintext, $extra_args );
+
+
+		// `<img src>` tags.
 		if ( stripos( $richtext, 'src=' ) !== false ) {
 			preg_match_all( '#src=(["\'])([^"\']+)\1#i', $richtext, $img_srcs );  // matches src="text" and src='text'
 
@@ -3296,33 +3334,60 @@ class BP_Media_Extractor {
 					);
 				}
 			}
+		}
 
-			// Galleries.
-			if ( ! empty( $galleries ) ) {
-				foreach ( $galleries as $gallery ) {
-					foreach ( $gallery as $image ) {
-						$image_url = esc_url_raw( $image['url'] );
-						if ( ! $image_url ) {
-							continue;
-						}
-
-						$media['images'][] = array(
-							'gallery_id' => $image['gallery_id'],
-							'source'     => 'galleries',
-							'url'        => $image_url,
-							'width'      => $image['width'],
-							'height'     => $image['height'],
-						);
+		// Galleries.
+		if ( ! empty( $galleries ) ) {
+			foreach ( $galleries as $gallery ) {
+				foreach ( $gallery as $image ) {
+					$image_url = esc_url_raw( $image['url'] );
+					if ( ! $image_url ) {
+						continue;
 					}
-				}
 
-				$media['has']['galleries'] = count( $galleries );
+					$media['images'][] = array(
+						'gallery_id' => $image['gallery_id'],
+						'source'     => 'galleries',
+						'url'        => $image_url,
+						'width'      => $image['width'],
+						'height'     => $image['height'],
+					);
+				}
+			}
+
+			$media['has']['galleries'] = count( $galleries );
+		}
+
+		// Featured images (aka thumbnails).
+		if ( ! empty( $featured_image ) ) {
+			$image_url = esc_url_raw( $featured_image[0] );
+
+			if ( $image_url ) {
+				$media['images'][] = array(
+					'source' => 'featured_images',
+					'url'    => $image_url,
+					'width'  => $featured_image[1],
+					'height' => $featured_image[2],
+				);
+
+				$media['has']['featured_images'] = 1;
 			}
 		}
 
 		// Update image count.
 		$media['has']['images'] = count( $media['images'] );
-		return $media;
+
+
+		/**
+		 * Filters images extracted from text.
+		 *
+		 * @param array $media Extracted images. See {@link BP_Media_Extractor::extract_images()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_images', $media, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3333,7 +3398,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $shortcodes
@@ -3373,7 +3438,17 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['shortcodes'] = count( $data['shortcodes'] );
-		return $data;
+
+		/**
+		 * Filters shortcodes extracted from text.
+		 *
+		 * @param array $data Extracted shortcodes. See {@link BP_Media_Extractor::extract_shortcodes()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_shortcodes', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3381,7 +3456,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $embeds
@@ -3438,7 +3513,17 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['embeds'] = count( $data['embeds'] );
-		return $data;
+
+		/**
+		 * Filters embeds extracted from text.
+		 *
+		 * @param array $data Extracted embeds. See {@link BP_Media_Extractor::extract_embeds()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_embeds', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3446,7 +3531,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $audio
@@ -3513,7 +3598,17 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['audio'] = count( $data['audio'] );
-		return $data;
+
+		/**
+		 * Filters audio extracted from text.
+		 *
+		 * @param array $data Extracted audio. See {@link BP_Media_Extractor::extract_audio()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_audio', $data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
@@ -3521,7 +3616,7 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array {
 	 *     @type array $has Extracted media counts. {
 	 *         @type int $video
@@ -3569,7 +3664,17 @@ class BP_Media_Extractor {
 		}
 
 		$data['has']['videos'] = count( $data['videos'] );
-		return $data;
+
+		/**
+		 * Filters videos extracted from text.
+		 *
+		 * @param array $data Extracted videos. See {@link BP_Media_Extractor::extract_videos()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_videos', $data, $richtext, $plaintext, $extra_args );
 	}
 
 
@@ -3582,149 +3687,100 @@ class BP_Media_Extractor {
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
+	 * @param array $extra_args Bespoke data for a particular extractor (optional).
 	 * @return array
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
-		$fake_post = new WP_Post( (object) array( 'post_content' => $richtext ) );
-
-		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
-		$galleries = get_post_galleries( $fake_post, false );
-		if ( empty( $galleries ) ) {
-			return array();
-		}
-
-		// Validate the size of the images requested.
-		if ( isset( $extra_args['width'] ) ) {
-			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
-				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
-			}
-
-			if ( ctype_digit( $extra_args['width'] ) ) {
-				$image_size = array( $extra_args['width'], $extra_args['height'] );
-			} else {
-				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
-			}
+	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args = array() ) {
+		if ( ! isset( $extra_args['post'] ) || ! is_a( $extra_args['post'], 'WP_Post' ) ) {
+			$post = new WP_Post( (object) array( 'post_content' => $richtext ) );
 		} else {
-			$image_size = 'full';
+			$post = $extra_args['post'];
 		}
 
+		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original image.
+		$galleries      = get_post_galleries( $post, false );
 		$galleries_data = array();
+	
+		if ( ! empty( $galleries ) ) {
+			// Validate the size of the images requested.
+			if ( isset( $extra_args['width'] ) ) {
 
+				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+				}
+
+				if ( ctype_digit( $extra_args['width'] ) ) {
+					$image_size = array( $extra_args['width'], $extra_args['height'] );
+				} else {
+					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				}
+
+			} else {
+				$image_size = 'full';
+			}
+
+			/**
+			 * There are two variants of gallery shortcode.
+			 *
+			 * One kind specifies the image (post) IDs via an `ids` parameter.
+			 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
+			 */
+
+			foreach ( $galleries as $gallery_id => $gallery ) {
+				$data   = array();
+				$images = array();
+
+				// Gallery ids= variant.
+				if ( isset( $gallery['ids'] ) ) {
+					$images = wp_parse_id_list( $gallery['ids'] );
+
+				// Gallery post_parent variant.
+				} elseif ( isset( $extra_args['post'] ) ) {
+					$images = wp_parse_id_list(
+						get_children( array(
+							'fields'         => 'ids',
+							'order'          => 'ASC',
+							'orderby'        => 'menu_order ID',
+							'post_mime_type' => 'image',
+							'post_parent'    => $extra_args['post']->ID,
+							'post_status'    => 'inherit',
+							'post_type'      => 'attachment',
+						) )
+					);
+				}
+
+				// Extract the data we need from each image in this gallery.
+				foreach ( $images as $image_id ) {
+					$image  = wp_get_attachment_image_src( $image_id, $image_size );
+					$data[] = array(
+						'url'    => $image[0],
+						'width'  => $image[1],
+						'height' => $image[2],
+
+						'gallery_id' => 1 + $gallery_id,
+					);
+				}
+
+				$galleries_data[] = $data;
+			}
+		}
 
 		/**
-		 * There are two variants of gallery shortcode; only the first is handled here.
+		 * Filters image galleries extracted from text.
 		 *
-		 * One kind specifies the image (post) IDs via an `ids` parameter.
-		 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
+		 * @param array $galleries_data Galleries. See {@link BP_Media_Extractor::extract_images_from_galleries()}.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
 		 */
-		foreach ( $galleries as $gallery_id => $gallery ) {
-			$data   = array();
-			$images = array();
-
-			// ids= variant.
-			if ( isset( $gallery['ids'] ) ) {
-				$images = wp_parse_id_list( $gallery['ids'] );
-			}
-
-			// Extract the data we need from each image in this gallery.
-			foreach ( $images as $image_id ) {
-				$image  = wp_get_attachment_image_src( $image_id, $image_size );
-				$data[] = array(
-					'url'    => $image[0],
-					'width'  => $image[1],
-					'height' => $image[2],
-
-					'gallery_id' => 1 + $gallery_id,
-				);
-			}
-
-			$galleries_data[] = $data;
-		}
-
-		return $galleries_data;
+		return apply_filters( 'bp_media_extractor_galleries', $galleries_data, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
-	 * Sanitize and format raw content to prepare for content extraction.
-	 *
-	 * HTML tags and shortcodes are removed, and HTML entities are decoded.
-	 *
-	 * @param string $content
-	 * @return string
-	 * @since BuddyPress (2.3.0)
-	 */
-	protected function make_plaintext_content( $content ) {
-		return strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
-	}
-}
-
-/**
- * Extracts media from a Post.
- *
- * @since BuddyPress (2.3.0)
- */
-class BP_Media_Extractor_Post extends BP_Media_Extractor {
-	/**
-	 * Extract media from text.
-	 *
-	 * @param string $richtext
-	 * @param int $what_to_extract Media type to extract (optional).
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array|WP_Error
-	 * @since BuddyPress (2.3.0)
-	 */
-	public function extract( $richtext, $what_to_extract = self::ALL, $extra_args = array() ) {
-		if ( empty( $extra_args['post'] ) || ! is_a( $extra_args['post'], 'WP_Post' ) ) {
-			return new WP_Error( 'invalid_post' );
-		}
-
-		return parent::extract( $extra_args['post']->post_content, $what_to_extract, $extra_args );
-	}
-
-	/**
-	 * Extract images from `<img src>` tags, [galleries], and featured images from a Post.
-	 *
-	 * @param string $richtext Content to parse.
-	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Optional. Contains data that an implementation might need beyond the defaults.
-	 * @return array
-	 * @since BuddyPress (2.3.0)
-	 */
-	protected function extract_images( $richtext, $plaintext, $extra_args = array() ) {
-		$existing_images = parent::extract_images( $richtext, $plaintext, $extra_args );
-		$featured_image  = $this->extract_images_from_featured_images( $richtext, $plaintext, $extra_args );
-
-		// Featured images (aka thumbnails).
-		if ( ! empty( $featured_image ) ) {
-			$image_url = esc_url_raw( $featured_image[0] );
-			if ( ! $image_url ) {
-				continue;
-			}
-
-			$new_images = array( 'images' => array() );
-
-			$new_images['images'][] = array(
-				'source' => 'featured_images',
-				'url'    => $image_url,
-				'width'  => $featured_image[1],
-				'height' => $featured_image[2],
-			);
-
-			$new_images['has']['featured_images'] = count( $new_images['images'] );
-			$existing_images = array_merge_recursive( $existing_images, $new_images );
-		}
-
-		// Update image count.
-		$existing_images['has']['images'] = count( $existing_images['images'] );
-
-		return $existing_images;
-	}
-
-	/**
-	 * Extract a featured image from a Post.
+	 * Extract the featured image from a Post.
 	 *
 	 * @param string $richtext Content to parse.
 	 * @param string $plaintext Sanitized version of the content.
@@ -3733,109 +3789,64 @@ class BP_Media_Extractor_Post extends BP_Media_Extractor {
 	 * @since BuddyPress (2.3.0)
 	 */
 	protected function extract_images_from_featured_images( $richtext, $plaintext, $extra_args ) {
-		$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
-		if ( ! $thumb ) {
-			return array();
+		$image = array();
+		$thumb = 0;
+
+		if ( isset( $extra_args['post'] ) ) {
+			$thumb = (int) get_post_thumbnail_id( $extra_args['post']->ID );
 		}
 
-		// Validate the size of the images requested.
-		if ( isset( $extra_args['width'] ) ) {
-			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
-				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
-			}
+		if ( $thumb ) {
+			// Validate the size of the images requested.
+			if ( isset( $extra_args['width'] ) ) {
+				if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
+					// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
+					$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
+				}
 
-			if ( ctype_digit( $extra_args['width'] ) ) {
-				$image_size = array( $extra_args['width'], $extra_args['height'] );
+				if ( ctype_digit( $extra_args['width'] ) ) {
+					$image_size = array( $extra_args['width'], $extra_args['height'] );
+				} else {
+					$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				}
 			} else {
-				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
+				$image_size = 'full';
 			}
-		} else {
-			$image_size = 'full';
+
+			$image = wp_get_attachment_image_src( $thumb, $image_size );
 		}
 
-		$image = wp_get_attachment_image_src( $thumb, $image_size );
-		return $image;
+		/**
+		 * Filters featured images extracted from a WordPress Post.
+		 *
+		 * @param array $image Extracted images. See {@link BP_Media_Extractor_Post::extract_images()} for format.
+		 * @param string $richtext Content to parse.
+		 * @param string $plaintext Copy of $richtext without any markup.
+		 * @param array $extra_args Bespoke data for a particular extractor.
+		 * @since BuddyPress (2.3.0)
+		 */
+		return apply_filters( 'bp_media_extractor_featured_images', $image, $richtext, $plaintext, $extra_args );
 	}
 
 	/**
-	 * Extract images in [galleries] shortcodes from a Post.
+	 * Sanitize and format raw content to prepare for content extraction.
 	 *
-	 * @param string $richtext Content to parse.
-	 * @param string $plaintext Sanitized version of the content.
-	 * @param array $extra_args Contains data that an implementation might need beyond the defaults.
-	 * @return array
+	 * HTML tags and shortcodes are removed, and HTML entities are decoded.
+	 *
+	 * @param string $richtext
+	 * @return string
 	 * @since BuddyPress (2.3.0)
 	 */
-	protected function extract_images_from_galleries( $richtext, $plaintext, $extra_args ) {
-		// We're not using get_post_galleries_images() because it returns thumbnails; we want the original.
-		$galleries = get_post_galleries( $extra_args['post'], false );
-		if ( empty( $galleries ) ) {
-			return array();
-		}
-
-		// Validate the size of the images requested.
-		if ( isset( $extra_args['width'] ) ) {
-			if ( ! isset( $extra_args['height'] ) && ctype_digit( $extra_args['width'] ) ) {
-				// A width was specified but not a height, so calculate it assuming a 4:3 ratio.
-				$extra_args['height'] = round( ( $extra_args['width'] / 4 ) * 3 );
-			}
-
-			if ( ctype_digit( $extra_args['width'] ) ) {
-				$image_size = array( $extra_args['width'], $extra_args['height'] );
-			} else {
-				$image_size = $extra_args['width'];  // e.g. "thumb", "medium".
-			}
-		} else {
-			$image_size = 'full';
-		}
-
-		$galleries_data = array();
-
+	protected function strip_markup( $richtext ) {
+		$plaintext = strip_shortcodes( html_entity_decode( strip_tags( $richtext ) ) );
 
 		/**
-		 * There are two variants of gallery shortcode.
+		 * Filters the generated plain text version of the content passed to the extractor.
 		 *
-		 * One kind specifies the image (post) IDs via an `ids` parameter.
-		 * The other gets the image IDs from post_type=attachment and post_parent=get_the_ID().
+		 * @param array $plaintext Generated plain text.
+		 * @param string $richtext Original content
+		 * @since BuddyPress (2.3.0)
 		 */
-		foreach ( $galleries as $gallery_id => $gallery ) {
-			$data = array();
-
-			// ids= variant.
-			if ( isset( $gallery['ids'] ) ) {
-				$images = wp_parse_id_list( $gallery['ids'] );
-
-			// post_parent variant.
-			} else {
-				$images = wp_parse_id_list(
-					get_children( array(
-						'fields'         => 'ids',
-						'order'          => 'ASC',
-						'orderby'        => 'menu_order ID',
-						'post_mime_type' => 'image',
-						'post_parent'    => $extra_args['post']->ID,
-						'post_status'    => 'inherit',
-						'post_type'      => 'attachment',
-					) )
-				);
-			}
-
-			// Extract the data we need from each image in this gallery.
-			foreach ( $images as $image_id ) {
-				$image  = wp_get_attachment_image_src( $image_id, $image_size );
-				$data[] = array(
-					'url'    => $image[0],
-					'width'  => $image[1],
-					'height' => $image[2],
-
-					'gallery_id' => 1 + $gallery_id,
-				);
-			}
-
-			$galleries_data[] = $data;
-		}
-
-		return $galleries_data;
+		return apply_filters( 'bp_media_extractor_strip_markup', $plaintext, $richtext );
 	}
 }
