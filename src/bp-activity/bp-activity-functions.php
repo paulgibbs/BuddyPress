@@ -2653,9 +2653,9 @@ function bp_activity_thumbnail_content_images( $content, $link = false, $args = 
 }
 
 /**
- * Create a rich summary of an activity item's content for the activity stream.
+ * Create a rich summary of an activity item for the activity stream.
  *
- * More than just a simple excerpt, this could contain oEmbeds and other types of media.
+ * More than just a simple excerpt, the summary could contain oEmbeds and other types of media.
  * Currently, it's only used for blog post items, but it will probably be used for all types of
  * activity in the future.
  *
@@ -2669,16 +2669,11 @@ function bp_activity_create_summary( $content, $activity ) {
 		'width' => isset( $GLOBALS['content_width'] ) ? (int) $GLOBALS['content_width'] : 'medium',
 	);
 
-
-	// New blog posts.
+	// Get the WP_Post object if this activity type is a blog post.
 	if ( $activity['type'] === 'new_blog_post' ) {
-		$args['post'] = get_post( $activity['secondary_item_id'] );
-		$extractor    = 'BP_Media_Extractor_Post';
-
-	// Everything else.
-	} else {
-		$extractor = 'BP_Media_Extractor';
+		$content = get_post( $activity['secondary_item_id'] );
 	}
+
 
 	/**
 	 * Filter the class name of the media extractor when creating an Activity summary.
@@ -2690,8 +2685,7 @@ function bp_activity_create_summary( $content, $activity ) {
 	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
 	 * @since BuddyPress (2.3.0)
 	 */
-	$extractor = apply_filters( 'bp_activity_create_summary_extractor_class', $extractor, $content, $activity );
-	$extractor = new $extractor();
+	$extractor = new apply_filters( 'bp_activity_create_summary_extractor_class', 'BP_Media_Extractor', $content, $activity );
 
 	/**
 	 * Filter the arguments passed to the media extractor when creating an Activity summary.
@@ -2709,6 +2703,8 @@ function bp_activity_create_summary( $content, $activity ) {
 	$media = $extractor->extract( $content, BP_Media_Extractor::ALL, $args );
 
 	$para_count     = substr_count( strtolower( wpautop( $content ) ), '<p>' );
+	$has_audio      = ! empty( $media['has']['audio'] )           && $media['has']['audio'];
+	$has_videos     = ! empty( $media['has']['videos'] )          && $media['has']['videos'];
 	$has_feat_image = ! empty( $media['has']['featured_images'] ) && $media['has']['featured_images'];
 	$has_galleries  = ! empty( $media['has']['galleries'] )       && $media['has']['galleries'];
 	$has_images     = ! empty( $media['has']['images'] )          && $media['has']['images'];
@@ -2724,12 +2720,18 @@ function bp_activity_create_summary( $content, $activity ) {
 	$use_media_type  = '';
 	$image_source    = '';
 
-	// If it's a short article and there's an embed, use it.
-	if ( $para_count <= 2 && $has_embeds ) {
-		$use_media_type = 'embeds';
+	// If it's a short article and there's an embed/audio/video, use it.
+	if ( $para_count <= 2 ) {
+		if ( $has_embeds ) {
+			$use_media_type = 'embeds';
+		} elseif ( $has_audio ) {
+			$use_media_type = 'audio';
+		} elseif ( $has_video ) {
+			$use_media_type = 'videos';
+		}
 	}
 
-	// Otherwise, try to use an image.
+	// If not, or in any other situation, try to use an image.
 	if ( ! $use_media_type && $has_images ) {
 		$use_media_type = 'images';
 		$image_source   = 'html';
@@ -2755,10 +2757,10 @@ function bp_activity_create_summary( $content, $activity ) {
 		/**
 		 * Filter the results of the media extractor when creating an Activity summary.
 		 *
-		 * @param array $extracted_media Extracted media item.
-		 * @param string $content The content of the activity item.
+		 * @param array $extracted_media Extracted media item. See {@link BP_Media_Extractor::extract()} for format.
+		 * @param string|WP_Post $content Content of the activity item, or Post object if activity type is "new_blog_post".
 		 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
-		 * @param array $media Complete results from the media extraction.
+		 * @param array $media All results from the media extraction. See {@link BP_Media_Extractor::extract()} for format.
 		 * @param string $use_media_type The kind of media item that was preferentially extracted.
 		 * @param string $image_source If $use_media_type was "images", the preferential source of the image.
 		 *               Otherwise empty.
@@ -2775,7 +2777,7 @@ function bp_activity_create_summary( $content, $activity ) {
 		);
 	}
 
-	// Generate a text excerpt for this activity item (remove shortcode URLs).
+	// Generate a text excerpt for this activity item (and remove any oEmbeds URLs).
 	$summary = strip_shortcodes( html_entity_decode( strip_tags( $content ) ) );
 	$summary = bp_create_excerpt( preg_replace( '#^\s*(https?://[^\s"]+)\s*$#im', '', $summary ) );
 
@@ -2783,17 +2785,18 @@ function bp_activity_create_summary( $content, $activity ) {
 		$summary .= PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
 	} elseif ( $use_media_type === 'images' ) {
 		$summary .= sprintf( '<img src="%s">', esc_url( $extracted_media['url'] ) );
+	} elseif ( in_array( $use_media_type, array( 'audio', 'videos' ), true ) ) {
+		$summary .= $extracted_media['original'];  // Full shortcode.
 	}
 
 	/**
 	 * Filters the newly-generated summary for the activity item.
 	 *
-	 * @since BuddyPress (2.3.0)
-	 *
-	 * @param string $summary The activity summary.
-	 * @param string $content $content The original content of the activity item.
+	 * @param string $summary Activity summary HTML.
+	 * @param string $content $content Content of the activity item, or Post object if activity type is "new_blog_post".
 	 * @param array $activity The data passed to bp_activity_add() or the values from an Activity obj.
-	 * @param array $extracted_media Extracted media item used to generate this summary.
+	 * @param array $extracted_media Media item extracted. See {@link BP_Media_Extractor::extract()} for format.
+	 * @since BuddyPress (2.3.0)
 	 */
 	return apply_filters( 'bp_activity_create_summary', $summary, $content, $activity, $extracted_media );
 }
