@@ -4,18 +4,15 @@
  * @group BP_Media_Extractor
  */
 class BP_Tests_Media_Extractor extends BP_UnitTestCase {
-	public static $media_extractor      = null;
-	public static $post_media_extractor = null;
-	public static $richtext             = '';
+	public static $media_extractor = null;
+	public static $richtext        = '';
 
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
 
-		self::$media_extractor      = new BP_Media_Extractor();
-		self::$post_media_extractor = new BP_Media_Extractor_Post();
-
-		self::$richtext = "Hello world.
+		self::$media_extractor = new BP_Media_Extractor();
+		self::$richtext        = "Hello world.
 
 		This sample text is used to test the media extractor parsing class. @paulgibbs thinks it's pretty cool.
 		Another thing really cool is this @youtube:
@@ -324,7 +321,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 
 		// Extract the gallery images.
-		$media = self::$post_media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES, array(
+		$media = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
@@ -353,7 +350,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 
 		// Extract the gallery images.
-		$media = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
+		$media = self::$media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
@@ -368,7 +365,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 	public function test_extract_no_images_from_content_with_invalid_galleries_variant_no_ids() {
 		$post_id = $this->factory->post->create( array( 'post_content' => self::$richtext ) );
-		$media   = self::$post_media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES, array(
+		$media   = self::$media_extractor->extract( self::$richtext, BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
@@ -379,7 +376,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 	public function test_extract_no_images_from_content_with_invalid_galleries_variant_ids() {
 		$post_id = $this->factory->post->create( array( 'post_content' => '[gallery ids="117,4529"]' ) );
-		$media   = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
+		$media   = self::$media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
@@ -403,7 +400,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 
 		// Extract the gallery images.
-		$media = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
+		$media = self::$media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
@@ -416,7 +413,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 	public function test_extract_images_from_content_without_featured_image() {
 		$post_id = $this->factory->post->create( array( 'post_content' => self::$richtext ) );
-		$media   = self::$post_media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
+		$media   = self::$media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
 			'post' => get_post( $post_id ),
 		) );
 
