@@ -595,9 +595,9 @@ class BP_Admin {
 					</div>
 
 					<div class="group-invites">
-						<span class=" dashicons dashicons-plus-alt"></span>
-						<h4><?php esc_html_e( 'Group Invitations', 'buddypress' ); ?></h4>
-						<p><?php esc_html_e( 'Inviting members to groups is now smoother than ever with a simpler, clearer interface.', 'buddypress' ); ?></p>
+						<span class=" dashicons dashicons-editor-code"></span>
+						<h4><?php esc_html_e( 'Message Meta', 'buddypress' ); ?></h4>
+						<p><?php esc_html_e( 'Private message conversations made infinitely more flexible with an additional metadata table.', 'buddypress' ); ?></p>
 					</div>
 
 					<div class="last-feature">
@@ -626,7 +626,7 @@ class BP_Admin {
 						<p><?php esc_html_e( 'Continued improvements to inline code documentation make it easier for developers to understand how BuddyPress works.', 'buddypress' ); ?></p>
 
 						<h4><?php esc_html_e( 'And so Much More', 'buddypress' ); ?></h4>
-						<p><?php esc_html_e( 'With over 130 bugs squashed and constant attention to improving unit-test coverage, we think this version is just the bees-knees.', 'buddypress' ); ?></p>
+						<p><?php esc_html_e( 'With over 130 bugs squashed and constant attention to improving unit-test coverage, we think this version is just the bee&#8217;s knees.', 'buddypress' ); ?></p>
 					</div>
 				</div>
 			</div>
