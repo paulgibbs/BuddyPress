@@ -165,6 +165,15 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertArrayNotHasKey( 'shortcodes', $media );
 	}
 
+	public function test_extract_media_from_a_wp_post() {
+		$post_id = $this->factory->post->create( array( 'post_content' => self::$richtext ) );
+		$media   = self::$media_extractor->extract( get_post( $post_id ), BP_Media_Extractor::LINKS );
+
+		$this->assertArrayHasKey( 'links', $media );
+		$this->assertSame( 'https://example.com', $media['links'][0]['url'] );
+		$this->assertSame( 'http://example.com',  $media['links'][1]['url'] );
+	}
+
 
 	/**
 	 * Link extraction.
