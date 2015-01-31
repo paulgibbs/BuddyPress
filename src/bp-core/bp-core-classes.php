@@ -3557,11 +3557,17 @@ class BP_Media_Extractor {
 		// [audio]
 		$audios = wp_list_filter( $audios['shortcodes'], array( 'type' => 'audio' ) );
 		foreach ( $audios as $audio ) {
-			if ( empty( $audio['attributes']['src'] ) ) {
+
+			// Media URL can appear as the first parameter inside the shortcode brackets.
+			if ( isset( $audio['attributes']['src'] ) ) {
+				$src_param = 'src';
+			} elseif ( isset( $audio['attributes'][0] ) ) {
+				$src_param = 0;
+			} else {
 				continue;
 			}
 
-			$path = untrailingslashit( parse_url( $audio['attributes']['src'], PHP_URL_PATH ) );
+			$path = untrailingslashit( parse_url( $audio['attributes'][ $src_param ], PHP_URL_PATH ) );
 
 			foreach ( $audio_types as $extension ) {
 				$extension = '.' . $extension;
@@ -3573,7 +3579,7 @@ class BP_Media_Extractor {
 
 				$data['audio'][] = array(
 					'source' => 'shortcodes',
-					'url'    => esc_url_raw( $audio['attributes']['src'] ),
+					'url'    => esc_url_raw( $audio['attributes'][ $src_param ] ),
 				);
 			}
 		}
@@ -3640,13 +3646,18 @@ class BP_Media_Extractor {
 
 		// [video]
 		$videos = wp_list_filter( $videos['shortcodes'], array( 'type' => 'video' ) );
-
 		foreach ( $videos as $video ) {
-			if ( empty( $video['attributes']['src'] ) ) {
+
+			// Media URL can appear as the first parameter inside the shortcode brackets.
+			if ( isset( $video['attributes']['src'] ) ) {
+				$src_param = 'src';
+			} elseif ( isset( $video['attributes'][0] ) ) {
+				$src_param = 0;
+			} else {
 				continue;
 			}
 
-			$path = untrailingslashit( parse_url( $video['attributes']['src'], PHP_URL_PATH ) );
+			$path = untrailingslashit( parse_url( $video['attributes'][ $src_param ], PHP_URL_PATH ) );
 
 			foreach ( $video_types as $extension ) {
 				$extension = '.' . $extension;
@@ -3658,7 +3669,7 @@ class BP_Media_Extractor {
 
 				$data['videos'][] = array(
 					'source' => 'shortcodes',
-					'url'    => esc_url_raw( $video['attributes']['src'] ),
+					'url'    => esc_url_raw( $video['attributes'][ $src_param ] ),
 				);
 			}
 		}

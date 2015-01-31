@@ -442,11 +442,25 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertSame( 'http://example.com/more_audio.mp3', $media['audio'][2]['url'] );
 	}
 
+	public function test_extract_audio_shortcode_with_no_src_param() {
+		$richtext = '[audio http://example.com/a-song.mp3]';
+		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::AUDIO );
+
+		$this->assertArrayHasKey( 'audio', $media );
+		$this->assertCount( 1, $media['audio'] );
+		$this->assertSame( 'http://example.com/a-song.mp3', $media['audio'][0]['url'] );
+	}
+
 	public function test_extract_no_audio_from_invalid_content() {
 		$richtext = '[audio src="http://example.com/not_audio.gif"]
 		<a href="http://example.com/more_not_audio.mp33">Hello</a>.';
 
 		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::AUDIO );
+		$this->assertSame( 0, $media['has']['audio'] );
+	}
+
+	public function test_extract_no_audio_from_empty_audio_shortcode() {
+		$media = self::$media_extractor->extract( '[audio]', BP_Media_Extractor::AUDIO );
 		$this->assertSame( 0, $media['has']['audio'] );
 	}
 
@@ -468,10 +482,25 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertSame( 'http://example.com/source.webm', $media['videos'][1]['url'] );
 	}
 
+
+	public function test_extract_video_shortcode_with_no_src_param() {
+		$richtext = '[video http://example.com/source.ogv]';
+		$media = self::$media_extractor->extract( $richtext, BP_Media_Extractor::VIDEOS );
+
+		$this->assertArrayHasKey( 'videos', $media );
+		$this->assertCount( 1, $media['videos'] );
+		$this->assertSame( 'http://example.com/source.ogv', $media['videos'][0]['url'] );
+	}
+
 	public function test_extract_no_video_from_invalid_content() {
 		$richtext = '[video src="http://example.com/not_video.mp3"]';
 		$media    = self::$media_extractor->extract( $richtext, BP_Media_Extractor::VIDEOS );
 
+		$this->assertSame( 0, $media['has']['videos'] );
+	}
+
+	public function test_extract_no_videos_from_empty_video_shortcodes() {
+		$media = self::$media_extractor->extract( '[video]', BP_Media_Extractor::VIDEOS );
 		$this->assertSame( 0, $media['has']['videos'] );
 	}
 }
