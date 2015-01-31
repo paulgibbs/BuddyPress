@@ -3559,8 +3559,15 @@ class BP_Media_Extractor {
 		foreach ( $audios as $audio ) {
 
 			// Media URL can appear as the first parameter inside the shortcode brackets.
-			$src_param = ( stripos( $richtext, 'src=' ) !== false ) ? 'src' : 0;
-			$path      = untrailingslashit( parse_url( $audio['attributes'][ $src_param ], PHP_URL_PATH ) );
+			if ( isset( $audio['attributes']['src'] ) ) {
+				$src_param = 'src';
+			} elseif ( isset( $audio['attributes'][0] ) ) {
+				$src_param = 0;
+			} else {
+				continue;
+			}
+
+			$path = untrailingslashit( parse_url( $audio['attributes'][ $src_param ], PHP_URL_PATH ) );
 
 			foreach ( $audio_types as $extension ) {
 				$extension = '.' . $extension;
@@ -3641,8 +3648,16 @@ class BP_Media_Extractor {
 		$videos = wp_list_filter( $videos['shortcodes'], array( 'type' => 'video' ) );
 		foreach ( $videos as $video ) {
 
-			$src_param = ( stripos( $richtext, 'src=' ) !== false ) ? 'src' : 0;
-			$path      = untrailingslashit( parse_url( $video['attributes'][ $src_param ], PHP_URL_PATH ) );
+			// Media URL can appear as the first parameter inside the shortcode brackets.
+			if ( isset( $video['attributes']['src'] ) ) {
+				$src_param = 'src';
+			} elseif ( isset( $video['attributes'][0] ) ) {
+				$src_param = 0;
+			} else {
+				continue;
+			}
+
+			$path = untrailingslashit( parse_url( $video['attributes'][ $src_param ], PHP_URL_PATH ) );
 
 			foreach ( $video_types as $extension ) {
 				$extension = '.' . $extension;
