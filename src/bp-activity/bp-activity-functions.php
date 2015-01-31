@@ -2727,7 +2727,7 @@ function bp_activity_create_summary( $content, $activity ) {
 	$image_source    = '';
 
 	// If it's a short article and there's an embed/audio/video, use it.
-	if ( $para_count <= 2 ) {
+	if ( $para_count <= 3 ) {
 		if ( $has_embeds ) {
 			$use_media_type = 'embeds';
 		} elseif ( $has_audio ) {
