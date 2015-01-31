@@ -459,6 +459,11 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$this->assertSame( 0, $media['has']['audio'] );
 	}
 
+	public function test_extract_no_audio_from_empty_audio_shortcode() {
+		$media = self::$media_extractor->extract( '[audio]', BP_Media_Extractor::AUDIO );
+		$this->assertSame( 0, $media['has']['audio'] );
+	}
+
 
 	/**
 	 * Video extraction.
@@ -491,6 +496,11 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		$richtext = '[video src="http://example.com/not_video.mp3"]';
 		$media    = self::$media_extractor->extract( $richtext, BP_Media_Extractor::VIDEOS );
 
+		$this->assertSame( 0, $media['has']['videos'] );
+	}
+
+	public function test_extract_no_videos_from_empty_video_shortcodes() {
+		$media = self::$media_extractor->extract( '[video]', BP_Media_Extractor::VIDEOS );
 		$this->assertSame( 0, $media['has']['videos'] );
 	}
 }
