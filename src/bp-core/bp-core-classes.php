@@ -3072,7 +3072,7 @@ class BP_Media_Extractor {
 	 *         @type array $attributes Key/value pairs of the shortcodes attributes (if any).
 	 *         @type string $content Text wrapped by the shortcode.
 	 *         @type string $type Shortcode type.
-	 *         @type string $oringal The entire shortcode.
+	 *         @type string $original The entire shortcode.
 	 *     }
 	 *     @type array $videos Extracted video. {
 	 *         Array of extracted media.
@@ -3409,7 +3409,7 @@ class BP_Media_Extractor {
 	 *         @type array $attributes Key/value pairs of the shortcodes attributes (if any).
 	 *         @type string $content Text wrapped by the shortcode.
 	 *         @type string $type Shortcode type.
-	 *         @type string $oringal The entire shortcode.
+	 *         @type string $original The entire shortcode.
 	 *     }
 	 * }
 	 * @since BuddyPress (2.3.0)
@@ -3539,6 +3539,7 @@ class BP_Media_Extractor {
 	 *     @type array $audio Extracted audio. {
 	 *         Array of extracted media.
 	 *
+	 *         @type string $original The entire shortcode.
 	 *         @type string $source Media source. Either "html" or "shortcodes".
 	 *         @type string $url Link to audio.
 	 *     }
