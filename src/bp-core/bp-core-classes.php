@@ -3578,8 +3578,9 @@ class BP_Media_Extractor {
 				}
 
 				$data['audio'][] = array(
-					'source' => 'shortcodes',
-					'url'    => esc_url_raw( $audio['attributes'][ $src_param ] ),
+					'original' => '[audio src="' . esc_url_raw( $audio['attributes'][ $src_param ] ) . '"]',
+					'source'   => 'shortcodes',
+					'url'      => esc_url_raw( $audio['attributes'][ $src_param ] ),
 				);
 			}
 		}
@@ -3597,8 +3598,9 @@ class BP_Media_Extractor {
 				}
 
 				$data['audio'][] = array(
-					'source' => 'html',
-					'url'    => esc_url_raw( $link['url'] ),
+					'original' => '[audio src="' . esc_url_raw( $link['url'] ) . '"]',  // Build an audio shortcode.
+					'source'   => 'html',
+					'url'      => esc_url_raw( $link['url'] ),
 				);
 			}
 		}
@@ -3668,8 +3670,9 @@ class BP_Media_Extractor {
 				}
 
 				$data['videos'][] = array(
-					'source' => 'shortcodes',
-					'url'    => esc_url_raw( $video['attributes'][ $src_param ] ),
+					'original' => $video['original'],  // Entire shortcode.
+					'source'   => 'shortcodes',
+					'url'      => esc_url_raw( $video['attributes'][ $src_param ] ),
 				);
 			}
 		}
