@@ -2788,11 +2788,11 @@ function bp_activity_create_summary( $content, $activity ) {
 	$summary = bp_create_excerpt( preg_replace( '#^\s*(https?://[^\s"]+)\s*$#im', '', $summary ) );
 
 	if ( $use_media_type === 'embeds' ) {
-		$summary .= PHP_EOL . PHP_EOL . $extracted_media['url'] . PHP_EOL;
+		$summary .= PHP_EOL . PHP_EOL . $extracted_media['url'];
 	} elseif ( $use_media_type === 'images' ) {
-		$summary .= sprintf( '<img src="%s">', esc_url( $extracted_media['url'] ) );
+		$summary .= sprintf( ' <img src="%s">', esc_url( $extracted_media['url'] ) );
 	} elseif ( in_array( $use_media_type, array( 'audio', 'videos' ), true ) ) {
-		$summary .= $extracted_media['original'];  // Full shortcode.
+		$summary .= PHP_EOL . PHP_EOL . $extracted_media['original'];  // Full shortcode.
 	}
 
 	/**
