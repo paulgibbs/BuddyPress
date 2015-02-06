@@ -127,7 +127,8 @@ class BP_Core extends BP_Component {
 			return;
 
 		$includes = array(
-			'admin'
+			'admin',
+			'relationships',
 		);
 
 		parent::includes( $includes );
