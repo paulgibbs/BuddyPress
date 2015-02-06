@@ -200,6 +200,9 @@ class BP_Core extends BP_Component {
 		// Is the logged in user is a mod for the current item?
 		bp_update_is_item_mod( false,                  'core' );
 
+		$this->register_global_tables( array( 'table_name' => $bp->table_prefix . 'bp_relationships' ) );
+		$this->register_meta_tables( array( 'table_name_meta' => $bp->table_prefix . 'bp_relationships_meta' ) );
+
 		do_action( 'bp_core_setup_globals' );
 	}
 
