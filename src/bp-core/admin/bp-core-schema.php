@@ -455,11 +455,11 @@ function bp_core_install_relations_table() {
 	$sql             = array();
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_relations (
-		relationship_id bigint(20) unsigned NOT NULL auto_increment,
+		relation_id bigint(20) unsigned NOT NULL auto_increment,
 		rel_from bigint(20) unsigned NOT NULL,
 		rel_to bigint(20) unsigned NOT NULL,
 		rel_type varchar(44) NOT NULL default '',
-		PRIMARY KEY (relationship_id),
+		PRIMARY KEY (relation_id),
 		KEY rel_from (rel_from),
 		KEY rel_to (rel_to),
 		KEY rel_type (rel_type)
@@ -467,11 +467,11 @@ function bp_core_install_relations_table() {
 
 	$sql[] = "CREATE TABLE {$bp_prefix}bp_relations_meta (
 		meta_id bigint(20) unsigned NOT NULL auto_increment,
-		relationship_id bigint(20) unsigned NOT NULL default '0',
+		relation_id bigint(20) unsigned NOT NULL default '0',
 		meta_key varchar(255) default NULL,
 		meta_value longtext,
 		PRIMARY KEY (meta_id),
-		KEY relationship_id (relationship_id),
+		KEY relation_id (relation_id),
 		KEY meta_key (meta_key)
 	) {$charset_collate};";
 
