@@ -29,28 +29,41 @@ function bp_relations_delete_meta( $object_id, $meta_key, $meta_value = '' ) {
 }
 
 /**
- * Get a piece of message metadata.
+ * Retrieve an object's metadata.
  *
+ * @param int $object_id Relation object ID.
+ * @param string $key Optional. The meta key to retrieve. By default, returns data for all keys. Default empty.
+ * @param bool $single  Optional. Whether to return a single value. Default false.
+ * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
  * @since BuddyPress (2.3.0)
  */
-function bp_messages_get_meta( $message_id, $meta_key = '', $single = true ) {
-	return get_metadata( 'message', $message_id, $meta_key, $single );
+function bp_relations_get_meta( $object_id, $meta_key = '', $single = true ) {
+	return get_metadata( 'relations', $object_id, $meta_key, $single );
 }
 
 /**
- * Update a piece of message metadata.
+ * Update existing metadata for an object.
  *
+ * @param int $object_id Relation object ID.
+ * @param string $meta_key Metadata key.
+ * @param mixed $meta_value Metadata value. Must be serializable if non-scalar.
+ * @param mixed $prev_value Optional. Previous value to check before removing. Default empty.
+ * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
  * @since BuddyPress (2.3.0)
  */
-function bp_messages_update_meta( $message_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'message', $message_id, $meta_key, $meta_value, $prev_value );
+function bp_relations_update_meta( $object_id, $meta_key, $meta_value, $prev_value = '' ) {
+	return update_metadata( 'relations', $object_id, $meta_key, $meta_value, $prev_value );
 }
 
 /**
- * Add a piece of message metadata.
+ * Add a metadata for an object.
  *
+ * @param int $object_id Relation object ID.
+ * @param string $meta_key Metadata name.
+ * @param mixed $meta_value Metadata value. Must be serializable if non-scalar.
+ * @param bool $unique Optional. Whether the same key should not be added. Default false.
  * @since BuddyPress (2.3.0)
  */
-function bp_message_add_meta( $message_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'message', $message_id, $meta_key, $meta_value, $unique );
+function bp_relations_add_meta( $object_id, $meta_key, $meta_value, $unique = false ) {
+	return add_metadata( 'relations', $object_id, $meta_key, $meta_value, $unique );
 }
