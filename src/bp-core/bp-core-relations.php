@@ -1,8 +1,8 @@
 <?php
 /**
- * BuddyPress' implementation of many-to-many database cardinality.
+ * BuddyPress' implementation of advanced object relationships (many-to-many database cardinality).
  *
- * Based originally on scribu's famous "Posts to Posts" plugin for WordPress. Big thanks!
+ * Based originally on scribu's "Posts to Posts" plugin for WordPress. Big thanks! https://github.com/scribu/
  *
  * @package BuddyPress
  */
@@ -18,14 +18,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Delete metadata for an object relationship.
  *
- * @param int $object_id Relationship object ID.
+ * @param int $object_id Relation object ID.
  * @param string $meta_key Metadata name.
  * @param mixed $meta_value Optional. Metadata value. Must be serializable if non-scalar. Default empty.
  * @return bool True on success, false on failure.
  * @since BuddyPress (2.3.0)
  */
 function bp_relations_delete_meta( $object_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'relationships', $object_id, $meta_key, $meta_value );
+	return delete_metadata( 'relations', $object_id, $meta_key, $meta_value );
 }
 
 /**

@@ -49,8 +49,8 @@ function bp_core_install( $active_components = false ) {
 	// Install the signups table
 	bp_core_maybe_install_signups();
 
-	// Many-to-many relationship tables
-	bp_core_install_relationships();
+	// Advanced object relationship tables.
+	bp_core_install_relations_table();
 
 
 	// Notifications
@@ -449,12 +449,12 @@ function bp_core_install_blog_tracking() {
  *
  * @since BuddyPress (2.3.0)
  */
-function bp_core_install_relationships() {
+function bp_core_install_relations_table() {
 	$bp_prefix       = bp_core_get_table_prefix();
 	$charset_collate = bp_core_set_charset();
 	$sql             = array();
 
-	$sql[] = "CREATE TABLE {$bp_prefix}bp_relationships (
+	$sql[] = "CREATE TABLE {$bp_prefix}bp_relations (
 		relationship_id bigint(20) unsigned NOT NULL auto_increment,
 		rel_from bigint(20) unsigned NOT NULL,
 		rel_to bigint(20) unsigned NOT NULL,
@@ -465,7 +465,7 @@ function bp_core_install_relationships() {
 		KEY rel_type (rel_type)
 	) {$charset_collate};";
 
-	$sql[] = "CREATE TABLE {$bp_prefix}bp_relationships_meta (
+	$sql[] = "CREATE TABLE {$bp_prefix}bp_relations_meta (
 		meta_id bigint(20) unsigned NOT NULL auto_increment,
 		relationship_id bigint(20) unsigned NOT NULL default '0',
 		meta_key varchar(255) default NULL,
