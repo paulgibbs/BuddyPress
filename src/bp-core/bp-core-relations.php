@@ -67,3 +67,40 @@ function bp_relations_update_meta( $object_id, $meta_key, $meta_value, $prev_val
 function bp_relations_add_meta( $object_id, $meta_key, $meta_value, $unique = false ) {
 	return add_metadata( 'relations', $object_id, $meta_key, $meta_value, $unique );
 }
+
+
+/**
+ * Helper functions.
+ */
+
+/**
+ * When items have been deleted (Activity, Posts, Users, and so on), tidy up any relationships.
+ *
+ * @param int|array $objects IDs of the items (of the appropriate type) that have been deleted.
+ * @param string $object_type Optional. The registered type of the item that have been deleted.
+ *               If not set, uses `current_filter()` to try to find a valid type from the action
+ *               that invoked this function.
+ * @since BuddyPress (2.3.0)
+ */
+function bp_relations_delete_connections_for_type( $objects, $object_type = '' ) {
+	if ( ! $object_type ) {
+		// This function is, by default, hooked to actions such as "deleted_user" and "deleted_post".
+		$object_type = preg_replace( '/.*deleted_/i', '', current_filter() );
+	}
+
+	if ( ! is_array( $objects ) ) {
+		$objects = (array) $objects;
+	}
+
+	foreach ( $objects as $object_id ) {
+		foreach ( BP_Relations_Connection_Type_Factory::get_all_instances() as $type => $connection ) {
+			foreach ( array( 'from', 'to' ) as $direction ) {
+				if ( $object_type !== $connection->side[ $direction ]->get_object_type() ) {
+					continue;
+				}
+
+				bp_relations_delete_connections( $type, array( $direction => $object_id ) );
+			}
+		}
+	}
+}

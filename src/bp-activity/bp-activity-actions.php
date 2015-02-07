@@ -828,3 +828,6 @@ function bp_activity_catch_transition_post_type_status( $new_status, $old_status
 	}
 }
 add_action( 'transition_post_status', 'bp_activity_catch_transition_post_type_status', 10, 3 );
+
+// Object relationships.
+add_action( 'bp_activity_deleted_activities', 'bp_relations_delete_connections_for_type' );
