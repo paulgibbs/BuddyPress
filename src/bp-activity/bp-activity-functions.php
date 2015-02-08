@@ -2513,10 +2513,11 @@ function bp_activity_delete_comment( $activity_id, $comment_id ) {
  * be sure to pass the full $activity_obj parameter as well, if you already
  * have it available.
  *
+ * @since BuddyPress (1.2.0)
+ *
  * @param int $activity_id The unique id of the activity object.
  * @param object $activity_obj Optional. The activity object.
  * @return string $link Permalink for the activity item.
- * @since BuddyPress (1.2.0)
  */
 function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
 	$bp = buddypress();
@@ -2556,8 +2557,9 @@ function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
 	/**
 	 * Filters the activity permalink for the specified activity item.
 	 *
-	 * @param array $array Array holding activity shortlink and activity item object.
-	 * @since BuddyPress (2.3.0)
+	 * @since BuddyPress (1.2.0)
+	 *
+	 * @param array $array Array holding activity permalink and activity item object.
 	 */
 	return apply_filters_ref_array( 'bp_activity_get_permalink', array( $link, &$activity_obj ) );
 }
