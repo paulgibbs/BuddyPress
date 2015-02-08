@@ -5,7 +5,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Output the groups component slug.
@@ -206,34 +206,37 @@ class BP_Groups_Template {
 		}
 
 		$defaults = array(
-			'type'            => 'active',
-			'page'            => 1,
-			'per_page'        => 20,
-			'max'             => false,
-			'show_hidden'     => false,
-			'page_arg'        => 'grpage',
-			'user_id'         => 0,
-			'slug'            => false,
-			'include'         => false,
-			'exclude'         => false,
-			'search_terms'    => '',
-			'meta_query'      => false,
-			'populate_extras' => true,
+			'page'              => 1,
+			'per_page'          => 20,
+			'page_arg'          => 'grpage',
+			'max'               => false,
+			'type'              => 'active',
+			'order'             => 'DESC',
+			'orderby'           => 'date_created',
+			'show_hidden'       => false,
+			'user_id'           => 0,
+			'slug'              => false,
+			'include'           => false,
+			'exclude'           => false,
+			'search_terms'      => '',
+			'meta_query'        => false,
+			'populate_extras'   => true,
 			'update_meta_cache' => true,
 		);
 
 		$r = wp_parse_args( $args, $defaults );
 		extract( $r );
 
-		$this->pag_page = isset( $_REQUEST[$page_arg] ) ? intval( $_REQUEST[$page_arg] ) : $page;
-		$this->pag_num  = isset( $_REQUEST['num'] ) ? intval( $_REQUEST['num'] ) : $per_page;
+		$this->pag_arg  = sanitize_key( $r['page_arg'] );
+		$this->pag_page = bp_sanitize_pagination_arg( $this->pag_arg, $r['page']     );
+		$this->pag_num  = bp_sanitize_pagination_arg( 'num',          $r['per_page'] );
 
 		if ( bp_current_user_can( 'bp_moderate' ) || ( is_user_logged_in() && $user_id == bp_loggedin_user_id() ) )
 			$show_hidden = true;
 
 		if ( 'invites' == $type ) {
 			$this->groups = groups_get_invites_for_user( $user_id, $this->pag_num, $this->pag_page, $exclude );
-		} else if ( 'single-group' == $type ) {
+		} elseif ( 'single-group' == $type ) {
 			$this->single_group = true;
 
 			if ( groups_get_current_group() ) {
@@ -279,7 +282,7 @@ class BP_Groups_Template {
 			$this->total_group_count = (int) $this->groups['total'];
 			$this->group_count       = (int) $this->groups['total'];
 			$this->groups            = $this->groups['groups'];
-		} else if ( 'single-group' == $type ) {
+		} elseif ( 'single-group' == $type ) {
 			if ( empty( $group->id ) ) {
 				$this->total_group_count = 0;
 				$this->group_count       = 0;
@@ -310,10 +313,7 @@ class BP_Groups_Template {
 		// Build pagination links
 		if ( (int) $this->total_group_count && (int) $this->pag_num ) {
 			$pag_args = array(
-				$page_arg => '%#%',
-				'num'     => $this->pag_num,
-				'sortby'  => $this->sort_by,
-				'order'   => $this->order,
+				$this->pag_arg => '%#%'
 			);
 
 			if ( defined( 'DOING_AJAX' ) && true === (bool) DOING_AJAX ) {
@@ -322,8 +322,14 @@ class BP_Groups_Template {
 				$base = '';
 			}
 
+			$add_args = array(
+				'num'     => $this->pag_num,
+				'sortby'  => $this->sort_by,
+				'order'   => $this->order,
+			);
+
 			if ( ! empty( $search_terms ) ) {
-				$pag_args['s'] = $search_terms;
+				$add_args['s'] = urlencode( $search_terms );
 			}
 
 			$this->pag_links = paginate_links( array(
@@ -333,7 +339,8 @@ class BP_Groups_Template {
 				'current'   => $this->pag_page,
 				'prev_text' => _x( '&larr;', 'Group pagination previous text', 'buddypress' ),
 				'next_text' => _x( '&rarr;', 'Group pagination next text', 'buddypress' ),
-				'mid_size'  => 1
+				'mid_size'  => 1,
+				'add_args'  => $add_args,
 			) );
 		}
 	}
@@ -423,35 +430,35 @@ class BP_Groups_Template {
  *
  * @param array $args {
  *     Array of parameters. All items are optional.
- *     @type string $type Optional. Shorthand for certain orderby/
+ *     @type string $type Shorthand for certain orderby/
  *           order combinations. 'newest', 'active', 'popular',
  *           'alphabetical', 'random'. When present, will override
  *           orderby and order params. Default: null.
- *     @type string $orderby Optional. Property to sort by.
+ *     @type string $orderby Property to sort by.
  *           'date_created', 'last_activity', 'total_member_count',
  *           'name', 'random'. Default: 'date_created'.
- *     @type string $order Optional. Sort order. 'ASC' or 'DESC'.
+ *     @type string $order Sort order. 'ASC' or 'DESC'.
  *           Default: 'DESC'.
- *     @type int $per_page Optional. Number of items to return per page
+ *     @type int $per_page Number of items to return per page
  *           of results. Default: null (no limit).
- *     @type int $page Optional. Page offset of results to return.
+ *     @type int $page Page offset of results to return.
  *           Default: null (no limit).
- *     @type int $user_id Optional. If provided, results will be limited
+ *     @type int $user_id If provided, results will be limited
  *           to groups of which the specified user is a member. Default:
  *           null.
- *     @type string $search_terms Optional. If provided, only groups
+ *     @type string $search_terms If provided, only groups
  *           whose names or descriptions match the search terms will be
  *           returned. Default: false.
- *     @type array $meta_query Optional. An array of meta_query
+ *     @type array $meta_query An array of meta_query
  *           conditions. See {@link WP_Meta_Query::queries} for
  *           description.
- *     @type array|string Optional. Array or comma-separated list of
+ *     @type array|string $include Array or comma-separated list of
  *           group IDs. Results will be limited to groups within the
  *           list. Default: false.
  *     @type bool $populate_extras Whether to fetch additional
  *           information (such as member count) about groups. Default:
  *           true.
- *     @type array|string Optional. Array or comma-separated list of
+ *     @type array|string $exclude Array or comma-separated list of
  *           group IDs. Results will exclude the listed groups.
  *           Default: false.
  *     @type bool $show_hidden Whether to include hidden groups in
@@ -706,9 +713,9 @@ function bp_group_type( $group = false ) {
 
 		if ( 'public' == $group->status ) {
 			$type = __( "Public Group", "buddypress" );
-		} else if ( 'hidden' == $group->status ) {
+		} elseif ( 'hidden' == $group->status ) {
 			$type = __( "Hidden Group", "buddypress" );
-		} else if ( 'private' == $group->status ) {
+		} elseif ( 'private' == $group->status ) {
 			$type = __( "Private Group", "buddypress" );
 		} else {
 			$type = ucwords( $group->status ) . ' ' . __( 'Group', 'buddypress' );
@@ -1858,7 +1865,7 @@ function bp_group_get_invite_status( $group_id = false ) {
 		if ( isset( $bp->groups->current_group->id ) ) {
 			// Default to the current group first
 			$group_id = $bp->groups->current_group->id;
-		} else if ( isset( $groups_template->group->id ) ) {
+		} elseif ( isset( $groups_template->group->id ) ) {
 			// Then see if we're in the loop
 			$group_id = $groups_template->group->id;
 		} else {
@@ -1877,58 +1884,70 @@ function bp_group_get_invite_status( $group_id = false ) {
 }
 
 /**
- * Can the logged-in user send invitations in the specified group?
+ * Can a user send invitations in the specified group?
  *
  * @since BuddyPress (1.5.0)
+ * @since BuddyPress (2.2.0) Added the $user_id parameter.
  *
- * @param int $group_id Optional. The ID of the group whose status you want to
- *        check. Default: the ID of the current group.
- * @return bool $can_send_invites
+ * @param int $group_id The group ID to check.
+ * @param int $user_id  The user ID to check.
+ * @return bool
  */
-function bp_groups_user_can_send_invites( $group_id = false ) {
-	global $bp;
-
+function bp_groups_user_can_send_invites( $group_id = 0, $user_id = 0 ) {
 	$can_send_invites = false;
 	$invite_status    = false;
 
-	if ( is_user_logged_in() ) {
-		if ( bp_current_user_can( 'bp_moderate' ) ) {
-			// Super admins can always send invitations
+	// If $user_id isn't specified, we check against the logged-in user.
+	if ( ! $user_id ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	// If $group_id isn't specified, use existing one if available.
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	if ( $user_id ) {
+		// Users with the 'bp_moderate' cap can always send invitations
+		if ( user_can( $user_id, 'bp_moderate' ) ) {
 			$can_send_invites = true;
-
 		} else {
-			// If no $group_id is provided, default to the current group id
-			if ( !$group_id )
-				$group_id = isset( $bp->groups->current_group->id ) ? $bp->groups->current_group->id : 0;
-
-			// If no group has been found, bail
-			if ( !$group_id )
-				return false;
-
 			$invite_status = bp_group_get_invite_status( $group_id );
-			if ( !$invite_status )
-				return false;
 
 			switch ( $invite_status ) {
 				case 'admins' :
-					if ( groups_is_user_admin( bp_loggedin_user_id(), $group_id ) )
+					if ( groups_is_user_admin( $user_id, $group_id ) ) {
 						$can_send_invites = true;
+					}
 					break;
 
 				case 'mods' :
-					if ( groups_is_user_mod( bp_loggedin_user_id(), $group_id ) || groups_is_user_admin( bp_loggedin_user_id(), $group_id ) )
+					if ( groups_is_user_mod( $user_id, $group_id ) || groups_is_user_admin( $user_id, $group_id ) ) {
 						$can_send_invites = true;
+					}
 					break;
 
 				case 'members' :
-					if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) )
+					if ( groups_is_user_member( $user_id, $group_id ) ) {
 						$can_send_invites = true;
+					}
 					break;
 			}
 		}
 	}
 
-	return apply_filters( 'bp_groups_user_can_send_invites', $can_send_invites, $group_id, $invite_status );
+	/**
+	 * Filters whether a user can send invites in a group.
+	 *
+	 * @since BuddyPress (1.5.0)
+	 * @since BuddyPress (2.2.0) Added the $user_id parameter.
+	 *
+	 * @param bool $can_send_invites Whether the user can send invites
+	 * @param int  $group_id         The group ID being checked
+	 * @param bool $invite_status    The group's current invite status
+	 * @param int  $user_id          The user ID being checked
+	 */
+	return apply_filters( 'bp_groups_user_can_send_invites', $can_send_invites, $group_id, $invite_status, $user_id );
 }
 
 /**
@@ -2299,38 +2318,48 @@ function bp_group_admin_tabs( $group = false ) {
 		$group = ( $groups_template->group ) ? $groups_template->group : groups_get_current_group();
 	}
 
-	$current_tab = bp_get_group_current_admin_tab();
+	$css_id = 'manage-members';
 
-	if ( bp_is_item_admin() ) : ?>
+	if ( 'private' == $group->status ) {
+		$css_id = 'membership-requests';
+	}
 
-		<li<?php if ( 'edit-details' == $current_tab || empty( $current_tab ) ) : ?> class="current"<?php endif; ?>><a href="<?php echo trailingslashit( bp_get_group_permalink( $group ) . 'admin/edit-details' ) ?>"><?php _e( 'Details', 'buddypress' ); ?></a></li>
+	add_filter( "bp_get_options_nav_{$css_id}", 'bp_group_admin_tabs_backcompat', 10, 3 );
 
-	<?php endif; ?>
+	bp_get_options_nav( $group->slug . '_manage' );
 
-	<?php if ( ! bp_is_item_admin() )
-			return false; ?>
+	remove_filter( "bp_get_options_nav_{$css_id}", 'bp_group_admin_tabs_backcompat', 10, 3 );
+}
 
-	<li<?php if ( 'group-settings' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo trailingslashit( bp_get_group_permalink( $group ) . 'admin/group-settings' ) ?>"><?php _e( 'Settings', 'buddypress' ); ?></a></li>
+/**
+ * BackCompat for plugins/themes directly hooking groups_admin_tabs
+ * without using the Groups Extension API
+ *
+ * @param  string $subnav_output subnav item output
+ * @param  string $subnav_item   subnav item params
+ * @param  string $selected_item current selected tab
+ * @return string HTML output
+ */
+function bp_group_admin_tabs_backcompat( $subnav_output = '', $subnav_item = '', $selected_item = '' ) {
+	if ( ! has_action( 'groups_admin_tabs' ) ) {
+		return $subnav_output;
+	}
 
-	<?php if ( !(int)bp_get_option( 'bp-disable-avatar-uploads' ) && buddypress()->avatar->show_avatars ) : ?>
+	$group = groups_get_current_group();
 
-		<li<?php if ( 'group-avatar'   == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo trailingslashit( bp_get_group_permalink( $group ) . 'admin/group-avatar' ) ?>"><?php _e( 'Photo', 'buddypress' ); ?></a></li>
+	ob_start();
 
-	<?php endif; ?>
+	do_action( 'groups_admin_tabs', $selected_item, $group->slug );
 
-	<li<?php if ( 'manage-members' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo trailingslashit( bp_get_group_permalink( $group ) . 'admin/manage-members' ) ?>"><?php _e( 'Members', 'buddypress' ); ?></a></li>
+	$admin_tabs_backcompat = trim( ob_get_contents() );
+	ob_end_clean();
 
-	<?php if ( $groups_template->group->status == 'private' ) : ?>
+	if ( ! empty( $admin_tabs_backcompat ) ) {
+		_doing_it_wrong( "do_action( 'groups_admin_tabs' )", __( 'This action should not be used directly. Please use the BuddyPress Group Extension API to generate Manage tabs.', 'buddypress' ), '2.2.0' );
+		$subnav_output .= $admin_tabs_backcompat;
+	}
 
-		<li<?php if ( 'membership-requests' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo trailingslashit( bp_get_group_permalink( $group ) . 'admin/membership-requests' ) ?>"><?php _e( 'Requests', 'buddypress' ); ?></a></li>
-
-	<?php endif; ?>
-
-	<?php do_action( 'groups_admin_tabs', $current_tab, $group->slug ) ?>
-
-	<li<?php if ( 'delete-group' == $current_tab ) : ?> class="current"<?php endif; ?>><a href="<?php echo trailingslashit( bp_get_group_permalink( $group ) . 'admin/delete-group' ) ?>"><?php _e( 'Delete', 'buddypress' ); ?></a></li>
-
-<?php
+	return $subnav_output;
 }
 
 /**
@@ -2840,13 +2869,68 @@ function bp_group_create_button() {
 			'component'  => 'groups',
 			'link_text'  => __( 'Create a Group', 'buddypress' ),
 			'link_title' => __( 'Create a Group', 'buddypress' ),
-			'link_class' => 'button group-create bp-title-button',
+			'link_class' => 'group-create no-ajax',
 			'link_href'  => trailingslashit( bp_get_root_domain() ) . trailingslashit( bp_get_groups_root_slug() ) . trailingslashit( 'create' ),
 			'wrapper'    => false,
+			'block_self' => false,
 		);
 
 		return bp_get_button( apply_filters( 'bp_get_group_create_button', $button_args ) );
 	}
+
+/**
+ * Output the Create a Group nav item.
+ *
+ * @since BuddyPress (2.2.0)
+ */
+function bp_group_create_nav_item() {
+	echo bp_get_group_create_nav_item();
+}
+
+	/**
+	 * Get the Create a Group nav item.
+	 *
+	 * @since BuddyPress (2.2.0)
+	 *
+	 * @return string
+	 */
+	function bp_get_group_create_nav_item() {
+		// Get the create a group button
+		$create_group_button = bp_get_group_create_button();
+
+		// Make sure the button is available
+		if ( empty( $create_group_button ) ) {
+			return;
+		}
+
+		$output = '<li id="group-create-nav">' . $create_group_button . '</li>';
+
+		return apply_filters( 'bp_get_group_create_nav_item', $output );
+	}
+
+/**
+ * Checks if a specific theme is still filtering the Groups directory title
+ * if so, transform the title button into a Groups directory nav item.
+ *
+ * @since BuddyPress (2.2.0)
+ *
+ * @uses   bp_group_create_nav_item() to output the create a Group nav item
+ * @return string HTML Output
+ */
+function bp_group_backcompat_create_nav_item() {
+	// Bail if the Groups nav item is already used by bp-legacy
+	if ( has_action( 'bp_groups_directory_group_filter', 'bp_legacy_theme_group_create_nav', 999 ) ) {
+		return;
+	}
+
+	// Bail if the theme is not filtering the Groups directory title
+	if ( ! has_filter( 'bp_groups_directory_header' ) ) {
+		return;
+	}
+
+	bp_group_create_nav_item();
+}
+add_action( 'bp_groups_directory_group_filter', 'bp_group_backcompat_create_nav_item', 1000 );
 
 /**
  * Prints a message if the group is not visible to the current user (it is a
@@ -2866,7 +2950,7 @@ function bp_group_status_message( $group = null ) {
  		if ( ! bp_group_has_requested_membership() ) {
 			if ( is_user_logged_in() && bp_group_is_invited() ) {
 				$message = __( 'You must accept your pending invitation before you can access this private group.', 'buddypress' );
-			} else if ( is_user_logged_in() ) {
+			} elseif ( is_user_logged_in() ) {
 				$message = __( 'This is a private group and you must request group membership in order to join.', 'buddypress' );
 			} else {
 				$message = __( 'This is a private group. To join you must be a registered site member and request group membership.', 'buddypress' );
@@ -2974,6 +3058,7 @@ class BP_Groups_Group_Members_Template {
 			'group_id'            => bp_get_current_group_id(),
 			'page'                => 1,
 			'per_page'            => 20,
+			'page_arg'            => 'mlpage',
 			'max'                 => false,
 			'exclude'             => false,
 			'exclude_admins_mods' => 1,
@@ -2986,8 +3071,9 @@ class BP_Groups_Group_Members_Template {
 		// @todo No
 		extract( $r );
 
-		$this->pag_page = isset( $_REQUEST['mlpage'] ) ? intval( $_REQUEST['mlpage'] ) : $r['page'];
-		$this->pag_num  = isset( $_REQUEST['num'] ) ? intval( $_REQUEST['num'] ) : $per_page;
+		$this->pag_arg  = sanitize_key( $r['page_arg'] );
+		$this->pag_page = bp_sanitize_pagination_arg( $this->pag_arg, $r['page']     );
+		$this->pag_num  = bp_sanitize_pagination_arg( 'num',          $r['per_page'] );
 
 		/**
 		 * Check the current group is the same as the supplied group ID.
@@ -3028,13 +3114,14 @@ class BP_Groups_Group_Members_Template {
 		}
 
 		$this->pag_links = paginate_links( array(
-			'base' => add_query_arg( array( 'mlpage' => '%#%' ), $base_url ),
-			'format' => '',
-			'total' => !empty( $this->pag_num ) ? ceil( $this->total_member_count / $this->pag_num ) : $this->total_member_count,
-			'current' => $this->pag_page,
+			'base'      => add_query_arg( array( $this->pag_arg => '%#%' ), $base_url ),
+			'format'    => '',
+			'total'     => ! empty( $this->pag_num ) ? ceil( $this->total_member_count / $this->pag_num ) : $this->total_member_count,
+			'current'   => $this->pag_page,
 			'prev_text' => '&larr;',
 			'next_text' => '&rarr;',
-			'mid_size' => 1
+			'mid_size'  => 1,
+			'add_args'  => array(),
 		));
 	}
 
@@ -4008,15 +4095,17 @@ class BP_Groups_Membership_Requests_Template {
 		}
 
 		$r = wp_parse_args( $args, array(
-			'group_id' => bp_get_current_group_id(),
-			'per_page' => 10,
 			'page'     => 1,
+			'per_page' => 10,
+			'page_arg' => 'mrpage',
 			'max'      => false,
 			'type'     => 'first_joined',
+			'group_id' => bp_get_current_group_id(),
 		) );
 
-		$this->pag_page = isset( $_REQUEST['mrpage'] ) ? intval( $_REQUEST['mrpage'] ) : $r['page'];
-		$this->pag_num  = isset( $_REQUEST['num'] ) ? intval( $_REQUEST['num'] ) : $r['per_page'];
+		$this->pag_arg  = sanitize_key( $r['page_arg'] );
+		$this->pag_page = bp_sanitize_pagination_arg( $this->pag_arg, $r['page']     );
+		$this->pag_num  = bp_sanitize_pagination_arg( 'num',          $r['per_page'] );
 
 		$mquery = new BP_Group_Member_Query( array(
 			'group_id' => $r['group_id'],
@@ -4059,13 +4148,14 @@ class BP_Groups_Membership_Requests_Template {
 		}
 
 		$this->pag_links = paginate_links( array(
-			'base' => add_query_arg( 'mrpage', '%#%' ),
-			'format' => '',
-			'total' => ceil( $this->total_request_count / $this->pag_num ),
-			'current' => $this->pag_page,
+			'base'      => add_query_arg( $this->pag_arg, '%#%' ),
+			'format'    => '',
+			'total'     => ceil( $this->total_request_count / $this->pag_num ),
+			'current'   => $this->pag_page,
 			'prev_text' => '&larr;',
 			'next_text' => '&rarr;',
-			'mid_size' => 1
+			'mid_size'  => 1,
+			'add_args'  => array(),
 		) );
 	}
 
@@ -4275,14 +4365,16 @@ class BP_Groups_Invite_Template {
 		}
 
 		$r = wp_parse_args( $args, array(
-			'user_id'  => bp_loggedin_user_id(),
-			'group_id' => bp_get_current_group_id(),
 			'page'     => 1,
 			'per_page' => 10,
+			'page_arg' => 'invitepage',
+			'user_id'  => bp_loggedin_user_id(),
+			'group_id' => bp_get_current_group_id(),
 		) );
 
-		$this->pag_num  = intval( $r['per_page'] );
-		$this->pag_page = isset( $_REQUEST['invitepage'] ) ? intval( $_REQUEST['invitepage'] ) : $r['page'];
+		$this->pag_arg  = sanitize_key( $r['page_arg'] );
+		$this->pag_page = bp_sanitize_pagination_arg( $this->pag_arg, $r['page']     );
+		$this->pag_num  = bp_sanitize_pagination_arg( 'num',          $r['per_page'] );
 
 		$iquery = new BP_Group_Member_Query( array(
 			'group_id' => $r['group_id'],
@@ -4304,13 +4396,14 @@ class BP_Groups_Invite_Template {
 		// pag_links
 		if ( ! empty( $this->pag_num ) ) {
 			$this->pag_links = paginate_links( array(
-				'base'      => add_query_arg( 'invitepage', '%#%' ),
+				'base'      => add_query_arg( $this->pag_arg, '%#%' ),
 				'format'    => '',
 				'total'     => ceil( $this->total_invite_count / $this->pag_num ),
 				'current'   => $this->pag_page,
 				'prev_text' => '&larr;',
 				'next_text' => '&rarr;',
 				'mid_size'  => 1,
+				'add_args'  => array(),
 			) );
 		} else {
 			$this->pag_links = '';
@@ -4382,13 +4475,9 @@ class BP_Groups_Invite_Template {
 			$this->invite->user->total_friends = BP_Friends_Friendship::total_friend_count( $user_id );
 		}
 
-		if ( bp_is_active( 'friends' ) ) {
-			$this->invite->user->total_friends = BP_Friends_Friendship::total_friend_count( $user_id );
-		}
-
 		$this->invite->user->total_blogs = null;
 
-		$this->invite->group_id = $group_id; // Globaled in bp_group_has_invites()
+		$this->invite->group_id = $group_id; // Global'ed in bp_group_has_invites()
 
 		if ( 0 == $this->current_invite ) // loop has just started
 			do_action('loop_start');
