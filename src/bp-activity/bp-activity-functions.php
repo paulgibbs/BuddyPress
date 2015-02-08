@@ -2554,7 +2554,7 @@ function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
  * @param int $activity_id The unique id of the activity object.
  * @param object $activity_obj Optional. The activity object.
  * @return string $link Permalink for the activity item.
- * @since BuddyPress (2.2.0)
+ * @since BuddyPress (2.3.0)
  */
 function bp_activity_get_shortlink( $activity_id, $activity_obj = false ) {
 	$bp = buddypress();
