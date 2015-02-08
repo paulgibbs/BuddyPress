@@ -2519,7 +2519,9 @@ function bp_activity_delete_comment( $activity_id, $comment_id ) {
  * @since BuddyPress (1.2.0)
  */
 function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
-	if ( ! $activity_obj ) {
+	$bp = buddypress();
+
+	if ( empty( $activity_obj ) ) {
 		$activity_obj = new BP_Activity_Activity( $activity_id );
 	}
 
@@ -2527,19 +2529,36 @@ function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
 		$activity_obj = $activity_obj->current_comment;
 	}
 
-	if ( 'new_blog_post' == $activity_obj->type || 'new_blog_comment' == $activity_obj->type || 'new_forum_topic' == $activity_obj->type || 'new_forum_post' == $activity_obj->type ) {
+	$use_primary_links = array(
+		'new_blog_post',
+		'new_blog_comment',
+		'new_forum_topic',
+		'new_forum_post',
+	);
+
+	if ( ! empty( $bp->activity->track ) ) {
+		$use_primary_links = array_merge( $use_primary_links, array_keys( $bp->activity->track ) );
+	}
+
+	if ( false !== array_search( $activity_obj->type, $use_primary_links ) ) {
 		$link = $activity_obj->primary_link;
 
 	} else {
-		if ( 'activity_comment' === $activity_obj->type ) {
-			$id = $activity_obj->item_id;
+		if ( 'activity_comment' == $activity_obj->type ) {
+			$id = (int) $activity_obj->item_id;
 		} else {
-			$id = $activity_obj->id;
+			$id = (int) $activity_obj->id;
 		}
 
 		$link = bp_core_get_user_domain( $activity_obj->user_id ) . bp_get_activity_slug() . "/{$id}/";
 	}
 
+	/**
+	 * Filters the activity permalink for the specified activity item.
+	 *
+	 * @param array $array Array holding activity shortlink and activity item object.
+	 * @since BuddyPress (2.3.0)
+	 */
 	return apply_filters_ref_array( 'bp_activity_get_permalink', array( $link, &$activity_obj ) );
 }
 
@@ -2583,9 +2602,9 @@ function bp_activity_get_shortlink( $activity_id, $activity_obj = false ) {
 
 	} else {
 		if ( 'activity_comment' == $activity_obj->type ) {
-			$id = $activity_obj->item_id;
+			$id = (int) $activity_obj->item_id;
 		} else {
-			$id = $activity_obj->id;
+			$id = (int) $activity_obj->id;
 		}
 
 		$link = bp_get_root_domain() . '/' . bp_get_activity_root_slug() . "/p/{$id}/";
@@ -2594,9 +2613,8 @@ function bp_activity_get_shortlink( $activity_id, $activity_obj = false ) {
 	/**
 	 * Filters the activity shortlink for the specified activity item.
 	 *
-	 * @since BuddyPress (2.3.0)
-	 *
 	 * @param array $array Array holding activity shortlink and activity item object.
+	 * @since BuddyPress (2.3.0)
 	 */
 	return apply_filters_ref_array( 'bp_activity_get_shortlink', array( $link, &$activity_obj ) );
 }
