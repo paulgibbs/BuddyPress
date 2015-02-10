@@ -14,21 +14,21 @@ defined( 'ABSPATH' ) || exit;
  * Register a relations connection type.
  *
  * @param array $args {
+ *     Describes the connection type.
+ *
  *     @type string $name A unique identifier for this connection type.
- *     @type string|array $from The first end of the connection: post type name or 'user'
+ *     @type string $from The object type of the first end of the connection.
+ *           Post type name or 'user'.
+ *     @type string $to The object type of the second end of the connection.
+ *           Post type name or 'user'.
+ *
  *     @type array $from_query_vars Additional query vars to pass to WP_Query. Default: none.
- *     @type string|array $to The second end of the connection: post type name or 'user'
  *     @type array $to_query_vars Additional query vars to pass to WP_Query. Default: none.
- *     @type array $fields Metadata fields editable by the user (key=>value pairs). Default: none.
- *     @type string $cardinality How many connection can each post have:
- *           'one-to-many', 'many-to-one' or 'many-to-many' (the default).
- *     @type bool $duplicate_connections Whether to allow more than one connection between the same
- *           two posts. Default: false.
- *     @type bool $self_connections Whether to allow a post/user to connect to itself.
+ *     @type string $cardinality Either "one-to-many", "many-to-one", or "many-to-many".
+ *           Default: "many-to-many".
+ *     @type bool $duplicate_connections Allow > 1 connection between the same two objects.
  *           Default: false.
- *     @type bool $reciprocal For indeterminate connections: True means all connections are
- *           displayed in a single box. False means 'from' connections are shown in one box
- *           and 'to' connections are shown in another box. Default: false.
+ *     @type bool $self_connections Allow an object to connect to itself. Default: false.
  * }
  * @return BP_Relations_Connection_Type|bool Object instance on success, false on failure.
  * @since BuddyPress (2.3.0)
