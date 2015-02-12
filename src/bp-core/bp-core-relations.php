@@ -22,20 +22,51 @@ defined( 'ABSPATH' ) || exit;
  *     @type string $to The object type of the second end of the connection.
  *           Post type name or 'user'.
  *
- *     @type array $from_query_vars Additional query vars to pass to WP_Query. Default: none.
- *     @type array $to_query_vars Additional query vars to pass to WP_Query. Default: none.
- *     @type string $cardinality Either "one-to-many", "many-to-one", or "many-to-many".
- *           Default: "many-to-many".
+ *     @type array $from_query_vars Additional query vars to pass to WP_Query. Optional.
+ *     @type array $to_query_vars Additional query vars to pass to WP_Query. Optional.
+ *     @type string $cardinality Either "one-to-many", "many-to-one", or "many-to-many" (default).
  *     @type bool $duplicate_connections Allow > 1 connection between the same two objects.
  *           Default: false.
  *     @type bool $self_connections Allow an object to connect to itself. Default: false.
  * }
- * @return BP_Relations_Connection_Type|bool Object instance on success, false on failure.
+ * @return BP_Relations_Connection_Type|WP_Error Connection type object on success, WP_Error on failure.
  * @since BuddyPress (2.3.0)
  */
 function bp_relations_register_connection_type( Array $args ) {
-	$obj = P2P_Connection_Type_Factory::register( $args );
-	return apply_filters( 'bp_relations_register_connection_type', $ojb );
+	$defaults = array(
+		// Required,
+		'name' => '',
+		'from' => 'post',
+		'to'   => 'post',
+
+		// Optional.
+		'from_query_vars'       => array(),
+		'to_query_vars'         => array(),
+		'cardinality'           => 'many-to-many',
+		'duplicate_connections' => false,
+		'self_connections'      => false,
+	);
+
+	$args = bp_parse_args( $defaults, $args, 'relations_register_connection_type' );
+
+	if ( ! $args['name'] || ! $args['from'] || ! $args['to'] ) {
+		return new WP_Error( 'missing_parameter' );
+	}
+
+	if ( ! in_array( $args['cardinality'], array( 'one-to-many', 'many-to-one', 'many-to-many', ) ) ) {
+		return new WP_Error( 'invalid_cardinality');
+	}
+
+	$sides = array();
+	foreach ( array( 'from', 'to' ) as $direction ) {
+		$sides[ $direction ] = self::create_side( $args, $direction );
+	}
+
+	$ctype = new P2P_Connection_Type( $args, $sides );
+	$ctype->strategy = self::get_direction_strategy( $sides, _p2p_pluck( $args, 'reciprocal' ) );
+
+	buddypress()->relations->types[ $ctype->name ] = $ctype;
+	return apply_filters( 'bp_relations_register_connection_type', $ctype );
 }
 
 
