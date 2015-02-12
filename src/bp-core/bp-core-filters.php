@@ -785,3 +785,16 @@ function bp_maybe_load_mentions_scripts_for_blog_content( $load_mentions, $menti
 	return $load_mentions;
 }
 add_filter( 'bp_activity_maybe_load_mentions_scripts', 'bp_maybe_load_mentions_scripts_for_blog_content', 10, 2 );
+
+/**
+ * Initialise required globals for our advanced object relationships implementation.
+ *
+ * @since BuddyPress (2.3.0)
+ */
+function bp_relations_setup_globals() {
+	$bp = buddypress();
+
+	$bp->relations        = new stdClass;
+	$bp->relations->types = array();
+}
+add_action( 'bp_core_setup_globals', 'bp_relations_setup_globals' );
