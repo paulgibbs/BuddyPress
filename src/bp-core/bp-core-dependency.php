@@ -262,6 +262,23 @@ function bp_add_permastructs() {
 }
 
 /**
+ * Fire the 'bp_add_relations' action, where components register their data types for use in
+ * advanced object relationships (many-to-many database cardinality).
+ *
+ * @since BuddyPress (2.3.0)
+ */
+function bp_add_relations() {
+	$bp = buddypress();
+
+	if ( ! isset( $bp->relations ) ) {
+		$bp->relations        = new stdClass;
+		$bp->relations->types = array();
+	}
+
+	do_action( 'bp_add_relations' );
+}
+
+/**
  * Fire the 'bp_setup_theme' action.
  *
  * The main purpose of 'bp_setup_theme' is give themes a place to load their

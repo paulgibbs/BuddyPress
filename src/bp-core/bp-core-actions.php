@@ -106,5 +106,7 @@ if ( is_admin() ) {
 // Activation redirect
 add_action( 'bp_activation', 'bp_add_activation_redirect' );
 
+// Relations
+add_action( 'bp_setup_globals', 'bp_add_relations' );
 add_action( 'deleted_post', 'bp_relations_delete_connections_for_type' );
 add_action( 'deleted_user', 'bp_relations_delete_connections_for_type' );
