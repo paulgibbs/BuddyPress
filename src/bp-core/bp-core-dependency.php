@@ -262,8 +262,7 @@ function bp_add_permastructs() {
 }
 
 /**
- * Fire the 'bp_add_relations' action, where components register their data types for use in
- * advanced object relationships (many-to-many database cardinality).
+ * Fire the 'bp_add_relations' action, where components register their object relationships.
  *
  * @since BuddyPress (2.3.0)
  */
