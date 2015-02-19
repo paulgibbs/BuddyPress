@@ -188,7 +188,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var int
 	 */
-	var $current_member = -1;
+	public $current_member = -1;
 
 	/**
 	 * The number of members returned by the paged query.
@@ -196,7 +196,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var int
 	 */
-	var $member_count;
+	public $member_count;
 
 	/**
 	 * Array of members located by the query.
@@ -204,7 +204,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var array
 	 */
-	var $members;
+	public $members;
 
 	/**
 	 * The member object currently being iterated on.
@@ -212,7 +212,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var object
 	 */
-	var $member;
+	public $member;
 
 	/**
 	 * A flag for whether the loop is currently being iterated.
@@ -220,7 +220,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var bool
 	 */
-	var $in_the_loop;
+	public $in_the_loop;
 
 	/**
 	 * The unique string used for pagination queries
@@ -228,7 +228,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var public
 	 */
-	var $pag_arg;
+	public $pag_arg;
 
 	/**
 	 * The page number being requested.
@@ -236,7 +236,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var public
 	 */
-	var $pag_page;
+	public $pag_page;
 
 	/**
 	 * The number of items being requested per page.
@@ -244,7 +244,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var public
 	 */
-	var $pag_num;
+	public $pag_num;
 
 	/**
 	 * An HTML string containing pagination links.
@@ -252,7 +252,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var string
 	 */
-	var $pag_links;
+	public $pag_links;
 
 	/**
 	 * The total number of members matching the query parameters.
@@ -260,7 +260,7 @@ class BP_Core_Members_Template {
 	 * @access public
 	 * @var int
 	 */
-	var $total_member_count;
+	public $total_member_count;
 
 	/**
 	 * Constructor method.
@@ -1297,7 +1297,7 @@ function bp_total_site_member_count() {
  * @deprecated Does not seem to be called anywhere in BP core.
  */
 function bp_get_loggedin_user_nav() {
-	global $bp;
+	$bp = buddypress();
 
 	// Loop through each navigation item
 	foreach( (array) $bp->bp_nav as $nav_item ) {
@@ -1339,7 +1339,7 @@ function bp_get_loggedin_user_nav() {
  * Render the navigation markup for the displayed user.
  */
 function bp_get_displayed_user_nav() {
-	global $bp;
+	$bp = buddypress();
 
 	foreach ( (array) $bp->bp_nav as $user_nav_item ) {
 		if ( empty( $user_nav_item['show_for_displayed_user'] ) && !bp_is_my_profile() )
@@ -1483,7 +1483,7 @@ function bp_displayed_user_email() {
 	 * @return string
 	 */
 	function bp_get_displayed_user_email() {
-		global $bp;
+		$bp = buddypress();
 
 		// If displayed user exists, return email address
 		if ( isset( $bp->displayed_user->userdata->user_email ) )
@@ -1645,7 +1645,7 @@ function bp_current_user_id() { return bp_displayed_user_id(); }
  * @return string
  */
 function bp_displayed_user_domain() {
-	global $bp;
+	$bp = buddypress();
 
 	/**
 	 * Filters the generated link for the displayed user's profile.
@@ -1663,7 +1663,7 @@ function bp_displayed_user_domain() {
  * @return string
  */
 function bp_loggedin_user_domain() {
-	global $bp;
+	$bp = buddypress();
 
 	/**
 	 * Filters the generated link for the logged-in user's profile.
@@ -1687,7 +1687,7 @@ function bp_displayed_user_fullname() {
 	 * @return string
 	 */
 	function bp_get_displayed_user_fullname() {
-		global $bp;
+		$bp = buddypress();
 
 		/**
 		 * Filters the displayed user's display name.
@@ -1717,7 +1717,7 @@ function bp_loggedin_user_fullname() {
 	 * @return string
 	 */
 	function bp_get_loggedin_user_fullname() {
-		global $bp;
+		$bp = buddypress();
 
 		/**
 		 * Filters the logged-in user's display name.
@@ -1741,7 +1741,7 @@ function bp_displayed_user_username() {
 	 * @return string
 	 */
 	function bp_get_displayed_user_username() {
-		global $bp;
+		$bp = buddypress();
 
 		if ( bp_displayed_user_id() ) {
 			$username = bp_core_get_username( bp_displayed_user_id(), $bp->displayed_user->userdata->user_nicename, $bp->displayed_user->userdata->user_login );
@@ -1771,7 +1771,7 @@ function bp_loggedin_user_username() {
 	 * @return string
 	 */
 	function bp_get_loggedin_user_username() {
-		global $bp;
+		$bp = buddypress();
 
 		if ( bp_loggedin_user_id() ) {
 			$username = bp_core_get_username( bp_loggedin_user_id(), $bp->loggedin_user->userdata->user_nicename, $bp->loggedin_user->userdata->user_login );
@@ -2095,7 +2095,7 @@ function bp_signup_avatar_dir_value() {
 	 * @return string
 	 */
 	function bp_get_signup_avatar_dir_value() {
-		global $bp;
+		$bp = buddypress();
 
 		// Check if signup_avatar_dir is passed
 		if ( !empty( $_POST['signup_avatar_dir'] ) )
@@ -2131,9 +2131,7 @@ function bp_current_signup_step() {
 	 * @return string
 	 */
 	function bp_get_current_signup_step() {
-		global $bp;
-
-		return $bp->signup->step;
+		return buddypress()->signup->step;
 	}
 
 /**
@@ -2302,11 +2300,12 @@ function bp_members_component_link( $component, $action = '', $query_args = '', 
 	 * @return string
 	 */
 	function bp_get_members_component_link( $component, $action = '', $query_args = '', $nonce = false ) {
-		global $bp;
 
 		// Must be displayed user
 		if ( !bp_displayed_user_id() )
 			return;
+
+		$bp = buddypress();
 
 		// Append $action to $url if there is no $type
 		if ( !empty( $action ) )

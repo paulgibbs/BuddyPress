@@ -61,9 +61,10 @@ add_filter( 'bp_get_new_group_name',        'esc_attr'     );
 add_filter( 'bp_get_new_group_description', 'esc_textarea' );
 
 // Format numberical output
-add_filter( 'bp_get_total_group_count',      'bp_core_number_format' );
-add_filter( 'bp_get_group_total_for_member', 'bp_core_number_format' );
-add_filter( 'bp_get_group_total_members',    'bp_core_number_format' );
+add_filter( 'bp_get_total_group_count',          'bp_core_number_format' );
+add_filter( 'bp_get_group_total_for_member',     'bp_core_number_format' );
+add_filter( 'bp_get_group_total_members',        'bp_core_number_format' );
+add_filter( 'bp_get_total_group_count_for_user', 'bp_core_number_format' );
 
 /**
  * Filter output of Group Description through WordPress's KSES API.
@@ -140,7 +141,7 @@ function groups_add_forum_fields_sql( $sql = '' ) {
  * @return string
  */
 function groups_add_forum_tables_sql( $sql = '' ) {
-	global $bp;
+	$bp = buddypress();
 
 	$sql .= 'JOIN ' . $bp->groups->table_name . ' AS g LEFT JOIN ' . $bp->groups->table_name_groupmeta . ' AS gm ON g.id = gm.group_id ';
 
@@ -154,7 +155,6 @@ function groups_add_forum_tables_sql( $sql = '' ) {
  * @return string
  */
 function groups_add_forum_where_sql( $sql = '' ) {
-	global $bp;
 
 	// Define locale variable
 	$parts = array();
@@ -189,6 +189,8 @@ function groups_add_forum_where_sql( $sql = '' ) {
 	// Assemble Voltron
 	$parts_string = implode( ' AND ', $parts );
 
+	$bp = buddypress();
+
 	// Set it to the global filter
 	$bp->groups->filter_sql = $parts_string;
 
@@ -205,13 +207,17 @@ function groups_add_forum_where_sql( $sql = '' ) {
  * @return bool
  */
 function groups_filter_bbpress_caps( $value, $cap, $args ) {
-	global $bp;
 
 	if ( bp_current_user_can( 'bp_moderate' ) )
 		return true;
 
-	if ( 'add_tag_to' == $cap )
-		if ( $bp->groups->current_group->user_has_access ) return true;
+	if ( 'add_tag_to' === $cap ) {
+		$bp = buddypress();
+
+		if ( $bp->groups->current_group->user_has_access ) {
+			return true;
+		}
+	}
 
 	if ( 'manage_forums' == $cap && is_user_logged_in() )
 		return true;

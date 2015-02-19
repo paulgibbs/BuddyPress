@@ -497,7 +497,16 @@ class BP_Legacy extends BP_Theme_Compat {
 		// Add it to the beginning of the templates array so it takes precedence
 		// over the default hierarchy.
 		if ( ! empty( $page_template ) ) {
-			array_unshift( $templates, $page_template );
+
+			/**
+			 * Check for existence of template before adding it to template
+			 * stack to avoid accidentally including an unintended file.
+			 *
+			 * @see: https://buddypress.trac.wordpress.org/ticket/6190
+			 */
+			if ( '' !== locate_template( $page_template ) ) {
+				array_unshift( $templates, $page_template );
+			}
 		}
 
 		return $templates;
@@ -1151,7 +1160,9 @@ function bp_legacy_theme_ajax_invite_user() {
 
 		$user = new BP_Core_User( $friend_id );
 
-		$uninvite_url = bp_is_current_action( 'create' ) ? bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-invites/?user_id=' . $friend_id : bp_get_group_permalink( $group ) . 'send-invites/remove/' . $friend_id;
+		$uninvite_url = bp_is_current_action( 'create' )
+			? bp_get_groups_directory_permalink() . 'create/step/group-invites/?user_id=' . $friend_id
+			: bp_get_group_permalink( $group )    . 'send-invites/remove/' . $friend_id;
 
 		echo '<li id="uid-' . esc_attr( $user->id ) . '">';
 		echo $user->avatar_thumb;
