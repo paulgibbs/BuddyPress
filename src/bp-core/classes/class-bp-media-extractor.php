@@ -899,15 +899,3 @@ class BP_Media_Extractor {
 		return apply_filters( 'bp_media_extractor_strip_markup', $plaintext, $richtext );
 	}
 }
-
-require dirname( __FILE__ ) . '/classes/class-bp-user-query.php';
-require dirname( __FILE__ ) . '/classes/class-bp-core-user.php';
-require dirname( __FILE__ ) . '/classes/class-bp-date-query.php';
-require dirname( __FILE__ ) . '/classes/class-bp-core-notification.php';
-require dirname( __FILE__ ) . '/classes/class-bp-button.php';
-require dirname( __FILE__ ) . '/classes/class-bp-embed.php';
-require dirname( __FILE__ ) . '/classes/class-bp-walker-nav-menu.php';
-require dirname( __FILE__ ) . '/classes/class-bp-walker-nav-menu-checklist.php';
-require dirname( __FILE__ ) . '/classes/class-bp-suggestions.php';
-require dirname( __FILE__ ) . '/classes/class-bp-members-suggestions.php';
-require dirname( __FILE__ ) . '/classes/class-bp-recursive-query.php';
