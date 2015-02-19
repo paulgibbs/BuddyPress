@@ -116,12 +116,12 @@ class BP_Admin {
 	 * @access private
 	 */
 	private function includes() {
-		require( $this->admin_dir . 'bp-core-actions.php'    );
-		require( $this->admin_dir . 'bp-core-settings.php'   );
-		require( $this->admin_dir . 'bp-core-functions.php'  );
-		require( $this->admin_dir . 'bp-core-components.php' );
-		require( $this->admin_dir . 'bp-core-slugs.php'      );
-		require( $this->admin_dir . 'bp-core-tools.php'      );
+		require( $this->admin_dir . 'bp-core-admin-actions.php'    );
+		require( $this->admin_dir . 'bp-core-admin-settings.php'   );
+		require( $this->admin_dir . 'bp-core-admin-functions.php'  );
+		require( $this->admin_dir . 'bp-core-admin-components.php' );
+		require( $this->admin_dir . 'bp-core-admin-slugs.php'      );
+		require( $this->admin_dir . 'bp-core-admin-tools.php'      );
 	}
 
 	/**
@@ -504,7 +504,7 @@ class BP_Admin {
 						<h3 style="margin:0"><?php _e( 'Getting Started with BuddyPress', 'buddypress' ); ?></h3>
 						<div class="welcome-panel-column-container">
 							<div class="welcome-panel-column">
-								<h4><?php _e( 'Configure Buddypress', 'buddypress' ); ?></h4>
+								<h4><?php _e( 'Configure BuddyPress', 'buddypress' ); ?></h4>
 								<ul>
 									<li><?php printf(
 									'<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Set Up Components', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) )
