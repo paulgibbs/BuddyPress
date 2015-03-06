@@ -51,7 +51,7 @@ function bp_core_set_uri_globals() {
 
 	// Ajax or not?
 	if ( defined( 'DOING_AJAX' ) && DOING_AJAX || strpos( $_SERVER['REQUEST_URI'], 'wp-load.php' ) )
-		$path = bp_core_referrer();
+		$path = bp_get_referer_path();
 	else
 		$path = esc_url( $_SERVER['REQUEST_URI'] );
 
@@ -759,8 +759,8 @@ add_action( 'bp_init', '_bp_maybe_remove_redirect_canonical' );
  *
  * @since BuddyPress (1.6.1)
  *
- * @link http://buddypress.trac.wordpress.org/ticket/4329
- * @link http://buddypress.trac.wordpress.org/ticket/4415
+ * @link https://buddypress.trac.wordpress.org/ticket/4329
+ * @link https://buddypress.trac.wordpress.org/ticket/4415
  */
 function _bp_rehook_maybe_redirect_404() {
 	if ( defined( 'NOBLOGREDIRECT' ) ) {

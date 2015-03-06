@@ -5,20 +5,6 @@
  * @group BP_User_Query
  */
 class BP_Tests_BP_User_Query_TestCases extends BP_UnitTestCase {
-	protected $old_current_user = 0;
-
-	public function setUp() {
-		parent::setUp();
-
-		$this->old_current_user = get_current_user_id();
-		$this->set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
-	}
-
-	public function tearDown() {
-		parent::tearDown();
-		$this->set_current_user( $this->old_current_user );
-	}
-
 	/**
 	 * Checks that user_id returns friends
 	 */
@@ -38,7 +24,7 @@ class BP_Tests_BP_User_Query_TestCases extends BP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 4938
+	 * @ticket BP4938
 	 */
 	public function test_bp_user_query_friends_with_include() {
 		$u1 = $this->factory->user->create();
@@ -514,9 +500,9 @@ class BP_Tests_BP_User_Query_TestCases extends BP_UnitTestCase {
 			'include' => $users,
 		) );
 
-		$this->assertSame( array( 'foo' ), wp_cache_get( $users[0], 'bp_member_type' ) );
-		$this->assertSame( array( 'bar' ), wp_cache_get( $users[1], 'bp_member_type' ) );
-		$this->assertSame( array( 'foo' ), wp_cache_get( $users[2], 'bp_member_type' ) );
-		$this->assertSame( '', wp_cache_get( $users[3], 'bp_member_type' ) );
+		$this->assertSame( array( 'foo' ), wp_cache_get( $users[0], 'bp_member_member_type' ) );
+		$this->assertSame( array( 'bar' ), wp_cache_get( $users[1], 'bp_member_member_type' ) );
+		$this->assertSame( array( 'foo' ), wp_cache_get( $users[2], 'bp_member_member_type' ) );
+		$this->assertSame( '', wp_cache_get( $users[3], 'bp_member_member_type' ) );
 	}
 }

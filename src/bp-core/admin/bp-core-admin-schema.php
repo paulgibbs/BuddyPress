@@ -40,6 +40,8 @@ function bp_core_install( $active_components = false ) {
 
 	// If no components passed, get all the active components from the main site
 	if ( empty( $active_components ) ) {
+
+		/** This filter is documented in bp-core/admin/bp-core-admin-components.php */
 		$active_components = apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
 	}
 
@@ -110,6 +112,15 @@ function bp_core_install_notifications() {
 				KEY component_name (component_name),
 				KEY component_action (component_action),
 				KEY useritem (user_id,is_new)
+			) {$charset_collate};";
+
+	$sql[] = "CREATE TABLE {$bp_prefix}bp_notifications_meta (
+				id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				notification_id bigint(20) NOT NULL,
+				meta_key varchar(255) DEFAULT NULL,
+				meta_value longtext DEFAULT NULL,
+				KEY notification_id (notification_id),
+				KEY meta_key (meta_key)
 			) {$charset_collate};";
 
 	dbDelta( $sql );
