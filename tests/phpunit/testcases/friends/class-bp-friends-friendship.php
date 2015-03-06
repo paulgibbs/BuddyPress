@@ -4,20 +4,6 @@
  * @group friends
  */
 class BP_Tests_BP_Friends_Friendship_TestCases extends BP_UnitTestCase {
-	protected $old_current_user = 0;
-
-	public function setUp() {
-		parent::setUp();
-
-		$this->old_current_user = get_current_user_id();
-		$this->set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
-	}
-
-	public function tearDown() {
-		parent::tearDown();
-		$this->set_current_user( $this->old_current_user );
-	}
-
 	public function test_search_friends() {
 		$u1 = $this->factory->user->create();
 		$u2 = $this->factory->user->create();
@@ -114,5 +100,31 @@ class BP_Tests_BP_Friends_Friendship_TestCases extends BP_UnitTestCase {
 		$u2 = $this->factory->user->create();
 		friends_add_friend( $u1, $u2, true );
 		$this->assertEquals( 'is_friend', BP_Friends_Friendship::check_is_friend( $u1, $u2 ) );
+	}
+
+	/**
+	 * @group BP6247
+	 */
+	public function test_save_method_should_update_existing_row() {
+		$u1 = $this->factory->user->create();
+		$u2 = $this->factory->user->create();
+
+		$friendship = new BP_Friends_Friendship();
+		$friendship->initiator_user_id = $u1;
+		$friendship->friend_user_id = $u2;
+		$friendship->is_confirmed = 0;
+		$friendship->is_limited = 0;
+		$friendship->date_created = bp_core_current_time();
+		$friendship->is_confirmed = 1;
+		$friendship->save();
+
+		$fid = $friendship->id;
+
+		$f = new BP_Friends_Friendship( $fid );
+		$f->is_confirmed = 1;
+		$f->save();
+
+		$f2 = new BP_Friends_Friendship( $fid );
+		$this->assertEquals( 1, $f2->is_confirmed );
 	}
 }
