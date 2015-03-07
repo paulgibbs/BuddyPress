@@ -205,4 +205,77 @@ class BP_Tests_Members_Types extends BP_UnitTestCase {
 		$this->assertFalse( wp_cache_get( $u, 'bp_member_type' ) );
 		$this->assertFalse( bp_get_member_type( $u ) );
 	}
+
+	/**
+	 * @group BP6242
+	 * @group cache
+	 */
+	public function test_bp_get_member_type_should_not_conflict_with_term_cache() {
+		global $wpdb;
+
+		// Offset IDs.
+		$dummy_terms = $this->factory->tag->create_many( 5 );
+
+		$u1 = $this->factory->user->create();
+		bp_register_member_type( 'foo' );
+		bp_set_member_type( $u1, 'foo' );
+
+		// Fetch a term ID.
+		$terms = get_terms( 'bp_member_type', array( 'hide_empty' => false, 'fields' => 'all' ) );
+
+		// Make sure the user's ID matches a term ID, to force a cache confusion.
+		$u2 = $this->factory->user->create();
+		$new_user_id = $terms[0]->term_id;
+		$wpdb->update( $wpdb->users, array( 'ID' => $new_user_id ), array( 'ID' => $u2 ) );
+
+		bp_set_member_type( $new_user_id, 'foo' );
+
+		// Reprime the taxonomy cache.
+		$terms = get_terms( 'bp_member_type', array( 'hide_empty' => false, 'fields' => 'all' ) );
+
+		$this->assertSame( 'foo', bp_get_member_type( $new_user_id, true ) );
+	}
+
+	/**
+	 * @group BP6188
+	 */
+	public function test_bp_remove_member_type_should_return_false_when_member_type_is_empty() {
+		$this->assertFalse( bp_remove_member_type( 5, '' ) );
+	}
+
+	/**
+	 * @group BP6188
+	 */
+	public function test_bp_remove_member_type_should_return_false_when_member_type_is_invalid() {
+		$this->assertFalse( bp_remove_member_type( 5, 'foo' ) );
+	}
+
+	/**
+	 * @group BP6188
+	 */
+	public function test_bp_remove_member_type_should_return_false_when_member_is_not_of_provided_type() {
+		$u1 = $this->factory->user->create();
+		bp_register_member_type( 'foo' );
+		bp_register_member_type( 'bar' );
+		bp_set_member_type( $u1, 'bar' );
+
+		$this->assertFalse( bp_remove_member_type( $u1, 'foo' ) );
+		$types = bp_get_member_type( $u1, false );
+		$this->assertEquals( array( 'bar' ), $types );
+	}
+
+	/**
+	 * @group BP6188
+	 */
+	public function test_bp_remove_member_type_should_return_true_for_successful_deletion() {
+		$u1 = $this->factory->user->create();
+		bp_register_member_type( 'foo' );
+		bp_register_member_type( 'bar' );
+		bp_set_member_type( $u1, 'foo' );
+		bp_set_member_type( $u1, 'bar', true );
+
+		$this->assertTrue( bp_remove_member_type( $u1, 'foo' ) );
+		$types = bp_get_member_type( $u1, false );
+		$this->assertEquals( array( 'bar' ), $types );
+	}
 }

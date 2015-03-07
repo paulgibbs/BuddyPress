@@ -442,7 +442,8 @@ function bp_search_default_text( $component = '' ) {
 	 * @return string Placeholder text for search field.
 	 */
 	function bp_get_search_default_text( $component = '' ) {
-		global $bp;
+
+		$bp = buddypress();
 
 		if ( empty( $component ) ) {
 			$component = bp_current_component();
@@ -657,10 +658,10 @@ function bp_create_excerpt( $text, $length = 225, $options = array() ) {
 		$openTags    = array();
 		$truncate    = '';
 
-		// Find all the tags and put them in a stack for later use
-		preg_match_all( '/(<\/?([\w+]+)[^>]*>)?([^<>]*)/', $text, $tags, PREG_SET_ORDER );
-		foreach ( $tags as $tag ) {
+		// Find all the tags and HTML comments and put them in a stack for later use
+		preg_match_all( '/(<\/?([\w!].+?)[^>]*>)?([^<>]*)/', $text, $tags, PREG_SET_ORDER );
 
+		foreach ( $tags as $tag ) {
 			// Process tags that need to be closed
 			if ( !preg_match( '/img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param/s',  $tag[2] ) ) {
 				if ( preg_match( '/<[\w]+[^>]*>/s', $tag[0] ) ) {
@@ -830,7 +831,7 @@ function bp_registration_needs_activation() {
  *
  * @since BuddyPress (1.7.0)
  *
- * @see http://buddypress.trac.wordpress.org/ticket/4401
+ * @see https://buddypress.trac.wordpress.org/ticket/4401
  *
  * @param array $args {
  *     Array of optional parameters.
@@ -2650,7 +2651,7 @@ function bp_get_nav_menu_items() {
 			continue;
 		}
 
-		// Get the correct menu link. See http://buddypress.trac.wordpress.org/ticket/4624
+		// Get the correct menu link. See https://buddypress.trac.wordpress.org/ticket/4624
 		$link = bp_loggedin_user_domain() ? str_replace( bp_loggedin_user_domain(), bp_displayed_user_domain(), $nav['link'] ) : trailingslashit( bp_displayed_user_domain() . $nav['link'] );
 
 		// Add this menu

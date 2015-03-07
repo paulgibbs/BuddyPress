@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @return bool True if found, otherwise false.
  */
 function bp_members_has_directory() {
-	global $bp;
+	$bp = buddypress();
 
 	return (bool) !empty( $bp->pages->members->id );
 }
@@ -2583,7 +2583,7 @@ function bp_set_member_type( $user_id, $member_type, $append = false ) {
 
 	// Bust the cache if the type has been updated.
 	if ( ! is_wp_error( $retval ) ) {
-		wp_cache_delete( $user_id, 'bp_member_type' );
+		wp_cache_delete( $user_id, 'bp_member_member_type' );
 
 		/**
 		 * Fires just after a user's member type has been changed.
@@ -2601,6 +2601,42 @@ function bp_set_member_type( $user_id, $member_type, $append = false ) {
 }
 
 /**
+ * Remove type for a member.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @param int    $user_id     ID of the user.
+ * @param string $member_type Member Type.
+ *
+ * @return bool|WP_Error
+ */
+function bp_remove_member_type( $user_id, $member_type ) {
+	// Bail if no valid member type was passed.
+	if ( empty( $member_type ) || ! bp_get_member_type_object( $member_type ) ) {
+		return false;
+	}
+
+	$deleted = bp_remove_object_terms( $user_id, $member_type, 'bp_member_type' );
+
+	// Bust the cache if the type has been removed.
+	if ( ! is_wp_error( $deleted ) ) {
+		wp_cache_delete( $user_id, 'bp_member_member_type' );
+
+		/**
+		 * Fires just after a user's member type has been removed.
+		 *
+		 * @since BuddyPress (2.3.0)
+		 *
+		 * @param int    $user_id     ID of the user whose member type has been updated.
+		 * @param string $member_type Member type.
+		 */
+		do_action( 'bp_remove_member_type', $user_id, $member_type );
+	}
+
+	return $deleted;
+}
+
+/**
  * Get type for a member.
  *
  * @since BuddyPress (2.2.0)
@@ -2612,14 +2648,14 @@ function bp_set_member_type( $user_id, $member_type, $append = false ) {
  *                           types (if $single is false). Returns false on failure.
  */
 function bp_get_member_type( $user_id, $single = true ) {
-	$types = wp_cache_get( $user_id, 'bp_member_type' );
+	$types = wp_cache_get( $user_id, 'bp_member_member_type' );
 
 	if ( false === $types ) {
-		$types = bp_get_object_terms( $user_id, 'bp_member_type'  );
+		$types = bp_get_object_terms( $user_id, 'bp_member_type' );
 
 		if ( ! is_wp_error( $types ) ) {
 			$types = wp_list_pluck( $types, 'name' );
-			wp_cache_set( $user_id, $types, 'bp_member_type' );
+			wp_cache_set( $user_id, $types, 'bp_member_member_type' );
 		}
 	}
 

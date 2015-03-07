@@ -432,7 +432,7 @@ function bp_core_get_directory_page_ids() {
 			}
 
 			// 'register' and 'activate' do not have components, but should be whitelisted.
-			if ( bp_get_signup_allowed() && ( 'register' === $component_name || 'activate' === $component_name ) ) {
+			if ( 'register' === $component_name || 'activate' === $component_name ) {
 				continue;
 			}
 
@@ -625,12 +625,21 @@ function bp_core_add_page_mappings( $components, $existing = 'keep' ) {
 /**
  * Remove the entry from bp_pages when the corresponding WP page is deleted.
  *
+ * Bails early on multisite installations when not viewing the root site.
+ * @link https://buddypress.trac.wordpress.org/ticket/6226
+ *
  * @since BuddyPress (2.2.0)
  *
  * @param int $post_id Post ID.
  */
 function bp_core_on_directory_page_delete( $post_id ) {
-	$page_ids = bp_core_get_directory_page_ids();
+
+	// Stop if we are not on the main BP root blog
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
+	$page_ids       = bp_core_get_directory_page_ids();
 	$component_name = array_search( $post_id, $page_ids );
 
 	if ( ! empty( $component_name ) ) {
@@ -826,14 +835,27 @@ function bp_core_redirect( $location = '', $status = 302 ) {
 }
 
 /**
- * Return the referrer URL without the http(s)://
+ * Return the URL path of the referring page.
  *
- * @return string The referrer URL.
+ * This is a wrapper for `wp_get_referer()` that sanitizes the referer URL to
+ * a webroot-relative path. For example, 'http://example.com/foo/' will be
+ * reduced to '/foo/'.
+ *
+ * @since BuddyPress (2.3.0)
+ *
+ * @return bool|string Returns false on error, a URL path on success.
  */
-function bp_core_referrer() {
-	$referer = explode( '/', wp_get_referer() );
-	unset( $referer[0], $referer[1], $referer[2] );
-	return implode( '/', $referer );
+function bp_get_referer_path() {
+	$referer = wp_get_referer();
+
+	if ( false === $referer ) {
+		return false;
+	}
+
+	// Turn into an absolute path.
+	$referer = preg_replace( '|https?\://[^/]+/|', '/', $referer );
+
+	return $referer;
 }
 
 /**

@@ -40,6 +40,8 @@ function bp_core_install( $active_components = false ) {
 
 	// If no components passed, get all the active components from the main site
 	if ( empty( $active_components ) ) {
+
+		/** This filter is documented in bp-core/admin/bp-core-admin-components.php */
 		$active_components = apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
 	}
 
@@ -114,6 +116,15 @@ function bp_core_install_notifications() {
 				KEY component_name (component_name),
 				KEY component_action (component_action),
 				KEY useritem (user_id,is_new)
+			) {$charset_collate};";
+
+	$sql[] = "CREATE TABLE {$bp_prefix}bp_notifications_meta (
+				id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				notification_id bigint(20) NOT NULL,
+				meta_key varchar(255) DEFAULT NULL,
+				meta_value longtext DEFAULT NULL,
+				KEY notification_id (notification_id),
+				KEY meta_key (meta_key)
 			) {$charset_collate};";
 
 	dbDelta( $sql );
@@ -493,7 +504,7 @@ function bp_core_install_signups() {
 	global $wpdb;
 
 	// Signups is not there and we need it so let's create it
-	require_once( buddypress()->plugin_dir . '/bp-core/admin/bp-core-schema.php' );
+	require_once( buddypress()->plugin_dir . '/bp-core/admin/bp-core-admin-schema.php' );
 	require_once( ABSPATH                  . 'wp-admin/includes/upgrade.php'     );
 
 	// Never use bp_core_get_table_prefix() for any global users tables
