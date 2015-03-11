@@ -119,7 +119,7 @@ add_action( 'bp_actions', 'bp_core_get_random_member' );
 
 /*
 DJPAULTODO:
-Each component needs to define a "Side" class for the relationship type that it provides.
+Each component needs to define a "Side" class for the relationship type that it provides.(start with P2P_Side_User?)
 Each component needs to declare its connections. --> via 'bp_add_relations'
 */
 
