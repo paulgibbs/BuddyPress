@@ -21,3 +21,6 @@ require dirname( __FILE__ ) . '/classes/class-bp-suggestions.php';
 require dirname( __FILE__ ) . '/classes/class-bp-members-suggestions.php';
 require dirname( __FILE__ ) . '/classes/class-bp-recursive-query.php';
 require dirname( __FILE__ ) . '/classes/class-bp-relations-item.php';
+require dirname( __FILE__ ) . '/classes/class-bp-relations-item-post.php';
+require dirname( __FILE__ ) . '/classes/class-bp-relations-item-user.php';
+require dirname( __FILE__ ) . '/classes/class-bp-relations-item-any.php';
