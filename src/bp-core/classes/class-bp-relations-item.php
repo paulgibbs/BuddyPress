@@ -34,7 +34,7 @@ abstract class BP_Relations_Item {
 	 * @param object $item The content object.
 	 * @since BuddyPress (2.3.0)
 	 */
-	function __construct( $item ) {
+	public function __construct( $item ) {
 		$this->item = $item;
 	}
 
