@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Relations API item wrapper for generic connection types (i.e. 'any').
+ * Relations API item wrapper for generic object types (i.e. 'any').
  *
  * @since BuddyPress (2.3.0)
  */

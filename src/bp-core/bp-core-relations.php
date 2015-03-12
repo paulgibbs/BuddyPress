@@ -18,9 +18,9 @@ defined( 'ABSPATH' ) || exit;
  *
  *     @type string $name A unique identifier for this connection type.
  *     @type string $from The object type of the first end of the connection.
- *           Post type name or 'user'.
+ *           Values: any post type name, or 'user'.
  *     @type string $to The object type of the second end of the connection.
- *           Post type name or 'user'.
+ *           Values: any post type name, or 'user'.
  *
  *     @type array $from_query_vars Additional query vars to pass to WP_Query. Optional.
  *     @type array $to_query_vars Additional query vars to pass to WP_Query. Optional.
