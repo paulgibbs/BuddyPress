@@ -53,7 +53,7 @@ function bp_relations_register_connection_type( Array $args ) {
 		return new WP_Error( 'missing_parameter' );
 	}
 
-	if ( ! in_array( $args['cardinality'], array( 'one-to-many', 'many-to-one', 'many-to-many', ) ) ) {
+	if ( ! in_array( $args['cardinality'], array( 'one-to-many', 'many-to-one', 'many-to-many', ), true ) ) {
 		return new WP_Error( 'invalid_cardinality');
 	}
 
