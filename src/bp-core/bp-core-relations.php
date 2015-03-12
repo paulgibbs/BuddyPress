@@ -22,8 +22,8 @@ defined( 'ABSPATH' ) || exit;
  *     @type string $to The object type of the second end of the connection.
  *           Values: any post type name, or 'user'.
  *
- *     @type array $from_query_vars Additional query vars to pass to WP_Query. Optional.
- *     @type array $to_query_vars Additional query vars to pass to WP_Query. Optional.
+ *     @type array $from_query_vars Additional query vars to use when fetching the object. Optional.
+ *     @type array $to_query_vars Additional query vars to use when fetching the object. Optional.
  *     @type string $cardinality Either "one-to-many", "many-to-one", or "many-to-many" (default).
  *     @type bool $duplicate_connections Allow > 1 connection between the same two objects.
  *           Default: false.
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
  * @return BP_Relations_Connection_Type|WP_Error Connection type object on success, WP_Error on failure.
  * @since BuddyPress (2.3.0)
  */
-function bp_relations_register_connection_type( Array $args ) {
+function bp_relations_register_connection_type( array $args ) {
 	$defaults = array(
 		// Required,
 		'name' => '',
