@@ -62,11 +62,13 @@ function bp_relations_register_connection_type( array $args ) {
 		$sides[ $direction ] = bp_relations_create_side_object( $args, $direction );
 	}
 
-	$ctype = new P2P_Connection_Type( $args, $sides );
+//djpaultodo: this next -> BP_Relations_Connection_Type and/or self::get_direction_strategy!
+	$ctype           = new BP_Relations_Connection_Type( $args, $sides );
 	$ctype->strategy = self::get_direction_strategy( $sides, _p2p_pluck( $args, 'reciprocal' ) );
+	$ctype           = apply_filters( 'bp_relations_register_connection_type', $ctype, $args, $sides );
 
 	buddypress()->relations->types[ $ctype->name ] = $ctype;
-	return apply_filters( 'bp_relations_register_connection_type', $ctype );
+	return $ctype;
 }
 
 
