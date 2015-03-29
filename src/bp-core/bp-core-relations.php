@@ -135,6 +135,23 @@ function bp_relations_add_meta( $object_id, $meta_key, $meta_value, $unique = fa
  */
 
 /**
+ * Get details about a registered relations connection type.
+ *
+ * @param string $type A unique identifier for the connection type to retrieve.
+ * @return BP_Relations_Connection_Type|bool Registered connection type, else false if not found.
+ * @since BuddyPress (2.3.0)
+ */
+function bp_relations_get_connection_type( $type ) {
+	$connection_type = false;
+
+	if ( isset( buddypress()->relations->types[ $type ] ) ) {
+		$connection_type = buddypress()->relations->types[ $type ];
+	}
+
+	return apply_filters( 'bp_relations_get_connection_type', $connection_type, $type );
+}
+
+/**
  * When items have been deleted (Activity, Posts, Users, and so on), tidy up any relationships.
  *
  * @param int|array $object_ids IDs of the items (of the appropriate type) that have been deleted.
@@ -177,7 +194,7 @@ function bp_relations_delete_connections_for_type( $object_ids, $object_type = '
  *
  * For example, for a relationship between Users and Posts, one side will be created for the
  * User (BP_Relations_Side_User) and one for the Post (BP_Relations_Side_Post). Internally,
- * BP_Relations_Side_User uses BP_User_Query, and BP_Relations_Side_Post uses WP_Query.
+ * BP_Relations_Side_User uses BP_User_Query, and BP_Relations_Side_Post uses WP_Query to fetch data.
  *
  * @param array $args See bp_relations_register_connection_type() for description.
  * @param string $direction An end of the connection. Either "from" or "to".
