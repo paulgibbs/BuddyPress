@@ -154,7 +154,8 @@ class BP_Core extends BP_Component {
 			return;
 
 		$includes = array(
-			'admin'
+			'relations',
+			'admin',
 		);
 
 		parent::includes( $includes );
@@ -250,6 +251,9 @@ class BP_Core extends BP_Component {
 
 		// Is the logged in user is a mod for the current item?
 		bp_update_is_item_mod( false,                  'core' );
+
+		$this->register_global_tables( array( 'table_name' => $bp->table_prefix . 'bp_relations' ) );
+		$this->register_meta_tables( array( 'table_name_meta' => $bp->table_prefix . 'bp_relations_meta' ) );
 
 		/**
 		 * Fires at the end of the setup of bp-core globals setting.
