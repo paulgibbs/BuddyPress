@@ -51,6 +51,9 @@ function bp_core_install( $active_components = false ) {
 	// Install the signups table
 	bp_core_maybe_install_signups();
 
+	// Advanced object relationship tables.
+	bp_core_install_relations_table();
+
 	// Notifications
 	if ( !empty( $active_components['notifications'] ) ) {
 		bp_core_install_notifications();
@@ -447,6 +450,40 @@ function bp_core_install_blog_tracking() {
 				KEY blog_id (blog_id),
 				KEY meta_key (meta_key(191))
 			) {$charset_collate};";
+
+	dbDelta( $sql );
+}
+
+/**
+ * Install tables used to track many-to-many relationships between objects.
+ *
+ * @since BuddyPress (2.3.0)
+ */
+function bp_core_install_relations_table() {
+	$bp_prefix       = bp_core_get_table_prefix();
+	$charset_collate = bp_core_set_charset();
+	$sql             = array();
+
+	$sql[] = "CREATE TABLE {$bp_prefix}bp_relations (
+		relation_id bigint(20) unsigned NOT NULL auto_increment,
+		rel_from bigint(20) unsigned NOT NULL,
+		rel_to bigint(20) unsigned NOT NULL,
+		rel_type varchar(44) NOT NULL default '',
+		PRIMARY KEY (relation_id),
+		KEY rel_from (rel_from),
+		KEY rel_to (rel_to),
+		KEY rel_type (rel_type)
+	) {$charset_collate};";
+
+	$sql[] = "CREATE TABLE {$bp_prefix}bp_relations_meta (
+		meta_id bigint(20) unsigned NOT NULL auto_increment,
+		relation_id bigint(20) unsigned NOT NULL default '0',
+		meta_key varchar(255) default NULL,
+		meta_value longtext,
+		PRIMARY KEY (meta_id),
+		KEY relation_id (relation_id),
+		KEY meta_key (meta_key)
+	) {$charset_collate};";
 
 	dbDelta( $sql );
 }
