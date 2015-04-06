@@ -451,6 +451,7 @@ class BuddyPress {
 		require( $this->plugin_dir . 'bp-core/bp-core-component.php'  );
 		require( $this->plugin_dir . 'bp-core/bp-core-functions.php'  );
 		require( $this->plugin_dir . 'bp-core/bp-core-moderation.php' );
+		require( $this->plugin_dir . 'bp-core/bp-core-relations.php'  );
 		require( $this->plugin_dir . 'bp-core/bp-core-loader.php'     );
 
 		// Skip or load deprecated content
