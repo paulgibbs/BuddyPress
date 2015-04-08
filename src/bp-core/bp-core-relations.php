@@ -1,8 +1,8 @@
 <?php
 /**
- * BuddyPress' implementation of advanced object relationships (those with many-to-many database cardinality).
+ * BuddyPress' implementation of advanced object relationships (many-to-many or many-to-one cardinality).
  *
- * Based originally on scribu's "Posts to Posts" plugin for WordPress. Big thanks! https://github.com/scribu/
+ * Inspired by scribu's "Posts to Posts" plugin for WordPress. Big thanks! https://github.com/scribu/
  *
  * @package BuddyPress
  */
@@ -57,18 +57,46 @@ function bp_relations_register_connection_type( array $args ) {
 		return new WP_Error( 'invalid_cardinality');
 	}
 
-	$sides = array();
-	foreach ( array( 'from', 'to' ) as $direction ) {
-		$sides[ $direction ] = bp_relations_create_side_object( $args, $direction );
-	}
+	$sides = array(
+		'from' => bp_relations_create_side_object( $args, 'from' ),
+		'to'   => bp_relations_create_side_object( $args, 'to'   ),
+	);
 
-//djpaultodo: this next -> BP_Relations_Connection_Type and/or self::get_direction_strategy!
-	$ctype           = new BP_Relations_Connection_Type( $args, $sides );
-	$ctype->strategy = self::get_direction_strategy( $sides, false );
-	$ctype           = apply_filters( 'bp_relations_register_connection_type', $ctype, $args, $sides );
+	$ctype = new BP_Relations_Connection_Type( $args, $sides );
+	$ctype = apply_filters( 'bp_relations_register_connection_type', $ctype, $args, $sides );
 
 	buddypress()->relations->types[ $ctype->name ] = $ctype;
 	return $ctype;
+}
+
+/**
+ * Creates an object representing the side of a connection.
+ *
+ * The Relations API defines objects for each side of a connection in order to partition the type-
+ * specific query/fetching implementation details. It makes them re-usable for other developers,
+ * and also helps to avoid a long, hardcoded IF statement of callbacks for each type.
+ *
+ * For example, for a relationship between Users and Posts, one side will be created for the
+ * User (BP_Relations_Side_User) and one for the Post (BP_Relations_Side_Post). Internally,
+ * BP_Relations_Side_User uses BP_User_Query, and BP_Relations_Side_Post uses WP_Query to fetch data.
+ *
+ * @param array $args See bp_relations_register_connection_type() for description.
+ * @param string $direction An end of the connection. Either "from" or "to".
+ * @return P2P_Side Returns a deverative of the P2P_Side class for this side.
+ * @since BuddyPress (2.3.0)
+ */
+function bp_relations_create_side_object( array $args, $direction ) {
+	$object_type = wp_list_pluck( $args, $direction );                  // from, to
+	$query_vars  = wp_list_pluck( $args, $direction . '_query_vars' );  // from_query_vars, to_query_vars
+
+	// Custom post types use the BP_Relations_Side_Post class.
+	$post_types = get_post_types( array( 'public' => true ), 'names' );
+	if ( in_array( $object_type, $post_type, true ) ) {
+		$object_type = 'post';
+	}
+
+	$class = 'BP_Relations_Side_' . ucfirst( $object_type ); // e.g. BP_Relations_Side_Post
+	return new $class( $query_vars );
 }
 
 
@@ -184,56 +212,3 @@ function bp_relations_delete_connections_for_type( $object_ids, $object_type = '
 		}
 	}
 }
-
-/**
- * Creates an object representing the side of a connection.
- *
- * The Relations API defines objects for each side of a connection in order to partition the type-
- * specific query/fetching implementation details. It makes them re-usable for other developers,
- * and also helps to avoid a long, hardcoded IF statement of callbacks for each type.
- *
- * For example, for a relationship between Users and Posts, one side will be created for the
- * User (BP_Relations_Side_User) and one for the Post (BP_Relations_Side_Post). Internally,
- * BP_Relations_Side_User uses BP_User_Query, and BP_Relations_Side_Post uses WP_Query to fetch data.
- *
- * @param array $args See bp_relations_register_connection_type() for description.
- * @param string $direction An end of the connection. Either "from" or "to".
- * @return P2P_Side Returns a deverative of the P2P_Side class for this side.
- * @since BuddyPress (2.3.0)
- */
-function bp_relations_create_side_object( array $args, $direction ) {
-	$object_type = wp_list_pluck( $args, $direction );                  // from, to
-	$query_vars  = wp_list_pluck( $args, $direction . '_query_vars' );  // from_query_vars, to_query_vars
-
-	// Custom post types use the BP_Relations_Side_Post class.
-	$post_types = get_post_types( array( 'public' => true ), 'names' );
-	if ( in_array( $object_type, $post_type, true ) ) {
-		$object_type = 'post';
-	}
-
-	$class = 'BP_Relations_Side_' . ucfirst( $object_type ); // e.g. BP_Relations_Side_Post
-	return new $class( $query_vars );
-}
-
-/**
- *
- *
- * @param array $sides
- * @return P2P_Direction_Strategy Returns a deverative of the P2P_Direction_Strategy class for this side.
- * @since BuddyPress (2.3.0)
- */
-function get_direction_strategy( $sides ) {
-	if ( $sides['from']->is_same_type( $sides['to'] ) && $sides['from']->is_indeterminate( $sides['to'] ) ) {
-		//$class = 'P2P_Indeterminate_Directed_Connection_Type';
-	} else {
-		//$class = 'P2P_Directed_Connection_Type';
-		//see set_direction()
-	}
-
-	return new $class;
-}
-
-
-/**
- * Classes (temp, pending core re-org of core-classes.php)
- */
