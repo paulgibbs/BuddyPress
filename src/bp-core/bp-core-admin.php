@@ -337,7 +337,8 @@ class BP_Admin {
 			// Add the main section
 			add_settings_section( 'bp_xprofile', _x( 'Profile Settings', 'BuddyPress setting tab', 'buddypress' ), 'bp_admin_setting_callback_xprofile_section', 'buddypress' );
 
-			$avatar_setting = 'bp_xprofile';
+			add_settings_field( 'bp-disable-avatar-uploads', __( 'Profile Photo Uploads', 'buddypress' ), 'bp_admin_setting_callback_avatar_uploads', 'buddypress', 'bp_xprofile' );
+			register_setting( 'buddypress', 'bp-disable-avatar-uploads', 'intval' );
 
 			// Profile sync setting
 			add_settings_field( 'bp-disable-profile-sync',   __( 'Profile Syncing',  'buddypress' ), 'bp_admin_setting_callback_profile_sync',     'buddypress', 'bp_xprofile' );
@@ -351,13 +352,13 @@ class BP_Admin {
 			// Add the main section
 			add_settings_section( 'bp_groups',        __( 'Groups Settings',  'buddypress' ), 'bp_admin_setting_callback_groups_section',   'buddypress'              );
 
-			if ( empty( $avatar_setting ) ) {
-				$avatar_setting = 'bp_groups';
-			}
-
 			// Allow subscriptions setting
 			add_settings_field( 'bp_restrict_group_creation', __( 'Group Creation',   'buddypress' ), 'bp_admin_setting_callback_group_creation',   'buddypress', 'bp_groups' );
 			register_setting  ( 'buddypress',         'bp_restrict_group_creation',   'intval'                                                                                );
+
+			// Allow group avatars.
+			add_settings_field( 'bp-disable-group-avatar-uploads', __( 'Group Photo Uploads', 'buddypress' ), 'bp_admin_setting_callback_group_avatar_uploads', 'buddypress', 'bp_groups' );
+			register_setting( 'buddypress', 'bp-disable-group-avatar-uploads', 'intval' );
 		}
 
 		/** Forums ************************************************************/
@@ -392,14 +393,6 @@ class BP_Admin {
 				add_settings_field( '_bp_enable_akismet', __( 'Akismet',          'buddypress' ), 'bp_admin_setting_callback_activity_akismet', 'buddypress', 'bp_activity' );
 				register_setting  ( 'buddypress',         '_bp_enable_akismet',   'intval'                                                                                  );
 			}
-		}
-
-		/** Avatar upload for users or groups ************************************/
-
-		if ( ! empty( $avatar_setting ) ) {
-		    // Allow avatar uploads
-		    add_settings_field( 'bp-disable-avatar-uploads', __( 'Profile Photo Uploads',   'buddypress' ), 'bp_admin_setting_callback_avatar_uploads',   'buddypress', $avatar_setting );
-		    register_setting  ( 'buddypress',         'bp-disable-avatar-uploads',   'intval'                                                                                    );
 		}
 	}
 
@@ -439,8 +432,8 @@ class BP_Admin {
 
 		// Add a few links to the existing links array
 		return array_merge( $links, array(
-			'settings' => '<a href="' . add_query_arg( array( 'page' => 'bp-components' ), bp_get_admin_url( $this->settings_page ) ) . '">' . esc_html__( 'Settings', 'buddypress' ) . '</a>',
-			'about'    => '<a href="' . add_query_arg( array( 'page' => 'bp-about'      ), bp_get_admin_url( 'index.php'          ) ) . '">' . esc_html__( 'About',    'buddypress' ) . '</a>'
+			'settings' => '<a href="' . esc_url( add_query_arg( array( 'page' => 'bp-components' ), bp_get_admin_url( $this->settings_page ) ) ) . '">' . esc_html__( 'Settings', 'buddypress' ) . '</a>',
+			'about'    => '<a href="' . esc_url( add_query_arg( array( 'page' => 'bp-about'      ), bp_get_admin_url( 'index.php'          ) ) ) . '">' . esc_html__( 'About',    'buddypress' ) . '</a>'
 		) );
 	}
 
@@ -515,13 +508,13 @@ class BP_Admin {
 								<h4><?php _e( 'Configure BuddyPress', 'buddypress' ); ?></h4>
 								<ul>
 									<li><?php printf(
-									'<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Set Up Components', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) )
+									'<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Set Up Components', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) ) )
 									); ?></li>
 									<li><?php printf(
-									'<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Assign Components to Pages', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), $this->settings_page ) )
+									'<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Assign Components to Pages', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), $this->settings_page ) ) )
 									); ?></li>
 									<li><?php printf(
-									'<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Customize Settings', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-settings' ), $this->settings_page ) )
+									'<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Customize Settings', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-settings' ), $this->settings_page ) ) )
 									); ?></li>
 								</ul>
 								<a class="button button-primary button-hero" style="margin-bottom:20px;margin-top:0;" href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), $this->settings_page ) ) ); ?>"><?php _e( 'Get Started', 'buddypress' ); ?></a>
@@ -530,16 +523,16 @@ class BP_Admin {
 								<h4><?php _e( 'Administration Tools', 'buddypress' ); ?></h4>
 								<ul>
 									<?php if ( bp_is_active( 'members' ) ) : ?>
-										<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add User Profile Fields', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-profile-setup' ), 'users.php' ) ) ); ?></li>
+										<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add User Profile Fields', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-profile-setup' ), 'users.php' ) ) ) ); ?></li>
 									<?php endif; ?>
-									<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Manage User Signups', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-signups' ), 'users.php' ) ) ); ?></li>
+									<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Manage User Signups', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-signups' ), 'users.php' ) ) ) ); ?></li>
 									<?php if ( bp_is_active( 'activity' ) ) : ?>
-										<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Moderate Activity Streams', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-activity' ), 'admin.php' ) ) ); ?></li>
+										<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Moderate Activity Streams', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-activity' ), 'admin.php' ) ) ) ); ?></li>
 									<?php endif; ?>
 									<?php if ( bp_is_active( 'groups' ) ) : ?>
-										<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Manage Groups', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-groups' ), 'admin.php' ) ) ); ?></li>
+										<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Manage Groups', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-groups' ), 'admin.php' ) ) ) ); ?></li>
 									<?php endif; ?>
-									<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Repair Data', 'buddypress' ) . '</a>', bp_get_admin_url( add_query_arg( array( 'page' => 'bp-tools' ), 'tools.php' ) ) ); ?>
+									<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Repair Data', 'buddypress' ) . '</a>', esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'bp-tools' ), 'tools.php' ) ) ) ); ?>
 									</li>
 								</ul>
 							</div>
@@ -695,6 +688,11 @@ class BP_Admin {
 					<a class="web" href="https://profiles.wordpress.org/tw2113">Michael Beckwith</a>
 					<span class="title"><?php _e( 'Core Developer', 'buddypress' ); ?></span>
 				</li>
+				<li class="wp-person" id="wp-person-hnla">
+					<a href="https://profiles.wordpress.org/hnla"><img src="//www.gravatar.com/avatar/3860c955aa3f79f13b92826ae47d07fe?s=60" class="gravatar" alt="Hugo Ashmore" /></a>
+					<a class="web" href="https://profiles.wordpress.org/hnla">Hugo</a>
+					<span class="title"><?php _e( 'Core Developer', 'buddypress' ); ?></span>
+				</li>
 			</ul>
 
 			<h4 class="wp-people-group"><?php _e( 'Recent Rockstars', 'buddypress' ); ?></h4>
@@ -715,59 +713,50 @@ class BP_Admin {
 					<a href="https://profiles.wordpress.org/netweb"><img src="//www.gravatar.com/avatar/97e1620b501da675315ba7cfb740e80f?s=60" class="gravatar" alt="Stephen Edgar" /></a>
 					<a class="web" href="https://profiles.wordpress.org/netweb">Stephen Edgar</a>
 				</li>
-				<li class="wp-person" id="wp-person-hnla">
-					<a href="https://profiles.wordpress.org/hnla"><img src="//www.gravatar.com/avatar/3860c955aa3f79f13b92826ae47d07fe?s=60" class="gravatar" alt="Hugo Ashmore" /></a>
-					<a class="web" href="https://profiles.wordpress.org/hnla">Hugo</a>
-				</li>
 			</ul>
 
 			<h4 class="wp-people-group"><?php printf( esc_html__( 'Contributors to BuddyPress %s', 'buddypress' ), self::display_version() ); ?></h4>
 			<p class="wp-credits-list">
-				<a href="https://profiles.wordpress.org/andemann/">andemann</a>,
-				<a href="https://profiles.wordpress.org/dontdream/">Andrea Tarantini (dontdream)</a>,
+				<a href="https://profiles.wordpress.org/jorbin/">Aaron Jorbin (aaronjorbin)</a>,
 				<a href="https://profiles.wordpress.org/boonebgorges/">Boone B Gorges (boonebgorges)</a>,
-				<a href="https://profiles.wordpress.org/thebrandonallen/">Brandon Allen (thebrandonallen)</a>,
-				<a href="https://profiles.wordpress.org/Clean-Cole/">Clean-Cole</a>,
-				<a href="https://profiles.wordpress.org/colabsadmin/">colabsadmin</a>,
-				<a href="https://profiles.wordpress.org/colorful-tones/">Damon Cook (colorful tones)</a>,
-				<a href="https://profiles.wordpress.org/danbp/">danbp</a>,
+				<a href="https://profiles.wordpress.org/sbrajesh/">Brajesh Singh (sbrajesh)</a>,
+				<a href="https://profiles.wordpress.org/CristinaCannon/">CristinaCannon</a>,
 				<a href="https://profiles.wordpress.org/dcavins/">David Cavins (dcavins)</a>,
-				<a href="https://profiles.wordpress.org/fahmiadib/">Fahmi Adib (fahmiadib)</a>,
+				<a href="https://profiles.wordpress.org/wpdennis/">Dennis (wpdennis)</a>,
+				<a href="https://profiles.wordpress.org/ocean90/">Dominik Schilling (ocean90)</a>,
+				ecehren,
+				<a href="https://profiles.wordpress.org/finzend/">finzend</a>,
 				<a href="https://profiles.wordpress.org/Mamaduka/">George Mamadashvili (Mamaduka)</a>,
 				<a href="https://profiles.wordpress.org/gregrickaby/">Greg Rickaby (gregrickaby)</a>,
+				<a href="https://profiles.wordpress.org/henrywright/">Henry Wright (henry.wright)</a>,
 				<a href="https://profiles.wordpress.org/hnla/">Hugo (hnla)</a>,
-				<a href="https://profiles.wordpress.org/whyisjake/">Jake Spurlock (whyisjake)</a>,
-				<a href="https://profiles.wordpress.org/ev3rywh3re/">Jess Planck (ev3rywh3re)</a>,
+				<a href="https://profiles.wordpress.org/jaimieolmstead/">jaimieolmstead</a>,
 				<a href="https://profiles.wordpress.org/johnjamesjacoby/">John James Jacoby (johnjamesjacoby)</a>,
-				<a href="https://profiles.wordpress.org/joshshashaty/">Josh (joshshashaty)</a>,
 				<a href="https://profiles.wordpress.org/jreeve/">jreeve</a>,
-				<a href="https://profiles.wordpress.org/lakrisgubben/">lakrisgubben</a>,
+				<a href="https://profiles.wordpress.org/JustinSainton/">Justin Sainton (JustinSainton)</a>,
+				<a href="https://profiles.wordpress.org/kadamwhite/">K.Adam White (kadamwhite)</a>,
 				<a href="https://profiles.wordpress.org/Offereins">Laurens Offereins (Offereins)</a>
 				<a href="https://profiles.wordpress.org/lenasterg/">lenasterg</a>,
-				<a href="https://profiles.wordpress.org/nofearinc/">Mario Peshev (nofearinc)</a>,
+				<a href="https://profiles.wordpress.org/natrio/">Marc (natrio)</a>,
+				<a href="https://profiles.wordpress.org/mechter/">Markus Echterhoff (mechter)</a>,
 				<a href="https://profiles.wordpress.org/imath/">Mathieu Viet (imath)</a>,
+				<a href="https://profiles.wordpress.org/melhop/">melhop</a>,
 				<a href="https://profiles.wordpress.org/mercime/">mercime</a>,
 				<a href="https://profiles.wordpress.org/tw2113/">Michael Beckwith (tw2113)</a>,
-				<a href="https://profiles.wordpress.org/modemlooper/">modemlooper</a>,
-				<a href="https://profiles.wordpress.org/sooskriszta/">OC2PS (sooskriszta)</a>,
+				<a href="https://profiles.wordpress.org/pareshradadiya/">paresh.radadiya (pareshradadiya)</a>,
 				<a href="https://profiles.wordpress.org/DJPaul/">Paul Gibbs (DJPaul)</a>,
-				<a href="https://profiles.wordpress.org/pro120/">pro120</a>,
-				<a href="https://profiles.wordpress.org/psycleuk/">psycleuk</a>,
+				<a href="https://profiles.wordpress.org/prometheus-fire/">Prometheus Fire</a>,
 				<a href="https://profiles.wordpress.org/r-a-y/">r-a-y</a>,
-				<a href="https://profiles.wordpress.org/espellcaste/">Renato Alves (espellcaste)</a>,
-				<a href="https://profiles.wordpress.org/SGr33n/">Sergio De Falco (SGr33n)</a>,
-				<a href="https://profiles.wordpress.org/shpitzyl/">shpitzyl</a>,
-				<a href="https://profiles.wordpress.org/slaFFik/">Slava UA (slaFFik)</a>,
-				<a href="https://profiles.wordpress.org/standardspace/">standardspace</a>,
+				<a href="https://profiles.wordpress.org/rogercoathup/">Roger Coathup (rogercoathup)</a>,
+				<a href="https://profiles.wordpress.org/dtc7240/">Scott Seitz (dtc7240)</a>,
+				<a href="https://profiles.wordpress.org/wonderboymusic/">Scott Taylor (wonderboymusic)</a>.
+				<a href="https://profiles.wordpress.org/SergeyBiryukov/">Sergey Biryukov (SergeyBiryukov)</a>,
+				<a href="https://profiles.wordpress.org/shanebp/">shanebp</a>,
 				<a href="https://profiles.wordpress.org/netweb/">Stephen Edgar (netweb)</a>,
 				<a href="https://profiles.wordpress.org/svenl77/">svenl77</a>,
-				<a href="https://profiles.wordpress.org/tharsheblows/">tharsheblows</a>,
-				<a href="https://profiles.wordpress.org/thebigA/">thebigA</a>,
-				<a href="https://profiles.wordpress.org/thomaslhotta/">thomaslhotta</a>,
-				<a href="https://profiles.wordpress.org/tometzky/">Tomasz Ostrowski (tometzky)</a>,
-				<a href="https://profiles.wordpress.org/unsalkorkmaz/">Unsal Korkmaz (unsalkorkmaz)</a>,
-				<a href="https://profiles.wordpress.org/vimes1984/">vimes1984</a>,
-				<a href="https://profiles.wordpress.org/wonderboymusic/">Scott Taylor (wonderboymusic)</a>.
+				<a href="https://profiles.wordpress.org/WeddyWood/">WeddyWood</a>,
+				<a href="https://profiles.wordpress.org/wolfhoundjesse/">wolfhoundjesse</a>,
+				<a href="https://profiles.wordpress.org/xgz/">xgz</a>.
 			</p>
 
 			<h4 class="wp-people-group"><?php _e( 'External Libraries', 'buddypress' ); ?></h4>

@@ -645,6 +645,65 @@ Bar!';
 
 	/**
 	 * @group xprofile_insert_field
+	 * @ticket BP6354
+	 */
+	public function test_xprofile_insert_field_should_process_falsey_values_for_boolean_params_on_existing_fields() {
+		$g = $this->factory->xprofile_group->create();
+		$f = xprofile_insert_field( array(
+			'field_group_id' => $g,
+			'type' => 'textbox',
+			'name' => 'Foo',
+			'is_required' => true,
+			'can_delete' => true,
+			'is_default_option' => true,
+			'parent_id' => 13,
+			'field_order' => 5,
+			'option_order' => 8,
+			'description' => 'foo',
+			'order_by' => 'custom',
+		) );
+
+		$this->assertNotEmpty( $f );
+
+		$field = new BP_XProfile_Field( $f );
+		$this->assertEquals( 1, $field->is_required );
+		$this->assertEquals( 1, $field->can_delete );
+		$this->assertEquals( 1, $field->is_default_option );
+		$this->assertEquals( 13, $field->parent_id );
+		$this->assertEquals( 5, $field->field_order );
+		$this->assertEquals( 8, $field->option_order );
+		$this->assertEquals( 'foo', $field->description );
+		$this->assertEquals( 'custom', $field->order_by );
+
+		$f = xprofile_insert_field( array(
+			'field_group_id' => $g,
+			'type' => 'textbox',
+			'name' => 'Foo',
+			'is_required' => false,
+			'can_delete' => false,
+			'is_default_option' => false,
+			'parent_id' => 0,
+			'field_order' => 0,
+			'option_order' => 0,
+			'description' => '',
+			'order_by' => '',
+		) );
+
+		$this->assertNotEmpty( $f );
+
+		$field = new BP_XProfile_Field( $f );
+		$this->assertEquals( 0, $field->is_required );
+		$this->assertEquals( 0, $field->can_delete );
+		$this->assertEquals( 0, $field->is_default_option );
+		$this->assertEquals( 0, $field->parent_id );
+		$this->assertEquals( 0, $field->field_order );
+		$this->assertEquals( 0, $field->option_order );
+		$this->assertEquals( '', $field->description );
+		$this->assertEquals( '', $field->order_by );
+	}
+
+	/**
+	 * @group xprofile_insert_field
 	 */
 	public function test_xprofile_insert_field_type_option_option_order() {
 		$g = $this->factory->xprofile_group->create();
@@ -665,6 +724,131 @@ Bar!';
 		$field = new BP_XProfile_Field( $f );
 
 		$this->assertEquals( 5, $field->option_order );
+	}
+
+	/**
+	 * @group xprofile_insert_field
+	 * @ticket BP6137
+	 */
+	public function test_xprofile_insert_field_should_set_is_default_option_to_false_for_new_option() {
+		$g = $this->factory->xprofile_group->create();
+		$parent = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'selectbox',
+			'name' => 'Parent',
+		) );
+
+		$f = xprofile_insert_field( array(
+			'field_group_id' => $g,
+			'parent_id' => $parent,
+			'type' => 'option',
+			'name' => 'Option 1',
+			'field_order' => 5,
+			'is_default_option' => false,
+		) );
+
+		$this->assertNotEmpty( $f );
+		$field = new BP_XProfile_Field( $f );
+		$this->assertEquals( 0, $field->is_default_option );
+	}
+
+	/**
+	 * @group xprofile_insert_field
+	 * @ticket BP6137
+	 */
+	public function test_xprofile_insert_field_should_set_is_default_option_to_true_for_new_option() {
+		$g = $this->factory->xprofile_group->create();
+		$parent = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'selectbox',
+			'name' => 'Parent',
+		) );
+
+		$f = xprofile_insert_field( array(
+			'field_group_id' => $g,
+			'parent_id' => $parent,
+			'type' => 'option',
+			'name' => 'Option 1',
+			'field_order' => 5,
+			'is_default_option' => true,
+		) );
+
+		$this->assertNotEmpty( $f );
+		$field = new BP_XProfile_Field( $f );
+		$this->assertEquals( 1, $field->is_default_option );
+	}
+
+	/**
+	 * @group xprofile_insert_field
+	 * @ticket BP6137
+	 */
+	public function test_xprofile_insert_field_should_set_is_default_option_to_false_for_existing_option() {
+		$g = $this->factory->xprofile_group->create();
+		$parent = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'selectbox',
+			'name' => 'Parent',
+		) );
+
+		$f = xprofile_insert_field( array(
+			'field_group_id' => $g,
+			'parent_id' => $parent,
+			'type' => 'option',
+			'name' => 'Option 1',
+			'field_order' => 5,
+			'is_default_option' => true,
+		) );
+
+		$this->assertNotEmpty( $f );
+		$field = new BP_XProfile_Field( $f );
+		$this->assertEquals( 1, $field->is_default_option );
+
+		$f = xprofile_insert_field( array(
+			'field_id' => $f,
+			'field_group_id' => $g,
+			'type' => 'textbox',
+			'is_default_option' => false,
+		) );
+
+		$field2 = new BP_XProfile_Field( $f );
+		$this->assertEquals( 0, $field2->is_default_option );
+	}
+
+	/**
+	 * @group xprofile_insert_field
+	 * @ticket BP6137
+	 */
+	public function test_xprofile_insert_field_should_set_is_default_option_to_true_for_existing_option() {
+		$g = $this->factory->xprofile_group->create();
+		$parent = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'selectbox',
+			'name' => 'Parent',
+		) );
+
+		$f = xprofile_insert_field( array(
+			'field_group_id' => $g,
+			'parent_id' => $parent,
+			'type' => 'option',
+			'name' => 'Option 1',
+			'field_order' => 5,
+			'is_default_option' => false,
+		) );
+
+		$this->assertNotEmpty( $f );
+		$field = new BP_XProfile_Field( $f );
+		$this->assertEquals( 0, $field->is_default_option );
+
+		$f = xprofile_insert_field( array(
+			'field_id' => $f,
+			'field_group_id' => $g,
+			'type' => 'textbox',
+			'is_default_option' => true,
+		) );
+
+		$field2 = new BP_XProfile_Field( $f );
+
+		$this->assertEquals( 1, $field2->is_default_option );
 	}
 
 	/**

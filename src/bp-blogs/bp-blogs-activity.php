@@ -32,6 +32,7 @@ function bp_blogs_register_activity_actions() {
 			__( 'New site created', 'buddypress' ),
 			'bp_blogs_format_activity_action_new_blog',
 			__( 'New Sites', 'buddypress' ),
+			array( 'activity', 'member' ),
 			0
 		);
 	}
@@ -172,7 +173,7 @@ function bp_blogs_format_activity_action_new_blog_post( $action, $activity ) {
 	}
 
 	// Build the 'post link' part of the activity action string
-	$post_link  = '<a href="' . $post_url . '">' . $post_title . '</a>';
+	$post_link  = '<a href="' . esc_url( $post_url ) . '">' . $post_title . '</a>';
 
 	$user_link = bp_core_get_userlink( $activity->user_id );
 
@@ -249,7 +250,7 @@ function bp_blogs_format_activity_action_new_blog_comment( $action, $activity ) 
 		restore_current_blog();
 	}
 
-	$post_link = '<a href="' . $post_url . '">' . $post_title . '</a>';
+	$post_link = '<a href="' . esc_url( $post_url ) . '">' . $post_title . '</a>';
 	$user_link = bp_core_get_userlink( $activity->user_id );
 
 	if ( is_multisite() ) {

@@ -44,7 +44,7 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 
 	function clean_up_global_scope() {
 		buddypress()->bp_nav                = buddypress()->bp_options_nav = buddypress()->action_variables = buddypress()->canonical_stack = buddypress()->unfiltered_uri = $GLOBALS['bp_unfiltered_uri'] = array();
-		buddypress()->current_component     = buddypress()->current_item = buddypress()->current_action = '';
+		buddypress()->current_component     = buddypress()->current_item = buddypress()->current_action = buddypress()->current_member_type = '';
 		buddypress()->unfiltered_uri_offset = 0;
 		buddypress()->is_single_item        = false;
 		buddypress()->current_user          = new stdClass();
@@ -422,5 +422,29 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	public static function commit_transaction() {
 		global $wpdb;
 		$wpdb->query( 'COMMIT;' );
+	}
+
+	/**
+	 * Clean up created directories/files
+	 */
+	public function rrmdir( $dir ) {
+		// Make sure we are only removing files/dir from uploads
+		if ( 0 !== strpos( $dir, bp_core_avatar_upload_path() ) ) {
+			return;
+		}
+
+		$d = glob( $dir . '/*' );
+
+		if ( ! empty( $d ) ) {
+			foreach ( $d as $file ) {
+				if ( is_dir( $file ) ) {
+					$this->rrmdir( $file );
+				} else {
+					@unlink( $file );
+				}
+			}
+		}
+
+		@rmdir( $dir );
 	}
 }

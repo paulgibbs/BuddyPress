@@ -219,6 +219,13 @@ abstract class BP_Attachment {
 		 */
 		add_filter( "{$this->action}_prefilter", array( $this, 'validate_upload' ), 10, 1 );
 
+		/**
+		 * The above dynamic filter was introduced in WordPress 4.0, as we support WordPress
+		 * back to 3.6, we need to also use the pre 4.0 static filter and remove it after
+		 * the upload was processed.
+		 */
+		add_filter( 'wp_handle_upload_prefilter', array( $this, 'validate_upload' ), 10, 1 );
+
 		// Set Default overrides
 		$overrides = array(
 			'action'               => $this->action,
@@ -264,6 +271,9 @@ abstract class BP_Attachment {
 
 		// Restore WordPress Uploads data
 		remove_filter( 'upload_dir', $upload_dir_filter, 10, 0 );
+
+		// Remove the pre WordPress 4.0 static filter
+		remove_filter( 'wp_handle_upload_prefilter', array( $this, 'validate_upload' ), 10, 1 );
 
 		// Finally return the uploaded file or the error
 		return $this->attachment;
@@ -476,5 +486,28 @@ abstract class BP_Attachment {
 
 		// Finally crop the image
 		return wp_crop_image( $r['original_file'], (int) $r['crop_x'], (int) $r['crop_y'], (int) $r['crop_w'], (int) $r['crop_h'], (int) $r['dst_w'], (int) $r['dst_h'], $r['src_abs'], $r['dst_file'] );
+	}
+
+	/**
+	 * Build script datas for the Uploader UI
+	 *
+	 * Override this method from your child class to build the script datas
+	 *
+	 * @since BuddyPress (2.3.0)
+	 *
+	 * @return array the javascript localization data
+	 */
+	public function script_data() {
+		$script_data = array(
+			'action'            => $this->action,
+			'file_data_name'    => $this->file_input,
+			'max_file_size'     => $this->original_max_filesize,
+			'feedback_messages' => array(
+				1 => __( 'Sorry, uploading the file failed.', 'buddypress' ),
+				2 => __( 'File successfully uploaded.', 'buddypress' ),
+			),
+		);
+
+		return $script_data;
 	}
 }
