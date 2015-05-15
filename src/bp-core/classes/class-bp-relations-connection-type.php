@@ -5,8 +5,8 @@
  * @since BuddyPress (2.3.0)
  */
 class BP_Relations_Connection_Type {
-	public $side;
-	public $cardinality;
+	protected $sides;
+	protected $cardinality;
 
 	/**
 	 * Constructor.
@@ -15,8 +15,8 @@ class BP_Relations_Connection_Type {
 	 * @param array $sides Array of BP_Relations_Side objects, each representing the side of a connection.
 	 * @since BuddyPress (2.3.0)
 	 */
-	public function __construct( $args, $sides ) {
-		$this->side = $sides;
+	public function __construct( array $args, $sides ) {
+		$this->sides = $sides;
 
 		$this->set_cardinality( $args['cardinality'] );
 
