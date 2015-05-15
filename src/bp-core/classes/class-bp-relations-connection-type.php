@@ -1,5 +1,15 @@
 <?php
 /**
+ * Core component classes.
+ *
+ * @package BuddyPress
+ * @subpackage Core
+ */
+
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
+/**
  * Contains information about a particular connection type.
  *
  * @since BuddyPress (2.3.0)
