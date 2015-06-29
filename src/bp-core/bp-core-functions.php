@@ -2593,8 +2593,29 @@ function bp_mail( $email_type, $to, $args ) {
 		'mail_from_name' => '',  // wp_mail_from_name
 	), 'bp_mail' );
 
-	// Required parameters.
-	if ( empty( $r['tokens'] ) ) {
+
+	/**
+	 * Prepare parameters.
+	 */
+
+	if ( ! is_array( $to ) ) {
+		$to = (array) explode( ',', $to );  // djpaultodo: what happens if explode() doesn't have anything to action?
+	}
+
+	foreach ( array( $to ) as $email ) {
+		if ( bp_core_validate_email_address( $email ) !== true ) {
+			unset( $to['email'] );
+		}
+	}
+
+	$to = array_unique( array_filter( $to ) );
+
+
+	/**
+	 * Check for required parameters.
+	 */
+
+	if ( empty( $to ) ) {
 		return new WP_Error( 'missing_parameter', 'bp_mail', $r );
 	}
 }
