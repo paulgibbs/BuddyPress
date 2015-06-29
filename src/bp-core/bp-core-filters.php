@@ -497,7 +497,7 @@ function bp_core_activation_signup_blog_notification( $domain, $path, $title, $u
 	$message = apply_filters( 'bp_core_activation_signup_blog_notification_message', $message, $domain, $path, $title, $user, $user_email, $key, $meta );
 
 	// Send the email
-	wp_mail( $to, $subject, $message );
+	bp_mail( 'djpaultodo', $to, $subject, $message );
 
 	// Set up the $admin_email to pass to the filter
 	$admin_email = bp_get_option( 'admin_email' );
@@ -612,7 +612,7 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 	$message = apply_filters( 'bp_core_activation_signup_user_notification_message', $message, $user, $user_email, $key, $meta );
 
 	// Send the email
-	wp_mail( $to, $subject, $message );
+	bp_mail( 'djpaultodo', $to, $subject, $message );
 
 	// Set up the $admin_email to pass to the filter
 	$admin_email = bp_get_option( 'admin_email' );

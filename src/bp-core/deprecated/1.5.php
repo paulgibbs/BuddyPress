@@ -368,7 +368,7 @@ To view and respond to the message, log in and visit: %4$s
 			$subject = apply_filters( 'groups_at_message_notification_subject', $subject, $group, $poster_name );
 			$message = apply_filters( 'groups_at_message_notification_message', $message, $group, $poster_name, $content, $message_link, $settings_link );
 
-			wp_mail( $to, $subject, $message );
+			bp_mail( 'djpaultodo', $to, $subject, $message );
 		}
 	}
 

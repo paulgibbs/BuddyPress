@@ -2228,7 +2228,7 @@ function bp_core_signup_send_validation_email( $user_id, $user_email, $key ) {
 	 */
 	$message = apply_filters( 'bp_core_signup_send_validation_email_message', $message,    $user_id, $activate_url );
 
-	wp_mail( $to, $subject, $message );
+	bp_mail( 'djpaultodo', $to, $subject, $message );
 
 	/**
 	 * Fires after the sending of activation email to a newly registered user.

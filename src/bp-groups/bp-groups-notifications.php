@@ -121,7 +121,7 @@ To view the group: %3$s
 		 */
 		$message = apply_filters_ref_array( 'groups_notification_group_updated_message', array( $message, &$group, $group_link, $settings_link ) );
 
-		wp_mail( $to, $subject, $message );
+		bp_mail( 'djpaultodo', $to, $subject, $message );
 
 		unset( $message, $to );
 	}
@@ -262,7 +262,7 @@ To view %4$s\'s profile: %5$s
 	 */
 	$message = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $message, &$group, $requesting_user_name, $profile_link, $group_requests, $settings_link ) );
 
-	wp_mail( $to, $subject, $message );
+	bp_mail( 'djpaultodo', $to, $subject, $message );
 
 	/**
 	 * Fires after the notification is sent that a member has requested group membership.
@@ -378,7 +378,7 @@ To submit another request please log in and visit: %2$s
 	 */
 	$message = apply_filters_ref_array( 'groups_notification_membership_request_completed_message', array( $message, &$group, $group_link, $settings_link ) );
 
-	wp_mail( $to, $subject, $message );
+	bp_mail( 'djpaultodo', $to, $subject, $message );
 
 	/**
 	 * Fires after the notification is sent that a membership has been approved.
@@ -484,7 +484,7 @@ To view the group please visit: %3$s
 	 */
 	$message = apply_filters_ref_array( 'groups_notification_promoted_member_message', array( $message, &$group, $promoted_to, $group_link, $settings_link ) );
 
-	wp_mail( $to, $subject, $message );
+	bp_mail( 'djpaultodo', $to, $subject, $message );
 
 	/**
 	 * Fires after the notification is sent that a member has been promoted.
@@ -601,7 +601,7 @@ To view %5$s\'s profile visit: %6$s
 	 */
 	$message = apply_filters_ref_array( 'groups_notification_group_invites_message', array( $message, &$group, $inviter_name, $inviter_link, $invites_link, $group_link, $settings_link ) );
 
-	wp_mail( $to, $subject, $message );
+	bp_mail( 'djpaultodo', $to, $subject, $message );
 
 	/**
 	 * Fires after the notification is sent that a member has been invited to a group.

@@ -2542,3 +2542,59 @@ function bp_upload_dir() {
 
 	return $bp->upload_dir;
 }
+
+/**
+ * Send mail, similar to WordPress' wp_mail().
+ *
+ * A true return value does not automatically mean that the user received the
+ * email successfully. It just only means that the method used was able to
+ * process the request without any errors.
+ *
+ * @since 2.4
+ *
+ * @param string $email_type Type of email being sent.
+ * @param string|array $to Array or comma-separated list of email addresses to the email to.
+ * @param array $args {
+ *     Array of parameters.
+ *     @type array $headers Optional. Additional email headers.
+ *     @type array $use_html Optional. Whether to send HTML emails. Default = true.
+ *     @type array $tokens Assocative arrays of string replacements for the email.
+ *     @type string $charset Optional. Email charset.
+ *     @type string $mail_from Optional. Email "from" address.
+ *     @type string $mail_from_name Optional. Email "from" name.
+ * }
+ * @return bool|WP_Error Bool if wp_mail() sent the email(s) or not.
+ *         If a WP_Error is returned, there was a failure is in bp_mail().
+ */
+function bp_mail( $email_type, $to, $args ) {
+
+	// Backward compatibility with pre-2.4 era plugins.
+	if ( ! is_array( $args ) || func_num_args() > 3 ) {
+		$old_args_keys = array(
+			0 => 'to',
+			1 => 'subject',
+			2 => 'message',
+			3 => 'headers',
+			4 => 'attachments',
+		);
+
+		$func_args = func_get_args();  // PHP 5.2
+		return call_user_func_array( 'wp_mail', bp_core_parse_args_array( $old_args_keys, $func_args ) );
+	}
+
+	$r = bp_parse_args( $args, array(
+		'headers'  => array(),
+		'use_html' => true,
+		'tokens'   => array(),
+
+		// These are passed to WP filters.
+		'charset'        => '',  // wp_mail_charset
+		'mail_from'      => '',  // wp_mail_from
+		'mail_from_name' => '',  // wp_mail_from_name
+	), 'bp_mail' );
+
+	// Required parameters.
+	if ( empty( $r['tokens'] ) ) {
+		return new WP_Error( 'missing_parameter', 'bp_mail', $r );
+	}
+}
