@@ -329,7 +329,30 @@ class BP_Core extends BP_Component {
 	 * @since BuddyPress (2.4.0)
 	 */
 	public function register_post_types() {
-		//yolo
+
+		// Emails
+		// Register Forum content type
+		register_post_type(
+			bbp_get_forum_post_type(),
+			apply_filters( 'bbp_register_forum_post_type', array(
+				'labels'              => bbp_get_forum_post_type_labels(),
+				'rewrite'             => bbp_get_forum_post_type_rewrite(),
+				'supports'            => bbp_get_forum_post_type_supports(),
+				'description'         => __( 'bbPress Forums', 'bbpress' ),
+				'capabilities'        => bbp_get_forum_caps(),
+				'capability_type'     => array( 'forum', 'forums' ),
+				'menu_position'       => 555555,
+				'has_archive'         => bbp_get_root_slug(),
+				'exclude_from_search' => true,
+				'show_in_nav_menus'   => true,
+				'public'              => true,
+				'show_ui'             => current_user_can( 'bbp_forums_admin' ),
+				'can_export'          => true,
+				'hierarchical'        => true,
+				'query_var'           => true,
+				'menu_icon'           => ''
+			) )
+		);
 
 		parent::register_post_types();
 	}

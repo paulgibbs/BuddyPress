@@ -3253,3 +3253,77 @@ function bp_nav_menu( $args = array() ) {
 		return $nav_menu;
 	}
 }
+
+/** Post Types *****************************************************************/
+
+/**
+ * Output the unique ID of the post type for emails.
+ *
+ * @since bbPress (r2857)
+ */
+function bp_email_post_type() {
+	echo bp_get_email_post_type();
+}
+	/**
+	 * Return the unique ID of the post type for emails.
+	 *
+	 * @return string The unique forum post type id
+	 * @since bbPress (r2857)
+	 */
+	function bp_get_email_post_type() {
+		return apply_filters( 'bp_get_email_post_type', bbpress()->forum_post_type );
+	}
+
+
+/**
+ * Return labels used by the email post type.
+ *
+ * @return array
+ * @since bbPress (r5129)
+ */
+function bp_get_email_post_type_labels() {
+	return apply_filters( 'bp_get_email_post_type_labels', array(
+		'name'               => __( 'Forums',                   'bbpress' ),
+		'menu_name'          => __( 'Forums',                   'bbpress' ),
+		'singular_name'      => __( 'Forum',                    'bbpress' ),
+		'all_items'          => __( 'All Forums',               'bbpress' ),
+		'add_new'            => __( 'New Forum',                'bbpress' ),
+		'add_new_item'       => __( 'Create New Forum',         'bbpress' ),
+		'edit'               => __( 'Edit',                     'bbpress' ),
+		'edit_item'          => __( 'Edit Forum',               'bbpress' ),
+		'new_item'           => __( 'New Forum',                'bbpress' ),
+		'view'               => __( 'View Forum',               'bbpress' ),
+		'view_item'          => __( 'View Forum',               'bbpress' ),
+		'search_items'       => __( 'Search Forums',            'bbpress' ),
+		'not_found'          => __( 'No forums found',          'bbpress' ),
+		'not_found_in_trash' => __( 'No forums found in Trash', 'bbpress' ),
+		'parent_item_colon'  => __( 'Parent Forum:',            'bbpress' )
+	) );
+}
+
+/**
+ * Return email post type rewrite settings.
+ *
+ * @return array
+ * @since bbPress (r5129)
+ */
+function bp_get_email_post_type_rewrite() {
+	return apply_filters( 'bp_get_email_post_type_rewrite', array(
+		'slug'       => bp_get_email_slug(),
+		'with_front' => false
+	) );
+}
+
+/**
+ * Return array of features that the email post type supports.
+ *
+ * @return array
+ * @since bbPress (r5129)
+ */
+function bp_get_email_post_type_supports() {
+	return apply_filters( 'bp_get_email_post_type_supports', array(
+		'title',
+		'editor',
+		'revisions'
+	) );
+}
