@@ -2557,8 +2557,8 @@ function bp_upload_dir() {
  * @param array $args {
  *     Array of parameters.
  *     @type array $headers Optional. Additional email headers.
- *     @type array $use_html Optional. Whether to send HTML emails. Default = true.
  *     @type array $tokens Assocative arrays of string replacements for the email.
+ *     @type array $use_html Optional. Whether to send HTML emails. Default = true.
  *     @type string $charset Optional. Email charset.
  *     @type string $mail_from Optional. Email "from" address.
  *     @type string $mail_from_name Optional. Email "from" name.
@@ -2584,8 +2584,8 @@ function bp_mail( $email_type, $to, $args ) {
 
 	$r = bp_parse_args( $args, array(
 		'headers'  => array(),
-		'use_html' => true,
 		'tokens'   => array(),
+		'use_html' => true,
 
 		// These are passed to WP filters.
 		'charset'        => '',  // wp_mail_charset
