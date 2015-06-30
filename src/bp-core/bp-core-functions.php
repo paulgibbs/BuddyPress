@@ -2599,7 +2599,7 @@ function bp_mail( $email_type, $to, $args ) {
 	 */
 
 	if ( ! is_array( $to ) ) {
-		$to = (array) explode( ',', $to );  // djpaultodo: what happens if explode() doesn't have anything to action?
+		$to = explode( ',', $to );
 	}
 
 	foreach ( array( $to ) as $email ) {
