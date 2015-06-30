@@ -322,6 +322,17 @@ class BP_Core extends BP_Component {
 
 		parent::setup_cache_groups();
 	}
+
+	/**
+	 * Set up post types.
+	 *
+	 * @since BuddyPress (2.4.0)
+	 */
+	public function register_post_types() {
+		//yolo
+
+		parent::register_post_types();
+	}
 }
 
 /**
