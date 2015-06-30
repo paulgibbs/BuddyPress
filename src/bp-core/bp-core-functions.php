@@ -2604,7 +2604,7 @@ function bp_mail( $email_type, $to, $args ) {
 
 	foreach ( array( $to ) as $email ) {
 		if ( bp_core_validate_email_address( $email ) !== true ) {
-			unset( $to['email'] );
+			unset( $to[ $email ] );
 		}
 	}
 
