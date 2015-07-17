@@ -331,26 +331,20 @@ class BP_Core extends BP_Component {
 	public function register_post_types() {
 
 		// Emails
-		// Register Forum content type
 		register_post_type(
-			bbp_get_forum_post_type(),
-			apply_filters( 'bbp_register_forum_post_type', array(
-				'labels'              => bbp_get_forum_post_type_labels(),
-				'rewrite'             => bbp_get_forum_post_type_rewrite(),
-				'supports'            => bbp_get_forum_post_type_supports(),
-				'description'         => __( 'bbPress Forums', 'bbpress' ),
-				'capabilities'        => bbp_get_forum_caps(),
-				'capability_type'     => array( 'forum', 'forums' ),
-				'menu_position'       => 555555,
-				'has_archive'         => bbp_get_root_slug(),
-				'exclude_from_search' => true,
-				'show_in_nav_menus'   => true,
-				'public'              => true,
-				'show_ui'             => current_user_can( 'bbp_forums_admin' ),
-				'can_export'          => true,
-				'hierarchical'        => true,
-				'query_var'           => true,
-				'menu_icon'           => ''
+			bp_get_email_post_type(),
+			apply_filters( 'bp_register_email_post_type', array(
+				'labels'              => bp_get_email_post_type_labels(),
+				'rewrite'             => bp_get_email_post_type_rewrite(),
+				'supports'            => bp_get_email_post_type_supports(),
+				'description'         => __( 'BuddyPress Emails', 'buddypress' ),
+				'capability_type'     => array( 'email', 'emails' ),
+				'menu_position'       => 200,
+				'show_in_nav_menus'   => false,
+				'public'              => false,
+				'show_ui'             => bp_current_user_can( 'bp_moderate' ),
+				'query_var'           => false,
+				'menu_icon'           => 'dashicons-email',
 			) )
 		);
 

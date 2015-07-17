@@ -405,6 +405,9 @@ class BuddyPress {
 
 		$this->current_user   = new stdClass();
 		$this->displayed_user = new stdClass();
+
+		/** Post types ********************************************************/
+		$this->forum_post_type   = apply_filters( 'bbp_forum_post_type',  'forum'     );
 	}
 
 	/**

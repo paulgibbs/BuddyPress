@@ -3259,7 +3259,7 @@ function bp_nav_menu( $args = array() ) {
 /**
  * Output the unique ID of the post type for emails.
  *
- * @since bbPress (r2857)
+ * @since BuddyPress (2.4.0)
  */
 function bp_email_post_type() {
 	echo bp_get_email_post_type();
@@ -3268,36 +3268,34 @@ function bp_email_post_type() {
 	 * Return the unique ID of the post type for emails.
 	 *
 	 * @return string The unique forum post type id
-	 * @since bbPress (r2857)
+	 * @since BuddyPress (2.4.0)
 	 */
 	function bp_get_email_post_type() {
 		return apply_filters( 'bp_get_email_post_type', bbpress()->forum_post_type );
 	}
 
-
 /**
  * Return labels used by the email post type.
  *
  * @return array
- * @since bbPress (r5129)
+ * @since BuddyPress (2.4.0)
  */
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
-		'name'               => __( 'Forums',                   'bbpress' ),
-		'menu_name'          => __( 'Forums',                   'bbpress' ),
-		'singular_name'      => __( 'Forum',                    'bbpress' ),
-		'all_items'          => __( 'All Forums',               'bbpress' ),
-		'add_new'            => __( 'New Forum',                'bbpress' ),
-		'add_new_item'       => __( 'Create New Forum',         'bbpress' ),
-		'edit'               => __( 'Edit',                     'bbpress' ),
-		'edit_item'          => __( 'Edit Forum',               'bbpress' ),
-		'new_item'           => __( 'New Forum',                'bbpress' ),
-		'view'               => __( 'View Forum',               'bbpress' ),
-		'view_item'          => __( 'View Forum',               'bbpress' ),
-		'search_items'       => __( 'Search Forums',            'bbpress' ),
-		'not_found'          => __( 'No forums found',          'bbpress' ),
-		'not_found_in_trash' => __( 'No forums found in Trash', 'bbpress' ),
-		'parent_item_colon'  => __( 'Parent Forum:',            'bbpress' )
+		'name'               => _x( 'Emails', 'email post type label', 'buddypress' ),
+		'menu_name'          => _x( 'Email', 'email post type label', 'buddypress' ),
+		'singular_name'      => _x( 'Email', 'email post type label', 'buddypress' ),
+		'all_items'          => _x( 'All Emails', 'email post type label', 'buddypress' ),
+		'add_new'            => _x( 'New Email', 'email post type label', 'buddypress' ),
+		'add_new_item'       => _x( 'Create New Email', 'email post type label', 'buddypress' ),
+		'edit'               => _x( 'Edit', 'email post type label', 'buddypress' ),
+		'edit_item'          => _x( 'Edit Email', 'email post type label', 'buddypress' ),
+		'new_item'           => _x( 'New Email', 'email post type label', 'buddypress' ),
+		'view'               => _x( 'View Email', 'email post type label', 'buddypress' ),
+		'view_item'          => _x( 'View Email', 'email post type label', 'buddypress' ),
+		'search_items'       => _x( 'Search Emails', 'email post type label', 'buddypress' ),
+		'not_found'          => _x( 'No emails found', 'email post type label', 'buddypress' ),
+		'not_found_in_trash' => _x( 'No emails found in Trash', 'email post type label', 'buddypress' ),
 	) );
 }
 
@@ -3305,25 +3303,22 @@ function bp_get_email_post_type_labels() {
  * Return email post type rewrite settings.
  *
  * @return array
- * @since bbPress (r5129)
+ * @since BuddyPress (2.4.0)
  */
 function bp_get_email_post_type_rewrite() {
-	return apply_filters( 'bp_get_email_post_type_rewrite', array(
-		'slug'       => bp_get_email_slug(),
-		'with_front' => false
-	) );
+	return apply_filters( 'bp_get_email_post_type_rewrite', false );
 }
 
 /**
  * Return array of features that the email post type supports.
  *
  * @return array
- * @since bbPress (r5129)
+ * @since BuddyPress (2.4.0)
  */
 function bp_get_email_post_type_supports() {
 	return apply_filters( 'bp_get_email_post_type_supports', array(
 		'title',
 		'editor',
-		'revisions'
+		'revisions',
 	) );
 }
