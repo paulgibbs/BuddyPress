@@ -2543,6 +2543,90 @@ function bp_upload_dir() {
 	return $bp->upload_dir;
 }
 
+
+/** Post Types *****************************************************************/
+
+/**
+ * Output the unique ID of the post type for emails.
+ *
+ * @since BuddyPress (2.4.0)
+ */
+function bp_email_post_type() {
+	echo bp_get_email_post_type();
+}
+	/**
+	 * Return the unique ID of the post type for emails.
+	 *
+	 * @return string The unique forum post type id
+	 * @since BuddyPress (2.4.0)
+	 */
+	function bp_get_email_post_type() {
+		return apply_filters( 'bp_get_email_post_type', buddypress()->email_post_type );
+	}
+
+/**
+ * Return labels used by the email post type.
+ *
+ * @return array
+ * @since BuddyPress (2.4.0)
+ */
+function bp_get_email_post_type_labels() {
+	return apply_filters( 'bp_get_email_post_type_labels', array(
+		'name'               => _x( 'Emails', 'email post type label', 'buddypress' ),
+		'menu_name'          => _x( 'Email', 'email post type label', 'buddypress' ),
+		'singular_name'      => _x( 'Email', 'email post type label', 'buddypress' ),
+		'all_items'          => _x( 'All Emails', 'email post type label', 'buddypress' ),
+		'add_new'            => _x( 'New Email', 'email post type label', 'buddypress' ),
+		'add_new_item'       => _x( 'Create New Email', 'email post type label', 'buddypress' ),
+		'edit'               => _x( 'Edit', 'email post type label', 'buddypress' ),
+		'edit_item'          => _x( 'Edit Email', 'email post type label', 'buddypress' ),
+		'new_item'           => _x( 'New Email', 'email post type label', 'buddypress' ),
+		'view'               => _x( 'View Email', 'email post type label', 'buddypress' ),
+		'view_item'          => _x( 'View Email', 'email post type label', 'buddypress' ),
+		'search_items'       => _x( 'Search Emails', 'email post type label', 'buddypress' ),
+		'not_found'          => _x( 'No emails found', 'email post type label', 'buddypress' ),
+		'not_found_in_trash' => _x( 'No emails found in Trash', 'email post type label', 'buddypress' ),
+	) );
+}
+
+/**
+ * Return array of features that the email post type supports.
+ *
+ * @return array
+ * @since BuddyPress (2.4.0)
+ */
+function bp_get_email_post_type_supports() {
+	return apply_filters( 'bp_get_email_post_type_supports', array(
+		'title',
+		'editor',
+		'revisions',
+	) );
+}
+
+
+/** Taxonomies *****************************************************************/
+
+/**
+ * Output the unique ID of the taxonomy for email types.
+ *
+ * @since BuddyPress (2.4.0)
+ */
+function bp_email_tax_type() {
+	echo bp_get_email_tax_type();
+}
+	/**
+	 * Return the unique ID of the taxonomy for email types.
+	 *
+	 * @return string The unique email taxonomy type ID.
+	 * @since BuddyPress (2.4.0)
+	 */
+	function bp_get_email_tax_type() {
+		return apply_filters( 'bp_get_email_tax_type', buddypress()->email_taxonomy_type );
+	}
+
+
+/** Email *****************************************************************/
+
 /**
  * Send mail, similar to WordPress' wp_mail().
  *
