@@ -20,6 +20,15 @@ function bp_register_default_taxonomies() {
 	register_taxonomy( 'bp_member_type', 'user', array(
 		'public' => false,
 	) );
+
+	// Email type.
+	register_taxonomy(
+		bp_get_email_tax_type(),
+		bp_get_email_post_type(),
+		apply_filters( 'bp_register_email_tax_type', array(
+			'public' => false,
+		) )
+	);
 }
 add_action( 'bp_register_taxonomies', 'bp_register_default_taxonomies' );
 
