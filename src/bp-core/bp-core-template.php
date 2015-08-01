@@ -3271,7 +3271,7 @@ function bp_email_post_type() {
 	 * @since BuddyPress (2.4.0)
 	 */
 	function bp_get_email_post_type() {
-		return apply_filters( 'bp_get_email_post_type', bbpress()->forum_post_type );
+		return apply_filters( 'bp_get_email_post_type', buddypress()->email_post_type );
 	}
 
 /**

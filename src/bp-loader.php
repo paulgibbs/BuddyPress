@@ -407,7 +407,7 @@ class BuddyPress {
 		$this->displayed_user = new stdClass();
 
 		/** Post types ********************************************************/
-		$this->forum_post_type   = apply_filters( 'bbp_forum_post_type',  'forum'     );
+		$this->email_post_type = apply_filters( 'bp_email_post_type', 'bp-email' );
 	}
 
 	/**
