@@ -2648,9 +2648,9 @@ function bp_email_tax_type() {
  *     @type string $mail_from_name Optional. Email "from" name.
  * }
  * @return bool|WP_Error Bool if wp_mail() sent the email(s) or not.
- *         If a WP_Error is returned, there was a failure is in bp_mail().
+ *         If a WP_Error is returned, there was a failure is in bp_send_mail().
  */
-function bp_mail( $email_type, $to, $args ) {
+function bp_send_mail( $email_type, $to, $args ) {
 
 	// Backward compatibility with pre-2.4 era plugins.
 	if ( ! is_array( $args ) || func_num_args() > 3 ) {

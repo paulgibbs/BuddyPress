@@ -138,7 +138,7 @@ Regards,
 					$content = apply_filters( 'bp_new_user_email_content', $email_text, $user_email, $old_user_email, $update_user );
 
 					// Send the verification email
-					bp_mail( 'djpaultodo', $user_email, sprintf( __( '[%s] Verify your new email address', 'buddypress' ), wp_specialchars_decode( bp_get_site_name() ) ), $content );
+					bp_send_mail( 'djpaultodo', $user_email, sprintf( __( '[%s] Verify your new email address', 'buddypress' ), wp_specialchars_decode( bp_get_site_name() ) ), $content );
 
 					// We mark that the change has taken place so as to ensure a
 					// success message, even though verification is still required
