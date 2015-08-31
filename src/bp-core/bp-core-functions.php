@@ -2651,9 +2651,37 @@ function bp_email_tax_type() {
  *         If a WP_Error is returned, there was a failure is in bp_send_mail().
  */
 function bp_send_mail( $email_type, $to, $args ) {
+	static $is_default_wpmail = null;
+	static $wp_html_emails    = null;
 
-	// Backward compatibility with pre-2.4 era plugins.
-	if ( ! is_array( $args ) || func_num_args() > 3 ) {
+
+	// Has wp_mail() been filtered to send HTML emails?
+	if ( is_null( $wp_html_emails ) ) {
+		$wp_html_emails = apply_filters( 'wp_mail_content_type', $content_type ) === 'text/html';
+	}
+
+	// wp_mail() is a pluggable function. Has it been re-defined by another plugin?
+	if ( is_null( $is_default_wpmail ) ) {
+		try {
+			$mirror            = new ReflectionFunction( 'wp_mail' );
+			$is_default_wpmail = substr( $mirror->getFileName(), -strlen( 'pluggable.php' ) ) === 'pluggable.php';
+		} catch ( Exception $e ) {
+			$is_default_wpmail = true;
+		}
+	}
+
+	$func_args = func_get_args();  // PHP 5.2
+
+	// Filter this to skip BP's email handling, to send everything to wp_mail().
+	$must_use_wpmail = apply_filters(
+		'bp_mail_use_legacy_support',
+		$wp_html_emails || ! $is_default_wpmail,
+		$func_args
+	);
+
+
+	// Backward compatibility with unported pre-2.4 code, and other wp_mail() plugins.
+	if ( ! is_array( $args ) || func_num_args() > 3 || $must_use_wpmail ) {
 		$old_args_keys = array(
 			0 => 'to',
 			1 => 'subject',
@@ -2662,7 +2690,6 @@ function bp_send_mail( $email_type, $to, $args ) {
 			4 => 'attachments',
 		);
 
-		$func_args = func_get_args();  // PHP 5.2
 		return call_user_func_array( 'wp_mail', bp_core_parse_args_array( $old_args_keys, $func_args ) );
 	}
 
