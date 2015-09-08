@@ -136,6 +136,22 @@ class BP_Email {
 		}
 	}
 
+	/**
+	 * Getter function to expose object properties.
+	 *
+	 * @since 2.4.0
+	 * @param string $property Name of property to accss.
+	 * @return mixed Returns null if property does not exist, otherwise the value.
+	 */
+	public function get( $property ) {
+		if ( ! property_exists( $this, $property ) ) {
+			return null;
+		}
+
+		$retval = apply_filters( "bp_email_get_{$property}", $this->$property, $this );
+		return apply_filters( 'bp_email_get_property', $retval, $property, $this );
+	}
+
 
 	/**
 	 * Sanitisation and validation logic.
