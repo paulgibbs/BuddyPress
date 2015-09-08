@@ -84,60 +84,96 @@ class BP_Email {
 	 */
 
 	/**
-	 * Something.
+	 * Set the email's "from" address.
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param string $email_address Something.
+	 * @param string $email_address
 	 * @return BP_Email
 	 */
 	public function from( $email_address ) {
+		$email_address = sanitize_email( $email_address );
+
+		if ( is_email( $email_address ) ) {
+			$this->email = apply_filters( 'bp_email_set_from', $email_address, $this );
+		}
+
+		return $this;
 	}
 
 	/**
-	 * Something.
+	 * Set the email's "to" address.
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param array|string $email_addresses Something.
+	 * @param array|string $email_addresses
 	 * @return BP_Email
 	 */
 	public function to( $email_addresses ) {
 		if ( ! is_array( $email_addresses ) ) {
 			$email_addresses = (array) $email_addresses;
 		}
+
+		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
+		$email_addresses = array_filter( $email_addresses, 'is_email' );
+
+		if ( $email_addresses ) {
+			$this->email = apply_filters( 'bp_email_set_to', $email_addresses, $this );
+		}
+
+		return $this;
 	}
 
 	/**
-	 * Something.
+	 * Set the email's "cc" address.
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param array|string $email_addresses Something.
+	 * @param array|string $email_addresses
 	 * @return BP_Email
 	 */
 	public function cc( $email_addresses ) {
 		if ( ! is_array( $email_addresses ) ) {
 			$email_addresses = (array) $email_addresses;
 		}
+
+		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
+		$email_addresses = array_filter( $email_addresses, 'is_email' );
+
+		if ( $email_addresses ) {
+			$this->email = apply_filters( 'bp_email_set_cc', $email_addresses, $this );
+		}
+
+		return $this;
 	}
 
 	/**
-	 * Something.
+	 * Set the email's "bcc" address.
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param array|string $email_addresses Something.
+	 * @param array|string $email_addresses
 	 * @return BP_Email
 	 */
 	public function bcc( $email_addresses ) {
 		if ( ! is_array( $email_addresses ) ) {
 			$email_addresses = (array) $email_addresses;
 		}
+
+		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
+		$email_addresses = array_filter( $email_addresses, 'is_email' );
+
+		if ( $email_addresses ) {
+			$this->email = apply_filters( 'bp_email_set_bcc', $email_addresses, $this );
+		}
+
+		return $this;
 	}
 
 	/**
 	 * Getter function to expose object properties.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.4.0
 	 * @param string $property Name of property to accss.
