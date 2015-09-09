@@ -61,6 +61,24 @@ class BP_Email {
 	protected $bcc = array();
 
 	/**
+	 * Email subject.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var string
+	 */
+	protected $subject = '';
+
+	/**
+	 * Email body.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var string
+	 */
+	protected $body = '';
+
+	/**
 	 * Token names and replacement values for this email.
 	 *
 	 * @since 2.4.0
@@ -102,10 +120,7 @@ class BP_Email {
 	 */
 	public function from( $email_address ) {
 		$email_address = sanitize_email( $email_address );
-
-		if ( is_email( $email_address ) ) {
-			$this->email = apply_filters( 'bp_email_set_from', $email_address, $this );
-		}
+		$this->from    = apply_filters( 'bp_email_set_from', $email_address, $this );
 
 		return $this;
 	}
@@ -125,10 +140,7 @@ class BP_Email {
 
 		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$email_addresses = array_filter( $email_addresses, 'is_email' );
-
-		if ( $email_addresses ) {
-			$this->email = apply_filters( 'bp_email_set_to', $email_addresses, $this );
-		}
+		$this->to        = apply_filters( 'bp_email_set_to', $email_addresses, $this );
 
 		return $this;
 	}
@@ -148,10 +160,7 @@ class BP_Email {
 
 		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$email_addresses = array_filter( $email_addresses, 'is_email' );
-
-		if ( $email_addresses ) {
-			$this->email = apply_filters( 'bp_email_set_cc', $email_addresses, $this );
-		}
+		$this->cc        = apply_filters( 'bp_email_set_cc', $email_addresses, $this );
 
 		return $this;
 	}
@@ -171,10 +180,37 @@ class BP_Email {
 
 		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$email_addresses = array_filter( $email_addresses, 'is_email' );
+		$this->bcc       = apply_filters( 'bp_email_set_bcc', $email_addresses, $this );
 
-		if ( $email_addresses ) {
-			$this->email = apply_filters( 'bp_email_set_bcc', $email_addresses, $this );
-		}
+		return $this;
+	}
+
+	/**
+	 * Set the email subject.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $subject
+	 * @return BP_Email
+	 */
+	public function subject( $subject ) {
+		$subject       = sanitize_text_field( $subject );
+		$this->subject = apply_filters( 'bp_email_set_subject', $subject, $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set the email body.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $subject
+	 * @return BP_Email
+	 */
+	public function body( $body ) {
+		$body       = sanitize_text_field( $body );
+		$this->body = apply_filters( 'bp_email_set_body', $body, $this );
 
 		return $this;
 	}
@@ -187,7 +223,7 @@ class BP_Email {
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param array $tokens Key/value pairs of token name/value.
+	 * @param array $tokens Key/value pairs of token name/value (strings).
 	 * @return BP_Email
 	 */
 	public function tokens( array $tokens ) {
@@ -197,9 +233,7 @@ class BP_Email {
 			$name = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
 		}
 
-		if ( $tokens ) {
-			$this->tokens = apply_filters( 'bp_email_set_tokens', $tokens, $this );
-		}
+		$this->tokens = apply_filters( 'bp_email_set_tokens', $tokens, $this );
 
 		return $this;
 	}
