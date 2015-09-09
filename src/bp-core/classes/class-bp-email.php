@@ -229,8 +229,8 @@ class BP_Email {
 	public function tokens( array $tokens ) {
 
 		// Wrap token name in {{brackets}}.
-		foreach ( $tokens as &$name => $value ) {
-			$name = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
+		foreach ( $tokens as $name => $value ) {
+			$tokens[ $name ] = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
 		}
 
 		$this->tokens = apply_filters( 'bp_email_set_tokens', $tokens, $this );
