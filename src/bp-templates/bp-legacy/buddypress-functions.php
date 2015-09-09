@@ -211,6 +211,7 @@ class BP_Legacy extends BP_Theme_Compat {
 	 * Load the theme CSS
 	 *
 	 * @since BuddyPress (1.7)
+	 * @since BuddyPress (2.3.0) Support custom CSS file named after the current theme or parent theme.
 	 *
 	 * @uses wp_enqueue_style() To enqueue the styles
 	 */
@@ -219,7 +220,6 @@ class BP_Legacy extends BP_Theme_Compat {
 
 		// Locate the BP stylesheet
 		$ltr = $this->locate_asset_in_stack( "buddypress{$min}.css",     'css' );
-		$rtl = $this->locate_asset_in_stack( "buddypress-rtl{$min}.css", 'css' );
 
 		// LTR
 		if ( ! is_rtl() && isset( $ltr['location'], $ltr['handle'] ) ) {
@@ -231,24 +231,42 @@ class BP_Legacy extends BP_Theme_Compat {
 		}
 
 		// RTL
-		if ( is_rtl() && isset( $rtl['location'], $rtl['handle'] ) ) {
-			$rtl['handle'] = str_replace( '-css', '-css-rtl', $rtl['handle'] );  // Backwards compatibility
-			wp_enqueue_style( $rtl['handle'], $rtl['location'], array(), $this->version, 'screen' );
+		if ( is_rtl() ) {
+			$rtl = $this->locate_asset_in_stack( "buddypress-rtl{$min}.css", 'css' );
 
-			if ( $min ) {
-				wp_style_add_data( $rtl['handle'], 'suffix', $min );
+			if ( isset( $rtl['location'], $rtl['handle'] ) ) {
+				$rtl['handle'] = str_replace( '-css', '-css-rtl', $rtl['handle'] );  // Backwards compatibility
+				wp_enqueue_style( $rtl['handle'], $rtl['location'], array(), $this->version, 'screen' );
+
+				if ( $min ) {
+					wp_style_add_data( $rtl['handle'], 'suffix', $min );
+				}
 			}
 		}
 
 		// Compatibility stylesheets for specific themes.
-		$asset = $this->locate_asset_in_stack( get_stylesheet() . "{$min}.css", 'css' );
-		if ( isset( $asset['location'] ) ) {
+		$theme = $this->locate_asset_in_stack( get_template() . "{$min}.css", 'css' );
+		if ( ! is_rtl() && isset( $theme['location'] ) ) {
 			// use a unique handle
-			$asset['handle'] = 'bp-' . get_stylesheet();
-			wp_enqueue_style( $asset['handle'], $asset['location'], array(), $this->version, 'screen' );
+			$theme['handle'] = 'bp-' . get_template();
+			wp_enqueue_style( $theme['handle'], $theme['location'], array(), $this->version, 'screen' );
 
 			if ( $min ) {
-				wp_style_add_data( $asset['handle'], 'suffix', $min );
+				wp_style_add_data( $theme['handle'], 'suffix', $min );
+			}
+		}
+
+		// Compatibility stylesheet for specific themes, RTL-version
+		if ( is_rtl() ) {
+			$theme_rtl = $this->locate_asset_in_stack( get_template() . "-rtl{$min}.css", 'css' );
+
+			if ( isset( $theme_rtl['location'] ) ) {
+				$theme_rtl['handle'] = $theme['handle'] . '-rtl';
+				wp_enqueue_style( $theme_rtl['handle'], $theme_rtl['location'], array(), $this->version, 'screen' );
+
+				if ( $min ) {
+					wp_style_add_data( $theme_rtl['handle'], 'suffix', $min );
+				}
 			}
 		}
 	}
@@ -375,14 +393,14 @@ class BP_Legacy extends BP_Theme_Compat {
 			$locations['bp-child'] = array(
 				'dir'  => get_stylesheet_directory(),
 				'uri'  => get_stylesheet_directory_uri(),
-				'file' => $file,
+				'file' => str_replace( '.min', '', $file ),
 			);
 		}
 
 		$locations['bp-parent'] = array(
 			'dir'  => get_template_directory(),
 			'uri'  => get_template_directory_uri(),
-			'file' => $file,
+			'file' => str_replace( '.min', '', $file ),
 		);
 
 		$locations['bp-legacy'] = array(
@@ -1522,58 +1540,17 @@ function bp_legacy_theme_ajax_messages_send_reply() {
 
 		// manually call oEmbed
 		// this is needed because we're not at the beginning of the loop
-		bp_messages_embed()
-	?>
+		bp_messages_embed();
 
-		<div class="message-box new-message <?php bp_the_thread_message_css_class(); ?>">
-			<div class="message-metadata">
-				<?php
+		// add new-message css class
+		add_filter( 'bp_get_the_thread_message_css_class', create_function( '$retval', '
+			$retval[] = "new-message";
+			return $retval;
+		' ) );
 
-				/**
-				 * Fires before the single message header is displayed.
-				 *
-				 * @since BuddyPress (1.1.0)
-				 */
-				do_action( 'bp_before_message_meta' ); ?>
-				<?php echo bp_loggedin_user_avatar( 'type=thumb&width=30&height=30' ); ?>
+		// output single message template part
+		bp_get_template_part( 'members/single/messages/message' );
 
-				<strong><a href="<?php echo bp_loggedin_user_domain(); ?>"><?php bp_loggedin_user_fullname(); ?></a> <span class="activity"><?php printf( __( 'Sent %s', 'buddypress' ), bp_core_time_since( bp_core_current_time() ) ); ?></span></strong>
-
-				<?php
-
-				/**
-				 * Fires after the single message header is displayed.
-				 *
-				 * @since BuddyPress (1.1.0)
-				 */
-				do_action( 'bp_after_message_meta' ); ?>
-			</div>
-
-			<?php
-
-			/**
-			 * Fires before the message content for a private message.
-			 *
-			 * @since BuddyPress (1.1.0)
-			 */
-			do_action( 'bp_before_message_content' ); ?>
-
-			<div class="message-content">
-				<?php bp_the_thread_message_content(); ?>
-			</div>
-
-			<?php
-
-			/**
-			 * Fires after the message content for a private message.
-			 *
-			 * @since BuddyPress (1.1.0)
-			 */
-			do_action( 'bp_after_message_content' ); ?>
-
-			<div class="clear"></div>
-		</div>
-	<?php
 		// clean up the loop
 		bp_thread_messages();
 

@@ -51,11 +51,11 @@ do_action( 'bp_before_members_loop' ); ?>
 	 */
 	do_action( 'bp_before_directory_members_list' ); ?>
 
-	<ul id="members-list" class="item-list" role="main">
+	<ul id="members-list" class="item-list">
 
 	<?php while ( bp_members() ) : bp_the_member(); ?>
 
-		<li>
+		<li <?php bp_member_class(); ?>>
 			<div class="item-avatar">
 				<a href="<?php bp_member_permalink(); ?>"><?php bp_member_avatar(); ?></a>
 			</div>

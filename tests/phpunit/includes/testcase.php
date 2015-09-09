@@ -1,11 +1,5 @@
 <?php
 
-/**
- * WP's test suite wipes out BP's directory page mappings with _delete_all_posts()
- * We must reestablish them before our tests can be successfully run
- */
-bp_core_add_page_mappings( bp_get_option( 'bp-active-components' ), 'delete' );
-
 require_once dirname( __FILE__ ) . '/factory.php';
 
 class BP_UnitTestCase extends WP_UnitTestCase {
@@ -13,7 +7,32 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	protected $temp_has_bp_moderate = array();
 	protected static $cached_SERVER_NAME = null;
 
+	/**
+	 * A flag indicating whether an autocommit has been detected inside of a test.
+	 *
+	 * @since BuddyPress (2.4.0)
+	 *
+	 * @var bool
+	 */
+	protected $autocommitted = false;
+
+	/**
+	 * A list of components that have been deactivated during a test.
+	 *
+	 * @since BuddyPress (2.4.0)
+	 *
+	 * @var array
+	 */
+	protected $deactivated_components = array();
+
 	public static function setUpBeforeClass() {
+
+		/*
+		 * WP's test suite wipes out BP's directory page mappings with `_delete_all_posts()`.
+		 * We must reestablish them before our tests can be successfully run.
+		 */
+		bp_core_add_page_mappings( bp_get_option( 'bp-active-components' ), 'delete' );
+
 		// Fake WP mail globals, to avoid errors
 		add_filter( 'wp_mail', array( 'BP_UnitTestCase', 'setUp_wp_mail' ) );
 		add_filter( 'wp_mail_from', array( 'BP_UnitTestCase', 'tearDown_wp_mail' ) );
@@ -22,24 +41,47 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		// There's a bug in the multisite tests that causes the
-		// transaction rollback to fail for the first user created,
-		// which busts every other attempt to create users. This is a
-		// hack workaround.
-		global $wpdb;
-		if ( is_multisite() ) {
-			$user_1 = get_user_by( 'login', 'user 1' );
-			if ( $user_1 ) {
-				$wpdb->delete( $wpdb->users, array( 'ID' => $user_1->ID ) );
-				clean_user_cache( $user_1 );
-			}
-		}
-
-
 		$this->factory = new BP_UnitTest_Factory;
 
 		// Fixes warnings in multisite functions
 		$_SERVER['REMOTE_ADDR'] = '';
+		global $wpdb;
+
+		// Clean up after autocommits.
+		add_action( 'bp_blogs_recorded_existing_blogs', array( $this, 'set_autocommit_flag' ) );
+	}
+
+	public function tearDown() {
+		global $wpdb;
+
+		remove_action( 'bp_blogs_recorded_existing_blogs', array( $this, 'set_autocommit_flag' ) );
+
+		parent::tearDown();
+
+		// If we detect that a COMMIT has been triggered during the test, clean up blog and user fixtures.
+		if ( $this->autocommitted ) {
+			if ( is_multisite() ) {
+				foreach ( $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs WHERE blog_id != 1" ) as $blog_id ) {
+					wpmu_delete_blog( $blog_id, true );
+				}
+			}
+
+			foreach ( $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE ID != 1" ) as $user_id ) {
+				if ( is_multisite() ) {
+					wpmu_delete_user( $user_id );
+				} else {
+					wp_delete_user( $user_id );
+				}
+			}
+		}
+
+		$this->commit_transaction();
+
+		// Reactivate any components that have been deactivated.
+		foreach ( $this->deactivated_components as $component ) {
+			buddypress()->active_components[ $component ] = 1;
+		}
+		$this->deactivated_components = array();
 	}
 
 	function clean_up_global_scope() {
@@ -50,28 +92,9 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 		buddypress()->current_user          = new stdClass();
 		buddypress()->displayed_user        = new stdClass();
 		buddypress()->loggedin_user         = new stdClass();
+		buddypress()->pages                 = array();
 
 		parent::clean_up_global_scope();
-	}
-
-	function tearDown() {
-		parent::tearDown();
-
-		/**
-		 * Sites created by the WP_UnitTest_Factory_For_Blog sometimes are not removed when the current
-		 * transaction is rolled back. This requires further investigation to understand the root cause
-		 * but for now, we'll empty out the blogs table manually.
-		 */
-		global $wpdb;
-
-		if ( is_multisite() ) {
-			$blogs = wp_get_sites();
-			foreach ( $blogs as $blog ) {
-				if ( (int) $blog['blog_id'] !== 1 ) {
-					wpmu_delete_blog( $blog['blog_id'], true );
-				}
-			}
-		}
 	}
 
 	function assertPreConditions() {
@@ -446,5 +469,32 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 		}
 
 		@rmdir( $dir );
+	}
+
+	/**
+	 * Set a flag that an autocommit has taken place inside of a test method.
+	 *
+	 * @since BuddyPress (2.4.0)
+	 */
+	public function set_autocommit_flag() {
+		$this->autocommitted = true;
+	}
+
+	/**
+	 * Deactivate a component for the duration of a test.
+	 *
+	 * @since BuddyPress (2.4.0)
+	 *
+	 * @param string $component Component name.
+	 */
+	public function deactivate_component( $component ) {
+		$is_active = isset( buddypress()->active_components[ $component ] );
+
+		if ( ! isset( $component ) ) {
+			return false;
+		}
+
+		unset( buddypress()->active_components[ $component ] );
+		$this->deactivated_components[] = $component;
 	}
 }

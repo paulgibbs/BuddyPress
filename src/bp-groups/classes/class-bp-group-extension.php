@@ -1,6 +1,6 @@
 <?php
 /**
- * BuddyPress Groups Classes
+ * BuddyPress Groups Classes.
  *
  * @package BuddyPress
  * @subpackage GroupsClasses
@@ -289,10 +289,16 @@ class BP_Group_Extension {
 	 * methods that it needs for its purposes.
 	 */
 
-	// The content of the group tab
+	/**
+	 * The content of the group tab.
+	 *
+	 * @param int|null $group_id
+	 */
 	public function display( $group_id = null ) {}
 
-	// Content displayed in a widget sidebar, if applicable
+	/**
+	 * Content displayed in a widget sidebar, if applicable
+	 */
 	public function widget_display() {}
 
 	// *_screen() displays the settings form for the given context
@@ -312,7 +318,7 @@ class BP_Group_Extension {
 	/** Setup *************************************************************/
 
 	/**
-	 * Initialize the extension, using your config settings
+	 * Initialize the extension, using your config settings.
 	 *
 	 * Your plugin should call this method at the very end of its
 	 * constructor, like so:
@@ -328,51 +334,43 @@ class BP_Group_Extension {
 	 *   }
 	 *
 	 * @since BuddyPress (1.8.0)
-	 * @since BuddyPress (2.1.0) Added 'access' and 'show_tab' arguments
-	 * 		  to $args.
+	 * @since BuddyPress (2.1.0) Added 'access' and 'show_tab' arguments to `$args`.
+	 *
 	 * @param array $args {
 	 *     Array of initialization arguments.
-	 *     @type string $slug Unique, URL-safe identifier for your
-	 *           extension.
-	 *     @type string $name Translatable name for your extension. Used to
-	 *           populate navigation items.
-	 *     @type string $visibility Optional. Set to 'public' for your
-	 *           extension (the main tab as well as the widget) to be
-	 *           available to anyone who can access the group; set to
-	 *           'private' otherwise. Default: 'public'.
-	 *     @type int $nav_item_position Optional. Location of the nav item
-	 *           in the tab list. Default: 81.
-	 *     @type bool $enable_nav_item Optional. Whether the extension's
-	 *           tab should be accessible to anyone who can view the group.
-	 *           Default: true.
-	 *     @type string $nav_item_name Optional. The translatable text you
-	 *           want to appear in the nav tab. Default: the value of $name.
-	 *     @type string $display_hook Optional. The WordPress action that
-	 *           the widget_display() method is hooked to.
-	 *           Default: 'groups_custom_group_boxes'.
-	 *     @type string $template_file Optional. Theme-relative path to the
-	 *           template file BP should use to load the content of your
-	 *           main extension tab. Default: 'groups/single/plugins.php'.
-	 *     @type array $screens A multi-dimensional array of configuration
-	 *           information for the extension screens. See docblock of
-	 *           {@link BP_Group_Extension} for more details.
-	 *     @type string|array $access Which users can visit the plugin's tab.
-	 *			 Possible values: 'anyone', 'loggedin', 'member',
-	 *        	 'mod', 'admin' or 'noone'. ('member', 'mod', 'admin'
-	 *           refer to user's role in group.) Note that 'mod' targets only
-	 *           group moderators. If you want to allow access to group
-	 *           moderators and admins, specify `array( 'mod', 'admin' )`.
-	 * 			 Defaults to 'anyone' for public groups and 'member' for
-	 *			 private groups.
-	 *     @type string|array $show_tab Which users can see the plugin's
-	 *           navigation tab.
-	 *			 Possible values: 'anyone', 'loggedin', 'member',
-	 *        	 'mod', 'admin' or 'noone'. ('member', 'mod', 'admin'
-	 *           refer to user's role in group.) Note that 'mod' targets only
-	 *           group moderators. If you want to show the tab to group
-	 *           moderators and admins, specify `array( 'mod', 'admin' )`.
-	 * 			 Defaults to 'anyone' for public groups and 'member' for
-	 *			 private groups.
+	 *     @type string       $slug              Unique, URL-safe identifier for your extension.
+	 *     @type string       $name              Translatable name for your extension. Used to populate
+	 *                                           navigation items.
+	 *     @type string       $visibility        Optional. Set to 'public' for your extension (the main tab as well
+	 *                                           as the widget) to be available to anyone who can access the group;
+	 *                                           set to 'private' otherwise. Default: 'public'.
+	 *     @type int          $nav_item_position Optional. Location of the nav item in the tab list.
+	 *                                           Default: 81.
+	 *     @type bool         $enable_nav_item   Optional. Whether the extension's tab should be accessible to
+	 *                                           anyone who can view the group. Default: true.
+	 *     @type string       $nav_item_name     Optional. The translatable text you want to appear in the nav tab.
+	 *                                           Default: the value of `$name`.
+	 *     @type string       $display_hook      Optional. The WordPress action that the widget_display() method is
+	 *                                           hooked to. Default: 'groups_custom_group_boxes'.
+	 *     @type string       $template_file     Optional. Theme-relative path to the template file BP should use
+	 *                                           to load the content of your main extension tab.
+	 *                                           Default: 'groups/single/plugins.php'.
+	 *     @type array        $screens           A multi-dimensional array of configuration information for the
+	 *                                           extension screens. See docblock of {@link BP_Group_Extension}
+	 *                                           for more details.
+	 *     @type string|array $access            Which users can visit the plugin's tab. Possible values: 'anyone',
+	 *                                           'loggedin', 'member', 'mod', 'admin' or 'noone'. ('member', 'mod',
+	 *                                           'admin' refer to user's role in group.) Note that 'mod' targets
+	 *                                           only group moderators. If you want to allow access to group moderators
+	 *                                           and admins, specify `array( 'mod', 'admin' )`. Defaults to 'anyone'
+	 *                                           for public groups and 'member' for private groups.
+	 *     @type string|array $show_tab          Which users can see the plugin's navigation tab. Possible values:
+	 *                                           'anyone', 'loggedin', 'member', 'mod', 'admin' or 'noone'.
+	 *                                           ('member', 'mod', 'admin' refer to user's role in group.) Note
+	 *                                           that 'mod' targets only group moderators. If you want to show the
+	 *                                           tab to group moderators and admins, specify
+	 *                                           `array( 'mod', 'admin' )`. Defaults to 'anyone' for public groups
+	 *                                           and 'member' for private groups.
 	 * }
 	 */
 	public function init( $args = array() ) {
@@ -672,7 +670,7 @@ class BP_Group_Extension {
 	 * Check whether the current user meets an access condition.
 	 *
 	 * @param string $access_condition 'anyone', 'loggedin', 'member',
-	 *        'mod', 'admin' or 'noone'.
+	 *                                 'mod', 'admin' or 'noone'.
 	 * @return bool
 	 */
 	protected function user_meets_access_condition( $access_condition ) {
@@ -729,12 +727,13 @@ class BP_Group_Extension {
 			return;
 		}
 
+		// If the user can see the nav item, we create it.
 		$user_can_see_nav_item = $this->user_can_see_nav_item();
 
 		if ( $user_can_see_nav_item ) {
 			$group_permalink = bp_get_group_permalink( groups_get_current_group() );
 
-			bp_core_new_subnav_item( array(
+			bp_core_create_subnav_link( array(
 				'name'            => ! $this->nav_item_name ? $this->name : $this->nav_item_name,
 				'slug'            => $this->slug,
 				'parent_slug'     => bp_get_current_group_slug(),
@@ -743,6 +742,21 @@ class BP_Group_Extension {
 				'item_css_id'     => 'nav-' . $this->slug,
 				'screen_function' => array( &$this, '_display_hook' ),
 				'user_has_access' => $user_can_see_nav_item,
+				'no_access_url'   => $group_permalink,
+			) );
+		}
+
+		// If the user can visit the screen, we register it.
+		$user_can_visit = $this->user_can_visit();
+
+		if ( $user_can_visit ) {
+			$group_permalink = bp_get_group_permalink( groups_get_current_group() );
+
+			bp_core_register_subnav_screen_function( array(
+				'slug'            => $this->slug,
+				'parent_slug'     => bp_get_current_group_slug(),
+				'screen_function' => array( &$this, '_display_hook' ),
+				'user_has_access' => $user_can_visit,
 				'no_access_url'   => $group_permalink,
 			) );
 
@@ -761,7 +775,7 @@ class BP_Group_Extension {
 	}
 
 	/**
-	 * Hook the main display method, and loads the template file
+	 * Hook the main display method, and loads the template file.
 	 */
 	public function _display_hook() {
 		add_action( 'bp_template_content', array( &$this, 'call_display' ) );
@@ -796,6 +810,8 @@ class BP_Group_Extension {
 	 *
 	 * @since BuddyPress (2.1.0)
 	 *
+	 * @param bool $user_can_see_nav_item
+	 *
 	 * @return bool
 	 */
 	public function user_can_see_nav_item( $user_can_see_nav_item = false ) {
@@ -810,6 +826,8 @@ class BP_Group_Extension {
 	 * Determine whether the current user has access to visit this tab.
 	 *
 	 * @since BuddyPress (2.1.0)
+	 *
+	 * @param bool $user_can_visit
 	 *
 	 * @return bool
 	 */
@@ -830,8 +848,9 @@ class BP_Group_Extension {
 	 *
 	 * @since BuddyPress (2.1.0)
 	 *
-	 * @param bool $user_can_visit
+	 * @param bool  $user_can_visit
 	 * @param array $no_access_args
+	 *
 	 * @return bool
 	 */
 	public function group_access_protection( $user_can_visit, &$no_access_args ) {
@@ -1083,8 +1102,9 @@ class BP_Group_Extension {
 	 * @since BuddyPress (1.8.0)
 	 *
 	 * @param string $screen The screen markup, captured in the output
-	 *        buffer.
-	 * @param string $screen The same markup, with a submit button added.
+	 *                       buffer.
+	 *
+	 * @return string $screen The same markup, with a submit button added.
 	 */
 	protected function maybe_add_submit_button( $screen = '' ) {
 		if ( $this->has_submit_button( $screen ) ) {
@@ -1105,6 +1125,7 @@ class BP_Group_Extension {
 	 * @since BuddyPress (1.8.0)
 	 *
 	 * @param string $screen The markup to check.
+	 *
 	 * @return bool True if a Submit button is found, otherwise false.
 	 */
 	public static function has_submit_button( $screen = '' ) {
@@ -1118,7 +1139,8 @@ class BP_Group_Extension {
 	 *
 	 * @since BuddyPress (2.1.0)
 	 *
-	 * @param string $location
+	 * @param string $redirect
+	 *
 	 * @return string
 	 */
 	public function detect_post_save_redirect( $redirect = '' ) {
@@ -1162,7 +1184,7 @@ class BP_Group_Extension {
 	}
 
 	/**
-	 * Check the nonce, and call the admin_screen_save() method
+	 * Check the nonce, and call the admin_screen_save() method.
 	 *
 	 * @since BuddyPress (1.8.0)
 	 */
@@ -1231,6 +1253,7 @@ class BP_Group_Extension {
 	 * @since BuddyPress (1.8.0)
 	 *
 	 * @param string $context Screen context. 'create', 'edit', or 'admin'.
+	 *
 	 * @return bool True if the screen is enabled, otherwise false.
 	 */
 	public function is_screen_enabled( $context = '' ) {
@@ -1278,8 +1301,9 @@ class BP_Group_Extension {
 	 * @since BuddyPress (1.8.0)
 	 *
 	 * @param string $context Screen context. 'create', 'edit', or 'admin'.
-	 * @param string $type Screen type. 'screen' or 'screen_save'. Default:
-	 *        'screen'.
+	 * @param string $type    Screen type. 'screen' or 'screen_save'. Default:
+	 *                        'screen'.
+	 *
 	 * @return callable A callable function handle.
 	 */
 	public function get_screen_callback( $context = '', $type = 'screen' ) {
@@ -1329,6 +1353,7 @@ class BP_Group_Extension {
 	 *
 	 * @param array $a First set of arguments.
 	 * @param array $b Second set of arguments.
+	 *
 	 * @return array Parsed arguments.
 	 */
 	public static function parse_args_r( &$a, $b ) {
@@ -1372,6 +1397,7 @@ class BP_Group_Extension {
 	 * @since BuddyPress (1.8.0)
 	 *
 	 * @param string $key Property name.
+	 *
 	 * @return mixed The value if found, otherwise null.
 	 */
 	public function __get( $key ) {
@@ -1396,6 +1422,7 @@ class BP_Group_Extension {
 	 * @since BuddyPress (1.8.0)
 	 *
 	 * @param string $key Property name.
+	 *
 	 * @return bool True if the value is set, otherwise false.
 	 */
 	public function __isset( $key ) {
@@ -1673,7 +1700,7 @@ class BP_Group_Extension {
  * Register a new Group Extension.
  *
  * @param string Name of the Extension class.
- * @return bool|null Returns false on failure, otherwise null.
+ * @return false|null Returns false on failure, otherwise null.
  */
 function bp_register_group_extension( $group_extension_class = '' ) {
 

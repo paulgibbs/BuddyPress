@@ -1,4 +1,4 @@
-/* globals bp, BP_Uploader, _, Backbone */
+/* global bp, BP_Uploader, _, Backbone */
 
 window.bp = window.bp || {};
 
@@ -530,7 +530,7 @@ window.bp = window.bp || {};
 				selection = {}, crop_top, crop_bottom, crop_left, crop_right, nh, nw;
 
 			if ( ! _.isUndefined( this.options.full_h ) && ! _.isUndefined( this.options.full_w ) ) {
-				this.options.aspectRatio = this.options.full_h / this.options.full_w;
+				this.options.aspectRatio = this.options.full_w / this.options.full_h;
 			}
 
 			selection.w = this.model.get( 'width' );

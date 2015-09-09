@@ -1,6 +1,6 @@
 <?php
 /**
- * BuddyPress Groups component admin screen
+ * BuddyPress Groups component admin screen.
  *
  * Props to WordPress core for the Comments admin screen, and its contextual
  * help text, on which this implementation is heavily based.
@@ -51,6 +51,7 @@ add_action( bp_core_admin_hook(), 'bp_groups_add_admin_menu' );
  * @since BuddyPress (1.7.0)
  *
  * @param array $custom_menus Array of BP top-level menu items.
+ *
  * @return array Menu item array, with Groups added.
  */
 function bp_groups_admin_menu_order( $custom_menus = array() ) {
@@ -246,7 +247,6 @@ function bp_groups_admin_load() {
 		$allowed_status = apply_filters( 'groups_allowed_status', array( 'public', 'private', 'hidden' ) );
 		$status         = ( in_array( $_POST['group-status'], (array) $allowed_status ) ) ? $_POST['group-status'] : 'public';
 
-		// Invite status
 		/**
 		 * Filters the allowed invite status values for the group.
 		 *
@@ -433,9 +433,10 @@ function bp_groups_admin_load() {
  *
  * @since BuddyPress (1.7.0)
  *
- * @param string $value Will always be false unless another plugin filters it first.
- * @param string $option Screen option name.
+ * @param string $value     Will always be false unless another plugin filters it first.
+ * @param string $option    Screen option name.
  * @param string $new_value Screen option form value.
+ *
  * @return string Option value. False to abandon update.
  */
 function bp_groups_admin_screen_options( $value, $option, $new_value ) {
@@ -560,7 +561,7 @@ function bp_groups_admin_edit() {
 	 *
 	 * @since BuddyPress (1.7.0)
 	 *
-	 * @param BP_Groups_Group Instance of the current group being edited. Passed by reference.
+	 * @param BP_Groups_Group $this Instance of the current group being edited. Passed by reference.
 	 */
 	do_action_ref_array( 'bp_groups_admin_edit', array( &$group ) ); ?>
 
@@ -590,12 +591,13 @@ function bp_groups_admin_edit() {
 								<div id="bp_groups_name" class="postbox">
 									<h3><?php _e( 'Name and Description', 'buddypress' ); ?></h3>
 									<div class="inside">
+										<label for="bp-groups-name" class="screen-reader-text"><?php _e( 'Group Name', 'buddypress' ); ?></label>
 										<input type="text" name="bp-groups-name" id="bp-groups-name" value="<?php echo esc_attr( stripslashes( $group_name ) ) ?>" />
 										<div id="bp-groups-permalink-box">
 											<strong><?php esc_html_e( 'Permalink:', 'buddypress' ) ?></strong> <span id="sample-permalink"><?php bp_group_permalink( $group ) ?></span> <a href="<?php echo bp_group_permalink( $group ) ?>" class="button button-small" id="bp-groups-visit-group"><?php esc_html_e( 'Visit Group', 'buddypress' ) ?></a>
 										</div>
 
-
+										<label for="bp-groups-description" class="screen-reader-text"><?php _e( 'Group Description', 'buddypress' ); ?></label>
 										<?php wp_editor( stripslashes( $group->description ), 'bp-groups-description', array( 'media_buttons' => false, 'teeny' => true, 'textarea_rows' => 5, 'quicktags' => array( 'buttons' => 'strong,em,link,block,del,ins,img,code,spell,close' ) ) ); ?>
 									</div>
 								</div>
@@ -687,7 +689,7 @@ function bp_groups_admin_delete() {
  *
  * @since BuddyPress (1.7.0)
  *
- * @global BP_Group_List_Table $bp_groups_list_table Group screen list table.
+ * @global BP_Groups_List_Table $bp_groups_list_table Group screen list table.
  * @global string $plugin_page Currently viewed plugin page.
  */
 function bp_groups_admin_index() {
@@ -803,6 +805,7 @@ function bp_groups_admin_edit_metabox_settings( $item ) {
 function bp_groups_admin_edit_metabox_add_new_members( $item ) {
 	?>
 
+	<label for="bp-groups-new-members" class="screen-reader-text"><?php _e( 'Add new members', 'buddypress' ); ?></label>
 	<input name="bp-groups-new-members" id="bp-groups-new-members" class="bp-suggest-user" placeholder="<?php esc_attr_e( 'Enter a comma-separated list of user logins.', 'buddypress' ) ?>" />
 	<ul id="bp-groups-new-members-list"></ul>
 	<?php
@@ -813,8 +816,7 @@ function bp_groups_admin_edit_metabox_add_new_members( $item ) {
  *
  * @since BuddyPress (1.7.0)
  *
- * @param BP_Groups_Group $item The BP_Groups_Group object for the current
- *        group.
+ * @param BP_Groups_Group $item The BP_Groups_Group object for the current group.
  */
 function bp_groups_admin_edit_metabox_members( $item ) {
 
@@ -897,6 +899,7 @@ function bp_groups_admin_edit_metabox_members( $item ) {
 						</td>
 
 						<td class="urole-column">
+							<label for="bp-groups-role-<?php echo esc_attr( $type_user->ID ); ?>" class="screen-reader-text"><?php _e( 'Select group role for member', 'buddypress' ); ?></label>
 							<select class="bp-groups-role" id="bp-groups-role-<?php echo esc_attr( $type_user->ID ); ?>" name="bp-groups-role[<?php echo esc_attr( $type_user->ID ); ?>]">
 								<optgroup label="<?php esc_attr_e( 'Roles', 'buddypress' ); ?>">
 									<option class="admin"  value="admin"  <?php selected( 'admin',  $member_type ); ?>><?php esc_html_e( 'Administrator', 'buddypress' ); ?></option>
@@ -1004,8 +1007,9 @@ function bp_groups_admin_edit_metabox_status( $item ) {
  *
  * @since BuddyPress (1.8.0)
  *
- * @param BP_Group_Member_Query $query A BP_Group_Member_Query object.
- * @param string $member_type member|mod|admin|banned.
+ * @param BP_Group_Member_Query $query       A BP_Group_Member_Query object.
+ * @param string                $member_type member|mod|admin|banned.
+ *
  * @return string Pagination links HTML.
  */
 function bp_groups_admin_create_pagination_links( BP_Group_Member_Query $query, $member_type ) {
@@ -1062,6 +1066,7 @@ function bp_groups_admin_create_pagination_links( BP_Group_Member_Query $query, 
  * @since BuddyPress (1.7.0)
  *
  * @param array $user_ids Array of user IDs.
+ *
  * @return array Array of user_logins corresponding to $user_ids.
  */
 function bp_groups_admin_get_usernames_from_ids( $user_ids = array() ) {
@@ -1132,6 +1137,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 * e.g. "All", "Pending", "Approved", "Spam"...
 	 *
 	 * @since BuddyPress (1.7.0)
+	 *
 	 * @access public
 	 * @var string
 	 */
@@ -1141,6 +1147,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 * Group counts for each group type.
 	 *
 	 * @since BuddyPress (1.7.0)
+	 *
 	 * @access public
 	 * @var int
 	 */
@@ -1289,9 +1296,23 @@ class BP_Groups_List_Table extends WP_List_Table {
 			$this->get_columns(),
 			array(),
 			$this->get_sortable_columns(),
+			$this->get_default_primary_column_name(),
 		);
 
 		return $this->_column_headers;
+	}
+
+	/**
+	 * Get name of default primary column
+	 *
+	 * @since BuddyPress (2.3.3)
+	 * @access protected
+	 *
+	 * @return string
+	 */
+	protected function get_default_primary_column_name() {
+		// comment column is mapped to Group's name
+		return 'comment';
 	}
 
 	/**
@@ -1311,7 +1332,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	public function display() {
 		$this->display_tablenav( 'top' ); ?>
 
-		<table class="<?php echo implode( ' ', $this->get_table_classes() ); ?>" cellspacing="0">
+		<table class="wp-list-table <?php echo implode( ' ', $this->get_table_classes() ); ?>" cellspacing="0">
 			<thead>
 				<tr>
 					<?php $this->print_column_headers(); ?>
@@ -1338,7 +1359,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 *
 	 * @since BuddyPress (1.7.0)
 	 *
-	 * @param object $item The current group item in the loop.
+	 * @param object|array $item The current group item in the loop.
 	 */
 	public function single_row( $item = array() ) {
 		static $even = false;
@@ -1448,7 +1469,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Get the column names for sortable columns
+	 * Get the column names for sortable columns.
 	 *
 	 * Note: It's not documented in WP, but the second item in the
 	 * nested arrays below is $desc_first. Normally, we would set
@@ -1470,6 +1491,37 @@ class BP_Groups_List_Table extends WP_List_Table {
 			'members'     => array( 'members', false ),
 			'last_active' => array( 'last_active', false ),
 		);
+	}
+
+	/**
+	 * Override WP_List_Table::row_actions().
+	 *
+	 * Basically a duplicate of the row_actions() method, but removes the
+	 * unnecessary <button> addition.
+	 *
+	 * @since 2.3.3
+	 * @access protected
+	 *
+	 * @param array $actions The list of actions
+	 * @param bool $always_visible Whether the actions should be always visible
+	 * @return string
+	 */
+	protected function row_actions( $actions, $always_visible = false ) {
+		$action_count = count( $actions );
+		$i = 0;
+
+		if ( !$action_count )
+			return '';
+
+		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
+		foreach ( $actions as $action => $link ) {
+			++$i;
+			( $i == $action_count ) ? $sep = '' : $sep = ' | ';
+			$out .= "<span class='$action'>$link$sep</span>";
+		}
+		$out .= '</div>';
+
+		return $out;
 	}
 
 	/**
@@ -1584,7 +1636,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 *
 	 * @since BuddyPress (1.7.0)
 	 *
-	 * @param array Information about the current row.
+	 * @param array $item Information about the current row.
 	 */
 	public function column_description( $item = array() ) {
 
@@ -1604,7 +1656,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 *
 	 * @since BuddyPress (1.7.0)
 	 *
-	 * @param array Information about the current row.
+	 * @param array $item Information about the current row.
 	 */
 	public function column_status( $item = array() ) {
 		$status      = $item['status'];
@@ -1640,7 +1692,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 *
 	 * @since BuddyPress (1.7.0)
 	 *
-	 * @param array Information about the current row.
+	 * @param array $item Information about the current row.
 	 */
 	public function column_members( $item = array() ) {
 		$count = groups_get_groupmeta( $item['id'], 'total_member_count' );
@@ -1661,7 +1713,7 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 *
 	 * @since BuddyPress (1.7.0)
 	 *
-	 * @param array Information about the current row.
+	 * @param array $item Information about the current row.
 	 */
 	public function column_last_active( $item = array() ) {
 		$last_active = groups_get_groupmeta( $item['id'], 'last_activity' );
@@ -1682,8 +1734,8 @@ class BP_Groups_List_Table extends WP_List_Table {
 	 *
 	 * @since BuddyPress (2.0.0)
 	 *
-	 * @param array Information about the current row.
-	 * @param string the column name.
+	 * @param array  $item        Information about the current row.
+	 * @param string $column_name The column name.
 	 *
 	 * @return string
 	 */
