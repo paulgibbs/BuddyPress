@@ -60,6 +60,15 @@ class BP_Email {
 	 */
 	protected $bcc = array();
 
+	/**
+	 * Token names and replacement values for this email.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var array Key/value pairs of token name/value (strings).
+	 */
+	protected $tokens = array();
+
 
 	/**
 	 * Constructor
@@ -165,6 +174,31 @@ class BP_Email {
 
 		if ( $email_addresses ) {
 			$this->email = apply_filters( 'bp_email_set_bcc', $email_addresses, $this );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set token names and replacement values for this email.
+	 *
+	 * In templates, tokens are inserted with a Handlebars-like syntax, e.g. `{{token_name}}`.
+	 * { and } are reserved characters. There's no need to specify these brackets in your token names.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param array $tokens Key/value pairs of token name/value.
+	 * @return BP_Email
+	 */
+	public function tokens( array $tokens ) {
+
+		// Wrap token name in {{brackets}}.
+		foreach ( $tokens as &$name => $value ) {
+			$name = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
+		}
+
+		if ( $tokens ) {
+			$this->tokens = apply_filters( 'bp_email_set_tokens', $tokens, $this );
 		}
 
 		return $this;
