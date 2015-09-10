@@ -262,15 +262,26 @@ class BP_Email {
 	 */
 
 	/**
-	 * Something.
+	 * Check that we'd be able to send this email.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.4.0
 	 *
 	 * @return bool|WP_Error Returns true if validation succesful, else a descriptive WP_Error.
 	 */
 	public function validate() {
+		$retval = true;
+
+		// BCC, CC, and token properties are optional.
+		if ( ! $this->get( 'from' ) || ! $this->get( 'to' ) ||	! $this->get( 'subject' ) || ! $this->get( 'body' ) ) {
+			$retval = new WP_Error( 'missing_parameter', __CLASS__, $this );
+		}
+
+		return apply_filters( 'bp_email_validate', $retval, $this );
 	}
 }
+
 
 
 $email = bp_get_email( 'new_user' );
@@ -278,7 +289,7 @@ $email = bp_get_email( 'new_user' );
 $email->to( 'example@djpaul.com' );
 $email->bcc( 'your@mom.com' );
 $email->tokens( $some_kv_array );
-// $email->validate()
+	$email->validate();
 
 
 $email_provider->send( $email->validate()->get_text(), 'html/plaintext' )
