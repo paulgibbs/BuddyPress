@@ -282,7 +282,7 @@ class BP_Email {
 	}
 }
 
-
+/*
 
 $email = bp_get_email( 'new_user' );
 // subject + body set via WP_Post, but methods to override.
@@ -294,6 +294,6 @@ $email->tokens( $some_kv_array );
 
 $email_provider->send( $email->validate()->get_text(), 'html/plaintext' )
 ->get_subject()
-
+*/
 
 
