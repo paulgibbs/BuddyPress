@@ -2679,7 +2679,7 @@ function bp_send_mail( $email_type, $to, $args ) {
 
 	// Has wp_mail() been filtered to send HTML emails?
 	if ( is_null( $wp_html_emails ) ) {
-		$wp_html_emails = apply_filters( 'wp_mail_content_type', $content_type ) === 'text/html';
+		$wp_html_emails = apply_filters( 'wp_mail_content_type', 'text/plain' ) === 'text/html';
 	}
 
 	// wp_mail() is a pluggable function. Has it been re-defined by another plugin?
