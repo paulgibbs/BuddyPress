@@ -119,8 +119,13 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function from( $email_address ) {
-		$email_address = sanitize_email( $email_address );
-		$this->from    = apply_filters( 'bp_email_set_from', $email_address, $this );
+		if ( is_email( $email_address ) ) {
+			$email_address = sanitize_email( $email_address );
+		} else {
+			$email_address = '';
+		}
+
+		$this->from = apply_filters( 'bp_email_set_from', $email_address, $this );
 
 		return $this;
 	}
@@ -138,8 +143,8 @@ class BP_Email {
 			$email_addresses = (array) $email_addresses;
 		}
 
-		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$email_addresses = array_filter( $email_addresses, 'is_email' );
+		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$this->to        = apply_filters( 'bp_email_set_to', $email_addresses, $this );
 
 		return $this;
@@ -158,8 +163,8 @@ class BP_Email {
 			$email_addresses = (array) $email_addresses;
 		}
 
-		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$email_addresses = array_filter( $email_addresses, 'is_email' );
+		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$this->cc        = apply_filters( 'bp_email_set_cc', $email_addresses, $this );
 
 		return $this;
@@ -178,8 +183,8 @@ class BP_Email {
 			$email_addresses = (array) $email_addresses;
 		}
 
-		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$email_addresses = array_filter( $email_addresses, 'is_email' );
+		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
 		$this->bcc       = apply_filters( 'bp_email_set_bcc', $email_addresses, $this );
 
 		return $this;
