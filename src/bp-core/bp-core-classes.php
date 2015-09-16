@@ -24,3 +24,4 @@ require dirname( __FILE__ ) . '/classes/class-bp-media-extractor.php';
 require dirname( __FILE__ ) . '/classes/class-bp-attachment.php';
 require dirname( __FILE__ ) . '/classes/class-bp-attachment-avatar.php';
 require dirname( __FILE__ ) . '/classes/class-bp-email.php';
+require dirname( __FILE__ ) . '/classes/class-bp-email-delivery.php';
