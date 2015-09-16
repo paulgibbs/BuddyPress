@@ -94,8 +94,6 @@ class BP_Tests_Email extends BP_UnitTestCase {
 	}
 
 
-
-
 	public function test_invalid_from() {
 		$address = 'test@example.com <Test Example>';
 		$email   = new BP_Email();
