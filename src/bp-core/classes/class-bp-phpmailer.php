@@ -17,6 +17,22 @@ defined( 'ABSPATH' ) || exit;
 class BP_PHPMailer implements BP_Email_Delivery {
 
 	/**
+	 * Constructor.
+	 *
+	 * @since 2.4.0
+	 */
+	public function __construct() {
+		global $phpmailer;
+
+		// We'll try to use the PHPMailer object that might have been created by WordPress.
+		if ( ! ( $phpmailer instanceof PHPMailer ) ) {
+			require_once ABSPATH . WPINC . '/class-phpmailer.php';
+			require_once ABSPATH . WPINC . '/class-smtp.php';
+			$phpmailer = new PHPMailer( true );
+		}
+	}
+
+	/**
 	 * Send email(s).
 	 *
 	 * @param BP_Email $email Email to send.
