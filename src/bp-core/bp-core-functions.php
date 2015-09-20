@@ -2665,9 +2665,6 @@ function bp_email_tax_type() {
  *     @type array $headers Optional. Additional email headers.
  *     @type array $tokens Assocative arrays of string replacements for the email.
  *     @type array $use_html Optional. Whether to send HTML emails. Default = true.
- *     @type string $charset Optional. Email charset.
- *     @type string $mail_from Optional. Email "from" address.
- *     @type string $mail_from_name Optional. Email "from" name.
  * }
  * @return bool|WP_Error Bool if wp_mail() sent the email(s) or not.
  *         If a WP_Error is returned, there was a failure is in bp_send_mail().
@@ -2719,36 +2716,5 @@ function bp_send_mail( $email_type, $to, $args ) {
 		'headers'  => array(),
 		'tokens'   => array(),
 		'use_html' => true,
-
-		// These are passed to WP filters.
-		'charset'        => '',  // wp_mail_charset
-		'mail_from'      => '',  // wp_mail_from
-		'mail_from_name' => '',  // wp_mail_from_name
 	), 'bp_mail' );
-
-
-	/**
-	 * Prepare parameters.
-	 */
-
-	if ( ! is_array( $to ) ) {
-		$to = explode( ',', $to );
-	}
-
-	foreach ( array( $to ) as $email ) {
-		if ( bp_core_validate_email_address( $email ) !== true ) {
-			unset( $to[ $email ] );
-		}
-	}
-
-	$to = array_unique( array_filter( $to ) );
-
-
-	/**
-	 * Check for required parameters.
-	 */
-
-	if ( empty( $to ) ) {
-		return new WP_Error( 'missing_parameter', 'bp_mail', $r );
-	}
 }
