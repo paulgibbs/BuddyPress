@@ -374,7 +374,7 @@ To view and respond to the message, log in and visit: %4$s
 			$subject = apply_filters( 'groups_at_message_notification_subject', $subject, $group, $poster_name );
 			$message = apply_filters( 'groups_at_message_notification_message', $message, $group, $poster_name, $content, $message_link, $settings_link );
 
-			bp_send_mail( 'djpaultodo', $to, $subject, $message );
+			bp_send_email( 'djpaultodo', $to, $subject, $message );
 		}
 	}
 
