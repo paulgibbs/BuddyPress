@@ -2667,6 +2667,7 @@ function bp_email_tax_type() {
  *     @type array $use_html Optional. Whether to send HTML emails. Default = true.
  * }
  * @return bool|WP_Error Bool if wp_mail() sent the email(s) or not.
+ *         If a WP_Error is returned, there was a failure in bp_send_email().
  */
 function bp_send_email( $email_type, $to, $args ) {
 	static $is_default_wpmail = null;
