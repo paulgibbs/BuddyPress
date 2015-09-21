@@ -38,7 +38,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	 * @param BP_Email $email Email to send.
 	 * @since 2.4.0
 	 */
-	public function bp_send_email( BP_Email $email ) {
 		//wp_mail();
 	}
+	public function bp_email( BP_Email $email ) {
 }
