@@ -2571,7 +2571,7 @@ function bp_upload_dir() {
 /**
  * Output the unique ID of the post type for emails.
  *
- * @since BuddyPress (2.4.0)
+ * @since 2.4.0
  */
 function bp_email_post_type() {
 	echo bp_get_email_post_type();
@@ -2580,7 +2580,7 @@ function bp_email_post_type() {
 	 * Return the unique ID of the post type for emails.
 	 *
 	 * @return string The unique forum post type id
-	 * @since BuddyPress (2.4.0)
+	 * @since 2.4.0
 	 */
 	function bp_get_email_post_type() {
 		return apply_filters( 'bp_get_email_post_type', buddypress()->email_post_type );
@@ -2590,7 +2590,7 @@ function bp_email_post_type() {
  * Return labels used by the email post type.
  *
  * @return array
- * @since BuddyPress (2.4.0)
+ * @since 2.4.0
  */
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
@@ -2615,7 +2615,7 @@ function bp_get_email_post_type_labels() {
  * Return array of features that the email post type supports.
  *
  * @return array
- * @since BuddyPress (2.4.0)
+ * @since 2.4.0
  */
 function bp_get_email_post_type_supports() {
 	return apply_filters( 'bp_get_email_post_type_supports', array(
@@ -2631,7 +2631,7 @@ function bp_get_email_post_type_supports() {
 /**
  * Output the unique ID of the taxonomy for email types.
  *
- * @since BuddyPress (2.4.0)
+ * @since 2.4.0
  */
 function bp_email_tax_type() {
 	echo bp_get_email_tax_type();
@@ -2640,7 +2640,7 @@ function bp_email_tax_type() {
 	 * Return the unique ID of the taxonomy for email types.
 	 *
 	 * @return string The unique email taxonomy type ID.
-	 * @since BuddyPress (2.4.0)
+	 * @since 2.4.0
 	 */
 	function bp_get_email_tax_type() {
 		return apply_filters( 'bp_get_email_tax_type', buddypress()->email_taxonomy_type );
@@ -2656,7 +2656,7 @@ function bp_email_tax_type() {
  * email successfully. It just only means that the method used was able to
  * process the request without any errors.
  *
- * @since 2.4
+ * @since 2.4.0
  *
  * @param string $email_type Type of email being sent.
  * @param string|array $to Array or comma-separated list of email addresses to the email to.
@@ -2673,7 +2673,6 @@ function bp_send_email( $email_type, $to, $args ) {
 	static $is_default_wpmail = null;
 	static $wp_html_emails    = null;
 
-
 	// Has wp_mail() been filtered to send HTML emails?
 	if ( is_null( $wp_html_emails ) ) {
 		$wp_html_emails = apply_filters( 'wp_mail_content_type', 'text/plain' ) === 'text/html';
@@ -2689,6 +2688,7 @@ function bp_send_email( $email_type, $to, $args ) {
 		}
 	}
 
+
 	$func_args = func_get_args();  // PHP 5.2
 
 	// Filter this to skip BP's email handling, to send everything to wp_mail().
@@ -2697,7 +2697,6 @@ function bp_send_email( $email_type, $to, $args ) {
 		$wp_html_emails || ! $is_default_wpmail,
 		$func_args
 	);
-
 
 	// Backward compatibility with unported pre-2.4 code, and other wp_mail() plugins.
 	if ( ! is_array( $args ) || func_num_args() > 3 || $must_use_wpmail ) {
