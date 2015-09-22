@@ -2711,9 +2711,16 @@ function bp_send_email( $email_type, $to, $args ) {
 		return call_user_func_array( 'wp_mail', bp_core_parse_args_array( $old_args_keys, $func_args ) );
 	}
 
-	$r = bp_parse_args( $args, array(
+
+	$delivery_class = apply_filters( 'bp_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
+	if ( ! class_exists( $delivery_class ) ) {
+		return WP_Error( 'missing_class', __CLASS__, $this );
+	}
+
+
+	$args = bp_parse_args( $args, array(
 		'headers'  => array(),
 		'tokens'   => array(),
 		'use_html' => true,
-	), 'bp_mail' );
+	), 'bp_send_email' );
 }
