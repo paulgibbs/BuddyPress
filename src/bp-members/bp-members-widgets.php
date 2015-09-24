@@ -195,34 +195,33 @@ class BP_Core_Members_Widget extends WP_Widget {
 		$link_title     = (bool) $settings['link_title']; ?>
 
 		<p>
-			<label for="bp-core-widget-title">
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>">
 				<?php esc_html_e( 'Title:', 'buddypress' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" style="width: 100%" />
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_name( 'link_title' ) ?>">
-				<input type="checkbox" name="<?php echo $this->get_field_name( 'link_title' ) ?>" value="1" <?php checked( $link_title ) ?> />
+			<label for="<?php echo $this->get_field_id( 'link_title' ) ?>">
+				<input type="checkbox" name="<?php echo $this->get_field_name( 'link_title' ) ?>" id="<?php echo $this->get_field_id( 'link_title' ) ?>" value="1" <?php checked( $link_title ) ?> />
 				<?php esc_html_e( 'Link widget title to Members directory', 'buddypress' ); ?>
 			</label>
 		</p>
 
 		<p>
-			<label for="bp-core-widget-members-max">
+			<label for="<?php echo $this->get_field_id( 'max_members' ); ?>">
 				<?php esc_html_e( 'Max members to show:', 'buddypress' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'max_members' ); ?>" name="<?php echo $this->get_field_name( 'max_members' ); ?>" type="text" value="<?php echo esc_attr( $max_members ); ?>" style="width: 30%" />
 			</label>
 		</p>
 
 		<p>
-			<label for="bp-core-widget-groups-default"><?php esc_html_e( 'Default members to show:', 'buddypress' ); ?>
-				<select name="<?php echo $this->get_field_name( 'member_default' ) ?>">
-					<option value="newest"  <?php if ( 'newest'  === $member_default ) : ?>selected="selected"<?php endif; ?>><?php esc_html_e( 'Newest',  'buddypress' ); ?></option>
-					<option value="active"  <?php if ( 'active'  === $member_default ) : ?>selected="selected"<?php endif; ?>><?php esc_html_e( 'Active',  'buddypress' ); ?></option>
-					<option value="popular" <?php if ( 'popular' === $member_default ) : ?>selected="selected"<?php endif; ?>><?php esc_html_e( 'Popular', 'buddypress' ); ?></option>
-				</select>
-			</label>
+			<label for="<?php echo $this->get_field_id( 'member_default' ) ?>"><?php esc_html_e( 'Default members to show:', 'buddypress' ); ?></label>
+			<select name="<?php echo $this->get_field_name( 'member_default' ) ?>" id="<?php echo $this->get_field_id( 'member_default' ) ?>">
+				<option value="newest"  <?php if ( 'newest'  === $member_default ) : ?>selected="selected"<?php endif; ?>><?php esc_html_e( 'Newest',  'buddypress' ); ?></option>
+				<option value="active"  <?php if ( 'active'  === $member_default ) : ?>selected="selected"<?php endif; ?>><?php esc_html_e( 'Active',  'buddypress' ); ?></option>
+				<option value="popular" <?php if ( 'popular' === $member_default ) : ?>selected="selected"<?php endif; ?>><?php esc_html_e( 'Popular', 'buddypress' ); ?></option>
+			</select>
 		</p>
 
 	<?php
@@ -364,14 +363,14 @@ class BP_Core_Whos_Online_Widget extends WP_Widget {
 		$max_members = strip_tags( $settings['max_members'] ); ?>
 
 		<p>
-			<label for="bp-core-widget-title">
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>">
 				<?php esc_html_e( 'Title:', 'buddypress' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" style="width: 100%" />
 			</label>
 		</p>
 
 		<p>
-			<label for="bp-core-widget-members-max">
+			<label for="<?php echo $this->get_field_id( 'max_members' ); ?>">
 				<?php esc_html_e( 'Max Members to show:', 'buddypress' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'max_members' ); ?>" name="<?php echo $this->get_field_name( 'max_members' ); ?>" type="text" value="<?php echo esc_attr( $max_members ); ?>" style="width: 30%" />
 			</label>
@@ -514,14 +513,14 @@ class BP_Core_Recently_Active_Widget extends WP_Widget {
 		$max_members = strip_tags( $settings['max_members'] ); ?>
 
 		<p>
-			<label for="bp-core-widget-members-title">
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>">
 				<?php esc_html_e( 'Title:', 'buddypress' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" style="width: 100%" />
 			</label>
 		</p>
 
 		<p>
-			<label for="bp-core-widget-members-max">
+			<label for="<?php echo $this->get_field_id( 'max_members' ); ?>">
 				<?php esc_html_e( 'Max Members to show:', 'buddypress' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'max_members' ); ?>" name="<?php echo $this->get_field_name( 'max_members' ); ?>" type="text" value="<?php echo esc_attr( $max_members ); ?>" style="width: 30%" />
 			</label>

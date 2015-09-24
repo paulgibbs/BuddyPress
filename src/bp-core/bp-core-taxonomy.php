@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuddyPress taxonomy functions.
  *
@@ -7,13 +6,19 @@
  * Because BuddyPress can be activated in various ways in a network environment, we
  * must switch to the root blog before using the WP functions.
  *
- * @since BuddyPress (2.2.0)
+ * @since 2.2.0
+ *
+ * @package BuddyPress
+ * @subpackage Core
  */
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Register our default taxonomies.
  *
- * @since BuddyPress (2.2.0)
+ * @since 2.2.0
  */
 function bp_register_default_taxonomies() {
 	// Member Type.
@@ -35,7 +40,7 @@ add_action( 'bp_register_taxonomies', 'bp_register_default_taxonomies' );
 /**
  * Set taxonomy terms on a BuddyPress object.
  *
- * @since BuddyPress (2.2.0)
+ * @since 2.2.0
  *
  * @see wp_set_object_terms() for a full description of function and parameters.
  *
@@ -65,7 +70,7 @@ function bp_set_object_terms( $object_id, $terms, $taxonomy, $append = false ) {
 /**
  * Get taxonomy terms for a BuddyPress object.
  *
- * @since BuddyPress (2.2.0)
+ * @since 2.2.0
  *
  * @see wp_get_object_terms() for a full description of function and parameters.
  *
@@ -94,7 +99,7 @@ function bp_get_object_terms( $object_ids, $taxonomies, $args = array() ) {
 /**
  * Remove taxonomy terms on a BuddyPress object.
  *
- * @since BuddyPress (2.3.0)
+ * @since 2.3.0
  *
  * @see wp_remove_object_terms() for a full description of function and parameters.
  *
