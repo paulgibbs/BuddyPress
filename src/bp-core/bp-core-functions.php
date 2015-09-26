@@ -2674,7 +2674,45 @@ function bp_email_tax_type() {
 /** Email *****************************************************************/
 
 /**
- * Send mail, similar to WordPress' wp_mail().
+ * Get an BP_Email object for the specified email type.
+ *
+ * This function pre-populates the object with the subject and body from the appropriate email post type item.
+ * It does not replace placeholder tokens in the content with real values.
+ *
+ * @since 2.4.0
+ *
+ * @param string $email_type The type of email to create the object for.
+ * @return BP_Email|WP_Error BP_Email object, or WP_Error if there was a problem.
+ */
+function bp_get_email( $email_type ) {
+	$args = array(
+		'numberposts'      => 1,
+		'post_type'        => bp_get_email_post_type(),
+		'suppress_filters' => false,
+		'tax_query'        => array(
+			array(
+				'field'    => 'slug',
+				'taxonomy' => bp_get_email_tax_type(),
+				'terms'    => $email_type,
+			)
+		),
+	);
+
+	$args = apply_filters( 'bp_get_email_args', $args, $email_type );
+	$post = get_posts( $args );
+
+	// Stop if a published email can't be found.
+	if ( ! $post ) {
+		return new WP_Error( 'missing_email', __FUNCTION__, $email_type );
+	}
+
+	$post = $post[0];
+}
+//$test = bp_get_email( 'yolo' );
+//die(var_dump($test));
+
+/**
+ * Send email, similar to WordPress' wp_mail().
  *
  * A true return value does not automatically mean that the user received the
  * email successfully. It just only means that the method used was able to
@@ -2741,10 +2779,25 @@ function bp_send_email( $email_type, $to, $args ) {
 		return new WP_Error( 'missing_class', __CLASS__, $this );
 	}
 
-
+/*
 	$args = bp_parse_args( $args, array(
 		'headers'  => array(),
 		'tokens'   => array(),
 		'use_html' => true,
 	), 'bp_send_email' );
+
+	$email_obj = new BP_Email( $email_type );
+
+$email = bp_get_email( 'new_user' );
+// subject + body set via WP_Post, but methods to override.
+$email->to( 'example@djpaul.com' );
+$email->bcc( 'your@mom.com' );
+$email->tokens( $some_kv_array );
+	$email->validate();
+
+
+
+	// Send the email.
+	$delivery_obj = new $delivery_class();
+	$delivery_obj->bp_email( $email );*/
 }
