@@ -2619,7 +2619,7 @@ function bp_email_post_type() {
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
 		'name'               => _x( 'Emails', 'email post type label', 'buddypress' ),
-		'menu_name'          => _x( 'Email', 'email post type label', 'buddypress' ),
+		'menu_name'          => _x( 'Emails', 'email post type label', 'buddypress' ),
 		'singular_name'      => _x( 'Email', 'email post type label', 'buddypress' ),
 		'all_items'          => _x( 'All Emails', 'email post type label', 'buddypress' ),
 		'add_new'            => _x( 'New Email', 'email post type label', 'buddypress' ),
