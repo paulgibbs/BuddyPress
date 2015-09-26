@@ -289,7 +289,7 @@ class BP_Core extends BP_Component {
 		register_post_type(
 			bp_get_email_post_type(),
 			apply_filters( 'bp_register_email_post_type', array(
-				//'capability_type'   => array( 'bpemail', 'bpemails' ),
+				//'capability_type'   => array( 'bpemail', 'bpemails' ), TODO
 				'description'       => __( 'BuddyPress Emails', 'buddypress' ),
 				'labels'            => bp_get_email_post_type_labels(),
 				'menu_icon'         => 'dashicons-email',
@@ -297,7 +297,7 @@ class BP_Core extends BP_Component {
 				'query_var'         => false,
 				'rewrite'           => false,
 				'show_in_admin_bar' => false,
-				'show_ui'           => bp_current_user_can( 'bp_moderate' ),
+				'show_ui'           => bp_current_user_can( 'bp_moderate' ),  // TODO
 				'supports'          => bp_get_email_post_type_supports(),
 			) )
 		);
