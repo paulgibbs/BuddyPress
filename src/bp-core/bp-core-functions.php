@@ -2640,9 +2640,10 @@ function bp_get_email_post_type_labels() {
  */
 function bp_get_email_post_type_supports() {
 	return apply_filters( 'bp_get_email_post_type_supports', array(
-		'title',
 		'editor',
 		'revisions',
+		'thumbnail',
+		'title',
 	) );
 }
 
