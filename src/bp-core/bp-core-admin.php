@@ -174,6 +174,9 @@ class BP_Admin {
 		// Add "Mark as Spam" row actions on users.php
 		add_filter( 'ms_user_row_actions', 'bp_core_admin_user_row_actions', 10, 2 );
 		add_filter( 'user_row_actions',    'bp_core_admin_user_row_actions', 10, 2 );
+
+		// Emails
+		add_filter( 'bp_admin_menu_order', array( $this, 'emails_admin_menu_order' ), 20 );
 	}
 
 	/**
@@ -862,6 +865,23 @@ class BP_Admin {
 
 		// Done!
 		return $display;
+	}
+
+	/**
+	 * Add Emails menu item to custom menus array.
+	 *
+	 * Several BuddyPress components have top-level menu items in the Dashboard,
+	 * which all appear together in the middle of the Dashboard menu. This function
+	 * adds the Emails screen to the array of these menu items.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param array $custom_menus The list of top-level BP menu items.
+	 * @return array $custom_menus List of top-level BP menu items, with Emails added.
+	 */
+	public function emails_admin_menu_order( $custom_menus = array() ) {
+		array_push( $custom_menus, 'edit.php?post_type=' . bp_get_email_post_type() );
+		return $custom_menus;
 	}
 }
 endif; // class_exists check
