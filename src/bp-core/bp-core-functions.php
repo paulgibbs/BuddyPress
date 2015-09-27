@@ -2618,8 +2618,8 @@ function bp_email_post_type() {
  */
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
-		'add_new'            => _x( 'New Email', 'email post type label', 'buddypress' ),
-		'add_new_item'       => _x( 'Create New Email', 'email post type label', 'buddypress' ),
+		'add_new'            => _x( 'Add New', 'email post type label', 'buddypress' ),
+		'add_new_item'       => _x( 'Add a New Email', 'email post type label', 'buddypress' ),
 		'all_items'          => _x( 'All Emails', 'email post type label', 'buddypress' ),
 		'edit_item'          => _x( 'Edit Email', 'email post type label', 'buddypress' ),
 		'name'               => _x( 'Emails', 'email post type name', 'buddypress' ),
@@ -2681,6 +2681,7 @@ function bp_get_email_tax_type_labels() {
 			'add_new_item'  => _x( 'New Email Type', 'email type taxonomy label', 'buddypress' ),
 			'all_items'     => _x( 'All Email Types', 'email type taxonomy label', 'buddypress' ),
 			'edit_item'     => _x( 'Edit Email Types', 'email type taxonomy label', 'buddypress' ),
+			'menu_name'     => _x( 'Types', 'email type taxonomy label', 'buddypress' ),
 			'name'          => _x( 'Email Types', 'email type taxonomy name', 'buddypress' ),
 			'new_item_name' => _x( 'New Email Type Name', 'email type taxonomy label', 'buddypress' ),
 			'not_found'     => _x( 'No email types found.', 'email type taxonomy label', 'buddypress' ),
