@@ -2663,12 +2663,37 @@ function bp_email_tax_type() {
 	/**
 	 * Return the unique ID of the taxonomy for email types.
 	 *
-	 * @return string The unique email taxonomy type ID.
 	 * @since 2.4.0
+	 *
+	 * @return string The unique email taxonomy type ID.
 	 */
 	function bp_get_email_tax_type() {
 		return apply_filters( 'bp_get_email_tax_type', buddypress()->email_taxonomy_type );
 	}
+
+/**
+ * Return labels used by the email type taxonomy.
+ *
+ * @since 2.4.0
+ *
+ * @return array
+ */
+function bp_get_email_tax_type_labels() {
+	return apply_filters( 'bp_get_email_tax_type_labels', array(
+			'add_new_item'  => _x( 'New Email Type', 'email type taxonomy label', 'buddypress' ),
+			'all_items'     => _x( 'All Email Types', 'email type taxonomy label', 'buddypress' ),
+			'edit_item'     => _x( 'Edit Email Types', 'email type taxonomy label', 'buddypress' ),
+			'name'          => _x( 'Email Types', 'email type taxonomy name', 'buddypress' ),
+			'new_item_name' => _x( 'New Email Type Name', 'email type taxonomy label', 'buddypress' )
+			'not_found'     => _x( 'No email types found.', 'email type taxonomy label', 'buddypress' ),
+			'no_terms'      => _x( 'No email types', 'email type taxonomy label', 'buddypress' ),
+			'popular_items' => _x( 'Popular Email Types', 'email type taxonomy label', 'buddypress' ),
+			'search_items'  => _x( 'Search Emails', 'email type taxonomy label', 'buddypress' ),
+			'singular_name' => _x( 'Email', 'email type taxonomy singular name', 'buddypress' ),
+			'update_item'   => _x( 'Update Email Type', 'email type taxonomy label', 'buddypress' ),
+			'view_item'     => _x( 'View Email Type', 'email type taxonomy label', 'buddypress' ),
+	) );
+}
 
 
 /** Email *****************************************************************/

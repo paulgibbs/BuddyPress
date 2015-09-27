@@ -31,7 +31,15 @@ function bp_register_default_taxonomies() {
 		bp_get_email_tax_type(),
 		bp_get_email_post_type(),
 		apply_filters( 'bp_register_email_tax_type', array(
-			'public' => false,
+			'description'       => _x( 'BuddyPress email types', 'email type taxonomy description', 'buddypress' ),
+			'labels'            => bp_get_email_tax_type_labels(),
+			'meta_box_cb'       => 'post_categories_meta_box',
+			'public'            => false,
+			'query_var'         => false,
+			'rewrite'           => false,
+			'show_admin_column' => true,
+			'show_tagcloud'     => false,
+			'show_ui'           => bp_current_user_can( 'bp_moderate' ),  // TODO
 		) )
 	);
 }
