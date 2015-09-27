@@ -237,26 +237,6 @@ function bp_core_menu_highlight_nav_menu_item( $retval, $item ) {
 add_filter( 'nav_menu_css_class', 'bp_core_menu_highlight_nav_menu_item', 10, 2 );
 
 /**
- * Set "From" name in outgoing email to the site name.
- *
- * @uses bp_get_option() fetches the value for a meta_key in the wp_X_options table.
- *
- * @return string The blog name for the root blog.
- */
-function bp_core_email_from_name_filter() {
-
-	/**
-	 * Filters the "From" name in outgoing email to the site name.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $value Value to set the "From" name to.
-	 */
- 	return apply_filters( 'bp_core_email_from_name_filter', bp_get_option( 'blogname', 'WordPress' ) );
-}
-add_filter( 'wp_mail_from_name', 'bp_core_email_from_name_filter' );
-
-/**
  * Filter the blog post comments array and insert BuddyPress URLs for users.
  *
  * @param array $comments The array of comments supplied to the comments template.
