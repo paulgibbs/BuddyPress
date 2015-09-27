@@ -2618,20 +2618,17 @@ function bp_email_post_type() {
  */
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
-		'name'               => _x( 'Emails', 'email post type label', 'buddypress' ),
-		'menu_name'          => _x( 'Emails', 'email post type label', 'buddypress' ),
-		'singular_name'      => _x( 'Email', 'email post type label', 'buddypress' ),
-		'all_items'          => _x( 'All Emails', 'email post type label', 'buddypress' ),
 		'add_new'            => _x( 'New Email', 'email post type label', 'buddypress' ),
 		'add_new_item'       => _x( 'Create New Email', 'email post type label', 'buddypress' ),
-		'edit'               => _x( 'Edit', 'email post type label', 'buddypress' ),
+		'all_items'          => _x( 'All Emails', 'email post type label', 'buddypress' ),
 		'edit_item'          => _x( 'Edit Email', 'email post type label', 'buddypress' ),
+		'name'               => _x( 'Emails', 'email post type name', 'buddypress' ),
 		'new_item'           => _x( 'New Email', 'email post type label', 'buddypress' ),
-		'view'               => _x( 'View Email', 'email post type label', 'buddypress' ),
-		'view_item'          => _x( 'View Email', 'email post type label', 'buddypress' ),
-		'search_items'       => _x( 'Search Emails', 'email post type label', 'buddypress' ),
 		'not_found'          => _x( 'No emails found', 'email post type label', 'buddypress' ),
 		'not_found_in_trash' => _x( 'No emails found in Trash', 'email post type label', 'buddypress' ),
+		'search_items'       => _x( 'Search Emails', 'email post type label', 'buddypress' ),
+		'singular_name'      => _x( 'Email', 'email post type singular name', 'buddypress' ),
+		'view_item'          => _x( 'View Email', 'email post type label', 'buddypress' ),
 	) );
 }
 
