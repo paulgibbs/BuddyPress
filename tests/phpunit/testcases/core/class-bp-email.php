@@ -76,6 +76,14 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertSame( $email->get( 'body' ), $message );
 	}
 
+	public function test_valid_body_with_plain_text() {
+		$message = 'test';
+		$email   = new BP_Email();
+
+		$email->body( 'HTML', $message );
+		$this->assertSame( $email->get( 'body' ), $message );
+	}
+
 	public function test_tokens() {
 		$email = new BP_Email();
 		$email->tokens( array( 'test1', '{{test2}}' ) );
