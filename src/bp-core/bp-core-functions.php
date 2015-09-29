@@ -2725,15 +2725,18 @@ function bp_get_email( $email_type ) {
 	$args = apply_filters( 'bp_get_email_args', $args, $email_type );
 	$post = get_posts( $args );
 
-	// Stop if a published email can't be found.
 	if ( ! $post ) {
 		return new WP_Error( 'missing_email', __FUNCTION__, $email_type );
 	}
 
-	$post = $post[0];
+	$post = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
+
+	// Create the email object, setting its subject and body from the post title and content.
+	$email = new BP_Email();
+	$email->subject( $post->post_title )->body( $post->post_content, $post->post_excerpt );
+
+	return apply_filters( 'bp_get_email', $email, $email_type, $args, $post );
 }
-//$test = bp_get_email( 'yolo' );
-//die(var_dump($test));
 
 /**
  * Send email, similar to WordPress' wp_mail().
