@@ -79,6 +79,28 @@ class BP_Email {
 	protected $body = '';
 
 	/**
+	 * Email body.
+	 *
+	 * Assumed to be HTML.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var string
+	 */
+	protected $body = '';
+
+	/**
+	 * Alternate email body.
+	 *
+	 * Assumed to be plain text.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var string
+	 */
+	protected $body_plaintext = '';
+
+	/**
 	 * Token names and replacement values for this email.
 	 *
 	 * @since 2.4.0
@@ -210,12 +232,16 @@ class BP_Email {
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param string $subject
+	 * @param string $html Email body. Assumed to be HTML.
+	 * @param string $plaintext Optional. Plain text version.
 	 * @return BP_Email
 	 */
-	public function body( $body ) {
-		$body       = sanitize_text_field( $body );
-		$this->body = apply_filters( 'bp_email_set_body', $body, $this );
+	public function body( $html, $plaintext = ''; ) {
+		$html       = sanitize_text_field( $html );
+		$plaintext  = sanitize_text_field( $plaintext );
+
+		$this->body           = apply_filters( 'bp_email_set_body', $html, $this );
+		$this->body_plaintext = apply_filters( 'bp_email_set_body_plaintext', $plaintext, $this );
 
 		return $this;
 	}
