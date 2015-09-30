@@ -118,7 +118,7 @@ function bp_core_customizer_register_sections( $wp_customize ) {
 
 	// Add controls
 	foreach( $controls as $control_id => $args ) {
-		$wp_customize->add_control( new $args['class'], $control_id, $args );
+		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );
 	}
 }
 add_action( 'customize_register', 'bp_core_customizer_register_sections' );
