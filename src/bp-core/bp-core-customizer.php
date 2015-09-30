@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function bp_core_add_email_customizer_actions() {
 
-	if( !isset( $_GET['mailtpl_display'] ) )
+	if( !isset( $_GET['bp_email_template'] ) )
 		return;
 
 	add_action( 'customize_controls_enqueue_scripts',  'bp_core_customizer_enqueue_scripts' );
