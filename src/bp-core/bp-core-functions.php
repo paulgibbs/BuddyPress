@@ -2807,19 +2807,6 @@ function bp_send_email( $email_type, $to, $args ) {
 	}
 
 /*
-	$args = bp_parse_args( $args, array(
-		'headers'  => array(),
-		'tokens'   => array(),
-		'use_html' => true,
-	), 'bp_send_email' );
-
-	$email_obj = new BP_Email( $email_type );
-
-$email = bp_get_email( 'new_user' );
-// subject + body set via WP_Post, but methods to override.
-$email->to( 'example@djpaul.com' );
-$email->bcc( 'your@mom.com' );
-$email->tokens( $some_kv_array );
 	$email->validate();
 
 
