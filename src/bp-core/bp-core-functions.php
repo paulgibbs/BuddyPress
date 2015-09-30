@@ -2711,6 +2711,7 @@ function bp_get_email_tax_type_labels() {
 function bp_get_email( $email_type ) {
 	$args = array(
 		'numberposts'      => 1,
+		'post_status'      => 'publish',
 		'post_type'        => bp_get_email_post_type(),
 		'suppress_filters' => false,
 		'tax_query'        => array(
