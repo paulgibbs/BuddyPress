@@ -222,7 +222,7 @@ class BP_Email {
 	 * @since 2.4.0
 	 *
 	 * @param string $html Email body. Assumed to be HTML.
-	 * @param string $plaintext Optional. Plain text version.
+	 * @param string $plaintext Optional. Plain text version for HTML messages (multipart).
 	 * @return BP_Email
 	 */
 	public function body( $html, $plaintext = '' ) {
