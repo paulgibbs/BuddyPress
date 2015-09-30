@@ -95,6 +95,14 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		);
 	}
 
+	public function test_headers() {
+		$email = new BP_Email();
+
+		$headers = array( 'custom_header' => 'custom_value' );
+		$email->headers( $headers );
+		$this->assertSame( $email->get( 'headers' ), $headers );
+	}
+
 	public function test_validation() {
 		$email = new BP_Email();
 		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' )->body( 'testing' );
@@ -152,6 +160,15 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->tokens( array( 'te{st}1' ) );
 
 		$this->assertSame( $email->get( 'tokens' ), array( '{{test1}}' ) );
+	}
+
+	public function test_invalid_headers() {
+		$email = new BP_Email();
+
+		$headers = array( 'custom:header' => 'custom:value' );
+		$email->headers( $headers );
+		$this->assertNotSame( $email->get( 'headers' ), $headers );
+		$this->assertSame( $email->get( 'headers' ), array( 'customheader' => 'customvalue' ) );
 	}
 
 	public function test_validation_with_missing_required_data() {
