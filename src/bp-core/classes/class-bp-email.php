@@ -98,6 +98,14 @@ class BP_Email {
 	 */
 	protected $tokens = array();
 
+	/**
+	 * Email headers.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var array Key/value pairs of header name/values (strings).
+	 */
+	protected $headers = array();
 
 	/**
 	 * Constructor
@@ -254,6 +262,31 @@ class BP_Email {
 		}
 
 		$this->tokens = apply_filters( 'bp_email_set_tokens', $tokens, $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set email headers.
+	 *
+	 * Does NOT let you override to/from, etc. Use the methods provided to set those.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param array $headers Key/value pairs of heade name/values (strings).
+	 * @return BP_Email
+	 */
+	public function headers( array $headers ) {
+		$new_headers = array();
+
+		for ( $headers as $name => $content ) {
+			$content = str_replace( ':', '', $content );
+			$name    = str_replace( ':', '', $name );
+
+			$new_headers[ $name ] = $content;
+		}
+
+		$this->headers = apply_filters( 'bp_email_set_headers', $new_headers, $headers, $this );
 
 		return $this;
 	}
