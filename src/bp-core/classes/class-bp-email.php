@@ -279,7 +279,7 @@ class BP_Email {
 	public function headers( array $headers ) {
 		$new_headers = array();
 
-		for ( $headers as $name => $content ) {
+		foreach ( $headers as $name => $content ) {
 			$content = str_replace( ':', '', $content );
 			$name    = str_replace( ':', '', $name );
 
