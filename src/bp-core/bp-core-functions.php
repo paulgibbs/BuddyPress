@@ -2801,14 +2801,25 @@ function bp_send_email( $email_type, $to, $args ) {
 	}
 
 
-	$delivery_class = apply_filters( 'bp_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
-	if ( ! class_exists( $delivery_class ) ) {
-		return new WP_Error( 'missing_class', __CLASS__, $this );
-	}
+	/**
+	 * Build the email.
+	 */
+
+	$email = bp_get_email( $email_type );
+
+	// Subject and body are set automatically.
+	$email->to( $to );
+	$email->tokens( $args['tokens'] );
+
 
 /*
 	$email->validate();
 
+
+	$delivery_class = apply_filters( 'bp_send_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
+	if ( ! class_exists( $delivery_class ) ) {
+		return new WP_Error( 'missing_class', __CLASS__, $this );
+	}
 
 
 	// Send the email.
