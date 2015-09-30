@@ -79,17 +79,6 @@ class BP_Email {
 	protected $body = '';
 
 	/**
-	 * Email body.
-	 *
-	 * Assumed to be HTML.
-	 *
-	 * @since 2.4.0
-	 *
-	 * @var string
-	 */
-	protected $body = '';
-
-	/**
 	 * Alternate email body.
 	 *
 	 * Assumed to be plain text.
@@ -236,7 +225,7 @@ class BP_Email {
 	 * @param string $plaintext Optional. Plain text version.
 	 * @return BP_Email
 	 */
-	public function body( $html, $plaintext = ''; ) {
+	public function body( $html, $plaintext = '' ) {
 		$html       = sanitize_text_field( $html );
 		$plaintext  = sanitize_text_field( $plaintext );
 
