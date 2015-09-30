@@ -42,6 +42,9 @@ function bp_core_register_common_scripts() {
 		'bp-plupload' => array( 'file' => "{$url}bp-plupload{$min}.js", 'dependencies' => array( 'plupload', 'jquery', 'json2', 'wp-backbone' ), 'footer' => true ),
 		'bp-avatar'   => array( 'file' => "{$url}avatar{$min}.js", 'dependencies' => array( 'jcrop' ), 'footer' => true ),
 		'bp-webcam'   => array( 'file' => "{$url}webcam{$min}.js", 'dependencies' => array( 'bp-avatar' ), 'footer' => true ),
+		// 2.4
+		'bp-customizer-admin'   => array( 'file' => "{$url}customizer-admin{$min}.js", 'dependencies' => array( 'jquery' ), 'footer' => false ),
+		'bp-customizer-front'   => array( 'file' => "{$url}customizer-front{$min}.js", 'dependencies' => array( 'jquery', 'customize-preview' ), 'footer' => true ),
 
 	) );
 
