@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Email delivery implementation using `wp_mail()` aka PHPMailer.
+ * Email delivery implementation using PHPMailer.
  *
  * @since 2.4.0
  */
@@ -41,74 +41,75 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	public function bp_email( BP_Email $email ) {
 		global $phpmailer;
 
-		// Empty out the values that may be set
-		$phpmailer->ClearAllRecipients();
-		$phpmailer->ClearAttachments();
-		$phpmailer->ClearCustomHeaders();
-		$phpmailer->ClearReplyTos();
-
 		/**
-		 * Filter the email address to send from.
-		 *
-		 * @since 2.2.0
-		 *
-		 * @param string $from_email Email address to send from.
+		 * Set up.
 		 */
-		$phpmailer->From = apply_filters( 'wp_mail_from', $from_email );
 
-		/**
-		 * Filter the name to associate with the "from" email address.
-		 *
-		 * @since 2.3.0
-		 *
-		 * @param string $from_name Name associated with the "from" email address.
-		 */
-		$phpmailer->FromName = apply_filters( 'wp_mail_from_name', $from_name );
+		$phpmailer->clearAllRecipients();
+		$phpmailer->clearAttachments();
+		$phpmailer->clearCustomHeaders();
+		$phpmailer->clearReplyTos();
 
-		try {
-			$phpmailer->AddAddress( $recipient, $recipient_name);
-		} catch ( phpmailerException $e ) {
-		}
-
-		// Set mail's subject and body
-		$phpmailer->Subject = $subject;
-		$phpmailer->Body    = $message;
-
-		try {
-			$phpmailer->AddCc( $recipient, $recipient_name );
-		} catch ( phpmailerException $e ) {
-			continue;
-		}
-
-		try {
-			$phpmailer->AddBcc( $recipient, $recipient_name );
-		} catch ( phpmailerException $e ) {
-			continue;
-		}
-
-		// Set to use PHP's mail()
 		$phpmailer->IsMail();
-
 		$phpmailer->IsHTML( true );
-		$phpmailer->ContentType = $content_type;
-		$phpmailer->CharSet = apply_filters( 'wp_mail_charset', $charset );
+
+		$phpmailer->CharSet     = get_bloginfo( 'charset' );
+		$phpmailer->ContentType = 'text/html';
+		$phpmailer->Hostname    = get_current_site()->domain;  // From WPMU
 
 
 		/**
-		 * Fires after PHPMailer is initialized.
-		 *
-		 * @since 2.2.0
-		 *
-		 * @param PHPMailer &$phpmailer The PHPMailer instance, passed by reference.
+		 * Email data.
 		 */
-		do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
 
-		// Send!
+		$phpmailer->AltBody = $email->get( 'body_plaintext' );
+		$phpmailer->Body    = $email->get( 'body' );
+		$phpmailer->From    = $email->get( 'from' );
+		$phpmailer->Subject = $email->get( 'subject' );
+
+		$to = $email->get( 'to' );
+		foreach ( $to as $to_address ) {
+			try {
+				$phpmailer->AddAddress( $to_address, '$recipient_name_djpaultodo' );
+			} catch ( phpmailerException $e ) {
+			}
+		}
+
+		$cc = $email->get( 'cc' );
+		foreach ( $cc as $cc_address ) {
+			try {
+				$phpmailer->AddCc( $cc_address, '$recipient_name' );
+			} catch ( phpmailerException $e ) {
+			}
+		}
+
+		$bcc = $email->get( 'bcc' );
+		foreach ( $bcc as $bcc_address ) {
+			try {
+				$phpmailer->AddBcc( $bcc_address, '$recipient_name' );
+			} catch ( phpmailerException $e ) {
+			}
+		}
+
+		$headers = $email->get( 'headers' );
+		foreach ( $headers as $name => $content ) {
+			$phpmailer->AddCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
+		}
+
+
+		/**
+		 * Fires after PHPMailer is initialised.
+		 *
+		 * @since 2.4.0
+		 *
+		 * @param PHPMailer $phpmailer The PHPMailer instance.
+		 */
+		do_action( 'bp_phpmailer_init', $phpmailer );
+
 		try {
 			return $phpmailer->Send();
 		} catch ( phpmailerException $e ) {
 			return false;
 		}
-
-		}
+	}
 }
