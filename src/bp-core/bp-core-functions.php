@@ -2705,7 +2705,7 @@ function bp_get_email_tax_type_labels() {
  *
  * @since 2.4.0
  *
- * @param string $email_type The type of email to create the object for.
+ * @param string $email_type Unique identifier for a particular type of email.
  * @return BP_Email|WP_Error BP_Email object, or WP_Error if there was a problem.
  */
 function bp_get_email( $email_type ) {
@@ -2733,7 +2733,7 @@ function bp_get_email( $email_type ) {
 	$post = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
 
 	// Create the email object, setting its subject and body from the post title and content.
-	$email = new BP_Email();
+	$email = new BP_Email( $email_type );
 	$email->subject( $post->post_title )->body( $post->post_content, $post->post_excerpt );
 
 	return apply_filters( 'bp_get_email', $email, $email_type, $args, $post );

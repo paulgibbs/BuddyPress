@@ -25,6 +25,16 @@ class BP_Email {
 	protected $post_obj = null;
 
 	/**
+	 * Unique identifier for this particular type of email.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var string
+	 */
+	protected $type = '';
+
+
+	/**
 	 * Send from this address.
 	 *
 	 * @since 2.4.0
@@ -111,8 +121,11 @@ class BP_Email {
 	 * Constructor
 	 *
 	 * @since 2.4.0
+	 *
+	 * @param string $email_type Unique identifier for a particular type of email.
 	 */
-	public function __construct() {
+	public function __construct( $email_type ) {
+		$this->type = $email_type;
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
