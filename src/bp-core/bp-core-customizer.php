@@ -560,3 +560,13 @@ function bp_sanitize_customizer_aligment( $input ) {
 		return '';
 	}
 }
+
+
+function bp_core_customizer_get_template( $template ){
+
+	if( is_customize_preview() && isset( $_GET['bp_email_template'] ) && 'true' == $_GET['bp_email_template'] ){
+		return bp_locate_template( array( 'emails/bp-email.php', 'bp-email.php' ), false );
+	}
+	return $template;
+}
+add_action( 'template_include' , 'bp_core_customizer_get_template');
