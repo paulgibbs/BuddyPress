@@ -89,9 +89,9 @@ function bp_core_customizer_remove_all_actions() {
 
 /**
  * Register all needed section for our Email Templates
- * @param $wp_customize
+ * @param WP_Customize_Manager $wp_customize  manager
  */
-function bp_core_customizer_register_sections( $wp_customize ) {
+function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customize ) {
 
 	$wp_customize->add_panel( 'bp_mailtpl', array(
 		'title'         => __( 'Email Templates', 'buddypress' ),
@@ -125,6 +125,25 @@ function bp_core_customizer_register_sections( $wp_customize ) {
 	}
 }
 add_action( 'customize_register', 'bp_core_customizer_register_sections' );
+
+/**
+ * We are not editing the normal front end so we remove other customizer sections.
+ * @param $active  Whether the Customizer section is active.
+ * @param WP_Customize_Section $section {@see WP_Customize_Section} instance.
+ *
+ * @return bool
+ */
+function bp_core_customizer_remove_sections( $active, $section ){
+	if ( isset( $_GET['bp_email_template'] ) ) {
+
+		if ( in_array( $section->id, array_keys( bp_core_customizer_get_sections() ) ) )
+			return true;
+
+		return false;
+	}
+	return true;
+}
+add_action( 'customize_section_active', 'bp_core_customizer_remove_sections', 10, 2 );
 
 /**
  * Define available sections for the customizer
