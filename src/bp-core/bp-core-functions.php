@@ -2724,17 +2724,16 @@ function bp_get_email( $email_type ) {
 	);
 
 	$args = apply_filters( 'bp_get_email_args', $args, $email_type );
-	$post = get_posts( $args );
 
+	$post = get_posts( $args );
 	if ( ! $post ) {
 		return new WP_Error( 'missing_email', __FUNCTION__, $email_type );
 	}
 
 	$post = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
 
-	// Create the email object, setting its subject and body from the post title and content.
 	$email = new BP_Email( $email_type );
-	$email->subject( $post->post_title )->body( $post->post_content, $post->post_excerpt );
+	$email->post_object( $post );
 
 	return apply_filters( 'bp_get_email', $email, $email_type, $args, $post );
 }
