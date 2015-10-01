@@ -99,15 +99,5 @@
         } );
     } );
 
-    wp.customize( 'bp_mailtpl_opts[footer_powered_by]', function( value ) {
-        value.bind( function( newval ) {
-            if( newval == 'off' ) {
-                $( '#powered' ).hide();
-            } else {
-                $( '#powered' ).show();
-            }
-        } );
-    } );
-
 
 })( jQuery );
