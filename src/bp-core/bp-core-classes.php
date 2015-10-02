@@ -26,4 +26,4 @@ require dirname( __FILE__ ) . '/classes/class-bp-attachment-avatar.php';
 require dirname( __FILE__ ) . '/classes/class-bp-email.php';
 require dirname( __FILE__ ) . '/classes/class-bp-email-delivery.php';
 require dirname( __FILE__ ) . '/classes/class-bp-phpmailer.php';
-require dirname( __FILE__ ) . '/classes/class-emogriefer.php';
+require dirname( __FILE__ ) . '/classes/class-emogrifier.php';
