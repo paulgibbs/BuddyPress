@@ -561,12 +561,48 @@ function bp_sanitize_customizer_aligment( $input ) {
 	}
 }
 
+/**
+ * Load template in the customizer before WordPress template is included
+ */
+function bp_core_customizer_load_template(){
 
-function bp_core_customizer_get_template( $template ){
+	if( ! is_customize_preview() || ! ( isset( $_GET['bp_email_template'] ) && 'true' == $_GET['bp_email_template'] ) )
+		return;
 
-	if( is_customize_preview() && isset( $_GET['bp_email_template'] ) && 'true' == $_GET['bp_email_template'] ){
-		return bp_locate_template( array( 'emails/bp-email.php', 'bp-email.php' ), false );
+	$css        = bp_core_customizer_get_styles();
+	$content    = bp_core_customizer_get_template();
+
+	try {
+		// apply CSS styles inline for picky email clients
+		$emogrifier = new Emogrifier( $content, $css );
+		$content = $emogrifier->emogrify();
+
+	} catch ( Exception $e ) {
+
 	}
-	return $template;
+	echo $content;
+	exit();
 }
-add_action( 'template_include' , 'bp_core_customizer_get_template');
+add_action( 'template_redirect' , 'bp_core_customizer_load_template');
+
+/**
+ * Get the css styles for the email template
+ * @return mixed|void
+ */
+function bp_core_customizer_get_styles() {
+	ob_start();
+	bp_locate_template( array( 'emails/bp-email-css.php', 'bp-email-css.php' ), true );
+
+	return apply_filters( 'bp_core_customizer_get_styles', ob_get_clean() );
+}
+
+/**
+ * Get the Email template html
+ * @return mixed|void
+ */
+function bp_core_customizer_get_template(){
+	ob_start();
+	bp_locate_template( array( 'emails/bp-email.php', 'bp-email.php' ), true );
+
+	return apply_filters( 'bp_core_customizer_get_styles', ob_get_clean() );
+}
