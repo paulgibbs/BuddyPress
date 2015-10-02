@@ -395,7 +395,7 @@ function bp_core_customizer_get_controls() {
 			'description'   => __( 'Choose alignment for header', 'buddypress' )
 		),
 		'bp_mailtpl_header_bg'         => array(
-			'class'         => 'WP_Customize_Image_Control',
+			'class'         => 'WP_Customize_Color_Control',
 			'label'         => __( 'Background Color', 'buddypress' ),
 			'section'       => 'section_bp_mailtpl_header',
 			'settings'      => 'bp_mailtpl_opts[header_bg]',
