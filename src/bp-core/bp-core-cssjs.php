@@ -44,8 +44,6 @@ function bp_core_register_common_scripts() {
 		'bp-webcam'   => array( 'file' => "{$url}webcam{$min}.js", 'dependencies' => array( 'bp-avatar' ), 'footer' => true ),
 		// 2.4
 		'bp-customizer-admin'   => array( 'file' => "{$url}customizer-admin{$min}.js", 'dependencies' => array( 'jquery' ), 'footer' => false ),
-		'bp-customizer-front'   => array( 'file' => "{$url}customizer-front{$min}.js", 'dependencies' => array( 'jquery', 'customize-preview' ), 'footer' => true ),
-
 	) );
 
 	$version = bp_get_version();

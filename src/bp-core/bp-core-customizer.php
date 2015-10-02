@@ -35,7 +35,11 @@ function bp_core_customizer_enqueue_scripts() {
  * Front js needed for customizer
  */
 function bp_core_customizer_enqueue_template_scripts(){
-	wp_enqueue_script( 'bp-customizer-front' );
+
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$url = buddypress()->plugin_url . 'bp-core/js/';
+
+	wp_enqueue_script( 'bp-customizer-front', "{$url}customizer-front{$min}.js", array( 'jquery', 'customize-preview' ) );
 	//TODO wp_enqueue_style( 'bp_mailtpl-css', $bp->plugin_url . '/admin/css/bp_mailtpl-admin.css', '', $this->version, false );
 }
 
