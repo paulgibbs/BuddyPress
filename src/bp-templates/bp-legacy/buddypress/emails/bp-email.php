@@ -3,6 +3,7 @@
  * BuddyPress email template
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
+$settings       = get_option('bp_mailtpl_opts', bp_core_customizer_get_defaults() );
 ?>
 
 <html>
@@ -44,12 +45,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<!-- Body -->
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_body">
 					<tr>
-						<td valign="top" id="mailtpl_body_bg">
+						<td valign="top" id="bp_mailtpl_body_bg">
 							<!-- Content -->
 							<table border="0" cellpadding="20" cellspacing="0" width="100%">
 								<tr>
 									<td valign="top">
-										<div id="mailtpl_body">
+										<div id="bp_mailtpl_body">
 											<?php
 											if( is_customize_preview() ) {
 												bp_locate_template( array( 'emails/bp-customizer-message.php', 'bp-customizer-message.php' ), true );
@@ -75,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 							<table border="0" cellpadding="10" cellspacing="0" width="100%">
 								<tr>
 									<td colspan="2" valign="middle" id="credit">
-										<?php echo  $settings['footer_text'] ; ?>
+										<?php echo $settings['footer_text'] ; ?>
 									</td>
 								</tr>
 							</table>
