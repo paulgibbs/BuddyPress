@@ -62,7 +62,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		 * Email data.
 		 */
 
-		$phpmailer->AltBody = $email->get( 'body_plaintext' );
+		$phpmailer->AltBody = $email->get( 'body' );  // djpaultodo: make this plain text
 		$phpmailer->Body    = $email->get( 'body' );
 		$phpmailer->From    = $email->get( 'from' );
 		$phpmailer->Subject = $email->get( 'subject' );

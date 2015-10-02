@@ -2705,12 +2705,13 @@ function bp_get_email_tax_type_labels() {
  *
  * @since 2.4.0
  *
- * @param string $email_type The type of email to create the object for.
+ * @param string $email_type Unique identifier for a particular type of email.
  * @return BP_Email|WP_Error BP_Email object, or WP_Error if there was a problem.
  */
 function bp_get_email( $email_type ) {
 	$args = array(
 		'numberposts'      => 1,
+		'post_status'      => 'publish',
 		'post_type'        => bp_get_email_post_type(),
 		'suppress_filters' => false,
 		'tax_query'        => array(
@@ -2723,17 +2724,16 @@ function bp_get_email( $email_type ) {
 	);
 
 	$args = apply_filters( 'bp_get_email_args', $args, $email_type );
-	$post = get_posts( $args );
 
+	$post = get_posts( $args );
 	if ( ! $post ) {
 		return new WP_Error( 'missing_email', __FUNCTION__, $email_type );
 	}
 
 	$post = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
 
-	// Create the email object, setting its subject and body from the post title and content.
-	$email = new BP_Email();
-	$email->subject( $post->post_title )->body( $post->post_content, $post->post_excerpt );
+	$email = new BP_Email( $email_type );
+	$email->post_object( $post );
 
 	return apply_filters( 'bp_get_email', $email, $email_type, $args, $post );
 }
@@ -2753,7 +2753,6 @@ function bp_get_email( $email_type ) {
  *     Array of parameters.
  *     @type array $headers Optional. Additional email headers.
  *     @type array $tokens Assocative arrays of string replacements for the email.
- *     @type array $use_html Optional. Whether to send HTML emails. Default = true.
  * }
  * @return bool|WP_Error Bool if wp_mail() sent the email(s) or not.
  *         If a WP_Error is returned, there was a failure in bp_send_email().
@@ -2801,27 +2800,25 @@ function bp_send_email( $email_type, $to, $args ) {
 	}
 
 
-	$delivery_class = apply_filters( 'bp_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
+	/**
+	 * Build the email.
+	 */
+
+	$email = bp_get_email( $email_type );
+
+	// Subject and body are set automatically.
+	$email->to( $to );
+	$email->tokens( $args['tokens'] );
+
+
+/*
+	$email->validate();
+
+
+	$delivery_class = apply_filters( 'bp_send_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
 	if ( ! class_exists( $delivery_class ) ) {
 		return new WP_Error( 'missing_class', __CLASS__, $this );
 	}
-
-/*
-	$args = bp_parse_args( $args, array(
-		'headers'  => array(),
-		'tokens'   => array(),
-		'use_html' => true,
-	), 'bp_send_email' );
-
-	$email_obj = new BP_Email( $email_type );
-
-$email = bp_get_email( 'new_user' );
-// subject + body set via WP_Post, but methods to override.
-$email->to( 'example@djpaul.com' );
-$email->bcc( 'your@mom.com' );
-$email->tokens( $some_kv_array );
-	$email->validate();
-
 
 
 	// Send the email.

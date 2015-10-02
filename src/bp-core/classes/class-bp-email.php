@@ -16,13 +16,22 @@ defined( 'ABSPATH' ) || exit;
  */
 class BP_Email {
 	/**
-	 * The WordPress Post object containing the email text and customisations.
+	 * The Post object containing the email body and subject.
 	 *
 	 * @since 2.4.0
 	 *
 	 * @var WP_Post
 	 */
-	protected $post_obj = null;
+	protected $post_object = null;
+
+	/**
+	 * Unique identifier for this particular type of email.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var string
+	 */
+	protected $type = '';
 
 	/**
 	 * Send from this address.
@@ -79,17 +88,6 @@ class BP_Email {
 	protected $body = '';
 
 	/**
-	 * Alternate email body.
-	 *
-	 * Assumed to be plain text.
-	 *
-	 * @since 2.4.0
-	 *
-	 * @var string
-	 */
-	protected $body_plaintext = '';
-
-	/**
 	 * Token names and replacement values for this email.
 	 *
 	 * @since 2.4.0
@@ -111,8 +109,11 @@ class BP_Email {
 	 * Constructor
 	 *
 	 * @since 2.4.0
+	 *
+	 * @param string $email_type Unique identifier for a particular type of email.
 	 */
-	public function __construct() {
+	public function __construct( $email_type ) {
+		$this->type = $email_type;
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
@@ -230,15 +231,28 @@ class BP_Email {
 	 * @since 2.4.0
 	 *
 	 * @param string $html Email body. Assumed to be HTML.
-	 * @param string $plaintext Optional. Plain text version for HTML messages (multipart).
 	 * @return BP_Email
 	 */
-	public function body( $html, $plaintext = '' ) {
-		$html       = sanitize_text_field( $html );
-		$plaintext  = sanitize_text_field( $plaintext );
+	public function body( $html ) {
+		$this->body = apply_filters( 'bp_email_set_body', sanitize_text_field( $html ), $this );
+		return $this;
+	}
 
-		$this->body           = apply_filters( 'bp_email_set_body', $html, $this );
-		$this->body_plaintext = apply_filters( 'bp_email_set_body_plaintext', $plaintext, $this );
+	/**
+	 * Set the Post object containing the email body template.
+	 *
+	 * Also sets the email's subject and body from the Post, for convenience.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param WP_Post $post
+	 * @return BP_Email
+	 */
+	public function post_object( WP_Post $post ) {
+		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
+
+		$this->subject( $this->get( 'post_object' )->post_title );
+		$this->body( $this->get( 'post_object' )->post_content );
 
 		return $this;
 	}
@@ -279,7 +293,7 @@ class BP_Email {
 	public function headers( array $headers ) {
 		$new_headers = array();
 
-		for ( $headers as $name => $content ) {
+		foreach ( $headers as $name => $content ) {
 			$content = str_replace( ':', '', $content );
 			$name    = str_replace( ':', '', $name );
 
