@@ -2724,15 +2724,20 @@ function bp_get_email( $email_type ) {
 	);
 
 	$args = apply_filters( 'bp_get_email_args', $args, $email_type );
-
 	$post = get_posts( $args );
 	if ( ! $post ) {
-		return new WP_Error( 'missing_email', __FUNCTION__, $email_type );
+		return new WP_Error( 'missing_email', __FUNCTION__, array( $email_type, $args ) );
 	}
 
-	$post = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
-
+	$post  = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
 	$email = new BP_Email( $email_type );
+
+
+	/**
+	 * Set some email properties for convenience.
+	 */
+
+	// Post object (sets subject and body).
 	$email->post_object( $post );
 
 	return apply_filters( 'bp_get_email', $email, $email_type, $args, $post );
@@ -2779,7 +2784,7 @@ function bp_send_email( $email_type, $to, $args ) {
 
 	$func_args = func_get_args();  // PHP 5.2
 
-	// Filter this to skip BP's email handling, to send everything to wp_mail().
+	// Filter this to skip BP's email handling and instead send everything to wp_mail().
 	$must_use_wpmail = apply_filters(
 		'bp_mail_use_legacy_support',
 		$wp_html_emails || ! $is_default_wpmail,
@@ -2806,15 +2811,16 @@ function bp_send_email( $email_type, $to, $args ) {
 
 	$email = bp_get_email( $email_type );
 
-	// Subject and body are set automatically.
+	// From, subject, body are set automatically.
 	$email->to( $to );
 	$email->tokens( $args['tokens'] );
 
 
+	if ( ! $email->validate() ) {
+		return new WP_Error( 'email_validation', __CLASS__, $email );
+	}
+
 /*
-	$email->validate();
-
-
 	$delivery_class = apply_filters( 'bp_send_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
 	if ( ! class_exists( $delivery_class ) ) {
 		return new WP_Error( 'missing_class', __CLASS__, $this );

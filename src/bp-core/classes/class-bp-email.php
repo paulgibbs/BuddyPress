@@ -113,7 +113,16 @@ class BP_Email {
 	 * @param string $email_type Unique identifier for a particular type of email.
 	 */
 	public function __construct( $email_type ) {
+		// Type
 		$this->type = $email_type;
+
+		// From
+		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
+		if ( substr( $sitename, 0, 4 ) === 'www.' ) {
+			$sitename = substr( $sitename, 4 );
+		}
+		$this->from( 'wordpress@' . $sitename );
+
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
