@@ -54,7 +54,6 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->IsHTML( true );
 
 		$phpmailer->CharSet     = get_bloginfo( 'charset' );
-		$phpmailer->ContentType = 'text/html';
 		$phpmailer->Hostname    = get_current_site()->domain;  // From WPMU
 
 
