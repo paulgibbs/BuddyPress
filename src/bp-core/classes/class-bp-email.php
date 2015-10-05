@@ -42,6 +42,16 @@ class BP_Email {
 	 */
 	protected $from = '';
 
+
+	/**
+	 * Send from this account name.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var string
+	 */
+	protected $from_name = '';
+
 	/**
 	 * Send to this address.
 	 *
@@ -155,6 +165,21 @@ class BP_Email {
 		}
 
 		$this->from = apply_filters( 'bp_email_set_from', $email_address, $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set the email's "from name".
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $from_name
+	 * @return BP_Email
+	 */
+	public function from_name( $from_name ) {
+		$from_name       = sanitize_text_field( $from_name );
+		$this->from_name = apply_filters( 'bp_email_set_from_name', $from_name, $this );
 
 		return $this;
 	}
@@ -350,7 +375,7 @@ class BP_Email {
 		$retval = true;
 
 		// BCC, CC, and token properties are optional.
-		if ( ! $this->get( 'from' ) || ! $this->get( 'to' ) ||	! $this->get( 'subject' ) || ! $this->get( 'body' ) ) {
+		if ( ! $this->get( 'from' ) || ! $this->get( 'to' ) || ! $this->get( 'subject' ) || ! $this->get( 'body' ) ) {
 			$retval = new WP_Error( 'missing_parameter', __CLASS__, $this );
 		}
 
