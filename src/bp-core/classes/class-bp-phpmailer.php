@@ -49,6 +49,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->clearAttachments();
 		$phpmailer->clearCustomHeaders();
 		$phpmailer->clearReplyTos();
+		$phpmailer->Sender = '';
 
 		$phpmailer->IsMail();
 		$phpmailer->IsHTML( true );
