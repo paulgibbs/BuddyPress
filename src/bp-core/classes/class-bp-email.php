@@ -133,6 +133,9 @@ class BP_Email {
 		}
 		$this->from( 'wordpress@' . $sitename );
 
+		// From name
+		$this->from_name( get_bloginfo( 'name' ) );
+
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
