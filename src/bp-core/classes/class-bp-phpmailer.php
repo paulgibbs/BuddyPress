@@ -54,13 +54,13 @@ class BP_PHPMailer implements BP_Email_Delivery {
 
 		$phpmailer->IsHTML( true );
 
-		$phpmailer->CharSet     = get_bloginfo( 'charset' );
 		$phpmailer->Hostname    = get_current_site()->domain;  // From WPMU
 		/**
 		 * Set up.
 		 */
 
 		$phpmailer->IsMail();                                      // Use PHP's mail()
+		$phpmailer->CharSet  = bp_get_option( 'blog_charset' );
 
 
 		/**
