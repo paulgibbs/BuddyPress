@@ -142,9 +142,10 @@ class BP_Email {
 		 *
 		 * @since 2.4.0
 		 *
+		 * @param string $email_type Unique identifier for this type of email.
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
-		do_action( 'bp_email', $this );
+		do_action( 'bp_email', $email_type, $this );
 	}
 
 
