@@ -36,13 +36,14 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	 * Send email(s).
 	 *
 	 * @param BP_Email $email Email to send.
+	 * @return bool False if some error occurred.
 	 * @since 2.4.0
 	 */
 	public function bp_email( BP_Email $email ) {
 		global $phpmailer;
 
 		/**
-		 * Set up.
+		 * Resets.
 		 */
 
 		$phpmailer->clearAllRecipients();
@@ -51,11 +52,15 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->clearReplyTos();
 		$phpmailer->Sender = '';
 
-		$phpmailer->IsMail();
 		$phpmailer->IsHTML( true );
 
 		$phpmailer->CharSet     = get_bloginfo( 'charset' );
 		$phpmailer->Hostname    = get_current_site()->domain;  // From WPMU
+		/**
+		 * Set up.
+		 */
+
+		$phpmailer->IsMail();                                      // Use PHP's mail()
 
 
 		/**
