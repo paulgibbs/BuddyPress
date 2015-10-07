@@ -385,6 +385,36 @@ class BP_Email {
 
 		return apply_filters( 'bp_email_validate', $retval, $this );
 	}
+
+
+	/**
+	 * Internal/utility helpers.
+	 */
+
+	/**
+	 * Parses a string like "User Name <email@example.com>" into an array.
+	 *
+	 * @param string $input
+	 * @return array {
+	 *     Pair of names and email addresses.
+	 *
+	 *     @type string $name  Name.
+	 *     @type string $email Email address.
+	 * }
+	 */
+	static public function parse_names_and_emails( $input ) {
+		$result = preg_match( '/(.*[^\s*<])?\s*<(.*)>/', $input, $matches );
+		if ( ! $result ) {
+			return array();
+		}
+
+		$matches = array_map( 'trim', $matches );
+
+		return array(
+			'name'  => $matches[1],
+			'email' => $matches[2],
+		);
+	}
 }
 
 /*
