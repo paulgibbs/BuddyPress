@@ -121,6 +121,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 
 
 	/**
+	 * Utility/helper functions.
 	 */
 
 	/**
