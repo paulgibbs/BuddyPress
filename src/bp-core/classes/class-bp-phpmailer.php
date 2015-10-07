@@ -54,7 +54,6 @@ class BP_PHPMailer implements BP_Email_Delivery {
 
 		$phpmailer->IsHTML( true );
 
-		$phpmailer->Hostname    = get_current_site()->domain;  // From WPMU
 		/**
 		 * Set up.
 		 */
@@ -62,6 +61,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->IsMail();                                      // Use PHP's mail()
 		$phpmailer->addReplyTo( bp_get_option( 'admin_email' ) );
 		$phpmailer->CharSet  = bp_get_option( 'blog_charset' );
+		$phpmailer->Hostname = self::get_hostname();
 
 
 		/**
@@ -117,5 +117,24 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		} catch ( phpmailerException $e ) {
 			return false;
 		}
+	}
+
+
+	/**
+	 */
+
+	/**
+	 * Get an appropriate hostname for the email. Varies depending on site configuration.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @return string
+	 */
+	static public function get_hostname() {
+		if ( is_multisite() ) {
+			return get_current_site()->domain;  // From fix_phpmailer_messageid()
+		}
+
+		return preg_replace( '^https?://', '', bp_get_option( 'home' ) );
 	}
 }
