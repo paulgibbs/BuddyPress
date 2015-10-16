@@ -34,48 +34,58 @@ class BP_Email {
 	protected $type = '';
 
 	/**
-	 * Send from this address.
+	 * Sender details.
 	 *
 	 * @since 2.4.0
 	 *
-	 * @var string
+	 * @var array {
+	 *     Name and email address.
+	 *
+	 *     @type string $email Email address.
+	 *     @type string $name  Name.
+	 * }
 	 */
 	protected $from = '';
 
-
 	/**
-	 * Send from this account name.
+	 * Addressee details (to).
 	 *
 	 * @since 2.4.0
 	 *
-	 * @var string
-	 */
-	protected $from_name = '';
-
-	/**
-	 * Send to this address.
+	 * @var array[] {
+	 *     Pairs of name and email addresses.
 	 *
-	 * @since 2.4.0
-	 *
-	 * @var string[]
+	 *     @type string $email Email address.
+	 *     @type string $name  Name.
+	 * }
 	 */
 	protected $to = array();
 
 	/**
-	 * CC to this address.
+	 * Addressee details (CC).
 	 *
 	 * @since 2.4.0
 	 *
-	 * @var string[]
+	 * @var array[] {
+	 *     Pairs of name and email addresses.
+	 *
+	 *     @type string $email Email address.
+	 *     @type string $name  Name.
+	 * }
 	 */
 	protected $cc = array();
 
 	/**
-	 * BCC to this address.
+	 * Addressee details (BCC).
 	 *
 	 * @since 2.4.0
 	 *
-	 * @var string[]
+	 * @var array[] {
+	 *     Pairs of name and email addresses.
+	 *
+	 *     @type string $email Email address.
+	 *     @type string $name  Name.
+	 * }
 	 */
 	protected $bcc = array();
 
@@ -116,26 +126,22 @@ class BP_Email {
 	protected $headers = array();
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 *
+	 * Set the email type and default "from" name and address.
 	 *
 	 * @since 2.4.0
 	 *
 	 * @param string $email_type Unique identifier for a particular type of email.
 	 */
 	public function __construct( $email_type ) {
-		// Type
 		$this->type = $email_type;
 
-		// From
 		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
 		if ( substr( $sitename, 0, 4 ) === 'www.' ) {
 			$sitename = substr( $sitename, 4 );
 		}
-		$this->from( 'wordpress@' . $sitename );
-
-		// From name
-		$this->from_name( get_bloginfo( 'name' ) );
-
+		$this->from( "wordpress@$sitename", get_bloginfo( 'name' ) );
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
@@ -154,36 +160,25 @@ class BP_Email {
 	 */
 
 	/**
-	 * Set the email's "from" address.
+	 * Set the email's "from" address and name.
 	 *
 	 * @since 2.4.0
 	 *
 	 * @param string $email_address
+	 * @param string $name Optional "from" name.
 	 * @return BP_Email
 	 */
-	public function from( $email_address ) {
+	public function from( $email_address, $name = '' ) {
 		if ( is_email( $email_address ) ) {
 			$email_address = sanitize_email( $email_address );
 		} else {
 			$email_address = '';
 		}
 
-		$this->from = apply_filters( 'bp_email_set_from', $email_address, $this );
-
-		return $this;
-	}
-
-	/**
-	 * Set the email's "from name".
-	 *
-	 * @since 2.4.0
-	 *
-	 * @param string $from_name
-	 * @return BP_Email
-	 */
-	public function from_name( $from_name ) {
-		$from_name       = sanitize_text_field( $from_name );
-		$this->from_name = apply_filters( 'bp_email_set_from_name', $from_name, $this );
+		$this->from = apply_filters( 'bp_email_set_from', array(
+			'email_address' => $email_address,
+			'name'          => $name,
+		), $this );
 
 		return $this;
 	}
@@ -191,19 +186,32 @@ class BP_Email {
 	/**
 	 * Set the email's "to" address.
 	 *
+	 * To set a single address, the first parameter is the address and the second the name.
+	 * To set multiple addresses, for each array item, the key is the email address and
+	 * the value is the name.
+	 *
 	 * @since 2.4.0
 	 *
-	 * @param array|string $email_addresses
+	 * @param string|string[] $to_address If array, key is email address, value is the name.
+	 *     If string, this is the email address.
+	 * @param string $name Optional. If $to_address is not an array, this is the "from" name.
+	 *     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
-	public function to( $email_addresses ) {
-		if ( ! is_array( $email_addresses ) ) {
-			$email_addresses = (array) $email_addresses;
+	public function to( $to_address, $name = '' ) {
+		if ( ! is_array( $to_address ) ) {
+			$to_address = array( $to_address => $name );
 		}
 
-		$email_addresses = array_filter( $email_addresses, 'is_email' );
-		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
-		$this->to        = apply_filters( 'bp_email_set_to', $email_addresses, $this );
+		$to = array();
+
+		foreach ( $to_address as $email => $recipient ) {
+			if ( is_email( $email ) ) {
+				$to[ sanitize_email( $email ) ] = $recipient;
+			}
+		}
+
+		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $name, $this );
 
 		return $this;
 	}
@@ -211,19 +219,32 @@ class BP_Email {
 	/**
 	 * Set the email's "cc" address.
 	 *
+	 * To set a single address, the first parameter is the address and the second the name.
+	 * To set multiple addresses, for each array item, the key is the email address and
+	 * the value is the name.
+	 *
 	 * @since 2.4.0
 	 *
-	 * @param array|string $email_addresses
+	 * @param string|string[] $cc_Address If array, key is email address, value is the name.
+	 *     If string, this is the email address.
+	 * @param string $name Optional. If $cc_Address is not an array, this is the "from" name.
+	 *     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
-	public function cc( $email_addresses ) {
-		if ( ! is_array( $email_addresses ) ) {
-			$email_addresses = (array) $email_addresses;
+	public function cc( $cc_address, $name = '' ) {
+		if ( ! is_array( $cc_address ) ) {
+			$cc_address = array( $cc_address => $name );
 		}
 
-		$email_addresses = array_filter( $email_addresses, 'is_email' );
-		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
-		$this->cc        = apply_filters( 'bp_email_set_cc', $email_addresses, $this );
+		$cc = array();
+
+		foreach ( $cc_address as $email => $recipient ) {
+			if ( is_email( $email ) ) {
+				$cc[ sanitize_email( $email ) ] = $recipient;
+			}
+		}
+
+		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $name, $this );
 
 		return $this;
 	}
@@ -231,19 +252,32 @@ class BP_Email {
 	/**
 	 * Set the email's "bcc" address.
 	 *
+	 * To set a single address, the first parameter is the address and the second the name.
+	 * To set multiple addresses, for each array item, the key is the email address and
+	 * the value is the name.
+	 *
 	 * @since 2.4.0
 	 *
-	 * @param array|string $email_addresses
+	 * @param string|string[] $to_address If array, key is email address, value is the name.
+	 *     If string, this is the email address.
+	 * @param string $name Optional. If $to_address is not an array, this is the "from" name.
+	 *     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
-	public function bcc( $email_addresses ) {
-		if ( ! is_array( $email_addresses ) ) {
-			$email_addresses = (array) $email_addresses;
+	public function bcc( $bcc_address, $name = '' ) {
+		if ( ! is_array( $bcc_address ) ) {
+			$bcc_address = array( $bcc_address => $name );
 		}
 
-		$email_addresses = array_filter( $email_addresses, 'is_email' );
-		$email_addresses = array_unique( array_map( 'sanitize_email', $email_addresses ) );
-		$this->bcc       = apply_filters( 'bp_email_set_bcc', $email_addresses, $this );
+		$bcc = array();
+
+		foreach ( $bcc_address as $email => $recipient ) {
+			if ( is_email( $email ) ) {
+				$bcc[ sanitize_email( $email ) ] = $recipient;
+			}
+		}
+
+		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
 
 		return $this;
 	}
@@ -384,36 +418,6 @@ class BP_Email {
 		}
 
 		return apply_filters( 'bp_email_validate', $retval, $this );
-	}
-
-
-	/**
-	 * Internal/utility helpers.
-	 */
-
-	/**
-	 * Parses a string like "User Name <email@example.com>" into an array.
-	 *
-	 * @param string $input
-	 * @return array {
-	 *     Pair of names and email addresses.
-	 *
-	 *     @type string $name  Name.
-	 *     @type string $email Email address.
-	 * }
-	 */
-	static public function parse_names_and_emails( $input ) {
-		$result = preg_match( '/(.*[^\s*<])?\s*<(.*)>/', $input, $matches );
-		if ( ! $result ) {
-			return array();
-		}
-
-		$matches = array_map( 'trim', $matches );
-
-		return array(
-			'name'  => $matches[1],
-			'email' => $matches[2],
-		);
 	}
 }
 
