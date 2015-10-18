@@ -45,7 +45,7 @@ class BP_Email {
 	 *     @type string $name  Name.
 	 * }
 	 */
-	protected $from = '';
+	protected $from = array();
 
 	/**
 	 * Addressee details (to).
