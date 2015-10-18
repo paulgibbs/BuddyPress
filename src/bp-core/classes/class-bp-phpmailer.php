@@ -58,7 +58,6 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		 */
 
 		$phpmailer->IsMail();
-		$phpmailer->addReplyTo( bp_get_option( 'admin_email' ), bp_get_option( 'blogname' ) );
 		$phpmailer->CharSet  = bp_get_option( 'blog_charset' );
 		$phpmailer->Hostname = self::get_hostname();
 
@@ -68,8 +67,19 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		 */
 
 		$phpmailer->msgHTML( $email->get( 'body' ), '', 'wp_strip_all_tags' );  // todo: is this adequate?
-		$phpmailer->SetFrom( $email->get( 'from' ), $email->get( 'from_name' ) );
 		$phpmailer->Subject = $email->get( 'subject' );
+
+		list( $email, $name ) = $email->get( 'from' );
+		try {
+			$phpmailer->SetFrom( $email, $name );
+		} catch ( phpmailerException $e ) {
+		}
+
+		list( $email, $name ) = $email->get( 'reply_to' );
+		try {
+			$phpmailer->addReplyTo( $email, $name );
+		} catch ( phpmailerException $e ) {
+		}
 
 		$to = $email->get( 'to' );
 		foreach ( $to as $email => $name ) {

@@ -142,7 +142,7 @@ class BP_Email {
 	/**
 	 * Constructor.
 	 *
-	 * Set the email type and default "from" name and address.
+	 * Set the email type and default "from" and "reply to" name and address.
 	 *
 	 * @since 2.4.0
 	 *
@@ -156,6 +156,8 @@ class BP_Email {
 			$sitename = substr( $sitename, 4 );
 		}
 		$this->from( "wordpress@$sitename", get_bloginfo( 'name' ) );
+
+		$this->reply_to( bp_get_option( 'admin_email' ), bp_get_option( 'blogname' ) );
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
