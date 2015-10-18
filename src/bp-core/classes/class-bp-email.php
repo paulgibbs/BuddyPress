@@ -225,9 +225,9 @@ class BP_Email {
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param string|string[] $cc_Address If array, key is email address, value is the name.
+	 * @param string|string[] $cc_address If array, key is email address, value is the name.
 	 *     If string, this is the email address.
-	 * @param string $name Optional. If $cc_Address is not an array, this is the "from" name.
+	 * @param string $name Optional. If $cc_address is not an array, this is the "from" name.
 	 *     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
@@ -258,9 +258,9 @@ class BP_Email {
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param string|string[] $to_address If array, key is email address, value is the name.
+	 * @param string|string[] $bcc_address If array, key is email address, value is the name.
 	 *     If string, this is the email address.
-	 * @param string $name Optional. If $to_address is not an array, this is the "from" name.
+	 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
 	 *     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */

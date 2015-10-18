@@ -52,7 +52,6 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->clearReplyTos();
 		$phpmailer->Sender = '';
 
-		$phpmailer->IsHTML( true );
 
 		/**
 		 * Set up.
@@ -68,8 +67,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		 * Content.
 		 */
 
-		$phpmailer->AltBody = $email->get( 'body' );  // djpaultodo: make this plain text
-		$phpmailer->Body    = $email->get( 'body' );
+		$phpmailer->msgHTML( $email->get( 'body' ), '', false );  // djpaultodo: 3rd parameter callback.
 		$phpmailer->SetFrom( $email->get( 'from' ), $email->get( 'from_name' ) );
 		$phpmailer->Subject = $email->get( 'subject' );
 
