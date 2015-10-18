@@ -48,6 +48,20 @@ class BP_Email {
 	protected $from = array();
 
 	/**
+	 * Reply To details.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @var array {
+	 *     Name and email address.
+	 *
+	 *     @type string $email Email address.
+	 *     @type string $name  Name.
+	 * }
+	 */
+	protected $reply_to = array();
+
+	/**
 	 * Addressee details (to).
 	 *
 	 * @since 2.4.0
@@ -176,6 +190,30 @@ class BP_Email {
 		}
 
 		$this->from = apply_filters( 'bp_email_set_from', array(
+			'email_address' => $email_address,
+			'name'          => $name,
+		), $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set the email's "reply to" address and name.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $email_address
+	 * @param string $name Optional "reply to" name.
+	 * @return BP_Email
+	 */
+	public function reply_to( $email_address, $name = '' ) {
+		if ( is_email( $email_address ) ) {
+			$email_address = sanitize_email( $email_address );
+		} else {
+			$email_address = '';
+		}
+
+		$this->reply_to = apply_filters( 'bp_email_set_reply_to', array(
 			'email_address' => $email_address,
 			'name'          => $name,
 		), $this );
