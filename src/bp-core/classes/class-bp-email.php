@@ -211,7 +211,7 @@ class BP_Email {
 			}
 		}
 
-		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $name, $this );
+		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $this );
 
 		return $this;
 	}
@@ -244,7 +244,7 @@ class BP_Email {
 			}
 		}
 
-		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $name, $this );
+		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $this );
 
 		return $this;
 	}
@@ -277,7 +277,7 @@ class BP_Email {
 			}
 		}
 
-		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
+		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $this );
 
 		return $this;
 	}
