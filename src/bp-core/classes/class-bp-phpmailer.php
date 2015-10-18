@@ -72,25 +72,25 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->Subject = $email->get( 'subject' );
 
 		$to = $email->get( 'to' );
-		foreach ( $to as $to_address ) {
+		foreach ( $to as $email => $name ) {
 			try {
-				$phpmailer->AddAddress( $to_address, '$recipient_name_djpaultodo' );
+				$phpmailer->AddAddress( $email, $name );
 			} catch ( phpmailerException $e ) {
 			}
 		}
 
 		$cc = $email->get( 'cc' );
-		foreach ( $cc as $cc_address ) {
+		foreach ( $cc as $email => $name ) {
 			try {
-				$phpmailer->AddCc( $cc_address, '$recipient_name' );
+				$phpmailer->AddCc( $email, $name );
 			} catch ( phpmailerException $e ) {
 			}
 		}
 
 		$bcc = $email->get( 'bcc' );
-		foreach ( $bcc as $bcc_address ) {
+		foreach ( $bcc as $email => $name ) {
 			try {
-				$phpmailer->AddBcc( $bcc_address, '$recipient_name' );
+				$phpmailer->AddBcc( $email, $name );
 			} catch ( phpmailerException $e ) {
 			}
 		}
