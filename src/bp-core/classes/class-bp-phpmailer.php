@@ -57,8 +57,8 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		 * Set up.
 		 */
 
-		$phpmailer->IsMail();                                      // Use PHP's mail()
-		$phpmailer->addReplyTo( bp_get_option( 'admin_email' ) );
+		$phpmailer->IsMail();
+		$phpmailer->addReplyTo( bp_get_option( 'admin_email' ), bp_get_option( 'blogname' ) );
 		$phpmailer->CharSet  = bp_get_option( 'blog_charset' );
 		$phpmailer->Hostname = self::get_hostname();
 
