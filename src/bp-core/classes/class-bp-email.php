@@ -194,7 +194,7 @@ class BP_Email {
 		$this->from = apply_filters( 'bp_email_set_from', array(
 			'email_address' => $email_address,
 			'name'          => $name,
-		), $this );
+		), $email_address, $name, $this );
 
 		return $this;
 	}
@@ -218,7 +218,7 @@ class BP_Email {
 		$this->reply_to = apply_filters( 'bp_email_set_reply_to', array(
 			'email_address' => $email_address,
 			'name'          => $name,
-		), $this );
+		), $email_address, $name, $this );
 
 		return $this;
 	}
@@ -346,7 +346,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function body( $html ) {
-		$this->body = apply_filters( 'bp_email_set_body', sanitize_text_field( $html ), $this );
+		$this->body = apply_filters( 'bp_email_set_body', sanitize_text_field( $html ), $html, $this );
 		return $this;
 	}
 
