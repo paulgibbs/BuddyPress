@@ -23,6 +23,7 @@ interface BP_Email_Delivery {
 	 * Send email(s).
 	 *
 	 * @param BP_Email $email Email to send.
+	 * @return bool False if some error occurred.
 	 * @since 2.4.0
 	 */
 	public function bp_email( BP_Email $email );
