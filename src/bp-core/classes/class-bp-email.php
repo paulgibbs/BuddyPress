@@ -202,8 +202,7 @@ class BP_Email {
 		}
 
 		$this->from = apply_filters( 'bp_email_set_from', array(
-			'email_address' => $email_address,
-			'name'          => $name,
+			$email_address => $name,
 		), $email_address, $name, $this );
 
 		return $this;
@@ -226,8 +225,7 @@ class BP_Email {
 		}
 
 		$this->reply_to = apply_filters( 'bp_email_set_reply_to', array(
-			'email_address' => $email_address,
-			'name'          => $name,
+			$email_address => $name,
 		), $email_address, $name, $this );
 
 		return $this;

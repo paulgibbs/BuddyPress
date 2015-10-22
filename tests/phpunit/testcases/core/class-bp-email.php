@@ -11,8 +11,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->from( $address );
 
 		$from = $email->get( 'from' );
-		$this->assertSame( $address, $from['email_address'] );
-		$this->assertEmpty( $from['name'] );
+		$this->assertSame( $address, key( $from ) );
+		$this->assertEmpty( value( $from ) );
 	}
 
 	public function test_valid_from_with_name() {
@@ -23,8 +23,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->from( $address, $name );
 
 		$from = $email->get( 'from' );
-		$this->assertSame( $address, $from['email_address'] );
-		$this->assertSame( $name, $from['name'] );
+		$this->assertSame( $address, key( $from )] );
+		$this->assertSame( $name, value( $from ) );
 	}
 
 	public function test_valid_to_with_no_name() {
@@ -34,8 +34,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->to( $address );
 
 		$to = $email->get( 'to' );
-		$this->assertSame( $address, $to['email_address'] );
-		$this->assertEmpty( $to['name'] );
+		$this->assertSame( $address, key( $to ) );
+		$this->assertEmpty( value( $to ) );
 	}
 
 	public function test_valid_to_with_name() {
@@ -46,8 +46,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->to( $address, $name );
 
 		$to = $email->get( 'to' );
-		$this->assertSame( $address, $to['email_address'] );
-		$this->assertSame( $name, $to['name'] );
+		$this->assertSame( $address, key( $to ) );
+		$this->assertSame( $name, value( $to ) );
 	}
 
 	public function test_valid_to_array() {
@@ -66,8 +66,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->cc( $address );
 
 		$cc = $email->get( 'cc' );
-		$this->assertSame( $address, $cc['email_address'] );
-		$this->assertEmpty( $cc['name'] );
+		$this->assertSame( $address, key( $cc ) );
+		$this->assertEmpty( value( $cc ) );
 	}
 
 	public function test_valid_cc_with_name() {
@@ -78,8 +78,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->cc( $address, $name );
 
 		$cc = $email->get( 'cc' );
-		$this->assertSame( $address, $cc['email_address'] );
-		$this->assertSame( $name, $cc['name'] );
+		$this->assertSame( $address, key( $cc ) );
+		$this->assertSame( $name, value( $cc ) );
 	}
 
 	public function test_valid_cc_array() {
@@ -98,8 +98,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->bcc( $address );
 
 		$bcc = $email->get( 'bcc' );
-		$this->assertSame( $address, $bcc['email_address'] );
-		$this->assertEmpty( $bcc['name'] );
+		$this->assertSame( $address, key( $bcc ) );
+		$this->assertEmpty( value( $bcc ) );
 	}
 
 	public function test_valid_bcc_with_name() {
@@ -110,8 +110,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->bcc( $address, $name );
 
 		$bcc = $email->get( 'bcc' );
-		$this->assertSame( $address, $bcc['email_address'] );
-		$this->assertSame( $name, $bcc['name'] );
+		$this->assertSame( $address, key( $bcc ) );
+		$this->assertSame( $name, value( $bcc ) );
 	}
 
 	public function test_valid_bcc_array() {
