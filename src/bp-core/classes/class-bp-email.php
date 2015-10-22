@@ -165,6 +165,7 @@ class BP_Email {
 			$sitename = php_uname( 'n' );
 		}
 
+
 		$this->from( "wordpress@$sitename", get_bloginfo( 'name' ) );
 		$this->reply_to( bp_get_option( 'admin_email' ), bp_get_option( 'blogname' ) );
 
