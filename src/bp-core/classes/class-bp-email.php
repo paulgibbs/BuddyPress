@@ -249,18 +249,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function to( $to_address, $name = '' ) {
-		if ( ! is_array( $to_address ) ) {
-			$to_address = array( $to_address => $name );
-		}
-
-		$to = array();
-
-		foreach ( $to_address as $email => $recipient ) {
-			if ( is_email( $email ) ) {
-				$to[ sanitize_email( $email ) ] = $recipient;
-			}
-		}
-
+		$to       = $this->parse_and_sanitize_addresses( $to_address, $name );
 		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $this );
 
 		return $this;
@@ -282,18 +271,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function cc( $cc_address, $name = '' ) {
-		if ( ! is_array( $cc_address ) ) {
-			$cc_address = array( $cc_address => $name );
-		}
-
-		$cc = array();
-
-		foreach ( $cc_address as $email => $recipient ) {
-			if ( is_email( $email ) ) {
-				$cc[ sanitize_email( $email ) ] = $recipient;
-			}
-		}
-
+		$cc       = $this->parse_and_sanitize_addresses( $cc_address, $name );
 		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $this );
 
 		return $this;
@@ -315,18 +293,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function bcc( $bcc_address, $name = '' ) {
-		if ( ! is_array( $bcc_address ) ) {
-			$bcc_address = array( $bcc_address => $name );
-		}
-
-		$bcc = array();
-
-		foreach ( $bcc_address as $email => $recipient ) {
-			if ( is_email( $email ) ) {
-				$bcc[ sanitize_email( $email ) ] = $recipient;
-			}
-		}
-
+		$bcc       = $this->parse_and_sanitize_addresses( $bcc, $name );
 		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $this );
 
 		return $this;
@@ -468,6 +435,38 @@ class BP_Email {
 		}
 
 		return apply_filters( 'bp_email_validate', $retval, $this );
+	}
+
+
+	/**
+	 * Utility functions.
+	 */
+
+	/**
+	 * Parse and sanitize email addresses.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string|string[] $raw_address If array, key is email address, value is the name.
+	 *     If string, this is the email address.
+	 * @param string $name Optional. If $raw_address is not an array, this is the "from" name.
+	 *     Otherwise, the parameter is not used.
+	 * @return array
+	 */
+	protected function parse_and_sanitize_addresses( $raw_address, $name = '' ) {
+		if ( ! is_array( $raw_address ) ) {
+			$raw_address = array( $raw_address => $name );
+		}
+
+		$addresses = array();
+
+		foreach ( $raw_address as $email => $recipient ) {
+			if ( is_email( $email ) ) {
+				$addresses[ sanitize_email( $email ) ] = $recipient;
+			}
+		}
+
+		return $addresses;
 	}
 }
 
