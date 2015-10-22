@@ -151,12 +151,21 @@ class BP_Email {
 	public function __construct( $email_type ) {
 		$this->type = $email_type;
 
-		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
-		if ( substr( $sitename, 0, 4 ) === 'www.' ) {
-			$sitename = substr( $sitename, 4 );
-		}
-		$this->from( "wordpress@$sitename", get_bloginfo( 'name' ) );
+		// SERVER_NAME isn't always set (e.g CLI).
+		if ( ! empty( $_SERVER['SERVER_NAME'] ) ) {
+			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
+			if ( substr( $sitename, 0, 4 ) === 'www.' ) {
+				$sitename = substr( $sitename, 4 );
+			}
 
+		} elseif ( function_exists( 'gethostname' ) && gethostname() !== false ) {
+			$sitename = gethostname();
+
+		} elseif ( php_uname( 'n' ) !== false ) {
+			$sitename = php_uname( 'n' );
+		}
+
+		$this->from( "wordpress@$sitename", get_bloginfo( 'name' ) );
 		$this->reply_to( bp_get_option( 'admin_email' ), bp_get_option( 'blogname' ) );
 
 		/**
