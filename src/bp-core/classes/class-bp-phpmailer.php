@@ -12,14 +12,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Email delivery implementation using PHPMailer.
  *
- * @since 2.4.0
+ * @since 2.5.0
  */
 class BP_PHPMailer implements BP_Email_Delivery {
 
 	/**
 	 * Constructor.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 */
 	public function __construct() {
 		global $phpmailer;
@@ -37,7 +37,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	 *
 	 * @param BP_Email $email Email to send.
 	 * @return bool False if some error occurred.
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 */
 	public function bp_email( BP_Email $email ) {
 		global $phpmailer;
@@ -114,7 +114,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		/**
 		 * Fires after PHPMailer is initialised.
 		 *
-		 * @since 2.4.0
+		 * @since 2.5.0
 		 *
 		 * @param PHPMailer $phpmailer The PHPMailer instance.
 		 */
@@ -135,7 +135,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	/**
 	 * Get an appropriate hostname for the email. Varies depending on site configuration.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @return string
 	 */

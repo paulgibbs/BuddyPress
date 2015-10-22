@@ -2595,7 +2595,7 @@ function bp_upload_dir() {
 /**
  * Output the unique ID of the post type for emails.
  *
- * @since 2.4.0
+ * @since 2.5.0
  */
 function bp_email_post_type() {
 	echo bp_get_email_post_type();
@@ -2604,7 +2604,7 @@ function bp_email_post_type() {
 	 * Return the unique ID of the post type for emails.
 	 *
 	 * @return string The unique forum post type id
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 */
 	function bp_get_email_post_type() {
 		return apply_filters( 'bp_get_email_post_type', buddypress()->email_post_type );
@@ -2614,7 +2614,7 @@ function bp_email_post_type() {
  * Return labels used by the email post type.
  *
  * @return array
- * @since 2.4.0
+ * @since 2.5.0
  */
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
@@ -2636,7 +2636,7 @@ function bp_get_email_post_type_labels() {
  * Return array of features that the email post type supports.
  *
  * @return array
- * @since 2.4.0
+ * @since 2.5.0
  */
 function bp_get_email_post_type_supports() {
 	return apply_filters( 'bp_get_email_post_type_supports', array(
@@ -2653,7 +2653,7 @@ function bp_get_email_post_type_supports() {
 /**
  * Output the unique ID of the taxonomy for email types.
  *
- * @since 2.4.0
+ * @since 2.5.0
  */
 function bp_email_tax_type() {
 	echo bp_get_email_tax_type();
@@ -2661,7 +2661,7 @@ function bp_email_tax_type() {
 	/**
 	 * Return the unique ID of the taxonomy for email types.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @return string The unique email taxonomy type ID.
 	 */
@@ -2672,7 +2672,7 @@ function bp_email_tax_type() {
 /**
  * Return labels used by the email type taxonomy.
  *
- * @since 2.4.0
+ * @since 2.5.0
  *
  * @return array
  */
@@ -2703,7 +2703,7 @@ function bp_get_email_tax_type_labels() {
  * This function pre-populates the object with the subject and body from the appropriate email post type item.
  * It does not replace placeholder tokens in the content with real values.
  *
- * @since 2.4.0
+ * @since 2.5.0
  *
  * @param string $email_type Unique identifier for a particular type of email.
  * @return BP_Email|WP_Error BP_Email object, or WP_Error if there was a problem.
@@ -2750,7 +2750,7 @@ function bp_get_email( $email_type ) {
  * email successfully. It just only means that the method used was able to
  * process the request without any errors.
  *
- * @since 2.4.0
+ * @since 2.5.0
  *
  * @param string $email_type Type of email being sent.
  * @param string|array $to Array or comma-separated list of email addresses to the email to.

@@ -12,13 +12,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Represents an email that will be sent to member(s).
  *
- * @since 2.4.0
+ * @since 2.5.0
  */
 class BP_Email {
 	/**
 	 * The Post object containing the email body and subject.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var WP_Post
 	 */
@@ -27,7 +27,7 @@ class BP_Email {
 	/**
 	 * Unique identifier for this particular type of email.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var string
 	 */
@@ -36,7 +36,7 @@ class BP_Email {
 	/**
 	 * Sender details.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var array {
 	 *     Name and email address.
@@ -50,7 +50,7 @@ class BP_Email {
 	/**
 	 * Reply To details.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var array {
 	 *     Name and email address.
@@ -64,7 +64,7 @@ class BP_Email {
 	/**
 	 * Addressee details (to).
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var array[] {
 	 *     Pairs of name and email addresses.
@@ -78,7 +78,7 @@ class BP_Email {
 	/**
 	 * Addressee details (CC).
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var array[] {
 	 *     Pairs of name and email addresses.
@@ -92,7 +92,7 @@ class BP_Email {
 	/**
 	 * Addressee details (BCC).
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var array[] {
 	 *     Pairs of name and email addresses.
@@ -106,7 +106,7 @@ class BP_Email {
 	/**
 	 * Email subject.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var string
 	 */
@@ -115,7 +115,7 @@ class BP_Email {
 	/**
 	 * Email body.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var string
 	 */
@@ -124,7 +124,7 @@ class BP_Email {
 	/**
 	 * Token names and replacement values for this email.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var array Key/value pairs of token name/value (strings).
 	 */
@@ -133,7 +133,7 @@ class BP_Email {
 	/**
 	 * Email headers.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @var array Key/value pairs of header name/values (strings).
 	 */
@@ -144,7 +144,7 @@ class BP_Email {
 	 *
 	 * Set the email type and default "from" and "reply to" name and address.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string $email_type Unique identifier for a particular type of email.
 	 */
@@ -172,7 +172,7 @@ class BP_Email {
 		/**
 		 * Fires inside __construct() method for BP_Email class.
 		 *
-		 * @since 2.4.0
+		 * @since 2.5.0
 		 *
 		 * @param string $email_type Unique identifier for this type of email.
 		 * @param BP_Email $this Current instance of the email type class.
@@ -188,7 +188,7 @@ class BP_Email {
 	/**
 	 * Set the email's "from" address and name.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string $email_address
 	 * @param string $name Optional "from" name.
@@ -212,7 +212,7 @@ class BP_Email {
 	/**
 	 * Set the email's "reply to" address and name.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string $email_address
 	 * @param string $name Optional "reply to" name.
@@ -240,7 +240,7 @@ class BP_Email {
 	 * To set multiple addresses, for each array item, the key is the email address and
 	 * the value is the name.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string|string[] $to_address If array, key is email address, value is the name.
 	 *     If string, this is the email address.
@@ -273,7 +273,7 @@ class BP_Email {
 	 * To set multiple addresses, for each array item, the key is the email address and
 	 * the value is the name.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string|string[] $cc_address If array, key is email address, value is the name.
 	 *     If string, this is the email address.
@@ -306,7 +306,7 @@ class BP_Email {
 	 * To set multiple addresses, for each array item, the key is the email address and
 	 * the value is the name.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string|string[] $bcc_address If array, key is email address, value is the name.
 	 *     If string, this is the email address.
@@ -335,7 +335,7 @@ class BP_Email {
 	/**
 	 * Set the email subject.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string $subject
 	 * @return BP_Email
@@ -350,7 +350,7 @@ class BP_Email {
 	/**
 	 * Set the email body.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param string $html Email body. Assumed to be HTML.
 	 * @return BP_Email
@@ -365,7 +365,7 @@ class BP_Email {
 	 *
 	 * Also sets the email's subject and body from the Post, for convenience.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param WP_Post $post
 	 * @return BP_Email
@@ -385,7 +385,7 @@ class BP_Email {
 	 * In templates, tokens are inserted with a Handlebars-like syntax, e.g. `{{token_name}}`.
 	 * { and } are reserved characters. There's no need to specify these brackets in your token names.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param array $tokens Key/value pairs of token name/value (strings).
 	 * @return BP_Email
@@ -407,7 +407,7 @@ class BP_Email {
 	 *
 	 * Does NOT let you override to/from, etc. Use the methods provided to set those.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @param array $headers Key/value pairs of heade name/values (strings).
 	 * @return BP_Email
@@ -432,7 +432,7 @@ class BP_Email {
 	 *
 	 * Unlike most other methods in this class, this one is not chainable.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 * @param string $property Name of property to accss.
 	 * @return mixed Returns null if property does not exist, otherwise the value.
 	 */
@@ -455,7 +455,7 @@ class BP_Email {
 	 *
 	 * Unlike most other methods in this class, this one is not chainable.
 	 *
-	 * @since 2.4.0
+	 * @since 2.5.0
 	 *
 	 * @return bool|WP_Error Returns true if validation succesful, else a descriptive WP_Error.
 	 */
