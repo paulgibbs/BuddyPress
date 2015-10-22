@@ -250,7 +250,7 @@ class BP_Email {
 	 */
 	public function to( $to_address, $name = '' ) {
 		$to       = $this->parse_and_sanitize_addresses( $to_address, $name );
-		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $this );
+		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $name, $this );
 
 		return $this;
 	}
@@ -272,7 +272,7 @@ class BP_Email {
 	 */
 	public function cc( $cc_address, $name = '' ) {
 		$cc       = $this->parse_and_sanitize_addresses( $cc_address, $name );
-		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $this );
+		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $name, $this );
 
 		return $this;
 	}
@@ -294,7 +294,7 @@ class BP_Email {
 	 */
 	public function bcc( $bcc_address, $name = '' ) {
 		$bcc       = $this->parse_and_sanitize_addresses( $bcc, $name );
-		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $this );
+		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
 
 		return $this;
 	}
