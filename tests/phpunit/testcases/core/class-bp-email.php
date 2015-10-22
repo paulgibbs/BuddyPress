@@ -9,16 +9,22 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$address = 'test@example.com';
 		$email->from( $address );
-		$this->assertSame( $email->get( 'from' ), $address );
-		$this->assertEmpty( $email->get( 'from_name' ) );
+
+		$from = $email->get( 'from' );
+		$this->assertSame( $address, $from['email_address'] );
+		$this->assertEmpty( $from['name'] );
 	}
 
-	public function test_valid_from_name() {
+	public function test_valid_from_with_name() {
 		$email = new BP_Email( 'fake_type' );
 
-		$name = 'Uni Est';
-		$email->from_name( $name );
-		$this->assertSame( $email->get( 'from_name' ), $name );
+		$address = 'test@example.com';
+		$name    = 'Uni Est';
+		$email->from( $address, $name );
+
+		$from = $email->get( 'from' );
+		$this->assertSame( $address, $from['email_address'] );
+		$this->assertSame( $name, $from['name'] );
 	}
 
 	public function test_valid_to_with_no_name() {
@@ -26,36 +32,31 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$address = 'test@example.com';
 		$email->to( $address );
-		$results = $email->get( 'to' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertEmpty( $results[ $address ] );
 
-		$address = '<test@example.com>';
-		$email->to( $address );
-		$results = $email->get( 'to' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertEmpty( $results[ $address ] );
+		$to = $email->get( 'to' );
+		$this->assertSame( $address, $to['email_address'] );
+		$this->assertEmpty( $to['name'] );
 	}
 
 	public function test_valid_to_with_name() {
-		$email   = new BP_Email( 'fake_type' );
-		$address = 'test@example.com';
-		$name    = 'some person';
+		$email = new BP_Email( 'fake_type' );
 
-		$email->to( "{$name} <{$address}>" );
-		$results = $email->get( 'to' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertSame( $results[ $address ], $name );
+		$address = 'test@example.com';
+		$name    = 'Uni Est';
+		$email->to( $address, $name );
+
+		$to = $email->get( 'to' );
+		$this->assertSame( $address, $to['email_address'] );
+		$this->assertSame( $name, $to['name'] );
 	}
 
 	public function test_valid_to_array() {
 		$email = new BP_Email( 'fake_type' );
 
-		$address = array( 'test@example.com', 'test2@example.com' );
-		$results = $email->get( 'to' );
+		$address = array( 'test@example.com' => 'Uni Est', 'test2@example.com' => '' );
+		$email->to( $address );
 
-		$this->assertArrayHasKey( $address[0], $results );
-		$this->assertEmpty( $results[ $address ] );
+		$this->assertEqualSets( $address, $email->get( 'to' ) );
 	}
 
 	public function test_valid_cc_with_no_name() {
@@ -63,34 +64,31 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$address = 'test@example.com';
 		$email->cc( $address );
-		$results = $email->get( 'cc' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertEmpty( $results[ $address ] );
 
-		$address = '<test@example.com>';
-		$email->cc( $address );
-		$results = $email->get( 'cc' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertEmpty( $results[ $address ] );
+		$cc = $email->get( 'cc' );
+		$this->assertSame( $address, $cc['email_address'] );
+		$this->assertEmpty( $cc['name'] );
 	}
 
 	public function test_valid_cc_with_name() {
-		$email   = new BP_Email( 'fake_type' );
-		$address = 'test@example.com';
-		$name    = 'some person';
+		$email = new BP_Email( 'fake_type' );
 
-		$email->cc( "{$name} <{$address}>" );
-		$results = $email->get( 'cc' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertSame( $results[ $address ], $name );
+		$address = 'test@example.com';
+		$name    = 'Uni Est';
+		$email->cc( $address, $name );
+
+		$cc = $email->get( 'cc' );
+		$this->assertSame( $address, $cc['email_address'] );
+		$this->assertSame( $name, $cc['name'] );
 	}
 
 	public function test_valid_cc_array() {
-		$address = array( 'test@example.com', 'test2@example.com' );
-		$email   = new BP_Email( 'fake_type' );
+		$email = new BP_Email( 'fake_type' );
 
+		$address = array( 'test@example.com' => 'Uni Est', 'test2@example.com' => '' );
 		$email->cc( $address );
-		$this->assertSame( $email->get( 'cc' ), $address );
+
+		$this->assertEqualSets( $address, $email->get( 'cc' ) );
 	}
 
 	public function test_valid_bcc_with_no_name() {
@@ -98,34 +96,31 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$address = 'test@example.com';
 		$email->bcc( $address );
-		$results = $email->get( 'bcc' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertEmpty( $results[ $address ] );
 
-		$address = '<test@example.com>';
-		$email->bcc( $address );
-		$results = $email->get( 'bcc' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertEmpty( $results[ $address ] );
+		$bcc = $email->get( 'bcc' );
+		$this->assertSame( $address, $bcc['email_address'] );
+		$this->assertEmpty( $bcc['name'] );
 	}
 
 	public function test_valid_bcc_with_name() {
-		$email   = new BP_Email( 'fake_type' );
-		$address = 'test@example.com';
-		$name    = 'some person';
+		$email = new BP_Email( 'fake_type' );
 
-		$email->bcc( "{$name} <{$address}>" );
-		$results = $email->get( 'bcc' );
-		$this->assertArrayHasKey( $address, $results );
-		$this->assertSame( $results[ $address ], $name );
+		$address = 'test@example.com';
+		$name    = 'Uni Est';
+		$email->bcc( $address, $name );
+
+		$bcc = $email->get( 'bcc' );
+		$this->assertSame( $address, $bcc['email_address'] );
+		$this->assertSame( $name, $bcc['name'] );
 	}
 
 	public function test_valid_bcc_array() {
-		$address = array( 'test@example.com', 'test2@example.com' );
-		$email   = new BP_Email( 'fake_type' );
+		$email = new BP_Email( 'fake_type' );
 
+		$address = array( 'test@example.com' => 'Uni Est', 'test2@example.com' => '' );
 		$email->bcc( $address );
-		$this->assertSame( $email->get( 'bcc' ), $address );
+
+		$this->assertEqualSets( $address, $email->get( 'bcc' ) );
 	}
 
 	public function test_valid_subject() {
@@ -171,11 +166,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 
 	public function test_invalid_from() {
-		$address = 'test@example.com <Test Example>';
 		$email   = new BP_Email( 'fake_type' );
-		$email->from( $address );
-		$this->assertSame( $email->get( 'from' ), '' );
-
 		$address = 'this-is-not-an-email-address';
 		$email->from( $address );
 		$this->assertSame( $email->get( 'from' ), '' );
