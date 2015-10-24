@@ -12,7 +12,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$from = $email->get( 'from' );
 		$this->assertSame( $address, key( $from ) );
-		$this->assertEmpty( value( $from ) );
+		$this->assertEmpty( current( $from ) );
 	}
 
 	public function test_valid_from_with_name() {
@@ -24,7 +24,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$from = $email->get( 'from' );
 		$this->assertSame( $address, key( $from ) );
-		$this->assertSame( $name, value( $from ) );
+		$this->assertSame( $name, current( $from ) );
 	}
 
 	public function test_valid_to_with_no_name() {
@@ -35,7 +35,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$to = $email->get( 'to' );
 		$this->assertSame( $address, key( $to ) );
-		$this->assertEmpty( value( $to ) );
+		$this->assertEmpty( current( $to ) );
 	}
 
 	public function test_valid_to_with_name() {
@@ -47,7 +47,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$to = $email->get( 'to' );
 		$this->assertSame( $address, key( $to ) );
-		$this->assertSame( $name, value( $to ) );
+		$this->assertSame( $name, current( $to ) );
 	}
 
 	public function test_valid_to_array() {
@@ -67,7 +67,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$cc = $email->get( 'cc' );
 		$this->assertSame( $address, key( $cc ) );
-		$this->assertEmpty( value( $cc ) );
+		$this->assertEmpty( current( $cc ) );
 	}
 
 	public function test_valid_cc_with_name() {
@@ -79,7 +79,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$cc = $email->get( 'cc' );
 		$this->assertSame( $address, key( $cc ) );
-		$this->assertSame( $name, value( $cc ) );
+		$this->assertSame( $name, current( $cc ) );
 	}
 
 	public function test_valid_cc_array() {
@@ -99,7 +99,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$bcc = $email->get( 'bcc' );
 		$this->assertSame( $address, key( $bcc ) );
-		$this->assertEmpty( value( $bcc ) );
+		$this->assertEmpty( current( $bcc ) );
 	}
 
 	public function test_valid_bcc_with_name() {
@@ -111,7 +111,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$bcc = $email->get( 'bcc' );
 		$this->assertSame( $address, key( $bcc ) );
-		$this->assertSame( $name, value( $bcc ) );
+		$this->assertSame( $name, current( $bcc ) );
 	}
 
 	public function test_valid_bcc_array() {
