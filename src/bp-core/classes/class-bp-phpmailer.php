@@ -69,36 +69,36 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->msgHTML( $email->get( 'body' ), '', 'wp_strip_all_tags' );  // todo: is this adequate?
 		$phpmailer->Subject = $email->get( 'subject' );
 
-		list( $email, $name ) = $email->get( 'from' );
+		$recipient = $email->get( 'from' );
 		try {
-			$phpmailer->SetFrom( $email, $name );
+			$phpmailer->SetFrom( key( $recipient ), current( $recipient ) );
 		} catch ( phpmailerException $e ) {
 		}
 
-		list( $email, $name ) = $email->get( 'reply_to' );
+		$recipient = $email->get( 'reply_to' );
 		try {
-			$phpmailer->addReplyTo( $email, $name );
+			$phpmailer->addReplyTo( key( $recipient ), current( $recipient ) );
 		} catch ( phpmailerException $e ) {
 		}
 
-		$to = $email->get( 'to' );
-		foreach ( $to as $email => $name ) {
+		$recipient = $email->get( 'to' );
+		foreach ( $recipient as $email => $name ) {
 			try {
 				$phpmailer->AddAddress( $email, $name );
 			} catch ( phpmailerException $e ) {
 			}
 		}
 
-		$cc = $email->get( 'cc' );
-		foreach ( $cc as $email => $name ) {
+		$recipient = $email->get( 'cc' );
+		foreach ( $recipient as $email => $name ) {
 			try {
 				$phpmailer->AddCc( $email, $name );
 			} catch ( phpmailerException $e ) {
 			}
 		}
 
-		$bcc = $email->get( 'bcc' );
-		foreach ( $bcc as $email => $name ) {
+		$recipient = $email->get( 'bcc' );
+		foreach ( $recipient as $email => $name ) {
 			try {
 				$phpmailer->AddBcc( $email, $name );
 			} catch ( phpmailerException $e ) {
