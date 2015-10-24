@@ -169,7 +169,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email   = new BP_Email( 'fake_type' );
 		$address = 'this-is-not-an-email-address';
 		$email->from( $address );
-		$this->assertSame( $email->get( 'from' ), '' );
+		$this->assertSame( $email->get( 'from' ), array() );
 	}
 
 	public function test_invalid_to() {

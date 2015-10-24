@@ -195,15 +195,13 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function from( $email_address, $name = '' ) {
+		$from = array();
+
 		if ( is_email( $email_address ) ) {
-			$email_address = sanitize_email( $email_address );
-		} else {
-			$email_address = '';
+			$from = array( sanitize_email( $email_address ) => $name );
 		}
 
-		$this->from = apply_filters( 'bp_email_set_from', array(
-			$email_address => $name,
-		), $email_address, $name, $this );
+		$this->from = apply_filters( 'bp_email_set_from', $from, $email_address, $name, $this );
 
 		return $this;
 	}
@@ -218,15 +216,13 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function reply_to( $email_address, $name = '' ) {
+		$reply_to = array();
+
 		if ( is_email( $email_address ) ) {
-			$email_address = sanitize_email( $email_address );
-		} else {
-			$email_address = '';
+			$reply_to = array( sanitize_email( $email_address ) => $name );
 		}
 
-		$this->reply_to = apply_filters( 'bp_email_set_reply_to', array(
-			$email_address => $name,
-		), $email_address, $name, $this );
+		$this->reply_to = apply_filters( 'bp_email_set_reply_to', $reply_to, $email_address, $name, $this );
 
 		return $this;
 	}
