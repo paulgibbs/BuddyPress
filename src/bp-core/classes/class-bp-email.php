@@ -291,7 +291,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function bcc( $bcc_address, $name = '' ) {
-		$bcc       = $this->parse_and_sanitize_addresses( $bcc, $name );
+		$bcc       = $this->parse_and_sanitize_addresses( $bcc_address, $name );
 		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
 
 		return $this;
