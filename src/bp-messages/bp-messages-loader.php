@@ -1,7 +1,6 @@
 <?php
-
 /**
- * BuddyPress Messages Loader
+ * BuddyPress Messages Loader.
  *
  * A private messages component, for users to send messages to each other.
  *
@@ -9,13 +8,13 @@
  * @subpackage MessagesLoader
  */
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Implementation of BP_Component for the Messages component.
  *
- * @since BuddyPress (1.5.0)
+ * @since 1.5.0
  */
 class BP_Messages_Component extends BP_Component {
 
@@ -23,7 +22,7 @@ class BP_Messages_Component extends BP_Component {
 	 * If this is true, the Message autocomplete will return friends only, unless
 	 * this is set to false, in which any matching users will be returned.
 	 *
-	 * @since BuddyPress (1.5.0)
+	 * @since 1.5.0
 	 * @var bool
 	 */
 	public $autocomplete_all;
@@ -31,7 +30,7 @@ class BP_Messages_Component extends BP_Component {
 	/**
 	 * Start the messages component creation process.
 	 *
-	 * @since BuddyPress (1.5.0)
+	 * @since 1.5.0
 	 */
 	public function __construct() {
 		parent::start(
@@ -48,13 +47,13 @@ class BP_Messages_Component extends BP_Component {
 	/**
 	 * Include files.
 	 *
-	 * @since BuddyPress (1.5.0)
+	 * @since 1.5.0
 	 *
 	 * @param array $includes See {BP_Component::includes()} for details.
 	 */
 	public function includes( $includes = array() ) {
 
-		// Files to include
+		// Files to include.
 		$includes = array(
 			'cssjs',
 			'cache',
@@ -68,7 +67,7 @@ class BP_Messages_Component extends BP_Component {
 			'widgets',
 		);
 
-		// Conditional includes
+		// Conditional includes.
 		if ( bp_is_active( $this->id, 'star' ) ) {
 			$includes[] = 'star';
 		}
@@ -82,19 +81,19 @@ class BP_Messages_Component extends BP_Component {
 	 * The BP_MESSAGES_SLUG constant is deprecated, and only used here for
 	 * backwards compatibility.
 	 *
-	 * @since BuddyPress (1.5.0)
+	 * @since 1.5.0
 	 *
 	 * @param array $args Not used.
 	 */
 	public function setup_globals( $args = array() ) {
 		$bp = buddypress();
 
-		// Define a slug, if necessary
+		// Define a slug, if necessary.
 		if ( ! defined( 'BP_MESSAGES_SLUG' ) ) {
 			define( 'BP_MESSAGES_SLUG', $this->id );
 		}
 
-		// Global tables for messaging component
+		// Global tables for messaging component.
 		$global_tables = array(
 			'table_name_notices'    => $bp->table_prefix . 'bp_messages_notices',
 			'table_name_messages'   => $bp->table_prefix . 'bp_messages_messages',
@@ -102,7 +101,7 @@ class BP_Messages_Component extends BP_Component {
 			'table_name_meta'       => $bp->table_prefix . 'bp_messages_meta',
 		);
 
-		// Metadata tables for messaging component
+		// Metadata tables for messaging component.
 		$meta_tables = array(
 			'message' => $bp->table_prefix . 'bp_messages_meta',
 		);
@@ -129,7 +128,7 @@ class BP_Messages_Component extends BP_Component {
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
-		// Determine user to use
+		// Determine user to use.
 		if ( bp_displayed_user_domain() ) {
 			$user_domain = bp_displayed_user_domain();
 		} elseif ( bp_loggedin_user_domain() ) {
@@ -142,7 +141,7 @@ class BP_Messages_Component extends BP_Component {
 		$slug          = bp_get_messages_slug();
 		$messages_link = trailingslashit( $user_domain . $slug );
 
-		// Only grab count if we're on a user page and current user has access
+		// Only grab count if we're on a user page and current user has access.
 		if ( bp_is_user() && bp_user_has_access() ) {
 			$count    = bp_get_total_unread_messages_count();
 			$class    = ( 0 === $count ) ? 'no-count' : 'count';
@@ -151,7 +150,7 @@ class BP_Messages_Component extends BP_Component {
 			$nav_name = __( 'Messages', 'buddypress' );
 		}
 
-		// Add 'Messages' to the main navigation
+		// Add 'Messages' to the main navigation.
 		$main_nav = array(
 			'name'                    => $nav_name,
 			'slug'                    => $slug,
@@ -162,7 +161,7 @@ class BP_Messages_Component extends BP_Component {
 			'item_css_id'             => $this->id
 		);
 
-		// Add the subnav items to the profile
+		// Add the subnav items to the profile.
 		$sub_nav[] = array(
 			'name'            => __( 'Inbox', 'buddypress' ),
 			'slug'            => 'inbox',
@@ -223,18 +222,17 @@ class BP_Messages_Component extends BP_Component {
 	/**
 	 * Set up the Toolbar.
 	 *
-	 * @param array $wp_admin_nav See {BP_Component::setup_admin_bar()}
-	 *                            for details.
+	 * @param array $wp_admin_nav See {BP_Component::setup_admin_bar()} for details.
 	 */
 	public function setup_admin_bar( $wp_admin_nav = array() ) {
 
-		// Menus for logged in user
+		// Menus for logged in user.
 		if ( is_user_logged_in() ) {
 
-			// Setup the logged in user variables
+			// Setup the logged in user variables.
 			$messages_link = trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() );
 
-			// Unread message count
+			// Unread message count.
 			$count = messages_get_unread_count();
 			if ( !empty( $count ) ) {
 				$title = sprintf( __( 'Messages <span class="count">%s</span>', 'buddypress' ), bp_core_number_format( $count ) );
@@ -244,7 +242,7 @@ class BP_Messages_Component extends BP_Component {
 				$inbox = __( 'Inbox',    'buddypress' );
 			}
 
-			// Add main Messages menu
+			// Add main Messages menu.
 			$wp_admin_nav[] = array(
 				'parent' => buddypress()->my_account_menu_id,
 				'id'     => 'my-account-' . $this->id,
@@ -252,7 +250,7 @@ class BP_Messages_Component extends BP_Component {
 				'href'   => $messages_link
 			);
 
-			// Inbox
+			// Inbox.
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-inbox',
@@ -260,7 +258,7 @@ class BP_Messages_Component extends BP_Component {
 				'href'   => $messages_link
 			);
 
-			// Starred
+			// Starred.
 			if ( bp_is_active( $this->id, 'star' ) ) {
 				$wp_admin_nav[] = array(
 					'parent' => 'my-account-' . $this->id,
@@ -270,7 +268,7 @@ class BP_Messages_Component extends BP_Component {
 				);
 			}
 
-			// Sent Messages
+			// Sent Messages.
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-sentbox',
@@ -278,7 +276,7 @@ class BP_Messages_Component extends BP_Component {
 				'href'   => trailingslashit( $messages_link . 'sentbox' )
 			);
 
-			// Compose Message
+			// Compose Message.
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-compose',
@@ -286,7 +284,7 @@ class BP_Messages_Component extends BP_Component {
 				'href'   => trailingslashit( $messages_link . 'compose' )
 			);
 
-			// Site Wide Notices
+			// Site Wide Notices.
 			if ( bp_current_user_can( 'bp_moderate' ) ) {
 				$wp_admin_nav[] = array(
 					'parent' => 'my-account-' . $this->id,
@@ -326,11 +324,11 @@ class BP_Messages_Component extends BP_Component {
 	/**
 	 * Setup cache groups
 	 *
-	 * @since BuddyPress (2.2.0)
+	 * @since 2.2.0
 	 */
 	public function setup_cache_groups() {
 
-		// Global groups
+		// Global groups.
 		wp_cache_add_global_groups( array(
 			'bp_messages',
 			'bp_messages_threads',

@@ -603,8 +603,9 @@ Bar!';
 		$display_name = 'Bar Foo';
 
 		$_POST = array(
-		    'display_name' => $display_name,
-		    'email'        => 'foo@bar.com',
+			'display_name' => $display_name,
+			'email' => 'foo@bar.com',
+			'nickname' => 'foobar',
 		);
 
 		$id = edit_user( $id );
@@ -866,5 +867,76 @@ Bar!';
 
 		// assert!
 		$this->assertEquals( array( 1, $g1, $g3, $g2 ), wp_list_pluck( $field_groups, 'id' ) );
+	}
+
+	/**
+	 * @ticket BP6638
+	 */
+	public function test_xprofile_get_field_should_return_bp_xprofile_field_object() {
+		global $wpdb;
+
+		$g = $this->factory->xprofile_group->create();
+		$f = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'selectbox',
+			'name' => 'Foo',
+		) );
+
+		$field = xprofile_get_field( $f );
+
+		$this->assertTrue( $field instanceof BP_XProfile_Field );
+	}
+
+	/**
+	 * @ticket BP6638
+	 * @group cache
+	 */
+	public function test_xprofile_get_field_should_prime_field_cache() {
+		global $wpdb;
+
+		$g = $this->factory->xprofile_group->create();
+		$f = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'selectbox',
+			'name' => 'Foo',
+		) );
+
+		$num_queries = $wpdb->num_queries;
+
+		// Prime the cache.
+		$field_1 = xprofile_get_field( $f );
+		$num_queries++;
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+
+		// No more queries.
+		$field_2 = xprofile_get_field( $f );
+		$this->assertEquals( $field_1, $field_2 );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+	}
+
+	/**
+	 * @ticket BP5625
+	 */
+	public function test_bp_xprofie_is_richtext_enabled_for_field_should_default_to_true_for_textareas() {
+		$g = $this->factory->xprofile_group->create();
+		$f = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'textarea',
+		) );
+
+		$this->assertTrue( bp_xprofile_is_richtext_enabled_for_field( $f ) );
+	}
+
+	/**
+	 * @ticket BP5625
+	 */
+	public function test_bp_xprofie_is_richtext_enabled_for_field_should_default_to_false_for_non_textareas() {
+		$g = $this->factory->xprofile_group->create();
+		$f = $this->factory->xprofile_field->create( array(
+			'field_group_id' => $g,
+			'type' => 'radio',
+		) );
+
+		$this->assertFalse( bp_xprofile_is_richtext_enabled_for_field( $f ) );
 	}
 }

@@ -12,18 +12,22 @@ class BP_Tests_BP_Attachment_TestCases extends BP_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
-		add_filter( 'bp_attachment_upload_overrides', array( $this, 'filter_overrides' ),  10, 1 );
-		add_filter( 'upload_dir',                     array( $this, 'filter_upload_dir' ), 20, 1 );
+		add_filter( 'bp_attachment_upload_overrides',        array( $this, 'filter_overrides' ),       10, 1 );
+		add_filter( 'upload_dir',                            array( $this, 'filter_upload_dir' ),      20, 1 );
+		add_filter( 'bp_attachments_cover_image_upload_dir', array( $this, 'filter_cover_image_dir' ), 10, 2 );
 		$this->upload_results = array();
 		$this->image_file = trailingslashit( buddypress()->plugin_dir ) . 'bp-core/images/mystery-man.jpg';
+		$this->original_upload_dir = array();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
-		remove_filter( 'bp_attachment_upload_overrides', array( $this, 'filter_overrides' ),  10, 1 );
-		remove_filter( 'upload_dir',                     array( $this, 'filter_upload_dir' ), 20, 1 );
+		remove_filter( 'bp_attachment_upload_overrides',     array( $this, 'filter_overrides' ),       10, 1 );
+		remove_filter( 'upload_dir',                         array( $this, 'filter_upload_dir' ),      20, 1 );
+		add_filter( 'bp_attachments_cover_image_upload_dir', array( $this, 'filter_cover_image_dir' ), 10, 2 );
 		$this->upload_results = array();
 		$this->image_file = '';
+		$this->original_upload_dir = array();
 	}
 
 	public function filter_overrides( $overrides ) {
@@ -43,6 +47,12 @@ class BP_Tests_BP_Attachment_TestCases extends BP_UnitTestCase {
 		);
 
 		return $upload_dir;
+	}
+
+	public function filter_cover_image_dir( $cover_dir, $upload_dir ) {
+		$this->original_upload_dir = $upload_dir;
+
+		return $cover_dir;
 	}
 
 	/**
@@ -327,5 +337,181 @@ class BP_Tests_BP_Attachment_TestCases extends BP_UnitTestCase {
 
 		// clean up!
 		$this->clean_files();
+	}
+
+	/**
+	 * @group upload
+	 * @group cover_image
+	 */
+	public function test_bp_attachment_cover_image_user_upload() {
+		$reset_files = $_FILES;
+		$reset_post = $_POST;
+		$bp = buddypress();
+		$displayed_user = $bp->displayed_user;
+		$bp->displayed_user = new stdClass;
+
+		$u1 = $this->factory->user->create();
+		$bp->displayed_user->id = $u1;
+
+		// Upload the file
+		$cover_image_attachment = new BP_Attachment_Cover_Image();
+		$_POST['action'] = $cover_image_attachment->action;
+		$_FILES[ $cover_image_attachment->file_input ] = array(
+			'tmp_name' => $this->image_file,
+			'name'     => 'mystery-man.jpg',
+			'type'     => 'image/jpeg',
+			'error'    => 0,
+			'size'     => filesize( $this->image_file )
+		);
+
+		/* No error */
+		$cover_image = $cover_image_attachment->upload( $_FILES );
+		$this->assertEquals( $cover_image['file'], $bp->avatar->upload_path . '/buddypress/members/' . $u1 .'/cover-image/mystery-man.jpg' );
+
+		// clean up!
+		$bp->displayed_user = $displayed_user;
+		$this->clean_files( 'buddypress' );
+		$_FILES = $reset_files;
+		$_POST = $reset_post;
+	}
+
+	/**
+	 * @group shrink
+	 * @group avatars
+	 */
+	public function test_bp_attachment_avatar_shrink() {
+		$image = BP_TESTS_DIR . 'assets/upside-down.jpg';
+
+		$dir_copy = bp_upload_dir();
+
+		// in case cleaning files fails
+		if ( ! is_dir( $dir_copy['basedir'] . '/shrink' ) ) {
+			mkdir( $dir_copy['basedir'] . '/shrink' );
+		}
+
+		$abs_path_copy = $dir_copy['basedir'] . '/shrink/upside-down.jpg';
+
+		copy( $image, $abs_path_copy );
+
+		add_filter( 'bp_core_avatar_original_max_width', array( $this, 'limit_to_50px' ) );
+
+		$shrink = BP_Attachment_Avatar::shrink( $abs_path_copy );
+
+		remove_filter( 'bp_core_avatar_original_max_width', array( $this, 'limit_to_50px' ) );
+
+		$this->assertTrue( 50 === $shrink['width'] && 50 === $shrink['height'] );
+
+		// Cleanup
+		$this->clean_files( 'shrink' );
+	}
+
+	public function limit_to_50px( $max_width ) {
+		return 50;
+	}
+
+	/**
+	 * @group shrink
+	 * @group avatars
+	 */
+	public function test_bp_attachment_avatar_shrink_not_needed() {
+		$shrink = BP_Attachment_Avatar::shrink( $this->image_file );
+
+		$this->assertTrue( empty( $shrink ) );
+	}
+
+	/**
+	 * @group shrink
+	 * @group cover_images
+	 */
+	public function test_bp_attachment_cover_image_fit() {
+		$image = BP_TESTS_DIR . 'assets/upside-down.jpg';
+
+		$cover_image_class = new BP_Attachment_Cover_Image();
+
+		$abs_path_copy = $cover_image_class->upload_path . '/upside-down.jpg';
+
+		copy( $image, $abs_path_copy );
+
+		$fit = $cover_image_class->fit( $abs_path_copy, array( 'width' => 50, 'height' => 50 ) );
+
+		$this->assertTrue( 50 === $fit['width'] && 50 === $fit['height'] );
+
+		// Cleanup
+		$this->clean_files( 'buddypress' );
+	}
+
+	/**
+	 * @group shrink
+	 * @group cover_images
+	 */
+	public function test_bp_attachment_cover_image_fit_not_needed() {
+		$cover_image_class = new BP_Attachment_Cover_Image();
+		$fit = $cover_image_class->fit( $this->image_file, array( 'width' => 1300, 'height' => 225 ) );
+
+		$this->assertTrue( empty( $fit ) );
+
+		// Cleanup
+		$this->clean_files( 'buddypress' );
+	}
+
+	/**
+	 * @group avatars
+	 * @group cover_images
+	 */
+	public function test_bp_attachment_get_image_data() {
+		$image_data = BP_Attachment::get_image_data( BP_TESTS_DIR . 'assets/upside-down.jpg' );
+
+		$this->assertTrue( 3 === $image_data['meta']['orientation'] );
+	}
+
+	/**
+	 * @group upload
+	 * @group cover_images
+	 */
+	public function test_bp_attachment_upload_dir_filter_arg() {
+		$reset_files = $_FILES;
+		$reset_post = $_POST;
+
+		$attachment_class = new BPTest_Attachment_Extension( array(
+			'action'                 => 'attachment_action',
+			'file_input'             => 'attachment_file_input',
+			'base_dir'               => 'attachment_base_dir',
+			'upload_dir_filter_args' => 1,
+		) );
+
+		$_POST['action'] = $attachment_class->action;
+		$_FILES[ $attachment_class->file_input ] = array(
+			'tmp_name' => $this->image_file,
+			'name'     => 'mystery-man.jpg',
+			'type'     => 'image/jpeg',
+			'error'    => 0,
+			'size'     => filesize( $this->image_file ),
+		);
+
+		// Simulate an upload
+		$attachment_class->upload( $_FILES );
+
+		// Remove the filter used to fake uploads
+		remove_filter( 'upload_dir', array( $this, 'filter_upload_dir' ), 20, 1 );
+
+		$this->assertSame( $attachment_class->original_upload_dir, wp_upload_dir() );
+
+		// Restore the filter used to fake uploads
+		add_filter( 'upload_dir', array( $this, 'filter_upload_dir' ), 20, 1 );
+
+		$this->assertTrue( 1 === $attachment_class->upload_dir_filter_args );
+
+		$cover_image_class = new BP_Attachment_Cover_Image();
+
+		// Simulate an upload
+		$cover_image_class->upload( $_FILES );
+
+		// Should be empty
+		$this->assertEmpty( $this->original_upload_dir );
+
+		$this->assertTrue( 0 === $cover_image_class->upload_dir_filter_args );
+
+		$_FILES = $reset_files;
+		$_POST = $reset_post;
 	}
 }

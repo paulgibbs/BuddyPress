@@ -90,7 +90,6 @@ class BP_Admin {
 	/**
 	 * Set admin-related globals.
 	 *
-	 * @access private
 	 * @since 1.6.0
 	 */
 	private function setup_globals() {
@@ -114,7 +113,6 @@ class BP_Admin {
 	 * Include required files.
 	 *
 	 * @since 1.6.0
-	 * @access private
 	 */
 	private function includes() {
 		require( $this->admin_dir . 'bp-core-admin-actions.php'    );
@@ -128,7 +126,6 @@ class BP_Admin {
 	/**
 	 * Set up the admin hooks, actions, and filters.
 	 *
-	 * @access private
 	 * @since 1.6.0
 	 *
 	 * @uses add_action() To add various actions.
@@ -322,17 +319,17 @@ class BP_Admin {
 
 		// Hide toolbar for logged out users setting
 		add_settings_field( 'hide-loggedout-adminbar', __( 'Toolbar', 'buddypress' ), 'bp_admin_setting_callback_admin_bar', 'buddypress', 'bp_main' );
-	 	register_setting( 'buddypress', 'hide-loggedout-adminbar', 'intval' );
+		register_setting( 'buddypress', 'hide-loggedout-adminbar', 'intval' );
 
 		// Only show 'switch to Toolbar' option if the user chose to retain the BuddyBar during the 1.6 upgrade
 		if ( (bool) bp_get_option( '_bp_force_buddybar', false ) ) {
 			add_settings_field( '_bp_force_buddybar', __( 'Toolbar', 'buddypress' ), 'bp_admin_setting_callback_force_buddybar', 'buddypress', 'bp_main' );
-		 	register_setting( 'buddypress', '_bp_force_buddybar', 'bp_admin_sanitize_callback_force_buddybar' );
+			register_setting( 'buddypress', '_bp_force_buddybar', 'bp_admin_sanitize_callback_force_buddybar' );
 		}
 
 		// Allow account deletion
 		add_settings_field( 'bp-disable-account-deletion', __( 'Account Deletion', 'buddypress' ), 'bp_admin_setting_callback_account_deletion', 'buddypress', 'bp_main' );
-	 	register_setting( 'buddypress', 'bp-disable-account-deletion', 'intval' );
+		register_setting( 'buddypress', 'bp-disable-account-deletion', 'intval' );
 
 		/** XProfile Section **************************************************/
 
@@ -341,8 +338,15 @@ class BP_Admin {
 			// Add the main section
 			add_settings_section( 'bp_xprofile', _x( 'Profile Settings', 'BuddyPress setting tab', 'buddypress' ), 'bp_admin_setting_callback_xprofile_section', 'buddypress' );
 
+			// Avatars
 			add_settings_field( 'bp-disable-avatar-uploads', __( 'Profile Photo Uploads', 'buddypress' ), 'bp_admin_setting_callback_avatar_uploads', 'buddypress', 'bp_xprofile' );
 			register_setting( 'buddypress', 'bp-disable-avatar-uploads', 'intval' );
+
+			// Cover images
+			if ( bp_is_active( 'xprofile', 'cover_image' ) ) {
+				add_settings_field( 'bp-disable-cover-image-uploads', __( 'Cover Image Uploads', 'buddypress' ), 'bp_admin_setting_callback_cover_image_uploads', 'buddypress', 'bp_xprofile' );
+				register_setting( 'buddypress', 'bp-disable-cover-image-uploads', 'intval' );
+			}
 
 			// Profile sync setting
 			add_settings_field( 'bp-disable-profile-sync',   __( 'Profile Syncing',  'buddypress' ), 'bp_admin_setting_callback_profile_sync', 'buddypress', 'bp_xprofile' );
@@ -363,6 +367,12 @@ class BP_Admin {
 			// Allow group avatars.
 			add_settings_field( 'bp-disable-group-avatar-uploads', __( 'Group Photo Uploads', 'buddypress' ), 'bp_admin_setting_callback_group_avatar_uploads', 'buddypress', 'bp_groups' );
 			register_setting( 'buddypress', 'bp-disable-group-avatar-uploads', 'intval' );
+
+			// Allow group cover images.
+			if ( bp_is_active( 'groups', 'cover_image' ) ) {
+				add_settings_field( 'bp-disable-group-cover-image-uploads', __( 'Group Cover Image Uploads', 'buddypress' ), 'bp_admin_setting_callback_group_cover_image_uploads', 'buddypress', 'bp_groups' );
+				register_setting( 'buddypress', 'bp-disable-group-cover-image-uploads', 'intval' );
+			}
 		}
 
 		/** Forums ************************************************************/
@@ -723,46 +733,52 @@ class BP_Admin {
 
 			<h4 class="wp-people-group"><?php printf( esc_html__( 'Contributors to BuddyPress %s', 'buddypress' ), self::display_version() ); ?></h4>
 			<p class="wp-credits-list">
-				<a href="https://profiles.wordpress.org/jorbin/">Aaron Jorbin (aaronjorbin)</a>,
+				<a href="https://profiles.wordpress.org/ankit-k-gupta/">Ankit K Gupta</a>,
+				<a href="https://profiles.wordpress.org/anthonyvalera/">anthonyvalera</a>,
 				<a href="https://profiles.wordpress.org/boonebgorges/">Boone B Gorges (boonebgorges)</a>,
-				<a href="https://profiles.wordpress.org/sbrajesh/">Brajesh Singh (sbrajesh)</a>,
-				<a href="https://profiles.wordpress.org/CristinaCannon/">CristinaCannon</a>,
+				<a href="https://profiles.wordpress.org/thebrandonallen/">Brandon Allen (thebrandonallen)</a>,
+				<a href="https://profiles.wordpress.org/BuddyBoss/">BuddyBoss</a>,
+				<a href="https://profiles.wordpress.org/needle/">Christian Wach (needle)</a>,
+				<a href="https://profiles.wordpress.org/damland/">damland</a>,
+				<a href="https://profiles.wordpress.org/danbp/">danbp</a>,
+				<a href="https://profiles.wordpress.org/daniluk4000/">daniluk4000</a>,
+				<a href="https://profiles.wordpress.org/davidtcarson/">David Carson (davidtcarson)</a>,
 				<a href="https://profiles.wordpress.org/dcavins/">David Cavins (dcavins)</a>,
-				<a href="https://profiles.wordpress.org/wpdennis/">Dennis (wpdennis)</a>,
-				<a href="https://profiles.wordpress.org/ocean90/">Dominik Schilling (ocean90)</a>,
-				ecehren,
-				<a href="https://profiles.wordpress.org/finzend/">finzend</a>,
-				<a href="https://profiles.wordpress.org/Mamaduka/">George Mamadashvili (Mamaduka)</a>,
-				<a href="https://profiles.wordpress.org/gregrickaby/">Greg Rickaby (gregrickaby)</a>,
-				<a href="https://profiles.wordpress.org/henrywright/">Henry Wright (henry.wright)</a>,
+				<a href="https://profiles.wordpress.org/valendesigns/">Derek Herman (valendesigns)</a>,
+				<a href="https://profiles.wordpress.org/ganesh641/">ganesh641</a>,
 				<a href="https://profiles.wordpress.org/hnla/">Hugo (hnla)</a>,
-				<a href="https://profiles.wordpress.org/jaimieolmstead/">jaimieolmstead</a>,
+				<a href="https://profiles.wordpress.org/jdgrimes/">J.D. Grimes</a>,
+				<a href="https://profiles.wordpress.org/JeffMatson/">JeffMatson</a>,
+				<a href="https://profiles.wordpress.org/jmarx75/">jmarx75</a>,
 				<a href="https://profiles.wordpress.org/johnjamesjacoby/">John James Jacoby (johnjamesjacoby)</a>,
-				<a href="https://profiles.wordpress.org/jreeve/">jreeve</a>,
-				<a href="https://profiles.wordpress.org/JustinSainton/">Justin Sainton (JustinSainton)</a>,
-				<a href="https://profiles.wordpress.org/kadamwhite/">K.Adam White (kadamwhite)</a>,
+				<a href="https://profiles.wordpress.org/kahless/">Jon Breitenbucher (kahless)</a>,
+				<a href="https://profiles.wordpress.org/jbrinley/">Jonathan Brinley (jbrinley)</a>,
+				<a href="https://profiles.wordpress.org/dunhakdis/">Joseph G. (dunhakdis)</a>,
+				<a href="https://profiles.wordpress.org/lakrisgubben/">lakrisgubben</a>,
+				<a href="https://profiles.wordpress.org/landwire/">landwire</a>,
 				<a href="https://profiles.wordpress.org/Offereins">Laurens Offereins (Offereins)</a>
 				<a href="https://profiles.wordpress.org/lenasterg/">lenasterg</a>,
-				<a href="https://profiles.wordpress.org/natrio/">Marc (natrio)</a>,
-				<a href="https://profiles.wordpress.org/mechter/">Markus Echterhoff (mechter)</a>,
+				<a href="https://profiles.wordpress.org/mrk-1/">m@rk</a>,
+				<a href="https://profiles.wordpress.org/mahype/">mahype</a>,
 				<a href="https://profiles.wordpress.org/imath/">Mathieu Viet (imath)</a>,
-				<a href="https://profiles.wordpress.org/melhop/">melhop</a>,
+				<a href="https://profiles.wordpress.org/mehulkaklotar/">mehulkaklotar</a>,
 				<a href="https://profiles.wordpress.org/mercime/">mercime</a>,
 				<a href="https://profiles.wordpress.org/tw2113/">Michael Beckwith (tw2113)</a>,
+				<a href="https://profiles.wordpress.org/modemlooper/">modemlooper</a>,
 				<a href="https://profiles.wordpress.org/pareshradadiya/">paresh.radadiya (pareshradadiya)</a>,
 				<a href="https://profiles.wordpress.org/DJPaul/">Paul Gibbs (DJPaul)</a>,
-				<a href="https://profiles.wordpress.org/prometheus-fire/">Prometheus Fire</a>,
 				<a href="https://profiles.wordpress.org/r-a-y/">r-a-y</a>,
-				<a href="https://profiles.wordpress.org/rogercoathup/">Roger Coathup (rogercoathup)</a>,
-				<a href="https://profiles.wordpress.org/dtc7240/">Scott Seitz (dtc7240)</a>,
-				<a href="https://profiles.wordpress.org/wonderboymusic/">Scott Taylor (wonderboymusic)</a>.
+				<a href="https://profiles.wordpress.org/ramiy/">Rami Yushuvaev (ramiy)</a>,
+				<a href="https://profiles.wordpress.org/ritteshpatel/">Ritesh Patel (ritteshpatel)</a>,
 				<a href="https://profiles.wordpress.org/SergeyBiryukov/">Sergey Biryukov (SergeyBiryukov)</a>,
 				<a href="https://profiles.wordpress.org/shanebp/">shanebp</a>,
+				<a href="https://profiles.wordpress.org/slaffik/">Slava UA (slaffik)</a>,
 				<a href="https://profiles.wordpress.org/netweb/">Stephen Edgar (netweb)</a>,
 				<a href="https://profiles.wordpress.org/svenl77/">svenl77</a>,
-				<a href="https://profiles.wordpress.org/WeddyWood/">WeddyWood</a>,
-				<a href="https://profiles.wordpress.org/wolfhoundjesse/">wolfhoundjesse</a>,
-				<a href="https://profiles.wordpress.org/xgz/">xgz</a>.
+				<a href="https://profiles.wordpress.org/tanner-m/">Tanner Moushey</a>,
+				<a href="https://profiles.wordpress.org/thomaslhotta/">thomaslhotta</a>,
+				<a href="https://profiles.wordpress.org/vnd/">vnd</a>,
+				<a href="https://profiles.wordpress.org/willgladstone/">willgladstone</a>.
 			</p>
 
 			<h4 class="wp-people-group"><?php _e( 'External Libraries', 'buddypress' ); ?></h4>

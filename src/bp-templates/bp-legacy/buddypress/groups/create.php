@@ -1,9 +1,15 @@
 <?php
+/**
+ * BuddyPress - Groups Create
+ *
+ * @package BuddyPress
+ * @subpackage bp-legacy
+ */
 
 /**
  * Fires at the top of the groups creation template file.
  *
- * @since BuddyPress (1.7.0)
+ * @since 1.7.0
  */
 do_action( 'bp_before_create_group_page' ); ?>
 
@@ -14,7 +20,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 	/**
 	 * Fires before the display of group creation content.
 	 *
-	 * @since BuddyPress (1.6.0)
+	 * @since 1.6.0
 	 */
 	do_action( 'bp_before_create_group_content_template' ); ?>
 
@@ -25,7 +31,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 		/**
 		 * Fires before the display of group creation.
 		 *
-		 * @since BuddyPress (1.2.0)
+		 * @since 1.2.0
 		 */
 		do_action( 'bp_before_create_group' ); ?>
 
@@ -52,7 +58,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires before the display of the group details creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_before_group_details_creation_step' ); ?>
 
@@ -71,7 +77,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires after the display of the group details creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_after_group_details_creation_step' );
 				do_action( 'groups_custom_group_fields_editable' ); // @Deprecated
@@ -88,7 +94,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires before the display of the group settings creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_before_group_settings_creation_step' ); ?>
 
@@ -162,7 +168,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires after the display of the group settings creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_after_group_settings_creation_step' ); ?>
 
@@ -178,7 +184,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires before the display of the group avatar creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_before_group_avatar_creation_step' ); ?>
 
@@ -194,6 +200,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 						<p><?php _e( "Upload an image to use as a profile photo for this group. The image will be shown on the main group page, and in search results.", 'buddypress' ); ?></p>
 
 						<p>
+							<label for="file" class="bp-screen-reader-text"><?php _e( 'Select an image', 'buddypress' ); ?></label>
 							<input type="file" name="file" id="file" />
 							<input type="submit" name="upload" id="upload" value="<?php esc_attr_e( 'Upload Image', 'buddypress' ); ?>" />
 							<input type="hidden" name="action" id="action" value="bp_avatar_upload" />
@@ -206,7 +213,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 					/**
 					 * Load the Avatar UI templates
 					 *
-					 * @since  BuddyPress (2.3.0)
+					 * @since 2.3.0
 					 */
 					bp_avatar_get_templates(); ?>
 
@@ -238,7 +245,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires after the display of the group avatar creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_after_group_avatar_creation_step' ); ?>
 
@@ -246,7 +253,38 @@ do_action( 'bp_before_create_group_page' ); ?>
 
 			<?php endif; ?>
 
-			<?php /* Group creation step 4: Invite friends to group */ ?>
+			<?php /* Group creation step 4: Cover image */ ?>
+			<?php if ( bp_is_group_creation_step( 'group-cover-image' ) ) : ?>
+
+				<?php
+
+				/**
+				 * Fires before the display of the group cover image creation step.
+				 *
+				 * @since 2.4.0
+				 */
+				do_action( 'bp_before_group_cover_image_creation_step' ); ?>
+
+				<div id="header-cover-image"></div>
+
+				<p><?php _e( 'The Cover Image will be used to customize the header of your group.', 'buddypress' ); ?></p>
+
+				<?php bp_attachments_get_template_part( 'cover-images/index' ); ?>
+
+				<?php
+
+				/**
+				 * Fires after the display of the group cover image creation step.
+				 *
+				 * @since 2.4.0
+				 */
+				do_action( 'bp_after_group_cover_image_creation_step' ); ?>
+
+				<?php wp_nonce_field( 'groups_create_save_group-cover-image' ); ?>
+
+			<?php endif; ?>
+
+			<?php /* Group creation step 5: Invite friends to group */ ?>
 			<?php if ( bp_is_group_creation_step( 'group-invites' ) ) : ?>
 
 				<?php
@@ -254,7 +292,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires before the display of the group invites creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_before_group_invites_creation_step' ); ?>
 
@@ -322,7 +360,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 				/**
 				 * Fires after the display of the group invites creation step.
 				 *
-				 * @since BuddyPress (1.1.0)
+				 * @since 1.1.0
 				 */
 				do_action( 'bp_after_group_invites_creation_step' ); ?>
 
@@ -335,7 +373,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 			 *
 			 * Allows plugins to add custom group creation steps.
 			 *
-			 * @since BuddyPress (1.1.0)
+			 * @since 1.1.0
 			 */
 			do_action( 'groups_custom_create_steps' ); ?>
 
@@ -344,7 +382,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 			/**
 			 * Fires before the display of the group creation step buttons.
 			 *
-			 * @since BuddyPress (1.1.0)
+			 * @since 1.1.0
 			 */
 			do_action( 'bp_before_group_creation_step_buttons' ); ?>
 
@@ -388,7 +426,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 			/**
 			 * Fires after the display of the group creation step buttons.
 			 *
-			 * @since BuddyPress (1.1.0)
+			 * @since 1.1.0
 			 */
 			do_action( 'bp_after_group_creation_step_buttons' ); ?>
 
@@ -400,7 +438,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 			/**
 			 * Fires and displays the groups directory content.
 			 *
-			 * @since BuddyPress (1.1.0)
+			 * @since 1.1.0
 			 */
 			do_action( 'bp_directory_groups_content' ); ?>
 
@@ -411,7 +449,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 		/**
 		 * Fires after the display of group creation.
 		 *
-		 * @since BuddyPress (1.2.0)
+		 * @since 1.2.0
 		 */
 		do_action( 'bp_after_create_group' ); ?>
 
@@ -422,7 +460,7 @@ do_action( 'bp_before_create_group_page' ); ?>
 	/**
 	 * Fires after the display of group creation content.
 	 *
-	 * @since BuddyPress (1.6.0)
+	 * @since 1.6.0
 	 */
 	do_action( 'bp_after_create_group_content_template' ); ?>
 
@@ -433,6 +471,6 @@ do_action( 'bp_before_create_group_page' ); ?>
 /**
  * Fires at the bottom of the groups creation template file.
  *
- * @since BuddyPress (1.7.0)
+ * @since 1.7.0
  */
 do_action( 'bp_after_create_group_page' ); ?>

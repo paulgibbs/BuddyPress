@@ -32,13 +32,7 @@ function bp_core_set_avatar_constants() {
 		define( 'BP_AVATAR_ORIGINAL_MAX_WIDTH', 450 );
 
 	if ( !defined( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE' ) ) {
-
-		$fileupload_maxk = bp_core_get_root_option( 'fileupload_maxk' );
-		if ( '' === $fileupload_maxk ) {
-			define( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE', 5120000 ); // 5mb
-		} else {
-			define( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE', $fileupload_maxk * 1024 );
-		}
+		define( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE', bp_attachments_get_max_upload_file_size( 'avatar' ) );
 	}
 
 	if ( ! defined( 'BP_SHOW_AVATARS' ) ) {
@@ -109,6 +103,9 @@ add_action( 'bp_setup_globals', 'bp_core_set_avatar_globals' );
  * locally:
  *    add_filter( 'bp_core_fetch_avatar_no_grav', '__return_true' );
  *
+ * @since 2.4.0 Added 'extra_attr', 'scheme', 'rating' and 'force_default' for $args.
+ *              These are inherited from WordPress 4.2.0. See {@link get_avatar()}.
+ *
  * @param array|string $args {
  *     An array of arguments. All arguments are technically optional; some
  *     will, if not provided, be auto-detected by bp_core_fetch_avatar(). This
@@ -178,6 +175,13 @@ add_action( 'bp_setup_globals', 'bp_core_set_avatar_globals' );
  *     @type bool       $html        Whether to return an <img> HTML element, vs a raw URL
  *                                   to an avatar. If false, <img>-specific arguments (like 'css_id')
  *                                   will be ignored. Default: true.
+ *     @type string     $extra_attr  HTML attributes to insert in the IMG element. Not sanitized. Default: ''.
+ *     @type string     $scheme      URL scheme to use. See set_url_scheme() for accepted values.
+ *                                   Default null.
+ *     @type string     $rating      What rating to display Gravatars for. Accepts 'G', 'PG', 'R', 'X'.
+ *                                   Default is the value of the 'avatar_rating' option.
+ *     @type bool       $force_default Used when creating the Gravatar URL. Whether to force the default
+ *                                     image regardless if the Gravatar exists. Default: false.
  * }
  *
  * @return string Formatted HTML <img> element, or raw avatar URL based on $html arg.
@@ -194,19 +198,23 @@ function bp_core_fetch_avatar( $args = '' ) {
 
 	// Set the default variables array and parse it against incoming $args array.
 	$params = wp_parse_args( $args, array(
-		'item_id'    => false,
-		'object'     => 'user',
-		'type'       => 'thumb',
-		'avatar_dir' => false,
-		'width'      => false,
-		'height'     => false,
-		'class'      => 'avatar',
-		'css_id'     => false,
-		'alt'        => '',
-		'email'      => false,
-		'no_grav'    => false,
-		'html'       => true,
-		'title'      => '',
+		'item_id'       => false,
+		'object'        => 'user',
+		'type'          => 'thumb',
+		'avatar_dir'    => false,
+		'width'         => false,
+		'height'        => false,
+		'class'         => 'avatar',
+		'css_id'        => false,
+		'alt'           => '',
+		'email'         => false,
+		'no_grav'       => false,
+		'html'          => true,
+		'title'         => '',
+		'extra_attr'    => '',
+		'scheme'        => null,
+		'rating'        => get_option( 'avatar_rating' ),
+		'force_default' => false,
 	) );
 
 	/** Set item_id ***********************************************************/
@@ -351,6 +359,9 @@ function bp_core_fetch_avatar( $args = '' ) {
 	if ( ! empty( $params['title'] ) ) {
 		$html_title = ' title="' . esc_attr( $params['title'] ) . '"';
 	}
+
+	// Extra attributes
+	$extra_attr = ! empty( $args['extra_attr'] ) ? ' ' . $args['extra_attr'] : '';
 
 	// Set CSS ID and create html string.
 	$html_css_id = '';
@@ -511,6 +522,8 @@ function bp_core_fetch_avatar( $args = '' ) {
 
 		// If we found a locally uploaded avatar
 		if ( isset( $avatar_url ) ) {
+			// Support custom scheme
+			$avatar_url = set_url_scheme( $avatar_url, $params['scheme'] );
 
 			// Return it wrapped in an <img> element
 			if ( true === $params['html'] ) {
@@ -530,7 +543,7 @@ function bp_core_fetch_avatar( $args = '' ) {
 				 * @param string $avatar_folder_url Avatar URL path.
 				 * @param string $avatar_folder_dir Avatar dir path.
 				 */
-				return apply_filters( 'bp_core_fetch_avatar', '<img src="' . $avatar_url . '"' . $html_class . $html_css_id  . $html_width . $html_height . $html_alt . $html_title . ' />', $params, $params['item_id'], $params['avatar_dir'], $html_css_id, $html_width, $html_height, $avatar_folder_url, $avatar_folder_dir );
+				return apply_filters( 'bp_core_fetch_avatar', '<img src="' . $avatar_url . '"' . $html_class . $html_css_id  . $html_width . $html_height . $html_alt . $html_title . $extra_attr . ' />', $params, $params['item_id'], $params['avatar_dir'], $html_css_id, $html_width, $html_height, $avatar_folder_url, $avatar_folder_dir );
 
 			// ...or only the URL
 			} else {
@@ -585,8 +598,6 @@ function bp_core_fetch_avatar( $args = '' ) {
 			}
 		}
 
-		$host = '//www.gravatar.com/avatar/';
-
 		/**
 		 * Filters the Gravatar email to use.
 		 *
@@ -599,19 +610,36 @@ function bp_core_fetch_avatar( $args = '' ) {
 		$params['email'] = apply_filters( 'bp_core_gravatar_email', $params['email'], $params['item_id'], $params['object'] );
 
 		/**
-		 * Filters the Gravatar URL path.
+		 * Filters the Gravatar URL host.
 		 *
 		 * @since 1.0.2
 		 *
-		 * @param string $value Gravatar URL path.
+		 * @param string $value Gravatar URL host.
 		 */
-		$gravatar = apply_filters( 'bp_gravatar_url', $host ) . md5( strtolower( $params['email'] ) ) . '?d=' . $default_grav . '&amp;s=' . $params['width'];
+		$gravatar = apply_filters( 'bp_gravatar_url', '//www.gravatar.com/avatar/' );
 
-		// Gravatar rating; http://bit.ly/89QxZA
-		$rating = get_option( 'avatar_rating' );
-		if ( ! empty( $rating ) ) {
-			$gravatar .= "&amp;r={$rating}";
+		// Append email hash to Gravatar
+		$gravatar .=  md5( strtolower( $params['email'] ) );
+
+		// Main Gravatar URL args
+		$url_args = array(
+			'd' => $default_grav,
+			's' => $params['width']
+		);
+
+		// Custom Gravatar URL args
+		if ( ! empty( $params['force_default'] ) ) {
+			$url_args['f'] = 'y';
 		}
+		if ( ! empty( $params['rating'] ) ) {
+			$url_args['r'] = strtolower( $params['rating'] );
+		}
+
+		// Set up the Gravatar URL
+		$gravatar = esc_url( add_query_arg(
+			rawurlencode_deep( array_filter( $url_args ) ),
+			$gravatar
+		) );
 
 	// No avatar was found, and we've been told not to use a gravatar.
 	} else {
@@ -632,7 +660,7 @@ function bp_core_fetch_avatar( $args = '' ) {
 	if ( true === $params['html'] ) {
 
 		/** This filter is documented in bp-core/bp-core-avatars.php */
-		return apply_filters( 'bp_core_fetch_avatar', '<img src="' . $gravatar . '"' . $html_css_id . $html_class . $html_width . $html_height . $html_alt . $html_title . ' />', $params, $params['item_id'], $params['avatar_dir'], $html_css_id, $html_width, $html_height, $avatar_folder_url, $avatar_folder_dir );
+		return apply_filters( 'bp_core_fetch_avatar', '<img src="' . $gravatar . '"' . $html_css_id . $html_class . $html_width . $html_height . $html_alt . $html_title . $extra_attr . ' />', $params, $params['item_id'], $params['avatar_dir'], $html_css_id, $html_width, $html_height, $avatar_folder_url, $avatar_folder_dir );
 	} else {
 
 		/** This filter is documented in bp-core/bp-core-avatars.php */
@@ -826,8 +854,16 @@ function bp_core_avatar_handle_upload( $file, $upload_dir_filter ) {
 		return false;
 	}
 
+	// The Avatar UI available width
+	$ui_available_width = 0;
+
+	// Try to set the ui_available_width using the avatar_admin global
+	if ( isset( $bp->avatar_admin->ui_available_width ) ) {
+		$ui_available_width = $bp->avatar_admin->ui_available_width;
+	}
+
 	// Maybe resize.
-	$bp->avatar_admin->resized = $avatar_attachment->shrink( $bp->avatar_admin->original['file'] );
+	$bp->avatar_admin->resized = $avatar_attachment->shrink( $bp->avatar_admin->original['file'], $ui_available_width );
 	$bp->avatar_admin->image   = new stdClass();
 
 	// We only want to handle one image after resize.
@@ -937,6 +973,14 @@ function bp_avatar_ajax_upload() {
 
 	if ( ! isset( $bp->avatar_admin ) ) {
 		$bp->avatar_admin = new stdClass();
+	}
+
+	/**
+	 * The BuddyPress upload parameters is including the Avatar UI Available width,
+	 * add it to the avatar_admin global for a later use.
+	 */
+	if ( isset( $bp_params['ui_available_width'] ) ) {
+		$bp->avatar_admin->ui_available_width =  (int) $bp_params['ui_available_width'];
 	}
 
 	// Upload the avatar
@@ -1271,17 +1315,20 @@ add_action( 'wp_ajax_bp_avatar_set', 'bp_avatar_ajax_set' );
 /**
  * Replace default WordPress avatars with BP avatars, if available.
  *
- * Filters 'get_avatar'.
+ * See 'get_avatar' filter description in wp-includes/pluggable.php.
+ *
+ * @since 2.4.0 Added $args parameter to coincide with WordPress 4.2.0.
  *
  * @param string            $avatar  The avatar path passed to 'get_avatar'.
  * @param int|string|object $user    A user ID, email address, or comment object.
  * @param int               $size    Size of the avatar image ('thumb' or 'full').
  * @param string            $default URL to a default image to use if no avatar is available.
  * @param string            $alt     Alternate text to use in image tag. Default: ''.
+ * @param array             $args    Arguments passed to get_avatar_data(), after processing.
  *
  * @return string BP avatar path, if found; else the original avatar path.
  */
-function bp_core_fetch_avatar_filter( $avatar, $user, $size, $default, $alt = '' ) {
+function bp_core_fetch_avatar_filter( $avatar, $user, $size, $default, $alt = '', $args = array() ) {
 	global $pagenow;
 
 	// Do not filter if inside WordPress options page
@@ -1322,19 +1369,47 @@ function bp_core_fetch_avatar_filter( $avatar, $user, $size, $default, $alt = ''
 		$type = 'full';
 	}
 
-	// Let BuddyPress handle the fetching of the avatar
-	$bp_avatar = bp_core_fetch_avatar( array(
+	$avatar_args = array(
 		'item_id' => $id,
 		'type'    => $type,
 		'width'   => $size,
 		'height'  => $size,
 		'alt'     => $alt,
-	) );
+	);
+
+	// Support new arguments as of WordPress 4.2.0
+	if ( ! empty( $args['width'] ) ) {
+		$avatar_args['width'] = $args['width'];
+	}
+	if ( ! empty( $args['height'] ) ) {
+		$avatar_args['height'] = $args['height'];
+	}
+	if ( ! empty( $args['class'] ) ) {
+		$avatar_args['class'] = $args['class'];
+	}
+	if ( ! empty( $args['class'] ) ) {
+		$avatar_args['class'] = $args['class'];
+	}
+	if ( ! empty( $args['extra_attr'] ) ) {
+		$avatar_args['extra_attr'] = $args['extra_attr'];
+	}
+	if ( ! empty( $args['scheme'] ) ) {
+		$avatar_args['scheme'] = $args['scheme'];
+	}
+	if ( ! empty( $args['force_default'] ) ) {
+		$avatar_args['force_default'] = $args['force_default'];
+	}
+	if ( ! empty( $args['rating'] ) ) {
+		$avatar_args['rating'] = $args['rating'];
+	}
+
+	// Let BuddyPress handle the fetching of the avatar
+	$bp_avatar = bp_core_fetch_avatar( $avatar_args );
 
 	// If BuddyPress found an avatar, use it. If not, use the result of get_avatar
 	return ( !$bp_avatar ) ? $avatar : $bp_avatar;
 }
-add_filter( 'get_avatar', 'bp_core_fetch_avatar_filter', 10, 5 );
+add_filter( 'get_avatar', 'bp_core_fetch_avatar_filter', 10, 6 );
 
 /**
  * Is the current avatar upload error-free?
@@ -1370,7 +1445,7 @@ function bp_core_check_avatar_size( $file ) {
  * @since 2.3.0
  */
 function bp_core_get_allowed_avatar_types() {
-	$allowed_types = array( 'jpeg', 'gif', 'png' );
+	$allowed_types = bp_attachments_get_allowed_types( 'avatar' );
 
 	/**
  	 * Filters the list of allowed image types.
@@ -1397,18 +1472,8 @@ function bp_core_get_allowed_avatar_types() {
  */
 function bp_core_get_allowed_avatar_mimes() {
 	$allowed_types  = bp_core_get_allowed_avatar_types();
-	$validate_mimes = wp_match_mime_types( join( ',', $allowed_types ), wp_get_mime_types() );
-	$allowed_mimes  = array_map( 'implode', $validate_mimes );
 
-	/**
-	 * Include jpg type if needed so that bp_core_check_avatar_type()
-	 * will check for jpeg and jpg extensions.
-	 */
-	if ( isset( $allowed_mimes['jpeg'] ) ) {
-		$allowed_mimes['jpg'] = $allowed_mimes['jpeg'];
-	}
-
-	return $allowed_mimes;
+	return bp_attachments_get_allowed_mimes( 'avatar', $allowed_types );
 }
 
 /**
@@ -1421,13 +1486,7 @@ function bp_core_get_allowed_avatar_mimes() {
  * @return bool True if the file extension is permitted, otherwise false.
  */
 function bp_core_check_avatar_type( $file ) {
-	$avatar_filetype = wp_check_filetype_and_ext( $file['file']['tmp_name'], $file['file']['name'], bp_core_get_allowed_avatar_mimes() );
-
-	if ( ! empty( $avatar_filetype['ext'] ) && ! empty( $avatar_filetype['type'] ) ) {
-		return true;
-	}
-
-	return false;
+	return bp_attachments_check_filetype( $file['file']['tmp_name'], $file['file']['name'], bp_core_get_allowed_avatar_mimes() );
 }
 
 /**

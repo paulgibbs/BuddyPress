@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuddyPress Member Notifications Loader.
  *
@@ -7,18 +6,21 @@
  *
  * @package BuddyPress
  * @subpackage NotificationsLoader
- * @since BuddyPress (1.9.0)
+ * @since 1.9.0
  */
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Extends the component class to set up the Notifications component.
+ */
 class BP_Notifications_Component extends BP_Component {
 
 	/**
 	 * Start the notifications component creation process.
 	 *
-	 * @since BuddyPress (1.9.0)
+	 * @since 1.9.0
 	 */
 	public function __construct() {
 		parent::start(
@@ -34,7 +36,7 @@ class BP_Notifications_Component extends BP_Component {
 	/**
 	 * Include notifications component files.
 	 *
-	 * @since BuddyPress (1.9.0)
+	 * @since 1.9.0
 	 *
 	 * @see BP_Component::includes() for a description of arguments.
 	 *
@@ -57,7 +59,7 @@ class BP_Notifications_Component extends BP_Component {
 	/**
 	 * Set up component global data.
 	 *
-	 * @since BuddyPress (1.9.0)
+	 * @since 1.9.0
 	 *
 	 * @see BP_Component::setup_globals() for a description of arguments.
 	 *
@@ -66,12 +68,12 @@ class BP_Notifications_Component extends BP_Component {
 	public function setup_globals( $args = array() ) {
 		$bp = buddypress();
 
-		// Define a slug, if necessary
+		// Define a slug, if necessary.
 		if ( ! defined( 'BP_NOTIFICATIONS_SLUG' ) ) {
 			define( 'BP_NOTIFICATIONS_SLUG', $this->id );
 		}
 
-		// Global tables for the notifications component
+		// Global tables for the notifications component.
 		$global_tables = array(
 			'table_name'      => $bp->table_prefix . 'bp_notifications',
 			'table_name_meta' => $bp->table_prefix . 'bp_notifications_meta',
@@ -92,7 +94,7 @@ class BP_Notifications_Component extends BP_Component {
 	/**
 	 * Set up component navigation.
 	 *
-	 * @since BuddyPress (1.9.0)
+	 * @since 1.9.0
 	 *
 	 * @see BP_Component::setup_nav() for a description of arguments.
 	 *
@@ -103,7 +105,7 @@ class BP_Notifications_Component extends BP_Component {
 	 */
 	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
 
-		// Determine user to use
+		// Determine user to use.
 		if ( bp_displayed_user_domain() ) {
 			$user_domain = bp_displayed_user_domain();
 		} elseif ( bp_loggedin_user_domain() ) {
@@ -116,7 +118,7 @@ class BP_Notifications_Component extends BP_Component {
 		$slug               = bp_get_notifications_slug();
 		$notifications_link = trailingslashit( $user_domain . $slug );
 
-		// Only grab count if we're on a user page and current user has access
+		// Only grab count if we're on a user page and current user has access.
 		if ( bp_is_user() && bp_user_has_access() ) {
 			$count    = bp_notifications_get_unread_notification_count( bp_displayed_user_id() );
 			$class    = ( 0 === $count ) ? 'no-count' : 'count';
@@ -125,7 +127,7 @@ class BP_Notifications_Component extends BP_Component {
 			$nav_name = _x( 'Notifications', 'Profile screen nav', 'buddypress' );
 		}
 
-		// Add 'Notifications' to the main navigation
+		// Add 'Notifications' to the main navigation.
 		$main_nav = array(
 			'name'                    => $nav_name,
 			'slug'                    => $slug,
@@ -136,7 +138,7 @@ class BP_Notifications_Component extends BP_Component {
 			'item_css_id'             => $this->id,
 		);
 
-		// Add the subnav items to the notifications nav item
+		// Add the subnav items to the notifications nav item.
 		$sub_nav[] = array(
 			'name'            => _x( 'Unread', 'Notification screen nav', 'buddypress' ),
 			'slug'            => 'unread',
@@ -164,7 +166,7 @@ class BP_Notifications_Component extends BP_Component {
 	/**
 	 * Set up the component entries in the WordPress Admin Bar.
 	 *
-	 * @since BuddyPress (1.9.0)
+	 * @since 1.9.0
 	 *
 	 * @see BP_Component::setup_nav() for a description of the $wp_admin_nav
 	 *      parameter array.
@@ -174,13 +176,13 @@ class BP_Notifications_Component extends BP_Component {
 	 */
 	public function setup_admin_bar( $wp_admin_nav = array() ) {
 
-		// Menus for logged in user
+		// Menus for logged in user.
 		if ( is_user_logged_in() ) {
 
-			// Setup the logged in user variables
+			// Setup the logged in user variables.
 			$notifications_link = trailingslashit( bp_loggedin_user_domain() . bp_get_notifications_slug() );
 
-			// Pending notification requests
+			// Pending notification requests.
 			$count = bp_notifications_get_unread_notification_count( bp_loggedin_user_id() );
 			if ( ! empty( $count ) ) {
 				$title  = sprintf( _x( 'Notifications <span class="count">%s</span>', 'My Account Notification pending', 'buddypress' ), bp_core_number_format( $count ) );
@@ -190,7 +192,7 @@ class BP_Notifications_Component extends BP_Component {
 				$unread = _x( 'Unread',        'My Account Notification sub nav', 'buddypress' );
 			}
 
-			// Add the "My Account" sub menus
+			// Add the "My Account" sub menus.
 			$wp_admin_nav[] = array(
 				'parent' => buddypress()->my_account_menu_id,
 				'id'     => 'my-account-' . $this->id,
@@ -198,7 +200,7 @@ class BP_Notifications_Component extends BP_Component {
 				'href'   => $notifications_link
 			);
 
-			// Unread
+			// Unread.
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-unread',
@@ -206,7 +208,7 @@ class BP_Notifications_Component extends BP_Component {
 				'href'   => $notifications_link
 			);
 
-			// Read
+			// Read.
 			$wp_admin_nav[] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-read',
@@ -221,11 +223,11 @@ class BP_Notifications_Component extends BP_Component {
 	/**
 	 * Set up the title for pages and <title>.
 	 *
-	 * @since BuddyPress (1.9.0)
+	 * @since 1.9.0
 	 */
 	public function setup_title() {
 
-		// Adjust title
+		// Adjust title.
 		if ( bp_is_notifications_component() ) {
 			$bp = buddypress();
 
@@ -247,11 +249,11 @@ class BP_Notifications_Component extends BP_Component {
 	/**
 	 * Setup cache groups.
 	 *
-	 * @since BuddyPress (2.2.0)
+	 * @since 2.2.0
 	 */
 	public function setup_cache_groups() {
 
-		// Global groups
+		// Global groups.
 		wp_cache_add_global_groups( array(
 			'bp_notifications',
 			'notification_meta'
@@ -264,7 +266,7 @@ class BP_Notifications_Component extends BP_Component {
 /**
  * Bootstrap the Notifications component.
  *
- * @since BuddyPress (1.9.0)
+ * @since 1.9.0
  */
 function bp_setup_notifications() {
 	buddypress()->notifications = new BP_Notifications_Component();

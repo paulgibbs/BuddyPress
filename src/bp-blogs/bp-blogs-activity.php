@@ -604,7 +604,17 @@ function bp_blogs_sync_add_from_activity_comment( $comment_id, $params, $parent_
 	//       doesn't change on the frontend until the next page refresh.
 	$resave_activity = new BP_Activity_Activity( $comment_id );
 	$resave_activity->primary_link = get_comment_link( $post_comment_id );
+
+	/**
+	 * Now that the activity id exists and the post comment was created, we don't need to update
+	 * the content of the comment as there are no chances it has evolved.
+	 */
+	remove_action( 'bp_activity_before_save', 'bp_blogs_sync_activity_edit_to_post_comment', 20 );
+
 	$resave_activity->save();
+
+	// add the edit activity comment hook back
+	add_action( 'bp_activity_before_save', 'bp_blogs_sync_activity_edit_to_post_comment', 20 );
 
 	// multisite again!
 	restore_current_blog();
@@ -979,8 +989,8 @@ add_filter( 'bp_activity_can_comment', 'bp_blogs_disable_activity_commenting' );
  *
  * @since 2.0.0
  *
- * @param bool   $retval  Are replies allowed for this activity reply?
- * @param object $comment The activity comment object.
+ * @param bool         $retval  Are replies allowed for this activity reply?
+ * @param object|array $comment The activity comment object.
  *
  * @return bool
  */

@@ -1,3 +1,12 @@
+<?php
+/**
+ * BuddyPress - Members Single Messages Compose
+ *
+ * @package BuddyPress
+ * @subpackage bp-legacy
+ */
+
+?>
 <form action="<?php bp_messages_form_action('compose' ); ?>" method="post" id="send_message_form" class="standard-form" enctype="multipart/form-data">
 
 	<?php
@@ -5,7 +14,7 @@
 	/**
 	 * Fires before the display of message compose content.
 	 *
-	 * @since BuddyPress (1.1.0)
+	 * @since 1.1.0
 	 */
 	do_action( 'bp_before_messages_compose_content' ); ?>
 
@@ -34,7 +43,7 @@
 	/**
 	 * Fires after the display of message compose content.
 	 *
-	 * @since BuddyPress (1.1.0)
+	 * @since 1.1.0
 	 */
 	do_action( 'bp_after_messages_compose_content' ); ?>
 

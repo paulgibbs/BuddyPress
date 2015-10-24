@@ -19,7 +19,6 @@ defined( 'ABSPATH' ) || exit;
 function bp_core_admin_tools() {
 	?>
 	<div class="wrap">
-		<?php screen_icon( 'buddypress'); ?>
 
 		<h2><?php esc_html_e( 'BuddyPress Tools', 'buddypress' ) ?></h2>
 
@@ -40,7 +39,7 @@ function bp_core_admin_tools() {
 
 								<?php foreach ( bp_admin_repair_list() as $item ) : ?>
 
-									<label><input type="checkbox" class="checkbox" name="<?php echo esc_attr( $item[0] ) . '" id="' . esc_attr( str_replace( '_', '-', $item[0] ) ); ?>" value="1" /> <?php echo esc_html( $item[1] ); ?></label><br />
+									<label for="<?php echo esc_attr( str_replace( '_', '-', $item[0] ) ); ?>"><input type="checkbox" class="checkbox" name="<?php echo esc_attr( $item[0] ) . '" id="' . esc_attr( str_replace( '_', '-', $item[0] ) ); ?>" value="1" /> <?php echo esc_html( $item[1] ); ?></label><br />
 
 								<?php endforeach; ?>
 

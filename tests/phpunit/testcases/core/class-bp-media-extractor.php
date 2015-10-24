@@ -35,7 +35,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 		There are two types of [gallery] shortcodes; one like that, and another with IDs specified.
 
 		Audio shortcodes:
-		[audio src='http://example.com/source.mp3'] 
+		[audio src='http://example.com/source.mp3']
 		[audio src='http://example.com/source.wav' loop='on' autoplay='off' preload='metadata'].
 
 		The following shortcode should be picked up by the shortcode extractor, but not the audio extractor, because
@@ -174,7 +174,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	}
 
 	public function test_extract_no_links_from_content_with_invalid_links() {
-		$richtext = "This is some sample text, with links, but not the kinds we want.		
+		$richtext = "This is some sample text, with links, but not the kinds we want.
 		<a href=''>Empty links should be ignore<a/> and
 		<a href='phone:004400'>weird protocols should be ignored, too</a>.
 		";
@@ -279,7 +279,7 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'images', $media );
 		$media = array_values( wp_list_filter( $media['images'], array( 'source' => 'html' ) ) );
-	
+
 		$this->assertSame( 'http://example.com/image.gif',           $media[0]['url'] );
 		$this->assertSame( 'http://example.com/image-in-a-link.gif', $media[1]['url'] );
 	}
@@ -324,21 +324,11 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 	}
 
 	public function test_extract_images_from_content_with_galleries_variant_ids() {
-		// To test the [gallery] shortcode, we need to create a post and attachments.
-		$attachment_ids = array();
-		foreach ( range( 1, 3 ) as $i ) {
-			$attachment_id = $this->factory->attachment->create_object( "image{$i}.jpg", 0, array(
-				'post_mime_type' => 'image/jpeg',
-				'post_type'      => 'attachment'
-			) );
-
-			wp_update_attachment_metadata( $attachment_id, array( 'width' => 100, 'height' => 100 ) );
-			$attachment_ids[] = $attachment_id;
-		}
-
-		$attachment_ids = join( ',', $attachment_ids );
-		$post_id        = $this->factory->post->create( array( 'post_content' => "[gallery ids='{$attachment_ids}']" ) );
-
+		$attachment_ids   = array();
+		$attachment_ids[] = $this->fake_attachment_upload( DIR_TESTDATA . '/images/test-image-large.png' );
+		$attachment_ids[] = $this->fake_attachment_upload( DIR_TESTDATA . '/images/canola.jpg' );
+		$attachment_ids   = join( ',', $attachment_ids );
+		$post_id          = $this->factory->post->create( array( 'post_content' => "[gallery ids='{$attachment_ids}']" ) );
 
 		// Extract the gallery images.
 		$media = self::$media_extractor->extract( '', BP_Media_Extractor::IMAGES, array(
@@ -347,11 +337,10 @@ class BP_Tests_Media_Extractor extends BP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'images', $media );
 		$media = array_values( wp_list_filter( $media['images'], array( 'source' => 'galleries' ) ) );
-		$this->assertCount( 3, $media );
+		$this->assertCount( 2, $media );
 
-		for ( $i = 1; $i <= 3; $i++ ) {
-			$this->assertSame( 'http://' . WP_TESTS_DOMAIN . "/wp-content/uploads/image{$i}.jpg", $media[ $i - 1 ]['url'] );
-		}
+		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test-image-large.png', $media[0]['url'] );
+		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/canola.jpg', $media[1]['url'] );
 	}
 
 	public function test_extract_no_images_from_content_with_invalid_galleries_variant_no_ids() {

@@ -1,3 +1,12 @@
+<?php
+/**
+ * BuddyPress - Members Single Message
+ *
+ * @package BuddyPress
+ * @subpackage bp-legacy
+ */
+
+?>
 <div id="message-thread">
 
 	<?php
@@ -5,7 +14,7 @@
 	/**
 	 * Fires before the display of a single member message thread content.
 	 *
-	 * @since BuddyPress (1.1.0)
+	 * @since 1.1.0
 	 */
 	do_action( 'bp_before_message_thread_content' ); ?>
 
@@ -40,7 +49,7 @@
 		/**
 		 * Fires before the display of the message thread list.
 		 *
-		 * @since BuddyPress (1.1.0)
+		 * @since 1.1.0
 		 */
 		do_action( 'bp_before_message_thread_list' ); ?>
 
@@ -53,7 +62,7 @@
 		/**
 		 * Fires after the display of the message thread list.
 		 *
-		 * @since BuddyPress (1.1.0)
+		 * @since 1.1.0
 		 */
 		do_action( 'bp_after_message_thread_list' ); ?>
 
@@ -62,7 +71,7 @@
 		/**
 		 * Fires before the display of the message thread reply form.
 		 *
-		 * @since BuddyPress (1.1.0)
+		 * @since 1.1.0
 		 */
 		do_action( 'bp_before_message_thread_reply' ); ?>
 
@@ -97,7 +106,7 @@
 					/**
 					 * Fires before the display of the message reply box.
 					 *
-					 * @since BuddyPress (1.1.0)
+					 * @since 1.1.0
 					 */
 					do_action( 'bp_before_message_reply_box' ); ?>
 
@@ -109,7 +118,7 @@
 					/**
 					 * Fires after the display of the message reply box.
 					 *
-					 * @since BuddyPress (1.1.0)
+					 * @since 1.1.0
 					 */
 					do_action( 'bp_after_message_reply_box' ); ?>
 
@@ -132,7 +141,7 @@
 		/**
 		 * Fires after the display of the message thread reply form.
 		 *
-		 * @since BuddyPress (1.1.0)
+		 * @since 1.1.0
 		 */
 		do_action( 'bp_after_message_thread_reply' ); ?>
 
@@ -143,7 +152,7 @@
 	/**
 	 * Fires after the display of a single member message thread content.
 	 *
-	 * @since BuddyPress (1.1.0)
+	 * @since 1.1.0
 	 */
 	do_action( 'bp_after_message_thread_content' ); ?>
 

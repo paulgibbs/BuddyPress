@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuddyPress Notifications Admin Bar functions.
  *
@@ -9,13 +8,13 @@
  * @subpackage NotificationsToolbar
  */
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Build the "Notifications" dropdown.
  *
- * @since BuddyPress (1.9.0)
+ * @since 1.9.0
  *
  * @return bool
  */
@@ -32,7 +31,7 @@ function bp_notifications_toolbar_menu() {
 	$menu_title    = '<span id="ab-pending-notifications" class="' . $alert_class . '">' . number_format_i18n( $count ) . '</span>';
 	$menu_link     = trailingslashit( bp_loggedin_user_domain() . bp_get_notifications_slug() );
 
-	// Add the top-level Notifications button
+	// Add the top-level Notifications button.
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'top-secondary',
 		'id'        => 'bp-notifications',

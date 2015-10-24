@@ -1935,6 +1935,11 @@ function bp_is_active( $component = '', $feature = '' ) {
 
 		// Is feature active?
 		if ( ! empty( $feature ) ) {
+			// The xProfile component is specific
+			if ( 'xprofile' === $component ) {
+				$component = 'profile';
+			}
+
 			if ( empty( buddypress()->$component->features ) || false === in_array( $feature, buddypress()->$component->features, true ) ) {
 				$retval = false;
 			}
@@ -2248,6 +2253,19 @@ function bp_is_user_change_avatar() {
 }
 
 /**
+ * Is the current page the a user's change cover image profile page?
+ *
+ * Eg http://example.com/members/joe/profile/change-cover-image/ (or a subpage thereof).
+ *
+ * @since  2.4.0
+ *
+ * @return True if the current page is a user's profile edit cover image page.
+ */
+function bp_is_user_change_cover_image() {
+	return (bool) ( bp_is_profile_component() && bp_is_current_action( 'change-cover-image' ) );
+}
+
+/**
  * Is this a user's forums page?
  *
  * Eg http://example.com/members/joe/forums/ (or a subpage thereof).
@@ -2535,7 +2553,17 @@ function bp_is_group_forum() {
  * @return True if the current page is a group's activity page.
  */
 function bp_is_group_activity() {
-	return (bool) ( bp_is_single_item() && bp_is_groups_component() && bp_is_current_action( 'activity' ) );
+	$retval = false;
+
+	if ( bp_is_single_item() && bp_is_groups_component() && bp_is_current_action( 'activity' ) ) {
+		$retval = true;
+	}
+
+	if ( bp_is_group_home() && bp_is_active( 'activity' ) && ! bp_is_group_custom_front() ) {
+		$retval = true;
+	}
+
+	return $retval;
 }
 
 /**
@@ -2568,7 +2596,17 @@ function bp_is_group_forum_topic_edit() {
  * @return bool True if the current page is part of a group's Members page.
  */
 function bp_is_group_members() {
-	return (bool) ( bp_is_single_item() && bp_is_groups_component() && bp_is_current_action( 'members' ) );
+	$retval = false;
+
+	if ( bp_is_single_item() && bp_is_groups_component() && bp_is_current_action( 'members' ) ) {
+		$retval = true;
+	}
+
+	if ( bp_is_group_home() && ! bp_is_active( 'activity' ) && ! bp_is_group_custom_front() ) {
+		$retval = true;
+	}
+
+	return $retval;
 }
 
 /**
@@ -2613,6 +2651,18 @@ function bp_is_group_leave() {
  */
 function bp_is_group_single() {
 	return (bool) ( bp_is_groups_component() && bp_is_single_item() );
+}
+
+/**
+ * Is the current group page a custom front?
+ *
+ * @since 2.4.0
+ *
+ * @return bool True if the current group page is a custom front.
+ */
+function bp_is_group_custom_front() {
+	$bp = buddypress();
+	return (bool) bp_is_group_home() && ! empty( $bp->groups->current_group->front_template );
 }
 
 /**
@@ -3036,19 +3086,6 @@ function bp_get_the_post_class( $wp_classes = array() ) {
 	// emulate post type css class
 	foreach ( $bp_classes as $bp_class ) {
 		$bp_classes[] = "type-{$bp_class}";
-	}
-
-	// removes the 'page' and 'type-page' post classes
-	// we need to remove these classes since they did not exist before we switched
-	// theme compat to use the 'page' post type
-	$page_key = array_search( 'page', $wp_classes );
-	if ( $page_key !== false ) {
-		unset( $wp_classes[$page_key] );
-	}
-
-	$page_type_key = array_search( 'type-page', $wp_classes );
-	if ( $page_type_key !== false ) {
-		unset( $wp_classes[$page_type_key] );
 	}
 
 	// okay let's merge!

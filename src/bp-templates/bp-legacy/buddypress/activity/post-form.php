@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuddyPress - Activity Post Form
  *
@@ -16,7 +15,7 @@
 	/**
 	 * Fires before the activity post form.
 	 *
-	 * @since BuddyPress (1.2.0)
+	 * @since 1.2.0
 	 */
 	do_action( 'bp_before_activity_post_form' ); ?>
 
@@ -67,7 +66,7 @@
 				</div>
 				<input type="hidden" id="whats-new-post-object" name="whats-new-post-object" value="groups" />
 
-			<?php elseif ( bp_is_group_home() ) : ?>
+			<?php elseif ( bp_is_group_activity() ) : ?>
 
 				<input type="hidden" id="whats-new-post-object" name="whats-new-post-object" value="groups" />
 				<input type="hidden" id="whats-new-post-in" name="whats-new-post-in" value="<?php bp_group_id(); ?>" />
@@ -79,7 +78,7 @@
 			/**
 			 * Fires at the end of the activity post form markup.
 			 *
-			 * @since BuddyPress (1.2.0)
+			 * @since 1.2.0
 			 */
 			do_action( 'bp_activity_post_form_options' ); ?>
 
@@ -92,7 +91,7 @@
 	/**
 	 * Fires after the activity post form.
 	 *
-	 * @since BuddyPress (1.2.0)
+	 * @since 1.2.0
 	 */
 	do_action( 'bp_after_activity_post_form' ); ?>
 

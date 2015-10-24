@@ -673,6 +673,11 @@ function bp_blogs_record_comment( $comment_id, $is_approved = true ) {
 				'secondary_item_id' => $recorded_comment->comment_post_ID
 			) );
 
+			// Try to create a new activity item for the parent blog post
+			if ( empty( $parent_activity_id ) ) {
+				$parent_activity_id = bp_activity_post_type_publish( $recorded_comment->comment_post_ID, $recorded_comment->post );
+			}
+
 			// we found the parent activity entry
 			// so let's go ahead and reconfigure some activity args
 			if ( ! empty( $parent_activity_id ) ) {
@@ -836,7 +841,6 @@ add_action( 'remove_user_from_blog', 'bp_blogs_remove_user_from_blog', 10, 2 );
  * first. See https://buddypress.trac.wordpress.org/ticket/3916.
  *
  * @since 1.6.0
- * @access private
  */
 function bp_blogs_maybe_add_user_to_blog() {
 	if ( ! is_multisite() )

@@ -10,7 +10,7 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * A flag indicating whether an autocommit has been detected inside of a test.
 	 *
-	 * @since BuddyPress (2.4.0)
+	 * @since 2.4.0
 	 *
 	 * @var bool
 	 */
@@ -19,7 +19,7 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * A list of components that have been deactivated during a test.
 	 *
-	 * @since BuddyPress (2.4.0)
+	 * @since 2.4.0
 	 *
 	 * @var array
 	 */
@@ -484,7 +484,7 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	public static function tearDown_wp_mail( $args ) {
 		if ( ! empty( self::$cached_SERVER_NAME ) ) {
 			$_SERVER['SERVER_NAME'] = self::$cached_SERVER_NAME;
-			unset( $this->cached_SERVER_NAME );
+			self::$cached_SERVER_NAME = '';
 		} else {
 			unset( $_SERVER['SERVER_NAME'] );
 		}
@@ -528,7 +528,7 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Set a flag that an autocommit has taken place inside of a test method.
 	 *
-	 * @since BuddyPress (2.4.0)
+	 * @since 2.4.0
 	 */
 	public function set_autocommit_flag() {
 		$this->autocommitted = true;
@@ -537,7 +537,7 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Deactivate a component for the duration of a test.
 	 *
-	 * @since BuddyPress (2.4.0)
+	 * @since 2.4.0
 	 *
 	 * @param string $component Component name.
 	 */
@@ -550,5 +550,36 @@ class BP_UnitTestCase extends WP_UnitTestCase {
 
 		unset( buddypress()->active_components[ $component ] );
 		$this->deactivated_components[] = $component;
+	}
+
+	/**
+	 * Fake an attachment upload (doesn't actually upload a file).
+	 *
+	 * @param string $file Absolute path to valid file.
+	 * @param int $parent Optional. Post ID to attach the new post to.
+	 * @return int Attachment post ID.
+	 */
+	public function fake_attachment_upload( $file, $parent = 0 ) {
+		$mime = wp_check_filetype( $file );
+		if ( $mime ) {
+			$type = $mime['type'];
+		} else {
+			$type = '';
+		}
+
+		$url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . basename( $file );
+		$attachment = array(
+			'guid'           => 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $url,
+			'post_content'   => '',
+			'post_mime_type' => $type,
+			'post_parent'    => $parent,
+			'post_title'     => basename( $file ),
+			'post_type'      => 'attachment',
+		);
+
+		$id = wp_insert_attachment( $attachment, $url, $parent );
+		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $url ) );
+
+		return $id;
 	}
 }
