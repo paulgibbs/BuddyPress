@@ -23,7 +23,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->from( $address, $name );
 
 		$from = $email->get( 'from' );
-		$this->assertSame( $address, key( $from )] );
+		$this->assertSame( $address, key( $from ) );
 		$this->assertSame( $name, value( $from ) );
 	}
 
