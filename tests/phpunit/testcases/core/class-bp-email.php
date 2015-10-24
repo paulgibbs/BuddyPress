@@ -27,6 +27,28 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertSame( $name, current( $from ) );
 	}
 
+	public function test_valid_reply_to_with_no_name() {
+		$email = new BP_Email( 'fake_type' );
+
+		$address = 'test@example.com';
+		$email->reply_to( $address );
+
+		$reply_to = $email->get( 'reply_to' );
+		$this->assertSame( $address, key( $reply_to ) );
+		$this->assertEmpty( current( $reply_to ) );
+	}
+
+	public function test_valid_reply_to_with_name() {
+		$email = new BP_Email( 'fake_type' );
+
+		$address = 'test@example.com';
+		$name    = 'Uni Est';
+		$email->reply_to( $address, $name );
+
+		$reply_to = $email->get( 'reply_to' );
+		$this->assertSame( $address, key( $reply_to ) );
+		$this->assertSame( $name, current( $reply_to ) );
+	}
 	public function test_valid_to_with_no_name() {
 		$email = new BP_Email( 'fake_type' );
 
@@ -170,6 +192,13 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$address = 'this-is-not-an-email-address';
 		$email->from( $address );
 		$this->assertSame( $email->get( 'from' ), array() );
+	}
+
+	public function test_invalid_reply_to() {
+		$email   = new BP_Email( 'fake_type' );
+		$address = 'this-is-not-an-email-address';
+		$email->reply_to( $address );
+		$this->assertSame( $email->get( 'reply_to' ), array() );
 	}
 
 	public function test_invalid_to() {
