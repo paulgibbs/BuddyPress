@@ -2820,14 +2820,16 @@ function bp_send_email( $email_type, $to, $args ) {
 		return new WP_Error( 'email_validation', __CLASS__, $email );
 	}
 
-/*
+
+	/**
+	 * Send the email.
+	 */
+
 	$delivery_class = apply_filters( 'bp_send_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
 	if ( ! class_exists( $delivery_class ) ) {
 		return new WP_Error( 'missing_class', __CLASS__, $this );
 	}
 
-
-	// Send the email.
-	$delivery_obj = new $delivery_class();
-	$delivery_obj->bp_email( $email );*/
+	$delivery = new $delivery_class();
+	return $delivery->bp_email( $email );
 }
