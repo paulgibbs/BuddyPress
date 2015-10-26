@@ -127,7 +127,7 @@ To view and read your messages please log in and visit: %4$s
 			 */
 			$email_content = apply_filters( 'messages_notification_new_message_message', $email_content, $sender_name, $subject, $content, $message_link, $settings_link, $ud );
 
-			bp_send_email( 'djpaultodo', $email_to, $email_subject, $email_content );
+			bp_send_email( 'messages-unread', $email_to, $email_subject, $email_content );
 		}
 	}
 

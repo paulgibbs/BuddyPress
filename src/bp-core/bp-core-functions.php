@@ -2756,6 +2756,7 @@ function bp_get_email( $email_type ) {
  * @param string|array $to Array or comma-separated list of email addresses to the email to.
  * @param array $args {
  *     Array of parameters.
+ *
  *     @type array $headers Optional. Additional email headers.
  *     @type array $tokens Assocative arrays of string replacements for the email.
  * }

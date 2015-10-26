@@ -130,7 +130,7 @@ To view and respond to the message, log in and visit: %3$s
 		 */
 		$message = apply_filters( 'bp_activity_at_message_notification_message', $message, $poster_name, $content, $message_link, $settings_link );
 
-		bp_send_email( 'djpaultodo', $to, $subject, $message );
+		bp_send_email( 'activity-at-message', $to, $subject, $message );
 	}
 
 	/**
@@ -247,7 +247,7 @@ To view your original update and all comments, log in and visit: %3$s
 		 */
 		$message = apply_filters( 'bp_activity_new_comment_notification_message', $message, $poster_name, $content, $thread_link, $settings_link );
 
-		bp_send_email( 'djpaultodo', $to, $subject, $message );
+		bp_send_email( 'activity-comment', $to, $subject, $message );
 
 		/**
 		 * Fires after the sending of a reply to an update email notification.
@@ -335,7 +335,7 @@ To view the original activity, your comment and all replies, log in and visit: %
 		 */
 		$message = apply_filters( 'bp_activity_new_comment_notification_comment_author_message', $message, $poster_name, $content, $settings_link, $thread_link );
 
-		bp_send_email( 'djpaultodo', $to, $subject, $message );
+		bp_send_email( 'activity-comment-author', $to, $subject, $message );
 
 		/**
 		 * Fires after the sending of a reply to a reply email notification.
