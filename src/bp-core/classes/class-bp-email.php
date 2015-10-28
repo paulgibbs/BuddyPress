@@ -289,11 +289,11 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $html Email body. Assumed to be HTML.
+	 * @param string $body Email body. Assumed to be HTML.
 	 * @return BP_Email
 	 */
-	public function body( $html ) {
-		$this->body = apply_filters( 'bp_email_set_body', sanitize_text_field( $html ), $html, $this );
+	public function body( $body ) {
+		$this->body = apply_filters( 'bp_email_set_body', $body, $this );
 		return $this;
 	}
 
