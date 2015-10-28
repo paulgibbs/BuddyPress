@@ -38,12 +38,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array {
-	 *     Name and email address.
-	 *
-	 *     @type string $email Email address.
-	 *     @type string $name  Name.
-	 * }
+	 * @var array Associative pairing of "from" name (key) and email addresses (value).
 	 */
 	protected $from = array();
 
@@ -52,12 +47,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array {
-	 *     Name and email address.
-	 *
-	 *     @type string $email Email address.
-	 *     @type string $name  Name.
-	 * }
+	 * @var array Associative pairing of  "reply to" name (key) and email addresses (value).
 	 */
 	protected $reply_to = array();
 
@@ -66,11 +56,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array[] {
-	 *     Pairs of name and email addresses.
-	 *
-	 *     @type string $email Email address.
-	 *     @type string $name  Name.
+	 * @var array Associative pairing of "to" name (key) and email addresses (value).
 	 * }
 	 */
 	protected $to = array();
@@ -80,12 +66,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array[] {
-	 *     Pairs of name and email addresses.
-	 *
-	 *     @type string $email Email address.
-	 *     @type string $name  Name.
-	 * }
+	 * @var array Associative pairing of "cc" name (key) and email addresses (value).
 	 */
 	protected $cc = array();
 
@@ -94,12 +75,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array[] {
-	 *     Pairs of name and email addresses.
-	 *
-	 *     @type string $email Email address.
-	 *     @type string $name  Name.
-	 * }
+	 * @var array Associative pairing of "bcc" name (key) and email addresses (value).
 	 */
 	protected $bcc = array();
 
@@ -126,7 +102,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Key/value pairs of token name/value (strings).
+	 * @var array Associative pairing of token name (key) and replacement value (value).
 	 */
 	protected $tokens = array();
 
@@ -135,7 +111,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Key/value pairs of header name/values (strings).
+	 * @var array Associative pairing of email header name/value.
 	 */
 	protected $headers = array();
 
@@ -438,6 +414,8 @@ class BP_Email {
 
 	/**
 	 * Parse and sanitize email addresses.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.5.0
 	 *
