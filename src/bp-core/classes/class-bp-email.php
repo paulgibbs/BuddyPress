@@ -328,13 +328,15 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function tokens( array $tokens ) {
+		$formatted_tokens = array();
 
-		// Wrap token name in {{brackets}}.
 		foreach ( $tokens as $name => $value ) {
-			$tokens[ $name ] = '{{' . str_replace( array( '{', '}' ), '', $value ) . '}}';
+			// Wrap token name in {{brackets}}.
+			$name                      = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
+			$formatted_tokens[ $name ] = $value;
 		}
 
-		$this->tokens = apply_filters( 'bp_email_set_tokens', $tokens, $this );
+		$this->tokens = apply_filters( 'bp_email_set_tokens', $formatted_tokens, $tokens, $this );
 
 		return $this;
 	}
@@ -461,7 +463,6 @@ class BP_Email {
 	 * @param string $text
 	 * @return string
 	 */
-
 	protected function replace_tokens( $text ) {
 		$tokens = $this->get( 'tokens' );
 		foreach ( $tokens as $token => &$replacement ) {
