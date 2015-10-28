@@ -410,6 +410,8 @@ class BP_Email {
 
 	/**
 	 * Utility functions.
+	 *
+	 * Unlike other methods in this class, utility functions are not chainable.
 	 */
 
 	/**
@@ -439,6 +441,26 @@ class BP_Email {
 		}
 
 		return $addresses;
+	}
+
+	/**
+	 * Replace all tokens in the specified field with appropriate values.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $field_name Name of a class property.
+	 * @return string
+	 */
+	protected function get_and_replace_tokens( $field_name ) {
+		$text = $this->get( $field_name );
+		if ( ! $text ) {
+			return '';
+		}
+
+		$text = strtr( $text, $this->get( 'tokens' ) )
+		return apply_filters( 'bp_email_get_replace_tokens', $text, $field_name, $this );
 	}
 }
 
