@@ -2811,6 +2811,9 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	 */
 
 	$email = bp_get_email( $email_type );
+	if ( is_wp_error( $email ) ) {
+		return $email;
+	}
 
 	// From, subject, body are set automatically.
 	$email->to( $to );
