@@ -2755,15 +2755,15 @@ function bp_get_email( $email_type ) {
  * @param string $email_type Type of email being sent.
  * @param string|array $to Array or comma-separated list of email addresses to the email to.
  * @param array $args {
- *     Array of parameters.
+ *     Optional. Array of extra. parameters.
  *
  *     @type array $headers Optional. Additional email headers.
- *     @type array $tokens Assocative arrays of string replacements for the email.
+ *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
  * }
  * @return bool|WP_Error Bool if wp_mail() sent the email(s) or not.
  *         If a WP_Error is returned, there was a failure in bp_send_email().
  */
-function bp_send_email( $email_type, $to, $args ) {
+function bp_send_email( $email_type, $to, $args = array() ) {
 	static $is_default_wpmail = null;
 	static $wp_html_emails    = null;
 
