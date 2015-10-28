@@ -162,12 +162,19 @@ class BP_Tests_Email extends BP_UnitTestCase {
 	}
 
 	public function test_tokens() {
+		$original = array( 'test1' => 'hello', '{{test2}}' => 'world' );
+
 		$email = new BP_Email( 'fake_type' );
-		$email->tokens( array( 'test1', '{{test2}}' ) );
+		$email->tokens( $original );
 
 		$this->assertSame(
-			$email->get( 'tokens' ),
-			array( '{{test1}}', '{{test2}}' )
+			array( '{{test1}}', '{{test2}}' ),
+			array_keys( $email->get( 'tokens' ) )
+		);
+
+		$this->assertSame(
+			array( 'hello', 'world' ),
+			array_values( $email->get( 'tokens' ) )
 		);
 	}
 
@@ -224,9 +231,12 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 	public function test_invalid_tokens() {
 		$email = new BP_Email( 'fake_type' );
-		$email->tokens( array( 'te{st}1' ) );
+		$email->tokens( array( 'te{st}1' => 'hello world' ) );
 
-		$this->assertSame( $email->get( 'tokens' ), array( '{{test1}}' ) );
+		$this->assertSame(
+			array_keys( $email->get( 'tokens' ) ),
+			array( '{{test1}}' )
+		);
 	}
 
 	public function test_invalid_headers() {
