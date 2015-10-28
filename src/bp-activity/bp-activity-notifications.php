@@ -247,7 +247,7 @@ To view your original update and all comments, log in and visit: %3$s
 		 */
 		$message = apply_filters( 'bp_activity_new_comment_notification_message', $message, $poster_name, $content, $thread_link, $settings_link );
 
-		bp_send_email( 'activity-comment', $to, $subject, $message );
+		bp_send_email( 'activity-comment', $to );
 
 		/**
 		 * Fires after the sending of a reply to an update email notification.
