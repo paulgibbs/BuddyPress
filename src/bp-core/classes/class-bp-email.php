@@ -324,7 +324,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param array $tokens Key/value pairs of token name/value (strings).
+	 * @param array $tokens Key/value pairs of token name/value. Values are a string or a callable function.
 	 * @return BP_Email
 	 */
 	public function tokens( array $tokens ) {
@@ -371,15 +371,23 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 * @param string $property Name of property to accss.
+	 * @param string $tranform Optional. How to transform the return value.
+	 *                         Accepts 'raw' (default) or 'replace-tokens'.
 	 * @return mixed Returns null if property does not exist, otherwise the value.
 	 */
-	public function get( $property ) {
+	public function get( $property, $transform = 'raw' ) {
 		if ( ! property_exists( $this, $property ) ) {
 			return null;
 		}
 
-		$retval = apply_filters( "bp_email_get_{$property}", $this->$property, $this );
-		return apply_filters( 'bp_email_get_property', $retval, $property, $this );
+		$retval = apply_filters( "bp_email_get_{$property}", $this->$property, $property, $transform, $this );
+
+		// Replace tokens.
+		if ( $transform === 'replace-tokens' ) {
+			$retval = $this->replace_tokens( $retval );
+		}
+
+		return apply_filters( 'bp_email_get_property', $retval, $property, $transform, $this );
 	}
 
 
@@ -450,15 +458,11 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $field_name Name of a class property.
+	 * @param string $text
 	 * @return string
 	 */
-	protected function get_and_replace_tokens( $field_name ) {
-		$text = $this->get( $field_name );
-		if ( ! $text ) {
-			return '';
-		}
 
+	protected function replace_tokens( $text ) {
 		$tokens = $this->get( 'tokens' );
 		foreach ( $tokens as $token => &$replacement ) {
 			if ( is_callable( $replacement ) ) {
@@ -467,7 +471,7 @@ class BP_Email {
 		}
 
 		$text = strtr( $text, $tokens );
-		return apply_filters( 'bp_email_get_and_replace_tokens', $text, $field_name, $this );
+		return apply_filters( 'bp_email_replace_tokens', $text, $this );
 	}
 }
 
