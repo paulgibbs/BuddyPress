@@ -459,8 +459,15 @@ class BP_Email {
 			return '';
 		}
 
-		$text = strtr( $text, $this->get( 'tokens' ) )
-		return apply_filters( 'bp_email_get_replace_tokens', $text, $field_name, $this );
+		$tokens = $this->get( 'tokens' );
+		foreach ( $tokens as $token => &$replacement ) {
+			if ( is_callable( $replacement ) ) {
+				$replacement = call_user_func( $replacement );
+			}
+		}
+
+		$text = strtr( $text, $tokens );
+		return apply_filters( 'bp_email_get_and_replace_tokens', $text, $field_name, $this );
 	}
 }
 
