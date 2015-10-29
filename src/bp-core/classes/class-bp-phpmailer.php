@@ -144,6 +144,6 @@ class BP_PHPMailer implements BP_Email_Delivery {
 			return get_current_site()->domain;  // From fix_phpmailer_messageid()
 		}
 
-		return preg_replace( '^https?://', '', bp_get_option( 'home' ) );
+		return preg_replace( '#^https?://#i', '', bp_get_option( 'home' ) );
 	}
 }
