@@ -253,15 +253,16 @@ To view your original update and all comments, log in and visit: %3$s
 		 * Fires after the sending of a reply to an update email notification.
 		 *
 		 * @since 1.5.0
+		 * @since 2.4.0 Deprecated $subject and $message.
 		 *
 		 * @param int    $user_id      ID of the original activity item author.
-		 * @param string $subject      Email notification subject text.
-		 * @param string $message      Email notification message text.
+		 * @param string $subject      Deprecated. Not used.
+		 * @param string $message      Deprecated. Not used.
 		 * @param int    $comment_id   ID for the newly received comment.
 		 * @param int    $commenter_id ID of the user who made the comment.
 		 * @param array  $params       Arguments used with the original activity comment.
 		 */
-		do_action( 'bp_activity_sent_reply_to_update_email', $original_activity->user_id, $subject, $message, $comment_id, $commenter_id, $params );
+		do_action( 'bp_activity_sent_reply_to_update_email', $original_activity->user_id, '', '', $comment_id, $commenter_id, $params );
 	}
 
 	/*
@@ -341,15 +342,16 @@ To view the original activity, your comment and all replies, log in and visit: %
 		 * Fires after the sending of a reply to a reply email notification.
 		 *
 		 * @since 1.5.0
+		 * @since 2.4.0 Deprecated $subject and $message.
 		 *
 		 * @param int    $user_id      ID of the parent activity item author.
-		 * @param string $subject      Email notification subject text.
-		 * @param string $message      Email notification message text.
+		 * @param string $subject      Deprecated. Not used.
+		 * @param string $message      Deprecated. Not used.
 		 * @param int    $comment_id   ID for the newly received comment.
 		 * @param int    $commenter_id ID of the user who made the comment.
 		 * @param array  $params       Arguments used with the original activity comment.
 		 */
-		do_action( 'bp_activity_sent_reply_to_reply_email', $parent_comment->user_id, $subject, $message, $comment_id, $commenter_id, $params );
+		do_action( 'bp_activity_sent_reply_to_reply_email', $parent_comment->user_id, '', '', $comment_id, $commenter_id, $params );
 	}
 }
 
