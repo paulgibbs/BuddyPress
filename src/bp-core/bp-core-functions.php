@@ -2805,6 +2805,10 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 		return call_user_func_array( 'wp_mail', bp_core_parse_args_array( $old_args_keys, $func_args ) );
 	}
 
+	$args = bp_parse_args( $args, array(
+		'tokens' => array(),
+	), 'send_email' );
+
 
 	/**
 	 * Build the email.
