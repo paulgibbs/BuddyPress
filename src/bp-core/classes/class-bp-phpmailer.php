@@ -107,7 +107,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 
 		$headers = $email->get( 'headers' );
 		foreach ( $headers as $name => $content ) {
-			$phpmailer->AddCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
+			$phpmailer->AddCustomHeader( $name, $content );
 		}
 
 
