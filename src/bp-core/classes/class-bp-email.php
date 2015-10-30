@@ -475,19 +475,3 @@ class BP_Email {
 		return apply_filters( 'bp_email_replace_tokens', $text, $this );
 	}
 }
-
-/*
-
-$email = bp_get_email( 'new_user' );
-// subject + body set via WP_Post, but methods to override.
-$email->to( 'example@djpaul.com' );
-$email->bcc( 'your@mom.com' );
-$email->tokens( $some_kv_array );
-	$email->validate();
-
-
-$email_provider->send( $email->validate()->get_text(), 'html/plaintext' )
-->get_subject()
-*/
-
-
