@@ -1109,3 +1109,15 @@ function _bp_core_inject_bp_widget_css_class( $params ) {
 	return $params;
 }
 add_filter( 'dynamic_sidebar_params', '_bp_core_inject_bp_widget_css_class' );
+
+/**
+ * Add a custom BuddyPress header to outgoing emails.
+ *
+ * @param array $headers
+ * @return array
+ */
+function bp_core_set_default_email_headers( $headers ) {
+	$headers['X-BuddyPress'] = bp_get_version();
+	return $headers;
+}
+add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6 );
