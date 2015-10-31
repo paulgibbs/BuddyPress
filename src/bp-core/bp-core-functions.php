@@ -2618,17 +2618,20 @@ function bp_email_post_type() {
  */
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
-		'add_new'            => _x( 'Add New', 'email post type label', 'buddypress' ),
-		'add_new_item'       => _x( 'Add a New Email', 'email post type label', 'buddypress' ),
-		'all_items'          => _x( 'All Emails', 'email post type label', 'buddypress' ),
-		'edit_item'          => _x( 'Edit Email', 'email post type label', 'buddypress' ),
-		'name'               => _x( 'Emails', 'email post type name', 'buddypress' ),
-		'new_item'           => _x( 'New Email', 'email post type label', 'buddypress' ),
-		'not_found'          => _x( 'No emails found', 'email post type label', 'buddypress' ),
-		'not_found_in_trash' => _x( 'No emails found in Trash', 'email post type label', 'buddypress' ),
-		'search_items'       => _x( 'Search Emails', 'email post type label', 'buddypress' ),
-		'singular_name'      => _x( 'Email', 'email post type singular name', 'buddypress' ),
-		'view_item'          => _x( 'View Email', 'email post type label', 'buddypress' ),
+		'add_new'               => _x( 'Add New', 'email post type label', 'buddypress' ),
+		'add_new_item'          => _x( 'Add a New Email', 'email post type label', 'buddypress' ),
+		'all_items'             => _x( 'All Emails', 'email post type label', 'buddypress' ),
+		'edit_item'             => _x( 'Edit Email', 'email post type label', 'buddypress' ),
+		'filter_items_list'     => _x( 'Filter email list', 'email post type label', 'buddypress' ),
+		'items_list'            => _x( 'Email list', 'email post type label', 'buddypress' ),
+		'items_list_navigation' => _x( 'Email list navigation', 'email post type label', 'buddypress' ),
+		'name'                  => _x( 'Emails', 'email post type name', 'buddypress' ),
+		'new_item'              => _x( 'New Email', 'email post type label', 'buddypress' ),
+		'not_found'             => _x( 'No emails found', 'email post type label', 'buddypress' ),
+		'not_found_in_trash'    => _x( 'No emails found in Trash', 'email post type label', 'buddypress' ),
+		'search_items'          => _x( 'Search Emails', 'email post type label', 'buddypress' ),
+		'singular_name'         => _x( 'Email', 'email post type singular name', 'buddypress' ),
+		'view_item'             => _x( 'View Email', 'email post type label', 'buddypress' ),
 	) );
 }
 
@@ -2678,19 +2681,21 @@ function bp_email_tax_type() {
  */
 function bp_get_email_tax_type_labels() {
 	return apply_filters( 'bp_get_email_tax_type_labels', array(
-			'add_new_item'  => _x( 'New Email Type', 'email type taxonomy label', 'buddypress' ),
-			'all_items'     => _x( 'All Email Types', 'email type taxonomy label', 'buddypress' ),
-			'edit_item'     => _x( 'Edit Email Types', 'email type taxonomy label', 'buddypress' ),
-			'menu_name'     => _x( 'Types', 'email type taxonomy label', 'buddypress' ),
-			'name'          => _x( 'Email Types', 'email type taxonomy name', 'buddypress' ),
-			'new_item_name' => _x( 'New Email Type Name', 'email type taxonomy label', 'buddypress' ),
-			'not_found'     => _x( 'No email types found.', 'email type taxonomy label', 'buddypress' ),
-			'no_terms'      => _x( 'No email types', 'email type taxonomy label', 'buddypress' ),
-			'popular_items' => _x( 'Popular Email Types', 'email type taxonomy label', 'buddypress' ),
-			'search_items'  => _x( 'Search Emails', 'email type taxonomy label', 'buddypress' ),
-			'singular_name' => _x( 'Email', 'email type taxonomy singular name', 'buddypress' ),
-			'update_item'   => _x( 'Update Email Type', 'email type taxonomy label', 'buddypress' ),
-			'view_item'     => _x( 'View Email Type', 'email type taxonomy label', 'buddypress' ),
+			'add_new_item'          => _x( 'New Email Type', 'email type taxonomy label', 'buddypress' ),
+			'all_items'             => _x( 'All Email Types', 'email type taxonomy label', 'buddypress' ),
+			'edit_item'             => _x( 'Edit Email Types', 'email type taxonomy label', 'buddypress' ),
+			'items_list'            => _x( 'Email list', 'email type taxonomy label', 'buddypress' ),
+			'items_list_navigation' => _x( 'Email list navigation', 'email type taxonomy label', 'buddypress' ),
+			'menu_name'             => _x( 'Types', 'email type taxonomy label', 'buddypress' ),
+			'name'                  => _x( 'Email Types', 'email type taxonomy name', 'buddypress' ),
+			'new_item_name'         => _x( 'New Email Type Name', 'email type taxonomy label', 'buddypress' ),
+			'not_found'             => _x( 'No email types found.', 'email type taxonomy label', 'buddypress' ),
+			'no_terms'              => _x( 'No email types', 'email type taxonomy label', 'buddypress' ),
+			'popular_items'         => _x( 'Popular Email Types', 'email type taxonomy label', 'buddypress' ),
+			'search_items'          => _x( 'Search Emails', 'email type taxonomy label', 'buddypress' ),
+			'singular_name'         => _x( 'Email', 'email type taxonomy singular name', 'buddypress' ),
+			'update_item'           => _x( 'Update Email Type', 'email type taxonomy label', 'buddypress' ),
+			'view_item'             => _x( 'View Email Type', 'email type taxonomy label', 'buddypress' ),
 	) );
 }
 
