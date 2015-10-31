@@ -372,7 +372,7 @@ class BP_Email {
 	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.5.0
-	 * @param string $property Name of property to accss.
+	 * @param string $property Name of property to access.
 	 * @param string $tranform Optional. How to transform the return value.
 	 *                         Accepts 'raw' (default) or 'replace-tokens'.
 	 * @return mixed Returns null if property does not exist, otherwise the value.
