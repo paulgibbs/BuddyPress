@@ -11,11 +11,10 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Set "From" name in outgoing email to the site name.
  *
- * @uses bp_get_option() fetches the value for a meta_key in the wp_X_options table.
- *
  * @return string The blog name for the root blog.
  */
 function bp_core_email_from_name_filter() {
+	_deprecated_function( __FUNCTION__, '2.4' );
 
 	/**
 	 * Filters the "From" name in outgoing email to the site name.
