@@ -1111,13 +1111,18 @@ function _bp_core_inject_bp_widget_css_class( $params ) {
 add_filter( 'dynamic_sidebar_params', '_bp_core_inject_bp_widget_css_class' );
 
 /**
- * Add a custom BuddyPress header to outgoing emails.
+ * Add custom headers to outgoing emails.
  *
  * @param array $headers
+ * @param string $property Name of property. Unused.
+ * @param string $tranform Return value transformation. Unused.
+ * @param BP_Email $email Email object reference.
  * @return array
  */
-function bp_core_set_default_email_headers( $headers ) {
-	$headers['X-BuddyPress'] = bp_get_version();
+function bp_core_set_default_email_headers( $headers, $property, $transform, $email ) {
+	$headers['X-BuddyPress']      = bp_get_version();
+	$headers['X-BuddyPress-Type'] = $email->get( 'type' );
+
 	return $headers;
 }
-add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6 );
+add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
