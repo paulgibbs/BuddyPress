@@ -1126,3 +1126,22 @@ function bp_core_set_default_email_headers( $headers, $property, $transform, $em
 	return $headers;
 }
 add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
+
+/**
+ * Add default email tokens.
+ *
+ * @param array $tokens
+ * @param string $property Name of property. Unused.
+ * @param string $tranform Return value transformation. Unused.
+ * @param BP_Email $email Email object reference.
+ * @return array
+ */
+function bp_core_set_default_email_tokens( $tokens, $property, $transform, $email ) {
+	$tokens['{{site.admin_email}}'] = bp_get_option( 'admin_email' );
+	$tokens['{{site.description}}'] = bp_get_option( 'blogdescription' );
+	$tokens['{{site.name}}']        = bp_get_option( 'blogname' );
+	$tokens['{{site.url}}']         = home_url();
+
+	return $tokens;
+}
+add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
