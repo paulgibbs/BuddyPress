@@ -215,38 +215,6 @@ To view your original update and all comments, log in and visit: %3$s
 			$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
 		}
 
-		/**
-		 * Filters the user email that the new comment notification will be sent to.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $to User email the notification is being sent to.
-		 */
-		$to = apply_filters( 'bp_activity_new_comment_notification_to', $to );
-
-		/**
-		 * Filters the new comment notification subject that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $subject     Email notification subject text.
-		 * @param string $poster_name Name of the person who made the comment.
-		 */
-		$subject = apply_filters( 'bp_activity_new_comment_notification_subject', $subject, $poster_name );
-
-		/**
-		 * Filters the new comment notification message that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $message       Email notification message text.
-		 * @param string $poster_name   Name of the person who made the comment.
-		 * @param string $content       Content of the comment.
-		 * @param string $thread_link   URL permalink for the activity thread.
-		 * @param string $settings_link URL permalink for the user's notification settings area.
-		 */
-		$message = apply_filters( 'bp_activity_new_comment_notification_message', $message, $poster_name, $content, $thread_link, $settings_link );
-
 		bp_send_email( 'activity-comment', $to );
 
 		/**
