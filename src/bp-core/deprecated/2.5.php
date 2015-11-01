@@ -96,7 +96,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value       Email notification subject text.
 			 * @param string $poster_name Name of the person who made the comment.
 			 */
-			$value = apply_filters( 'bp_activity_new_comment_notification_subject', $value, $tokens['poster_name'] );
+			$value = apply_filters( 'bp_activity_new_comment_notification_subject', $value, $tokens['{{poster_name}}'] );
 
 		} elseif ( $property === 'body' ) {
 			/**
@@ -111,7 +111,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $thread_link   URL permalink for the activity thread.
 			 * @param string $settings_link URL permalink for the user's notification settings area.
 			 */
-			$value = apply_filters( 'bp_activity_new_comment_notification_message', $value, $tokens['poster_name'], $tokens['content'], $tokens['thread_link'], $tokens['settings_link'] );
+			$value = apply_filters( 'bp_activity_new_comment_notification_message', $value, $tokens['{{poster_name}}'], $tokens['{{content}}'], $tokens['{{thread_link}}'], $tokens['{{settings_link}}'] );
 		}
 	}
 
@@ -150,7 +150,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		'settings-verify-email-change',
 	);
 
-	remove_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
+	remove_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
 	$email_body    = $email->get( 'body' );
 	$email_subject = $email->get( 'subject' );
 	$email_type    = $email->get( 'type' );
@@ -158,7 +158,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 
 	// Backpat for pre-2.5 emails only.
 	if ( ! in_array( $email_type, $pre_2_4_emails, true ) ) {
-		add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
+		add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
 		return $value;
 	}
 
@@ -176,7 +176,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param int    $commenter_id ID of the user who made the comment.
 		 * @param array  $params       Deprecated in 2.5; now an empty array.
 		 */
-		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['original_activity.user_id'], $email_subject, $email_body, $tokens['comment_id'], $tokens['commenter_id'], array() );
+		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['{{original_activity.user_id}}'], $email_subject, $email_body, $tokens['{{comment_id}}'], $tokens['{{commenter_id}}'], array() );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
