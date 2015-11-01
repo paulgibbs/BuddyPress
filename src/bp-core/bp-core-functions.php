@@ -2762,7 +2762,6 @@ function bp_get_email( $email_type ) {
  * @param array $args {
  *     Optional. Array of extra. parameters.
  *
- *     @type array $headers Optional. Additional email headers.
  *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
  * }
  * @return bool|WP_Error Bool if the email is sent or not.
