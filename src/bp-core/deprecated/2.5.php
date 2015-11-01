@@ -179,6 +179,6 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['{{original_activity.user_id}}'], $email_subject, $email_body, $tokens['{{comment_id}}'], $tokens['{{commenter_id}}'], array() );
 	}
 
-	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
+	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
 }
-add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
+add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
