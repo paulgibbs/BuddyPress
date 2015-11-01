@@ -2846,7 +2846,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	$delivery = new $delivery_class();
 	$status   = $delivery->bp_email( $email );
 
-	do_action( 'bp_sent_email', $email, $email_type, $status );
+	do_action( 'bp_sent_email', $email, $status );
 
 	return $status;
 }
