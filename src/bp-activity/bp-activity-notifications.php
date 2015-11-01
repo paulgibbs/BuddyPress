@@ -215,7 +215,19 @@ To view your original update and all comments, log in and visit: %3$s
 			$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
 		}
 
-		bp_send_email( 'activity-comment', $to );
+		$args = array(
+			'tokens' => array(
+				'comment_id'                => $comment_id,
+				'commenter_id'              => $commenter_id,
+				'content'                   => $content,
+				'original_activity.user_id' => $original_activity->user_id,
+				'poster_name'               => $poster_name,
+				'settings_link'             => $settings_link,
+				'thread_link'               => $thread_link,
+			),
+		);
+
+		bp_send_email( 'activity-comment', $to, $args );
 	}
 
 	/*
