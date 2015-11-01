@@ -71,10 +71,11 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the new comment notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Return type changed to array.
+			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0
 			 *
-			 * @param string $value User email the notification is being sent to.
+			 * @param array $value User email the notification is being sent to.
+			 *                     Array key is email address, value is the name.
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_to', $value );
 			if ( ! is_array( $value ) ) {
