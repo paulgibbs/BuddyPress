@@ -29,7 +29,9 @@ function bp_core_email_from_name_filter() {
 }
 
 /**
- * Add support for pre-2.4 email filters.
+ * Add support for pre-2.5 email filters.
+ *
+ * @since 2.5.0
  *
  * @param mixed $value
  * @param string $property Name of property.
@@ -60,7 +62,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 	$email_type = $email->get( 'type' );
 	$tokens     = $email->get( 'tokens' );
 
-	// Backpat for pre-2.4 emails only.
+	// Backpat for pre-2.5 emails only.
 	if ( ! in_array( $email_type, $pre_2_4_emails, true ) ) {
 		return $value;
 	}
@@ -72,7 +74,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 *
 			 * @since 1.2.0
 			 * @since 2.5.0 Argument type changes from string to array.
-			 * @deprecated 2.5.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
 			 * @param array $value User email the notification is being sent to.
 			 *                     Array key is email address, value is the name.
@@ -87,7 +89,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the new comment notification subject that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
 			 * @param string $value       Email notification subject text.
 			 * @param string $poster_name Name of the person who made the comment.
@@ -99,7 +101,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the new comment notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
 			 * @param string $value         Email notification message text.
 			 * @param string $poster_name   Name of the person who made the comment.
@@ -115,3 +117,61 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 }
 add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 
+/**
+ * Add support for pre-2.5 email actions.
+ *
+ * @since 2.5.0
+ *
+ * @param BP_Email $email Email object reference.
+ * @param bool|WP_Error $delivery_status Bool if the email was sent or not.
+ *                                       If a WP_Error, there was a failure.
+ * @return mixed
+ */
+function bp_core_deprecated_email_actions( $email, $delivery_status ) {
+	$pre_2_4_emails = array(
+		'activity-at-message',
+		'activity-comment',
+		'activity-comment-author',
+		'core-user-registration',
+		'core-user-registration-validation',
+		'core-user-registration-with-blog',
+		'friends-request',
+		'friends-request-accepted',
+		'groups-at-message',
+		'groups-details-updated',
+		'groups-invitation',
+		'groups-member-promoted',
+		'groups-membership-request',
+		'groups-membership-request-accepted',
+		'messages-unread',
+		'settings-verify-email-change',
+	);
+
+	$email_body    = $email->get( 'body' );
+	$email_subject = $email->get( 'subject' );
+	$email_type    = $email->get( 'type' );
+	$tokens        = $email->get( 'tokens' );
+
+	// Backpat for pre-2.5 emails only.
+	if ( ! in_array( $email_type, $pre_2_4_emails, true ) ) {
+		return $value;
+	}
+
+	if ( $email_type === 'activity-comment' ) {
+		/**
+		 * Fires after the sending of a reply to an update email notification.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email. $params argument unset and deprecated.
+		 *
+		 * @param int    $user_id      ID of the original activity item author.
+		 * @param string $subject      Email notification subject text.
+		 * @param string $message      Email notification message text.
+		 * @param int    $comment_id   ID for the newly received comment.
+		 * @param int    $commenter_id ID of the user who made the comment.
+		 * @param array  $params       Deprecated in 2.5; now an empty array.
+		 */
+		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['original_activity.user_id'], $email_subject, $email_body, $tokens['comment_id'], $tokens['commenter_id'], array() );
+	}
+}
+add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
