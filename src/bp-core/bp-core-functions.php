@@ -2766,7 +2766,7 @@ function bp_get_email( $email_type ) {
  *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
  * }
  * @return bool|WP_Error Bool if the email is sent or not.
- *         If a WP_Error is returned, there was a failure in bp_send_email().
+ *         If a WP_Error is returned, there was a failure.
  */
 function bp_send_email( $email_type, $to, $args = array() ) {
 	static $is_default_wpmail = null;
