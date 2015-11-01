@@ -1137,7 +1137,7 @@ add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
  * @return array
  */
 function bp_core_set_default_email_tokens( $tokens, $property, $transform, $email ) {
-	$tokens['{{site.admin_email}}'] = bp_get_option( 'admin_email' );
+	$tokens['{{site.admin-email}}'] = bp_get_option( 'admin_email' );
 	$tokens['{{site.description}}'] = bp_get_option( 'blogdescription' );
 	$tokens['{{site.name}}']        = bp_get_option( 'blogname' );
 	$tokens['{{site.url}}']         = home_url();
