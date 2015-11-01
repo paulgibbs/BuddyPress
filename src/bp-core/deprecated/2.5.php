@@ -59,11 +59,13 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		'settings-verify-email-change',
 	);
 
+	remove_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 	$email_type = $email->get( 'type' );
 	$tokens     = $email->get( 'tokens' );
 
 	// Backpat for pre-2.5 emails only.
 	if ( ! in_array( $email_type, $pre_2_4_emails, true ) ) {
+		add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 		return $value;
 	}
 
@@ -113,6 +115,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		}
 	}
 
+	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 	return $value;
 }
 add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
@@ -147,6 +150,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		'settings-verify-email-change',
 	);
 
+	remove_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
 	$email_body    = $email->get( 'body' );
 	$email_subject = $email->get( 'subject' );
 	$email_type    = $email->get( 'type' );
@@ -154,6 +158,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 
 	// Backpat for pre-2.5 emails only.
 	if ( ! in_array( $email_type, $pre_2_4_emails, true ) ) {
+		add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
 		return $value;
 	}
 
@@ -173,5 +178,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 */
 		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['original_activity.user_id'], $email_subject, $email_body, $tokens['comment_id'], $tokens['commenter_id'], array() );
 	}
+
+	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
 }
 add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4 );
