@@ -197,9 +197,6 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 		$content = bp_activity_filter_kses( stripslashes($content) );
 
 		// Set up and send the message.
-		$ud      = bp_core_get_core_userdata( $original_activity->user_id );
-		$to      = $ud->user_email;
-		$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s replied to one of your updates', 'buddypress' ), $poster_name ) ) );
 		$message = sprintf( __(
 '%1$s replied to one of your updates:
 
@@ -227,7 +224,8 @@ To view your original update and all comments, log in and visit: %3$s
 			),
 		);
 
-		bp_send_email( 'activity-comment', $to, $args );
+		$recipient = get_user_by( 'id', $original_activity->user_id );
+		bp_send_email( 'activity-comment', $recipient->user_email, $args );
 	}
 
 	/*

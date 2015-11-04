@@ -524,3 +524,37 @@ function bp_core_upgrade_signups() {
 	$wpdb->query( "ALTER TABLE {$wpdb->signups} ADD signup_id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST" );
 	$wpdb->query( "ALTER TABLE {$wpdb->signups} DROP INDEX domain" );
 }
+
+/**
+ * Add default emails.
+ *
+ * @since 2.5.0
+ */
+function bp_core_install_emails() {
+	$defaults = array(
+		'post_status' => 'publish',
+		'post_type'   => bp_get_email_post_type(),
+	);
+
+	$emails = array(
+		'activity-comment' => array(
+			'post-title'   => _x( '{{poster_name}} replied to one of your updates', 'email subject', 'buddypress' ),
+			'post-content' => _x( '%1$s replied to one of your updates:<br><br>"%2$s"<br>To view your original update and all comments, log in and visit: %3$s<br>---------------------<br>', 'email subject', 'buddypress' ),
+		);
+	);
+
+	// Add these posts.
+	foreach ( $emails as $email ) {
+		foreach ( $email as $id => $args ) {
+			$_defaults = bp_parse_args( array( 'tax_input' => array( bp_get_email_tax_type() => $id ) ), $defaults );
+			$data      = bp_parse_args( $args, $_defaults, 'install_email_' . $id )
+
+			if ( empty( $data['post-excerpt'] ) ) {
+				$data['post-excerpt'] = $data['post-content'];
+			}
+
+			$debug = wp_insert_post( $data );
+			die(var_dump($debug));
+		}
+	}
+}
