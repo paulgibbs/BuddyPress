@@ -955,3 +955,41 @@ function bp_core_admin_user_spammed_js() {
 	</script>
 	<?php
 }
+
+/**
+ * Display a Customize template button in the emails post type
+ * @since 2.4.0?
+ */
+function bp_admin_email_templates_button( $editor_id ) {
+	// only for emails
+	if( get_post_type() != bp_get_email_post_type() )
+		return;
+
+	// check if we are editing or adding a new email to generate return url
+	if( isset( $_GET['post'] ) ) {
+		$return_url = add_query_arg(
+							array(
+								'post' => esc_url( $_GET['post'] ),
+								'action' => 'edit'
+							),
+							admin_url( 'post.php' )
+		);
+	} else {
+		$return_url = add_query_arg(
+			array(
+				'post_type' => bp_get_email_post_type(),
+			),
+			admin_url( 'post-new.php' )
+		);
+	}
+	// create our magic customizer link
+	$link = add_query_arg(
+		array(
+			'url'               => urlencode( site_url('/?bp_email_template=true') ),
+			'return'            => urlencode( $return_url ),
+			'bp_email_template' => 'true'
+		),
+		'customize.php'
+	);
+	echo '<a href="' . $link . '" id="insert-my-media" class="button-primary">' . __( 'Customize Email', 'buddypress' ) . '</a>';
+}

@@ -46,6 +46,8 @@ function bp_core_register_common_scripts() {
 		// 2.4
 		'bp-cover-image' => array( 'file' => "{$url}cover-image{$min}.js", 'dependencies' => array(), 'footer' => true ),
 
+		// 2.5
+		'bp-customizer-admin' => array( 'file' => "{$url}customizer-admin{$min}.js", 'dependencies' => array( 'jquery' ), 'footer' => false ),
 	) );
 
 	$version = bp_get_version();
