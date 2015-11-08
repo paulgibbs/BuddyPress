@@ -214,6 +214,7 @@ function bp_version_updater() {
         bp_core_install( $default_components );
         bp_update_option( 'bp-active-components', $default_components );
         bp_core_add_page_mappings( $default_components, 'delete' );
+		bp_core_install_emails();
 
     // Upgrades
     } else {
@@ -261,6 +262,11 @@ function bp_version_updater() {
         if ( $raw_db_version < 9615 ) {
             bp_update_to_2_3();
         }
+
+		// 2.5.0
+		if ( $raw_db_version < 10001 ) {
+			bp_update_to_2_5();
+		}
     }
 
     /** All done! *************************************************************/
@@ -482,6 +488,17 @@ function bp_update_to_2_3() {
     if ( bp_is_active( 'notifications' ) ) {
         bp_core_install_notifications();
     }
+}
+
+/**
+ * 2.5.0 update routine.
+ *
+ * - Add emails.
+ *
+ * @since 2.5.0
+ */
+function bp_update_to_2_5() {
+	bp_core_install_emails();
 }
 
 /**
