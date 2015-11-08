@@ -178,22 +178,11 @@ To view and respond to the message, log in and visit: %3$s
  * @return bool
  */
 function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 0, $params = array() ) {
-
-	// Set some default parameters.
-	$activity_id = 0;
-	$parent_id   = 0;
-
-	extract( $params );
-
-	$original_activity = new BP_Activity_Activity( $activity_id );
+	$original_activity = new BP_Activity_Activity( $params['activity_id'] );
+	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 
 	if ( $original_activity->user_id != $commenter_id && 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
-		$poster_name   = bp_core_get_user_displayname( $commenter_id );
-		$thread_link   = bp_activity_get_permalink( $activity_id );
-		$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 		$settings_link = bp_core_get_user_domain( $original_activity->user_id ) . $settings_slug . '/notifications/';
-		$poster_name   = stripslashes( $poster_name );
-		$content       = bp_activity_filter_kses( stripslashes($content) );
 
 		// Only show the disable notifications line if the settings component is enabled.
 		if ( bp_is_active( 'settings' ) ) {
@@ -204,11 +193,11 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 			'tokens' => array(
 				'comment_id'                => $comment_id,
 				'commenter_id'              => $commenter_id,
-				'content'                   => $content,
+				'content'                   => bp_activity_filter_kses( stripslashes( $content ) ),
 				'original_activity.user_id' => $original_activity->user_id,
-				'poster_name'               => $poster_name,
+				'poster_name'               => bp_core_get_user_displayname( $commenter_id ),
 				'settings_link'             => $settings_link,
-				'thread_link'               => $thread_link,
+				'thread_link'               => bp_activity_get_permalink( $params['activity_id'] ),
 			),
 		);
 
@@ -220,16 +209,15 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	 * If this is a reply to another comment, send an email notification to the
 	 * author of the immediate parent comment.
 	 */
-	if ( empty( $parent_id ) || ( $activity_id == $parent_id ) ) {
+	if ( empty( $params['parent_id'] ) || ( $params['activity_id'] == $params['parent_id'] ) ) {
 		return false;
 	}
 
-	$parent_comment = new BP_Activity_Activity( $parent_id );
+	$parent_comment = new BP_Activity_Activity( $params['parent_id'] );
 
 	if ( $parent_comment->user_id != $commenter_id && $original_activity->user_id != $parent_comment->user_id && 'no' != bp_get_user_meta( $parent_comment->user_id, 'notification_activity_new_reply', true ) ) {
 		$poster_name   = bp_core_get_user_displayname( $commenter_id );
-		$thread_link   = bp_activity_get_permalink( $activity_id );
-		$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
+		$thread_link   = bp_activity_get_permalink( $params['activity_id'] );
 		$settings_link = bp_core_get_user_domain( $parent_comment->user_id ) . $settings_slug . '/notifications/';
 
 		// Set up and send the message.
