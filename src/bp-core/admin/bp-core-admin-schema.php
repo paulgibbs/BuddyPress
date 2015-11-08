@@ -538,23 +538,24 @@ function bp_core_install_emails() {
 
 	$emails = array(
 		'activity-comment' => array(
-			'post-title'   => _x( '{{poster_name}} replied to one of your updates', 'email subject', 'buddypress' ),
-			'post-content' => _x( "{{poster_name}}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email subject', 'buddypress' ),
-		);
+			'post_title'   => _x( '{{poster_name}} replied to one of your updates', 'email subject', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email subject', 'buddypress' ),
+		)
 	);
 
 	// Add these posts.
-	foreach ( $emails as $email ) {
-		foreach ( $email as $id => $args ) {
-			$_defaults = bp_parse_args( array( 'tax_input' => array( bp_get_email_tax_type() => $id ) ), $defaults );
-			$data      = bp_parse_args( $args, $_defaults, 'install_email_' . $id )
+	foreach ( $emails as $id => $email ) {
+		$_defaults = bp_parse_args( array( 'tax_input' => array( bp_get_email_tax_type() => $id ) ), $defaults );
+		$data      = bp_parse_args( $email, $_defaults, 'install_email_' . $id );
 
-			if ( empty( $data['post-excerpt'] ) ) {
-				$data['post-excerpt'] = $data['post-content'];
-			}
-
-			$debug = wp_insert_post( $data );
-			die(var_dump($debug));
+		// Non-HTML email text.
+		if ( empty( $data['post-excerpt'] ) ) {
+			$data['post_excerpt'] = $data['post_content'];
 		}
+
+		// HTML email text.
+		$data['post_content'] = wpautop( $data['post_content'] );
+
+		wp_insert_post( $data );
 	}
 }
