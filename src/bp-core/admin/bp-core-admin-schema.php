@@ -539,7 +539,7 @@ function bp_core_install_emails() {
 	$emails = array(
 		'activity-comment' => array(
 			'post-title'   => _x( '{{poster_name}} replied to one of your updates', 'email subject', 'buddypress' ),
-			'post-content' => _x( '%1$s replied to one of your updates:<br><br>"%2$s"<br>To view your original update and all comments, log in and visit: %3$s<br>---------------------<br>', 'email subject', 'buddypress' ),
+			'post-content' => _x( "{{poster_name}}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email subject', 'buddypress' ),
 		);
 	);
 

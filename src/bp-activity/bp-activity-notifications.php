@@ -192,20 +192,8 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 		$thread_link   = bp_activity_get_permalink( $activity_id );
 		$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 		$settings_link = bp_core_get_user_domain( $original_activity->user_id ) . $settings_slug . '/notifications/';
-
-		$poster_name = stripslashes( $poster_name );
-		$content = bp_activity_filter_kses( stripslashes($content) );
-
-		// Set up and send the message.
-		$message = sprintf( __(
-'%1$s replied to one of your updates:
-
-"%2$s"
-
-To view your original update and all comments, log in and visit: %3$s
-
----------------------
-', 'buddypress' ), $poster_name, $content, $thread_link );
+		$poster_name   = stripslashes( $poster_name );
+		$content       = bp_activity_filter_kses( stripslashes($content) );
 
 		// Only show the disable notifications line if the settings component is enabled.
 		if ( bp_is_active( 'settings' ) ) {
