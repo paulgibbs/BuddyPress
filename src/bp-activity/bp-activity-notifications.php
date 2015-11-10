@@ -151,6 +151,7 @@ To view and respond to the message, log in and visit: %3$s
  * Send email and BP notifications when an activity item receives a comment.
  *
  * @since 1.2.0
+ * @since 2.5.0 Updated to use new email APIs.
  *
  * @uses bp_get_user_meta()
  * @uses bp_core_get_user_displayname()
@@ -182,21 +183,10 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	$settings_slug     = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 
 	if ( $original_activity->user_id != $commenter_id && 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
-		$settings_link = bp_core_get_user_domain( $original_activity->user_id ) . $settings_slug . '/notifications/';
-
-		// Only show the disable notifications line if the settings component is enabled.
-		if ( bp_is_active( 'settings' ) ) {
-			$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-		}
-
-
 		remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
-
 		/** This filter is documented in bp-activity/bp-activity-template.php */
-		$ccontent = apply_filters( 'bp_get_activity_content_body', $content );
-
+		$content = apply_filters( 'bp_get_activity_content_body', $content );
 		add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
-
 
 		$args = array(
 			'tokens' => array(
@@ -205,7 +195,6 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 				'content'                   => $content,
 				'original_activity.user_id' => $original_activity->user_id,
 				'poster_name'               => bp_core_get_user_displayname( $commenter_id ),
-				'settings_link'             => $settings_link,
 				'thread_link'               => bp_activity_get_permalink( $params['activity_id'] ),
 			),
 		);
@@ -227,7 +216,6 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	if ( $parent_comment->user_id != $commenter_id && $original_activity->user_id != $parent_comment->user_id && 'no' != bp_get_user_meta( $parent_comment->user_id, 'notification_activity_new_reply', true ) ) {
 		$poster_name   = bp_core_get_user_displayname( $commenter_id );
 		$thread_link   = bp_activity_get_permalink( $params['activity_id'] );
-		$settings_link = bp_core_get_user_domain( $parent_comment->user_id ) . $settings_slug . '/notifications/';
 
 		// Set up and send the message.
 		$ud       = bp_core_get_core_userdata( $parent_comment->user_id );
@@ -246,11 +234,6 @@ To view the original activity, your comment and all replies, log in and visit: %
 
 ---------------------
 ', 'buddypress' ), $poster_name, $content, $thread_link );
-
-		// Only show the disable notifications line if the settings component is enabled.
-		if ( bp_is_active( 'settings' ) ) {
-			$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-		}
 
 		/**
 		 * Filters the user email that the new comment reply notification will be sent to.
