@@ -93,11 +93,6 @@ To view and respond to the message, log in and visit: %3$s
 ', 'buddypress' ), $poster_name, $content, $message_link );
 		}
 
-		// Only show the disable notifications line if the settings component is enabled.
-		if ( bp_is_active( 'settings' ) ) {
-			$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-		}
-
 		/**
 		 * Filters the user email that the @mention notification will be sent to.
 		 *

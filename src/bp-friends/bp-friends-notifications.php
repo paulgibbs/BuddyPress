@@ -52,11 +52,6 @@ To view %3$s\'s profile: %4$s
 ---------------------
 ', 'buddypress' ), $initiator_name, $all_requests_link, $initiator_name, $initiator_link );
 
-	// Only show the disable notifications line if the settings component is enabled
-	if ( bp_is_active( 'settings' ) ) {
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-	}
-
 	/**
 	 * Filters the email address for who is getting the friend request.
 	 *
@@ -140,11 +135,6 @@ To view %2$s\'s profile: %3$s
 
 ---------------------
 ', 'buddypress' ), $friend_name, $friend_name, $friend_link );
-
-	// Only show the disable notifications line if the settings component is enabled
-	if ( bp_is_active( 'settings' ) ) {
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-	}
 
 	/**
 	 * Filters the email address for whose friend request got accepted.

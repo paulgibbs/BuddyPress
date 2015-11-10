@@ -87,8 +87,6 @@ To view the group: %3$s
 ---------------------
 ', 'buddypress' ), $group->name, $changed_text, $group_link );
 
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-
 		/**
 		 * Filters the user email that the group update notification will be sent to.
 		 *
@@ -224,11 +222,6 @@ To view %4$s\'s profile: %5$s
 ', 'buddypress' ), $requesting_user_name, $group->name, $group_requests, $requesting_user_name, $profile_link );
 	}
 
-	// Only show the disable notifications line if the settings component is enabled
-	if ( bp_is_active( 'settings' ) ) {
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-	}
-
 	/**
 	 * Filters the user email that the group membership request will be sent to.
 	 *
@@ -343,11 +336,6 @@ To submit another request please log in and visit: %2$s
 ', 'buddypress' ), $group->name, $group_link );
 	}
 
-	// Only show the disable notifications line if the settings component is enabled
-	if ( bp_is_active( 'settings' ) ) {
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-	}
-
 	/**
 	 * Filters the user email that the group membership request result will be sent to.
 	 *
@@ -448,11 +436,6 @@ To view the group please visit: %3$s
 
 ---------------------
 ', 'buddypress' ), $promoted_to, $group->name, $group_link );
-
-	// Only show the disable notifications line if the settings component is enabled
-	if ( bp_is_active( 'settings' ) ) {
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-	}
 
 	/**
 	 * Filters the user email that the group promotion notification will be sent to.
@@ -564,11 +547,6 @@ To view %5$s\'s profile visit: %6$s
 
 ---------------------
 ', 'buddypress' ), $inviter_name, $group->name, $invites_link, $group_link, $inviter_name, $inviter_link );
-
-	// Only show the disable notifications line if the settings component is enabled
-	if ( bp_is_active( 'settings' ) ) {
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
-	}
 
 	/**
 	 * Filters the user email that the group invite notification will be sent to.
