@@ -179,7 +179,7 @@ To view and respond to the message, log in and visit: %3$s
  */
 function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 0, $params = array() ) {
 	$original_activity = new BP_Activity_Activity( $params['activity_id'] );
-	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
+	$settings_slug     = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 
 	if ( $original_activity->user_id != $commenter_id && 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
 		$settings_link = bp_core_get_user_domain( $original_activity->user_id ) . $settings_slug . '/notifications/';
@@ -189,11 +189,20 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 			$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'buddypress' ), $settings_link );
 		}
 
+
+		remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+
+		/** This filter is documented in bp-activity/bp-activity-template.php */
+		$ccontent = apply_filters( 'bp_get_activity_content_body', $content );
+
+		add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+
+
 		$args = array(
 			'tokens' => array(
 				'comment_id'                => $comment_id,
 				'commenter_id'              => $commenter_id,
-				'content'                   => bp_activity_filter_kses( stripslashes( $content ) ),
+				'content'                   => $content,
 				'original_activity.user_id' => $original_activity->user_id,
 				'poster_name'               => bp_core_get_user_displayname( $commenter_id ),
 				'settings_link'             => $settings_link,
