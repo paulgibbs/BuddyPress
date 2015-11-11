@@ -39,107 +39,47 @@ defined( 'ABSPATH' ) || exit;
  * @param int $receiver_user_id The ID of the user who is receiving the update.
  */
 function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) {
-
-	// Don't leave multiple notifications for the same activity item.
 	$notifications = BP_Core_Notification::get_all_for_user( $receiver_user_id, 'all' );
 
+	// Don't leave multiple notifications for the same activity item.
 	foreach( $notifications as $notification ) {
 		if ( $activity_id == $notification->item_id ) {
 			return;
 		}
 	}
 
-	$activity = new BP_Activity_Activity( $activity_id );
+	$activity     = new BP_Activity_Activity( $activity_id );
+	$email_type   = 'activity-at-message';
+	$group_name   = '';
+	$message_link = bp_activity_get_permalink( $activity_id );
+	$poster_name  = bp_core_get_user_displayname( $activity->user_id );
 
-	$subject = '';
-	$message = '';
-	$content = '';
+	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+	/** This filter is documented in bp-activity/bp-activity-template.php */
+	$content = apply_filters( 'bp_get_activity_content_body', $activity->content );
+	add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 
 	// Now email the user with the contents of the message (if they have enabled email notifications).
 	if ( 'no' != bp_get_user_meta( $receiver_user_id, 'notification_activity_new_mention', true ) ) {
-		$poster_name = bp_core_get_user_displayname( $activity->user_id );
-
-		$message_link  = bp_activity_get_permalink( $activity_id );
-		$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-		$settings_link = bp_core_get_user_domain( $receiver_user_id ) . $settings_slug . '/notifications/';
-
-		$poster_name = stripslashes( $poster_name );
-		$content = bp_activity_filter_kses( strip_tags( stripslashes( $activity->content ) ) );
-
-		// Set up and send the message.
-		$ud       = bp_core_get_core_userdata( $receiver_user_id );
-		$to       = $ud->user_email;
-		$subject  = bp_get_email_subject( array( 'text' => sprintf( __( '%s mentioned you in an update', 'buddypress' ), $poster_name ) ) );
-
 		if ( bp_is_active( 'groups' ) && bp_is_group() ) {
-			$message = sprintf( __(
-'%1$s mentioned you in the group "%2$s":
-
-"%3$s"
-
-To view and respond to the message, log in and visit: %4$s
-
----------------------
-', 'buddypress' ), $poster_name, bp_get_current_group_name(), $content, $message_link );
-		} else {
-			$message = sprintf( __(
-'%1$s mentioned you in an update:
-
-"%2$s"
-
-To view and respond to the message, log in and visit: %3$s
-
----------------------
-', 'buddypress' ), $poster_name, $content, $message_link );
+			$email_type = 'groups-at-message';
+			$group_name = bp_get_current_group_name();
 		}
 
-		/**
-		 * Filters the user email that the @mention notification will be sent to.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $to User email the notification is being sent to.
-		 */
-		$to 	 = apply_filters( 'bp_activity_at_message_notification_to', $to );
+		$args = array(
+			'tokens' => array(
+				'activity'         => $activity,
+				'content'          => $content,
+				'group_name'       => $group_name,
+				'message_link'     => $message_link,
+				'poster_name'      => $poster_name,
+				'receiver_user_id' => $receiver_user_id,
+			),
+		);
 
-		/**
-		 * Filters the @mention notification subject that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $subject     Email notification subject text.
-		 * @param string $poster_name Name of the person who made the @mention.
-		 */
-		$subject = apply_filters( 'bp_activity_at_message_notification_subject', $subject, $poster_name );
-
-		/**
-		 * Filters the @mention notification message that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $message       Email notification message text.
-		 * @param string $poster_name   Name of the person who made the @mention.
-		 * @param string $content       Content of the @mention.
-		 * @param string $message_link  URL permalink for the activity message.
-		 * @param string $settings_link URL permalink for the user's notification settings area.
-		 */
-		$message = apply_filters( 'bp_activity_at_message_notification_message', $message, $poster_name, $content, $message_link, $settings_link );
-
-		bp_send_email( 'activity-at-message', $to, $subject, $message );
+		$recipient = get_user_by( 'id', $receiver_user_id );
+		bp_send_email( $email_type, $recipient->user_email, $args );
 	}
-
-	/**
-	 * Fires after the sending of an @mention email notification.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param BP_Activity_Activity $activity         Activity Item object.
-	 * @param string               $subject          Email notification subject text.
-	 * @param string               $message          Email notification message text.
-	 * @param string               $content          Content of the @mention.
-	 * @param int                  $receiver_user_id The ID of the user who is receiving the update.
-	 */
-	do_action( 'bp_activity_sent_mention_email', $activity, $subject, $message, $content, $receiver_user_id );
 }
 
 /**
@@ -175,7 +115,6 @@ To view and respond to the message, log in and visit: %3$s
  */
 function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 0, $params = array() ) {
 	$original_activity = new BP_Activity_Activity( $params['activity_id'] );
-	$settings_slug     = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 	$poster_name       = bp_core_get_user_displayname( $commenter_id );
 	$thread_link       = bp_activity_get_permalink( $params['activity_id'] );
 
