@@ -176,27 +176,30 @@ To view and respond to the message, log in and visit: %3$s
 function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 0, $params = array() ) {
 	$original_activity = new BP_Activity_Activity( $params['activity_id'] );
 	$settings_slug     = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
+	$poster_name       = bp_core_get_user_displayname( $commenter_id );
+	$thread_link       = bp_activity_get_permalink( $params['activity_id'] );
+
+	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+	/** This filter is documented in bp-activity/bp-activity-template.php */
+	$content = apply_filters( 'bp_get_activity_content_body', $params['content'] );
+	add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 
 	if ( $original_activity->user_id != $commenter_id && 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
-		remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
-		/** This filter is documented in bp-activity/bp-activity-template.php */
-		$content = apply_filters( 'bp_get_activity_content_body', $content );
-		add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
-
 		$args = array(
 			'tokens' => array(
 				'comment_id'                => $comment_id,
 				'commenter_id'              => $commenter_id,
 				'content'                   => $content,
 				'original_activity.user_id' => $original_activity->user_id,
-				'poster_name'               => bp_core_get_user_displayname( $commenter_id ),
-				'thread_link'               => bp_activity_get_permalink( $params['activity_id'] ),
+				'poster_name'               => $poster_name,
+				'thread_link'               => $thread_link,
 			),
 		);
 
 		$recipient = get_user_by( 'id', $original_activity->user_id );
 		bp_send_email( 'activity-comment', $recipient->user_email, $args );
 	}
+
 
 	/*
 	 * If this is a reply to another comment, send an email notification to the
@@ -209,74 +212,19 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	$parent_comment = new BP_Activity_Activity( $params['parent_id'] );
 
 	if ( $parent_comment->user_id != $commenter_id && $original_activity->user_id != $parent_comment->user_id && 'no' != bp_get_user_meta( $parent_comment->user_id, 'notification_activity_new_reply', true ) ) {
-		$poster_name   = bp_core_get_user_displayname( $commenter_id );
-		$thread_link   = bp_activity_get_permalink( $params['activity_id'] );
+		$args = array(
+			'tokens' => array(
+				'comment_id'             => $comment_id,
+				'commenter_id'           => $commenter_id,
+				'content'                => $content,
+				'parent_comment.user_id' => $parent_comment->user_id,
+				'poster_name'            => $poster_name,
+				'thread_link'            => $thread_link,
+			),
+		);
 
-		// Set up and send the message.
-		$ud       = bp_core_get_core_userdata( $parent_comment->user_id );
-		$to       = $ud->user_email;
-		$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s replied to one of your comments', 'buddypress' ), $poster_name ) ) );
-
-		$poster_name = stripslashes( $poster_name );
-		$content = bp_activity_filter_kses( stripslashes( $content ) );
-
-$message = sprintf( __(
-'%1$s replied to one of your comments:
-
-"%2$s"
-
-To view the original activity, your comment and all replies, log in and visit: %3$s
-
----------------------
-', 'buddypress' ), $poster_name, $content, $thread_link );
-
-		/**
-		 * Filters the user email that the new comment reply notification will be sent to.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $to User email the notification is being sent to.
-		 */
-		$to = apply_filters( 'bp_activity_new_comment_notification_comment_author_to', $to );
-
-		/**
-		 * Filters the new comment reply notification subject that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $subject     Email notification subject text.
-		 * @param string $poster_name Name of the person who made the comment reply.
-		 */
-		$subject = apply_filters( 'bp_activity_new_comment_notification_comment_author_subject', $subject, $poster_name );
-
-		/**
-		 * Filters the new comment reply notification message that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $message       Email notification message text.
-		 * @param string $poster_name   Name of the person who made the comment reply.
-		 * @param string $content       Content of the comment reply.
-		 * @param string $settings_link URL permalink for the user's notification settings area.
-		 * @param string $thread_link   URL permalink for the activity thread.
-		 */
-		$message = apply_filters( 'bp_activity_new_comment_notification_comment_author_message', $message, $poster_name, $content, $settings_link, $thread_link );
-
-		bp_send_email( 'activity-comment-author', $to, $subject, $message );
-
-		/**
-		 * Fires after the sending of a reply to a reply email notification.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param int    $user_id      ID of the parent activity item author.
-		 * @param string $subject      Email notification subject text.
-		 * @param string $message      Email notification message text.
-		 * @param int    $comment_id   ID for the newly received comment.
-		 * @param int    $commenter_id ID of the user who made the comment.
-		 * @param array  $params       Arguments used with the original activity comment.
-		 */
-		do_action( 'bp_activity_sent_reply_to_reply_email', $parent_comment->user_id, $subject, $message, $comment_id, $commenter_id, $params );
+		$recipient = get_user_by( 'id', $parent_comment->user_id );
+		bp_send_email( 'activity-comment-author', $recipient->user_email, $args );
 	}
 }
 

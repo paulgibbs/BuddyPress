@@ -539,8 +539,12 @@ function bp_core_install_emails() {
 	$emails = array(
 		'activity-comment' => array(
 			'post_title'   => _x( '{{poster_name}} replied to one of your updates', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email subject', 'buddypress' ),
-		)
+			'post_content' => _x( "{{poster_name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email body', 'buddypress' ),
+		),
+		'activity-comment-author' => array(
+			'post_title'   => _x( '{{poster_name}} replied to one of your comments', 'email subject', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo view the original activity, your comment and all replies, log in and visit: {{thread_link}}", 'email body', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.
