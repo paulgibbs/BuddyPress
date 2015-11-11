@@ -264,7 +264,7 @@ function bp_version_updater() {
         }
 
 		// 2.5.0
-		if ( $raw_db_version < 10003 ) {
+		if ( $raw_db_version < 10005 ) {
 			bp_update_to_2_5();
 		}
     }
