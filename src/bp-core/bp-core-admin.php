@@ -162,6 +162,9 @@ class BP_Admin {
 		// On non-multisite, catch
 		add_action( 'load-users.php', 'bp_core_admin_user_manage_spammers' );
 
+		// Add a button next to Add media in emails post types
+		add_action('media_buttons',  'bp_admin_email_templates_button');
+
 		/** Filters ***********************************************************/
 
 		// Add link to settings page
