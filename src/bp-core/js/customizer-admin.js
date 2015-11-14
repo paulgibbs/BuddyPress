@@ -14,7 +14,7 @@
             $.ajax({
                 url     : ajaxurl,
                 data    : { action: 'bp_mailtpl_send_email' }
-            }).done(function(data) {
+            }).done(function() {
                 $('#bp_mailtpl-spinner').fadeOut();
                 $('#bp_mailtpl-success').fadeIn().delay(3000).fadeOut();
             });
