@@ -957,23 +957,27 @@ function bp_core_admin_user_spammed_js() {
 }
 
 /**
- * Display a Customize template button in the emails post type
- * @since 2.4.0?
+ * Add a "customize" button to the emails screen in wp-admin.
+ *
+ * @since 2.5.0
+ *
+ * @param string $editor_id Unique editor identifier, e.g. 'content'.
  */
 function bp_admin_email_templates_button( $editor_id ) {
-	// only for emails
-	if( get_post_type() != bp_get_email_post_type() )
+	if ( get_post_type() !== bp_get_email_post_type() ) {
 		return;
+	}
 
-	// check if we are editing or adding a new email to generate return url
-	if( isset( $_GET['post'] ) ) {
+	// Are we editing or adding a new email?
+	if ( isset( $_GET['post'] ) ) {
 		$return_url = add_query_arg(
-							array(
-								'post' => esc_url( $_GET['post'] ),
-								'action' => 'edit'
-							),
-							admin_url( 'post.php' )
+			array(
+				'action' => 'edit',
+				'post'   => (int) $_GET['post'],
+			),
+			admin_url( 'post.php' )
 		);
+
 	} else {
 		$return_url = add_query_arg(
 			array(
@@ -982,14 +986,19 @@ function bp_admin_email_templates_button( $editor_id ) {
 			admin_url( 'post-new.php' )
 		);
 	}
-	// create our magic customizer link
+
 	$link = add_query_arg(
 		array(
-			'url'               => urlencode( site_url('/?bp_email_template=true') ),
-			'return'            => urlencode( $return_url ),
-			'bp_email_template' => 'true'
+			'bp_email_template' => 'true',  // djpaultodo Make integer?
+			'return'            => rawurlencode( $return_url ),
+			'url'               => rawurlencode( home_url( '/?bp_email_template=true' ) ),  // djpaultodo Check this?
 		),
-		'customize.php'
+		admin_url( 'customize.php' )
 	);
-	echo '<a href="' . $link . '" id="insert-my-media" class="button-primary">' . __( 'Customize Email', 'buddypress' ) . '</a>';
+
+	printf(
+		'<a href="%s" id="insert-my-media" class="button-primary">%s</a>',
+		esc_url( $link ),
+		esc_html( _x( 'Customize Email', 'Emails admin button label', 'buddypress' ) )
+	);
 }
