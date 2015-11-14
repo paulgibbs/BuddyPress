@@ -10,7 +10,7 @@
 	wp.customize( 'bp_mailtpl_opts[header_logo]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#logo a' ).html( '<img src="'+newval+'" alt="logo"/>' );
+				$( '#logo a' ).html( '<img src="' + newval + '">' );
 			} else {
 				$( '#logo a' ).html( '' );
 			}
@@ -44,7 +44,7 @@
 	wp.customize( 'bp_mailtpl_opts[header_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#logo' ).css( 'font-size', newval +'px' );
+				$( '#logo' ).css( 'font-size', newval + 'px' );
 			}
 		});
 	});
@@ -68,7 +68,7 @@
 	wp.customize( 'bp_mailtpl_opts[body_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#bp_mailtpl_body' ).css( 'font-size', newval +'px' );
+				$( '#bp_mailtpl_body' ).css( 'font-size', newval + 'px' );
 			}
 		});
 	});
@@ -115,7 +115,7 @@
 
 	wp.customize( 'bp_mailtpl_opts[footer_text]', function( value ) {
 		value.bind(function( newval ) {
-			$( '#credit' ).html( newval );
+			$( '#credit' ).text( newval );
 		});
 	});
 })( jQuery );
