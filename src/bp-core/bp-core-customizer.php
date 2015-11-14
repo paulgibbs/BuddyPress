@@ -576,14 +576,6 @@ function bp_core_customizer_load_template(){
 	$css        = bp_core_customizer_get_styles();
 	$content    = bp_core_customizer_get_template();
 
-	try {
-		// apply CSS styles inline for picky email clients
-		$emogrifier = new Emogrifier( $content, $css );
-		$content = $emogrifier->emogrify();
-
-	} catch ( Exception $e ) {
-
-	}
 	echo $content;
 	exit();
 }
