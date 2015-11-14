@@ -18,8 +18,8 @@ function bp_core_add_email_customizer_actions() {
 	if( !isset( $_GET['bp_email_template'] ) )
 		return;
 
-	add_action( 'customize_controls_enqueue_scripts',  'bp_core_customizer_enqueue_scripts' );
-	add_action( 'customize_preview_init',  'bp_core_customizer_enqueue_template_scripts', 99 );
+	add_action( 'customize_controls_enqueue_scripts', 'bp_core_customizer_enqueue_scripts' );
+	add_action( 'customize_preview_init', 'bp_core_customizer_enqueue_template_scripts' );
 	add_action( 'bp_init', 'bp_core_customizer_remove_all_actions', 99 );
 
 }
@@ -29,18 +29,22 @@ add_action( 'bp_init', 'bp_core_add_email_customizer_actions', 10 );
  * Admin js needed for customizer
  */
 function bp_core_customizer_enqueue_scripts() {
+	$bp  = buddypress();
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$url = $bp->plugin_url . 'bp-core/js/';
+
 	wp_enqueue_script( 'bp-customizer-admin' );
+	wp_enqueue_style( 'bp-mailtpl-css', "{$url}../admin/css/bp-mailtpl-admin{$min}.css", array(), bp_get_version() );
 }
 /**
  * Front js needed for customizer
  */
-function bp_core_customizer_enqueue_template_scripts(){
-
+function bp_core_customizer_enqueue_template_scripts() {
+	$bp  = buddypress();
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	$url = buddypress()->plugin_url . 'bp-core/js/';
+	$url = $bp->plugin_url . 'bp-core/js/';
 
-	wp_enqueue_script( 'bp-customizer-front', "{$url}customizer-front{$min}.js", array( 'jquery', 'customize-preview' ), bp_get_version() );
-	//TODO wp_enqueue_style( 'bp_mailtpl-css', $bp->plugin_url . '/admin/css/bp_mailtpl-admin.css', '', $this->version, false );
+	wp_enqueue_script( 'bp-customizer-front', "{$url}customizer-front{$min}.js", array( 'customize-preview' ), bp_get_version() );
 }
 
 /**
@@ -51,6 +55,7 @@ function bp_core_customizer_remove_all_actions() {
 
 	$exceptions = array(
 		'bp-customizer-front',
+		'bp-mailtpl-css',
 		'jquery',
 		'query-monitor',
 		'bp-customizer-admin',

@@ -10,9 +10,9 @@ class WP_Send_Mail_Customize_Control extends WP_Customize_Control {
 
 		?><li id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class ); ?>">
 			<label>
-				<button class="button button-primary " id="bp_mailtpl-send_mail" tabindex="0"><?php _e( 'Send', 'buddypress' ); ?></button>
-				<img id="bp_mailtpl-spinner" src="<?php echo admin_url('images/spinner.gif');?>" alt="" style="display:none;"/>
-				<span id="bp_mailtpl-success" style="display:none;"><?php _e( 'Email sent!', 'buddypress');?></span>
+				<button class="button button-primary " id="bp-mailtpl-send_mail" tabindex="0"><?php _e( 'Send', 'buddypress' ); ?></button>
+				<img id="bp-mailtpl-spinner" src="<?php echo admin_url('images/spinner.gif');?>" alt="" style="display:none;"/>
+				<span id="bp-mailtpl-success" style="display:none;"><?php _e( 'Email sent!', 'buddypress');?></span>
 				<?php if ( ! empty( $this->description ) ) : ?>
 					<p><span class="description customize-control-description"><?php echo $this->description; ?></span></p>
 				<?php endif; ?>
