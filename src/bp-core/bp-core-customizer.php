@@ -144,7 +144,8 @@ function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customiz
 
 
 	$controls = bp_core_customizer_get_controls();
-	require dirname( __FILE__ ) . '/classes/class-font-size-customize-control.php';
+
+	require dirname( __FILE__ ) . '/classes/class-bp-customize-control-font-size.php';
 	require dirname( __FILE__ ) . '/classes/class-send-mail-customize-control.php';
 
 	// Add controls
@@ -446,7 +447,7 @@ function bp_core_customizer_get_controls() {
 		),
 
 		'bp_mailtpl_header_text_size' => array(
-			'class'       => 'WP_Font_Size_Customize_Control',
+			'class'       => 'BP_Customize_Control_Font_Size',
 			'label'       => __( 'Text size', 'buddypress' ),
 			'type'        => 'bp_mailtpl_send_mail',
 			'section'     => 'section_bp_mailtpl_header',
@@ -471,7 +472,7 @@ function bp_core_customizer_get_controls() {
 		),
 
 		'bp_mailtpl_body_text_size' => array(
-			'class'       => 'WP_Font_Size_Customize_Control',
+			'class'       => 'BP_Customize_Control_Font_Size',
 			'label'       => __( 'Text size', 'buddypress' ),
 			'type'        => 'bp_mailtpl_send_mail',
 			'section'     => 'section_bp_mailtpl_body',
@@ -521,7 +522,7 @@ function bp_core_customizer_get_controls() {
 		),
 
 		'bp_mailtpl_footer_text_size' => array(
-			'class'       => 'WP_Font_Size_Customize_Control',
+			'class'       => 'BP_Customize_Control_Font_Size',
 			'label'       => __( 'Text size', 'buddypress' ),
 			'type'        => 'bp_mailtpl_send_mail',
 			'section'     => 'section_bp_mailtpl_footer',
