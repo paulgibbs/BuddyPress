@@ -1,8 +1,16 @@
 <?php
 /**
- * BuddyPress email template
+ * BuddyPress email template.
+ *
+ * @since 2.5.0
+ *
+ * @package BuddyPress
+ * @subpackage Core
  */
-if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
 $settings       = get_option('bp_mailtpl_opts', bp_core_customizer_get_defaults() );
 ?>
 

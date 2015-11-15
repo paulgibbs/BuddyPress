@@ -1,9 +1,15 @@
 <?php
 /**
- * Bp Email Template Css rules
- * Rules will be merged with our template usimg emogrifier library
+ * BuddyPress email template CSS rules.
+ *
+ * @since 2.5.0
+ *
+ * @package BuddyPress
+ * @subpackage Core
  */
-if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 $settings       = get_option('bp_mailtpl_opts', bp_core_customizer_get_defaults() );
 $border_radius  = $settings['template'] == 'boxed' ? '6px' : '0px';
