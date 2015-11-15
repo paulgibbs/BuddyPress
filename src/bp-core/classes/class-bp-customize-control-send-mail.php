@@ -1,5 +1,15 @@
 <?php
-class WP_Send_Mail_Customize_Control extends WP_Customize_Control {
+/**
+ * BuddyPress Customize controls.
+ *
+ * @package BuddyPress
+ * @subpackage Core
+ */
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
+class BP_Customize_Control_Send_Mail extends WP_Customize_Control {
 	public $type = 'bp_mailtpl_send_mail';
 	/**
 	 * Render the control's content.

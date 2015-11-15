@@ -146,7 +146,7 @@ function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customiz
 	$controls = bp_core_customizer_get_controls();
 
 	require dirname( __FILE__ ) . '/classes/class-bp-customize-control-font-size.php';
-	require dirname( __FILE__ ) . '/classes/class-send-mail-customize-control.php';
+	require dirname( __FILE__ ) . '/classes/class-bp-customize-control-send-mail.php';
 
 	// Add controls
 	foreach( $controls as $control_id => $args ) {
