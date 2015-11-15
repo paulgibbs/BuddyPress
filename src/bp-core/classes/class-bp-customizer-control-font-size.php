@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.5.0
  */
-class BP_Customize_Control_Font_Size extends WP_Customize_Control {
+class BP_Customizer_Control_Font_Size extends WP_Customize_Control {
 	/**
 	 * @var string
 	 */
@@ -32,6 +32,7 @@ class BP_Customize_Control_Font_Size extends WP_Customize_Control {
 		?><li id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class ); ?>">
 			<label>
 				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+				waffle
 				<div class="font_value"><?php echo esc_attr( $this->value() ); ?></div><!-- djpaultodo: can this esc_html? -->
 				<input <?php $this->link(); ?> type="range" min="1" max="100" step="1" value="<?php echo esc_attr( $this->value() ); ?>" class="bp_mailtpl_range" />
 
