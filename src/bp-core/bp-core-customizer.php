@@ -637,7 +637,7 @@ add_action( 'template_redirect', 'bp_core_customizer_load_template');
  */
 function bp_core_customizer_get_styles() {
 	ob_start();
-	bp_locate_template( array( 'emails/bp-email-css.php', 'bp-email-css.php' ), true );
+	bp_locate_template( array( 'assets/emails/bp-email-css.php', 'bp-email-css.php' ), true );
 
 	return apply_filters( 'bp_core_customizer_get_styles', ob_get_clean() );
 }
@@ -651,7 +651,7 @@ function bp_core_customizer_get_styles() {
  */
 function bp_core_customizer_get_template(){
 	ob_start();
-	bp_locate_template( array( 'emails/bp-email.php', 'bp-email.php' ), true );
+	bp_locate_template( array( 'assets/emails/bp-email.php', 'bp-email.php' ), true );
 
 	return apply_filters( 'bp_core_customizer_get_styles', ob_get_clean() );
 }
