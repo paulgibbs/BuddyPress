@@ -145,7 +145,7 @@ function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customiz
 
 	$controls = bp_core_customizer_get_controls();
 
-	require dirname( __FILE__ ) . '/classes/class-bp-customizer-control-font-size.php';
+	require dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
 
 	// Add controls
 	foreach( $controls as $control_id => $args ) {
@@ -446,9 +446,8 @@ function bp_core_customizer_get_controls() {
 		),
 
 		'bp_mailtpl_header_text_size' => array(
-			'class'       => 'BP_Customizer_Control_Font_Size',
+			'class'       => 'BP_Customizer_Control_Range',
 			'label'       => __( 'Text size', 'buddypress' ),
-			'type'        => 'bp_mailtpl_font_size',
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_mailtpl_opts[header_text_size]',
 			'description' => __( 'Slide to change text size', 'buddypress' )
@@ -471,9 +470,8 @@ function bp_core_customizer_get_controls() {
 		),
 
 		'bp_mailtpl_body_text_size' => array(
-			'class'       => 'BP_Customizer_Control_Font_Size',
+			'class'       => 'BP_Customizer_Control_Range',
 			'label'       => __( 'Text size', 'buddypress' ),
-			'type'        => 'bp_mailtpl_font_size',
 			'section'     => 'section_bp_mailtpl_body',
 			'settings'    => 'bp_mailtpl_opts[body_text_size]',
 			'description' => __( 'Slide to change text size', 'buddypress' )
@@ -521,9 +519,8 @@ function bp_core_customizer_get_controls() {
 		),
 
 		'bp_mailtpl_footer_text_size' => array(
-			'class'       => 'BP_Customizer_Control_Font_Size',
+			'class'       => 'BP_Customizer_Control_Range',
 			'label'       => __( 'Text size', 'buddypress' ),
-			'type'        => 'bp_mailtpl_font_size',
 			'section'     => 'section_bp_mailtpl_footer',
 			'settings'    => 'bp_mailtpl_opts[footer_text_size]',
 			'description' => __( 'Slide to change text size', 'buddypress' )
