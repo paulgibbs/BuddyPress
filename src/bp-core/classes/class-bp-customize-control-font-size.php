@@ -1,6 +1,6 @@
 <?php
 /**
- * BuddyPress Customize controls.
+ * Core component class.
  *
  * @package BuddyPress
  * @subpackage Core
@@ -9,11 +9,19 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * BuddyPress Customizer font size control.
+ *
+ * @since 2.5.0
+ */
 class BP_Customize_Control_Font_Size extends WP_Customize_Control {
+	/**
+	 * @var string
+	 */
 	public $type = 'bp_mailtpl_font_size';
 
 	/**
-	 * Render the control's content.
+	 * Render the control.
 	 *
 	 * @since 2.5.0
 	 */
@@ -30,6 +38,7 @@ class BP_Customize_Control_Font_Size extends WP_Customize_Control {
 				<?php if ( ! empty( $this->description ) ) : ?>
 					<p><span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span></p>
 				<?php endif; ?>
+
 			</label>
 		</li><?php
 	}
