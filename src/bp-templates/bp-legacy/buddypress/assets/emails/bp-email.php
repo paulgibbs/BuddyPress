@@ -88,6 +88,6 @@ $settings = get_option( 'bp_mailtpl_opts', bp_core_customizer_get_defaults() );
 				</td>
 			</tr>
 		</table>
-	</div>
+	</div><?php if ( is_customize_preview() ) wp_footer(); ?>
 </body>
 </html>
