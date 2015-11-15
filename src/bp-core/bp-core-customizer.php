@@ -33,9 +33,10 @@ add_action( 'bp_init', 'bp_core_add_email_customizer_actions', 10 );
  * @since 2.5.0
  */
 function bp_core_customizer_enqueue_template_scripts() {
+	// djpaultodo: This is called after wp_loaded (see WP_Customize_Manager->wp_loaded) which is way early before our script registration functions.
 	$bp  = buddypress();
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	$url = $bp->plugin_url . 'bp-core/js/';
+	$url = $bp->plugin_url . 'bp-core/js/../admin/js/';
 
 	wp_enqueue_script( 'bp-customizer-front', "{$url}customizer-front{$min}.js", array( 'customize-preview' ), bp_get_version() );
 }
