@@ -21,6 +21,16 @@ class BP_Customizer_Control_Range extends WP_Customize_Control {
 	public $type = 'range';
 
 	/**
+	 * Enqueue scripts/styles for the color picker.
+	 *
+	 * @since 2.5.0
+	 */
+	public function enqueue() {
+		wp_enqueue_script( 'bp-customizer-admin' );
+		wp_enqueue_style( 'bp-customizer' );
+	}
+
+	/**
 	 * Render the control.
 	 *
 	 * @since 2.5.0

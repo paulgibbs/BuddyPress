@@ -22,25 +22,10 @@ function bp_core_add_email_customizer_actions() {
 		return;
 	}
 
-	add_action( 'customize_controls_enqueue_scripts', 'bp_core_customizer_enqueue_scripts' );
 	add_action( 'customize_preview_init', 'bp_core_customizer_enqueue_template_scripts' );
 	add_action( 'bp_init', 'bp_core_customizer_remove_all_actions', 99 );
 }
 add_action( 'bp_init', 'bp_core_add_email_customizer_actions', 10 );
-
-/**
- * Customizer admin scripts.
- *
- * @since 2.5.0
- */
-function bp_core_customizer_enqueue_scripts() {
-	$bp  = buddypress();
-	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	$url = $bp->plugin_url . 'bp-core/js/';
-
-	wp_enqueue_script( 'bp-customizer-admin' );
-	wp_enqueue_style( 'bp-mailtpl-css', "{$url}../admin/css/bp-mailtpl-admin{$min}.css", array(), bp_get_version() );
-}
 
 /**
  * Customizer front-end scripts.
