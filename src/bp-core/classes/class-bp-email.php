@@ -139,6 +139,9 @@ class BP_Email {
 
 		} elseif ( php_uname( 'n' ) !== false ) {
 			$sitename = php_uname( 'n' );
+
+		} else {
+			$sitename = 'localhost.localdomain';
 		}
 
 
