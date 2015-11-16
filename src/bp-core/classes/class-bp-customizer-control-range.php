@@ -26,7 +26,7 @@ class BP_Customizer_Control_Range extends WP_Customize_Control {
 	 * @since 2.5.0
 	 */
 	public function enqueue() {
-		wp_enqueue_script( 'bp-customizer-admin' );
+		wp_enqueue_script( 'bp-customizer-controls' );
 		wp_enqueue_style( 'bp-customizer' );
 	}
 

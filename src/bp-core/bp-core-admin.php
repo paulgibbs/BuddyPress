@@ -963,8 +963,8 @@ class BP_Admin {
 		 */
 		$scripts = apply_filters( 'bp_core_admin_register_scripts', array(
 			// 2.5
-			'bp-customizer-admin' => array(
-				'file'         => "{$url}customizer-admin{$min}.js",
+			'bp-customizer-controls' => array(
+				'file'         => "{$url}customizer-controls{$min}.js",
 				'dependencies' => array( 'jquery' ),
 				'footer'       => true,
 			),

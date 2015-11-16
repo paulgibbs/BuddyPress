@@ -50,7 +50,7 @@ function bp_core_customizer_remove_all_actions() {
 	global $wp_filter, $wp_scripts, $wp_styles;
 
 	$exceptions = array(
-		'bp-customizer-admin',
+		'bp-customizer-controls',
 		'bp-customizer-front',
 		'bp-mailtpl-css',
 		'customize-controls',
