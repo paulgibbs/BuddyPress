@@ -1,9 +1,14 @@
+/**
+ * Implementation details for BP Customizer controls.
+ *
+ * If you're looking to add JS for a specific Customizer panel or a control implementation,
+ * don't do it here.
+ */
+
 (function( $ ) {
 	$( window ).load(function() {
-		wp.customize.panel( 'bp_mailtpl' ).focus();
 
-		// djpaultodo: move this into a universal/shared file, or move the above into something email-specific.
-		// Range slider
+		// Range control
 		$( '.customize-control-range input' ).on( 'input', function() {
 			var val = $( this ).val();
 			$( this ).parent().find( '.range-value' ).html( val );
