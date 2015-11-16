@@ -38,7 +38,7 @@ function bp_core_customizer_enqueue_template_scripts() {
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	$url = $bp->plugin_url . 'bp-core/js/../admin/js/';
 
-	wp_enqueue_script( 'bp-customizer-front', "{$url}customizer-front{$min}.js", array( 'customize-preview' ), bp_get_version() );
+	wp_enqueue_script( 'bp-customizer-emails', "{$url}customizer-emails{$min}.js", array( 'customize-preview' ), bp_get_version() );
 }
 
 /**
@@ -51,7 +51,7 @@ function bp_core_customizer_remove_all_actions() {
 
 	$exceptions = array(
 		'bp-customizer-controls',
-		'bp-customizer-front',
+		'bp-customizer-emails',
 		'bp-mailtpl-css',
 		'customize-controls',
 		'customize-preview',

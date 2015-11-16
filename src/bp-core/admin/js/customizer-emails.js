@@ -1,3 +1,10 @@
+/**
+ * Customizer implementation for Email.
+ *
+ * If you're looking to add JS for every instance of a control, don't add it here.
+ * The file only implements the Customizer controls for Emails.
+ */
+
 (function( $ ) {
 	wp.customize( 'bp_mailtpl_opts[body_bg]', function( value ) {
 		value.bind(function( newval ) {

@@ -1,8 +1,8 @@
 /**
- * Implementation details for BP Customizer controls.
+ * Customizer controls implementation.
  *
- * If you're looking to add JS for a specific Customizer panel or a control implementation,
- * don't do it here.
+ * If you're looking to add JS for a specific panel or control, don't add it here.
+ * The file only implements generic Customizer control implementations.
  */
 
 (function( $ ) {
