@@ -23,7 +23,6 @@ function bp_core_add_email_customizer_actions() {
 	}
 
 	add_action( 'customize_preview_init', 'bp_core_customizer_enqueue_template_scripts' );
-	add_action( 'bp_init', 'bp_core_customizer_remove_all_actions', 99 );
 }
 add_action( 'bp_init', 'bp_core_add_email_customizer_actions', 10 );
 
@@ -39,61 +38,6 @@ function bp_core_customizer_enqueue_template_scripts() {
 	$url = $bp->plugin_url . 'bp-core/js/../admin/js/';
 
 	wp_enqueue_script( 'bp-customizer-emails', "{$url}customizer-emails{$min}.js", array( 'customize-preview' ), bp_get_version() );
-}
-
-/**
- * Remove all actions and filters, apart from ones involved in displaying the email.
- *
- * @since 2.5.0
- */
-function bp_core_customizer_remove_all_actions() {
-	global $wp_filter, $wp_scripts, $wp_styles;
-
-	$exceptions = array(
-		'bp-customizer-controls',
-		'bp-customizer-emails',
-		'bp-mailtpl-css',
-		'customize-controls',
-		'customize-preview',
-		'jquery',
-		'query-monitor',
-	);
-
-	if ( is_object( $wp_scripts ) && isset( $wp_scripts->queue ) && is_array( $wp_scripts->queue ) ) {
-		foreach( $wp_scripts->queue as $handle ) {
-			if ( in_array( $handle, $exceptions, true ) ) {
-				continue;
-			}
-
-			wp_dequeue_script( $handle );
-		}
-	}
-
-	if ( is_object( $wp_styles ) && isset( $wp_styles->queue ) && is_array( $wp_styles->queue ) ) {
-		foreach( $wp_styles->queue as $handle ) {
-			if ( in_array( $handle, $exceptions, true ) ) {
-				continue;
-			}
-
-			wp_dequeue_style( $handle );
-		}
-	}
-
-	// Now remove actions
-	$action_exceptions = array(
-		'wp_admin_bar_render',
-		'wp_print_footer_scripts',
-	);
-
-	remove_all_actions( 'wp_header' );
-
-	foreach( $wp_filter['wp_footer'] as $priority => $handle ) {
-		if ( in_array( key( $handle ), $action_exceptions ) ) {
-			continue;
-		}
-
-		unset( $wp_filter['wp_footer'][ $priority ] );
-	}
 }
 
 /**
