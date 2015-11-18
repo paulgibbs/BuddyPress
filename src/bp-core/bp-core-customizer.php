@@ -111,10 +111,6 @@ add_action( 'customize_section_active', 'bp_core_customizer_remove_sections', 10
  */
 function bp_core_customizer_get_sections() {
 	return apply_filters( 'bp_core_customizer_get_sections', array(
-		'section_bp_mailtpl_settings' => array(
-			'title' => __( 'Settings', 'buddypress' ),
-			'panel' => 'bp_mailtpl',
-		),
 		'section_bp_mailtpl_template' => array(
 			'title' => __( 'Template', 'buddypress' ),
 			'panel' => 'bp_mailtpl',
@@ -131,10 +127,6 @@ function bp_core_customizer_get_sections() {
 			'title' => __( 'Footer', 'buddypress' ),
 			'panel' => 'bp_mailtpl',
 		),
-		'section_bp_mailtpl_test' =>  array(
-			'title' => __( 'Send test email', 'buddypress' ),
-			'panel' => 'bp_mailtpl',
-		)
 	) );
 }
 
