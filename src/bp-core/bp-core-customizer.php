@@ -376,7 +376,12 @@ function bp_core_customizer_get_controls() {
 			'label'       => __( 'Text size', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_mailtpl_opts[header_text_size]',
-			'description' => __( 'Slide to change text size', 'buddypress' )
+			'description' => __( 'Slide to change text size', 'buddypress' ),
+			'input_attrs' => array(
+				'max'  => 100,
+				'min'  => 1,
+				'step' => 1,
+			),
 		),
 
 		'bp_mailtpl_header_text_color' => array(
@@ -400,7 +405,12 @@ function bp_core_customizer_get_controls() {
 			'label'       => __( 'Text size', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_body',
 			'settings'    => 'bp_mailtpl_opts[body_text_size]',
-			'description' => __( 'Slide to change text size', 'buddypress' )
+			'description' => __( 'Slide to change text size', 'buddypress' ),
+			'input_attrs' => array(
+				'max'  => 100,
+				'min'  => 1,
+				'step' => 1,
+			),
 		),
 
 		'bp_mailtpl_body_text_color' => array(
@@ -449,7 +459,12 @@ function bp_core_customizer_get_controls() {
 			'label'       => __( 'Text size', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_footer',
 			'settings'    => 'bp_mailtpl_opts[footer_text_size]',
-			'description' => __( 'Slide to change text size', 'buddypress' )
+			'description' => __( 'Slide to change text size', 'buddypress' ),
+			'input_attrs' => array(
+				'max'  => 100,
+				'min'  => 1,
+				'step' => 1,
+			),
 		),
 
 		'bp_mailtpl_footer_text_color' => array(

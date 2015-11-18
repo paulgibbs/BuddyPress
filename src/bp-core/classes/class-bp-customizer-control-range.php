@@ -46,7 +46,7 @@ class BP_Customizer_Control_Range extends WP_Customize_Control {
 				</label>
 			<?php endif; ?>
 
-			<input type="range" id="<?php echo esc_attr( "{$id}-range" ); ?>" <?php $this->link(); $this->input_attrs(); ?> min="1" max="100" step="1" value="<?php echo esc_attr( $this->value() ); ?>" />
+			<input type="range" id="<?php echo esc_attr( "{$id}-range" ); ?>" <?php $this->link(); $this->input_attrs(); ?> value="<?php echo esc_attr( $this->value() ); ?>" />
 			<output for="<?php echo esc_attr( "{$id}-range" ); ?>"><?php echo esc_html( $this->value() ); ?></output>
 
 			<?php if ( $this->description ) : ?>
