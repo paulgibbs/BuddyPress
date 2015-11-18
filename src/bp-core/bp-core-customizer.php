@@ -48,16 +48,14 @@ function bp_core_customizer_enqueue_template_scripts() {
  * @param WP_Customize_Manager $wp_customize
  */
 function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customize ) {
-
 	$wp_customize->add_panel( 'bp_mailtpl', array(
-		'title'         => __( 'Email Templates', 'buddypress' ),
 		'description'   => __( 'Customize the look of your BuddyPress emails', 'buddypress' ),
+		'title'         => __( 'Email Templates', 'buddypress' ),
 	) );
 
 
-	$sections = bp_core_customizer_get_sections();
-
 	// Add sections
+	$sections = bp_core_customizer_get_sections();
 	foreach( $sections as $section_id => $args ) {
 		$wp_customize->add_section( $section_id, $args );
 	}
@@ -65,19 +63,17 @@ function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customiz
 	do_action( 'bp_core_customizer_register_sections', $wp_customize, $sections );
 
 
-	$settings = bp_core_customizer_get_settings();
-
 	// Add settings
+	$settings = bp_core_customizer_get_settings();
 	foreach( $settings as $setting_id => $args ) {
 		$wp_customize->add_setting( $setting_id, $args );
 	}
 
 
-	$controls = bp_core_customizer_get_controls();
-
 	require dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
 
 	// Add controls
+	$controls = bp_core_customizer_get_controls();
 	foreach( $controls as $control_id => $args ) {
 		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );  // djpaultodo is this 5.2 compat?
 	}
@@ -157,7 +153,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['from_name'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_text_field',
 			'sanitize_js_callback' => '',
 		),
@@ -165,7 +161,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['from_email'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_text_field',
 			'sanitize_js_callback' => '',
 		),
@@ -173,7 +169,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['template'],
 			'transport'            => 'refresh',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_templates',
 			'sanitize_js_callback' => '',
 		),
@@ -181,7 +177,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['body_bg'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'sanitize_js_callback' => '',
 		),
@@ -189,7 +185,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => '',
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => '',
 			'sanitize_js_callback' => '',
 		),
@@ -197,7 +193,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => '',
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
 			'sanitize_js_callback' => '',
 		),
@@ -205,7 +201,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['header_aligment'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_alignment',
 			'sanitize_js_callback' => '',
 		),
@@ -213,7 +209,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['header_bg'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'sanitize_js_callback' => '',
 		),
@@ -221,7 +217,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['header_text_size'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
 			'sanitize_js_callback' => '',
 		),
@@ -229,7 +225,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['header_text_color'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'sanitize_js_callback' => '',
 		),
@@ -237,7 +233,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['email_body_bg'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'sanitize_js_callback' => '',
 		),
@@ -245,7 +241,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['body_text_size'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
 			'sanitize_js_callback' => '',
 		),
@@ -253,7 +249,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['body_text_color'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'sanitize_js_callback' => '',
 		),
@@ -261,7 +257,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['footer_text'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
 			'sanitize_js_callback' => '',
 		),
@@ -269,7 +265,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['footer_aligment'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_alignment',
 			'sanitize_js_callback' => '',
 		),
@@ -277,7 +273,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['footer_bg'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'sanitize_js_callback' => '',
 		),
@@ -285,7 +281,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['footer_text_size'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
 			'sanitize_js_callback' => '',
 		),
@@ -293,7 +289,7 @@ function bp_core_customizer_get_settings() {
 			'type'                 => 'option',
 			'default'              => $defaults['footer_text_color'],
 			'transport'            => 'postMessage',
-			'capability'           => 'edit_theme_options',
+			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'sanitize_js_callback' => '',
 		)
