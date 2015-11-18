@@ -53,24 +53,18 @@ function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customiz
 		'title'         => __( 'Email Templates', 'buddypress' ),
 	) );
 
-
-	// Add sections
 	$sections = bp_core_customizer_get_sections();
 	foreach( $sections as $section_id => $args ) {
 		$wp_customize->add_section( $section_id, $args );
 	}
 
-	do_action( 'bp_core_customizer_register_sections', $wp_customize, $sections );
-
-
-	// Add settings
 	$settings = bp_core_customizer_get_settings();
 	foreach( $settings as $setting_id => $args ) {
 		$wp_customize->add_setting( $setting_id, $args );
 	}
 
-
 	require dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
+	do_action( 'bp_core_customizer_register_sections', $wp_customize, $sections );
 
 	// Add controls
 	$controls = bp_core_customizer_get_controls();
