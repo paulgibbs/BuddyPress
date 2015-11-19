@@ -14,30 +14,27 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Initialise Customizer scripts.
  *
- * @since 2.5.0
- */
-function bp_core_add_email_customizer_actions() {
-	if ( ! is_customize_preview() || ! isset( $_GET['bp_customizer'] ) || $_GET['bp_customizer'] !== 'email' ) ) {
-		return;
-	}
-
-	add_action( 'customize_preview_init', 'bp_core_customizer_enqueue_template_scripts' );
-}
-add_action( 'bp_init', 'bp_core_add_email_customizer_actions', 10 );
-
-/**
- * Customizer front-end scripts.
+ * Scripts can't be registered in {@link bp_core_register_common_styles} etc because Customizer loads very, very early.
  *
  * @since 2.5.0
  */
-function bp_core_customizer_enqueue_template_scripts() {
-	// djpaultodo: This is called after wp_loaded (see WP_Customize_Manager->wp_loaded) which is way early before our script registration functions.
+function bp_core_add_email_customizer_actions() {
+	if ( ! isset( $_GET['bp_customizer'] ) || $_GET['bp_customizer'] !== 'email' ) {
+		return;
+	}
+
 	$bp  = buddypress();
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	$url = $bp->plugin_url . 'bp-core/js/../admin/js/';
 
-	wp_enqueue_script( 'bp-customizer-emails', "{$url}customizer-emails{$min}.js", array( 'customize-preview' ), bp_get_version() );
+	// Emails
+	wp_enqueue_script(
+		'bp-customizer-emails',
+		"{$bp->plugin_url}/bp-core/admin/js/customizer-emails{$min}.js",
+		array( 'customize-preview' ),
+		bp_get_version()
+	);
 }
+add_action( 'customize_preview_init', 'bp_core_add_email_customizer_actions', 10 );
 
 /**
  * Register Customizer settings for Emails.
