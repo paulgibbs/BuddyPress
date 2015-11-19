@@ -17,8 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 2.5.0
  */
 function bp_core_add_email_customizer_actions() {
-	// djpaultodo: Figure out a better way to do this?
-	if ( ! isset( $_GET['bp_email_template'] ) ) {
+	if ( ! is_customize_preview() || ! isset( $_GET['bp_customizer'] ) || $_GET['bp_customizer'] !== 'email' ) ) {
 		return;
 	}
 
@@ -84,12 +83,8 @@ add_action( 'customize_register', 'bp_core_customizer_register_sections' );
  * @return bool
  */
 function bp_core_customizer_remove_sections( $active, $section ) {
-	if ( isset( $_GET['bp_email_template'] ) ) {
-		if ( in_array( $section->id, array_keys( bp_core_customizer_get_sections() ), true ) ) {
-			return true;
-		}
-
-		return false;
+	if ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) {
+		return in_array( $section->id, array_keys( bp_core_customizer_get_sections() ), true );
 	}
 
 	return true;
@@ -558,7 +553,7 @@ function bp_sanitize_customizer_aligment( $input ) {
  * @since 2.5.0
  */
 function bp_core_customizer_load_template() {
-	if ( ! is_customize_preview() || ! ( isset( $_GET['bp_email_template'] ) && 'true' === $_GET['bp_email_template'] ) ) {
+	if ( ! is_customize_preview() || ! ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) ) {
 		return;
 	}
 

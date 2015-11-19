@@ -957,7 +957,7 @@ function bp_core_admin_user_spammed_js() {
 }
 
 /**
- * Add a "customize" button to the emails screen in wp-admin.
+ * Add a "customize" button to the emails post type in wp-admin.
  *
  * @since 2.5.0
  *
@@ -989,9 +989,9 @@ function bp_admin_email_templates_button( $editor_id ) {
 
 	$link = add_query_arg(
 		array(
-			'bp_email_template' => 'true',  // djpaultodo Make integer?
-			'return'            => rawurlencode( $return_url ),
-			'url'               => rawurlencode( home_url( '/?bp_email_template=true' ) ),  // djpaultodo Check this?
+			'bp_customizer' => 'email',
+			'return'        => rawurlencode( $return_url ),
+			'url'           => rawurlencode( home_url( '/?bp_customizer=email' ) ),  // djpaultodo Check this?
 		),
 		admin_url( 'customize.php' )
 	);
