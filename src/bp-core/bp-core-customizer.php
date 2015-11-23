@@ -12,38 +12,13 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Initialise Customizer scripts.
- *
- * Scripts can't be registered in {@link bp_core_register_common_styles} etc because Customizer loads very, very early.
- *
- * @since 2.5.0
- */
-function bp_core_add_email_customizer_actions() {
-	if ( ! isset( $_GET['bp_customizer'] ) || $_GET['bp_customizer'] !== 'email' ) {
-		return;
-	}
-
-	$bp  = buddypress();
-	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
-	// Emails
-	wp_enqueue_script(
-		'bp-customizer-emails',
-		"{$bp->plugin_url}/bp-core/admin/js/customizer-emails{$min}.js",
-		array( 'customize-preview' ),
-		bp_get_version()
-	);
-}
-add_action( 'customize_preview_init', 'bp_core_add_email_customizer_actions', 10 );
-
-/**
  * Register Customizer settings for Emails.
  *
  * @since 2.5.0
  *
  * @param WP_Customize_Manager $wp_customize
  */
-function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customize ) {
+function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	$wp_customize->add_panel( 'bp_mailtpl', array(
 		'description'   => __( 'Customize the look of your BuddyPress emails', 'buddypress' ),
 		'title'         => __( 'Email Templates', 'buddypress' ),
@@ -68,7 +43,7 @@ function bp_core_customizer_register_sections( WP_Customize_Manager $wp_customiz
 		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );  // djpaultodo is this 5.2 compat?
 	}
 }
-add_action( 'customize_register', 'bp_core_customizer_register_sections' );
+add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
 
 /**
  * Tidy up the Customizer by removing all the default WP sections.

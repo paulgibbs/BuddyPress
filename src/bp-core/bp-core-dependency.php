@@ -228,6 +228,44 @@ function bp_init() {
 }
 
 /**
+ * Fire the 'bp_customize_register' action when the Customizer has loaded,
+ * allowing scripts and styles to be initialized.
+ *
+ * @since 2.5.0
+ *
+ * @param WP_Customize_Manager $customizer Customizer instance.
+ */
+function bp_customize_register( WP_Customize_Manager $customizer ) {
+
+	/**
+	 * Fires once the Customizer has loaded, allow scripts and styles to be initialized.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param WP_Customize_Manager $customizer Customizer instance.
+	 */
+	do_action( 'bp_customize_register', $customizer );
+
+	if ( ! empty( $_GET['bp_customizer'] ) ) {
+		$action    = sanitize_text_field( $_GET['bp_customizer'] );
+		$whitelist = apply_filters( 'bp_customize_actions', array( 'email' ), $customizer );
+
+		if ( ! in_array( $action, $whitelist, true ) ) {
+			return;
+		}
+
+		/**
+		 * Fires once the Customizer has loaded, allow scripts and styles to be initialized.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param WP_Customize_Manager $customizer Customizer instance.
+		 */
+		do_action( "bp_customize_register_for_{$action}", $customizer );
+	}
+}
+
+/**
  * Fire the 'bp_loaded' action, which fires after BP's core plugin files have been loaded.
  *
  * Attached to 'plugins_loaded'.
