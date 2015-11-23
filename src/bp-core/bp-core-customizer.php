@@ -40,7 +40,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	// Add controls
 	$controls = bp_email_get_customizer_controls();
 	foreach( $controls as $control_id => $args ) {
-		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );  // djpaultodo is this 5.2 compat?
+		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );
 	}
 
 
