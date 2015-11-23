@@ -24,12 +24,12 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 		'title'         => __( 'Email Templates', 'buddypress' ),
 	) );
 
-	$sections = bp_core_customizer_get_sections();
+	$sections = bp_email_get_customizer_sections();
 	foreach( $sections as $section_id => $args ) {
 		$wp_customize->add_section( $section_id, $args );
 	}
 
-	$settings = bp_core_customizer_get_settings();
+	$settings = bp_email_get_customizer_settings();
 	foreach( $settings as $setting_id => $args ) {
 		$wp_customize->add_setting( $setting_id, $args );
 	}
@@ -38,7 +38,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	do_action( 'bp_core_customizer_register_sections', $wp_customize, $sections );
 
 	// Add controls
-	$controls = bp_core_customizer_get_controls();
+	$controls = bp_email_get_customizer_controls();
 	foreach( $controls as $control_id => $args ) {
 		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );  // djpaultodo is this 5.2 compat?
 	}
@@ -72,14 +72,14 @@ add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
  * @param WP_Customize_Section $section {@see WP_Customize_Section} instance.
  * @return bool
  */
-function bp_core_customizer_remove_sections( $active, $section ) {
+function bp_email_remove_customizer_sections( $active, $section ) {
 	if ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) {
-		return in_array( $section->id, array_keys( bp_core_customizer_get_sections() ), true );
+		return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
 	}
 
 	return true;
 }
-add_action( 'customize_section_active', 'bp_core_customizer_remove_sections', 10, 2 );
+add_action( 'customize_section_active', 'bp_email_remove_customizer_sections', 10, 2 );
 
 /**
  * Define available sections for the Customizer.
@@ -88,8 +88,8 @@ add_action( 'customize_section_active', 'bp_core_customizer_remove_sections', 10
  *
  * @return array
  */
-function bp_core_customizer_get_sections() {
-	return apply_filters( 'bp_core_customizer_get_sections', array(
+function bp_email_get_customizer_sections() {
+	return apply_filters( 'bp_email_get_customizer_sections', array(
 		'section_bp_mailtpl_template' => array(
 			'title' => __( 'Template', 'buddypress' ),
 			'panel' => 'bp_mailtpl',
@@ -116,8 +116,8 @@ function bp_core_customizer_get_sections() {
  *
  * @return array
  */
-function bp_core_customizer_get_settings() {
-	$defaults = bp_core_customizer_get_defaults();
+function bp_email_get_customizer_settings() {
+	$defaults = bp_email_get_customizer_defaults();
 
 	$settings = array(
 		'bp_mailtpl_opts[from_name]' => array(
@@ -266,7 +266,7 @@ function bp_core_customizer_get_settings() {
 		)
 	);
 
-	return apply_filters( 'bp_core_customizer_get_settings', $settings );
+	return apply_filters( 'bp_email_get_customizer_settings', $settings );
 }
 
 /**
@@ -276,7 +276,7 @@ function bp_core_customizer_get_settings() {
  *
  * @return array
  */
-function bp_core_customizer_get_controls() {
+function bp_email_get_customizer_controls() {
 	$controls = array(
 		'bp_mailtpl_template' => array(
 			'class'       => 'WP_Customize_Control',
@@ -447,7 +447,7 @@ function bp_core_customizer_get_controls() {
 		)
 	);
 
-	return apply_filters( 'bp_core_customizer_get_controls', $controls );
+	return apply_filters( 'bp_email_get_customizer_controls', $controls );
 }
 
 /**
@@ -457,7 +457,7 @@ function bp_core_customizer_get_controls() {
  *
  * @return array
  */
-function bp_core_customizer_get_defaults() {
+function bp_email_get_customizer_defaults() {
 	$defaults = array(
 		'from_name'         => get_bloginfo( 'name' ),
 		'from_email'        => get_bloginfo( 'admin_email' ),
@@ -477,8 +477,12 @@ function bp_core_customizer_get_defaults() {
 		'body_text_color'   => '#222',
 	);
 
-	return apply_filters( 'bp_core_customizer_get_defaults', $defaults );
+	return apply_filters( 'bp_email_get_customizer_defaults', $defaults );
 }
+
+
+
+
 
 /**
  * Sanitize callback for template select.
@@ -537,23 +541,31 @@ function bp_sanitize_customizer_aligment( $input ) {
 	}
 }
 
+
+
+
+
+
+
+
+
 /**
  * Load template in the customizer before WordPress template is included
  *
  * @since 2.5.0
  */
-function bp_core_customizer_load_template() {
+function bp_email_customizer_load_template() {
 	if ( ! is_customize_preview() || ! ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) ) {
 		return;
 	}
 
-	$css     = bp_core_customizer_get_styles();
-	$content = bp_core_customizer_get_template();
+	$css     = bp_email_get_customizer_styles();
+	$content = bp_email_get_customizer_template();
 
 	echo $content;
 	exit();
 }
-add_action( 'template_redirect', 'bp_core_customizer_load_template');
+add_action( 'bp_actions', 'bp_email_customizer_load_template' );
 
 /**
  * Get the CSS styles for the email template
@@ -562,11 +574,11 @@ add_action( 'template_redirect', 'bp_core_customizer_load_template');
  *
  * @return string
  */
-function bp_core_customizer_get_styles() {
+function bp_email_get_customizer_styles() {
 	ob_start();
 	bp_locate_template( array( 'assets/emails/bp-email-css.php', 'bp-email-css.php' ), true );
 
-	return apply_filters( 'bp_core_customizer_get_styles', ob_get_clean() );
+	return apply_filters( 'bp_email_get_customizer_styles', ob_get_clean() );
 }
 
 /**
@@ -576,9 +588,9 @@ function bp_core_customizer_get_styles() {
  *
  * @return string
  */
-function bp_core_customizer_get_template(){
+function bp_email_get_customizer_template() {
 	ob_start();
 	bp_locate_template( array( 'assets/emails/bp-email.php', 'bp-email.php' ), true );
 
-	return apply_filters( 'bp_core_customizer_get_styles', ob_get_clean() );
+	return apply_filters( 'bp_email_get_customizer_template', ob_get_clean() );
 }
