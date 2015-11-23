@@ -12,7 +12,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Register Customizer settings for Emails.
+ * Register Customizer settings for Emails, and enqueue scripts.
  *
  * @since 2.5.0
  *
@@ -42,6 +42,24 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	foreach( $controls as $control_id => $args ) {
 		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );  // djpaultodo is this 5.2 compat?
 	}
+
+
+	/**
+	 * Enqueue scripts/styles.
+	 *
+	 * Scripts can't be registered in {@link bp_core_register_common_styles} etc because
+	 * the Customizer loads very, very early.
+	 */
+
+	$bp  = buddypress();
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+	wp_enqueue_script(
+		'bp-customizer-emails',
+		"{$bp->plugin_url}/bp-core/admin/js/customizer-emails{$min}.js",
+		array( 'customize-preview' ),
+		bp_get_version()
+	);
 }
 add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
 
