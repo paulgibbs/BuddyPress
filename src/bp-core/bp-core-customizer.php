@@ -12,13 +12,17 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Register Customizer settings for Emails, and enqueue scripts.
+ * Initialize the Customizer for emails.
  *
  * @since 2.5.0
  *
  * @param WP_Customize_Manager $wp_customize
  */
 function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
+
+	/**
+	 * Add email items.
+	 */
 	$wp_customize->add_panel( 'bp_mailtpl', array(
 		'description'   => __( 'Customize the look of your BuddyPress emails', 'buddypress' ),
 		'title'         => __( 'Email Templates', 'buddypress' ),
@@ -37,7 +41,6 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	require dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
 	do_action( 'bp_core_customizer_register_sections', $wp_customize, $sections );
 
-	// Add controls
 	$controls = bp_email_get_customizer_controls();
 	foreach( $controls as $control_id => $args ) {
 		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );
@@ -71,7 +74,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
 
 /**
- * Tidy up the Customizer by removing all the default WP sections.
+ * Remove non-email sections from the current Customizer preview.
  *
  * @since 2.5.0
  *
