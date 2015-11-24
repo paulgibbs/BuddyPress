@@ -60,6 +60,13 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 		array( 'customize-preview' ),
 		bp_get_version()
 	);
+
+
+	/**
+	 * Hook actions/filters for further configuration.
+	 */
+
+	add_filter( 'customize_section_active', 'bp_email_hide_other_customizer_sections', 10, 2 );
 }
 add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
 
@@ -72,14 +79,9 @@ add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
  * @param WP_Customize_Section $section {@see WP_Customize_Section} instance.
  * @return bool
  */
-function bp_email_remove_customizer_sections( $active, $section ) {
-	if ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) {
-		return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
-	}
-
-	return true;
+function bp_email_hide_other_customizer_sections( $active, $section ) {
+	return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
 }
-add_action( 'customize_section_active', 'bp_email_remove_customizer_sections', 10, 2 );
 
 /**
  * Define available sections for the Customizer.
