@@ -74,7 +74,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
 
 /**
- * Remove non-email sections from the current Customizer preview.
+ * Only show email sections in the Customizer.
  *
  * @since 2.5.0
  *
