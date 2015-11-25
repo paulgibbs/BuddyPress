@@ -151,7 +151,7 @@ function bp_email_get_customizer_settings() {
 			'default'              => '',
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'bp_sanitize_customizer_text',
+			'sanitize_callback'    => 'sanitize_text_field',
 		),
 		'bp_mailtpl_opts[header_aligment]' => array(
 			'type'                 => 'option',
@@ -172,7 +172,7 @@ function bp_email_get_customizer_settings() {
 			'default'              => $defaults['header_text_size'],
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'bp_sanitize_customizer_text',
+			'sanitize_callback'    => 'sanitize_text_field',
 		),
 		'bp_mailtpl_opts[header_text_color]' => array(
 			'type'                 => 'option',
@@ -193,7 +193,7 @@ function bp_email_get_customizer_settings() {
 			'default'              => $defaults['body_text_size'],
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'bp_sanitize_customizer_text',
+			'sanitize_callback'    => 'sanitize_text_field',
 		),
 		'bp_mailtpl_opts[body_text_color]' => array(
 			'type'                 => 'option',
@@ -207,7 +207,7 @@ function bp_email_get_customizer_settings() {
 			'default'              => $defaults['footer_text'],
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'bp_sanitize_customizer_text',
+			'sanitize_callback'    => 'sanitize_text_field',
 		),
 		'bp_mailtpl_opts[footer_aligment]' => array(
 			'type'                 => 'option',
@@ -228,7 +228,7 @@ function bp_email_get_customizer_settings() {
 			'default'              => $defaults['footer_text_size'],
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'bp_sanitize_customizer_text',
+			'sanitize_callback'    => 'sanitize_text_field',
 		),
 		'bp_mailtpl_opts[footer_text_color]' => array(
 			'type'                 => 'option',
@@ -474,18 +474,6 @@ function bp_sanitize_customizer_templates( $input ) {
 	}
 
 	return '';  // djpaultodo: Set a sensible default?
-}
-
-/**
- * Sanitize callback for template text.
- *
- * @since 2.5.0
- *
- * @param $input string to sanitize
- * @return string
- */
-function bp_sanitize_customizer_text( $input ) {
-	return wp_kses_post( force_balance_tags( $input ) );
 }
 
 /**
