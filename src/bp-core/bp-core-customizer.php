@@ -87,7 +87,7 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
 }
 
 /**
- * Define available sections for the Customizer.
+ * Get email sections for the Customizer.
  *
  * @since 2.5.0
  *
@@ -115,7 +115,7 @@ function bp_email_get_customizer_sections() {
 }
 
 /**
- * Get available settings for the Customizer.
+ * Get email settings for the Customizer.
  *
  * @since 2.5.0
  *
@@ -275,7 +275,7 @@ function bp_email_get_customizer_settings() {
 }
 
 /**
- * Get available controls for the Customizer.
+ * Get email controls for the Customizer.
  *
  * @since 2.5.0
  *
