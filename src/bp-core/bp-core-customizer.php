@@ -282,7 +282,7 @@ function bp_email_get_customizer_settings() {
  * @return array
  */
 function bp_email_get_customizer_controls() {
-	$controls = array(
+	return apply_filters( 'bp_email_get_customizer_controls', array(
 		'bp_mailtpl_template' => array(
 			'class'       => 'WP_Customize_Control',
 			'label'       => __( 'Choose one', 'buddypress' ),
@@ -450,13 +450,11 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_mailtpl_opts[footer_text_color]',
 			'description' => __( 'Choose footer text color', 'buddypress' )
 		)
-	);
-
-	return apply_filters( 'bp_email_get_customizer_controls', $controls );
+	) );
 }
 
 /**
- * Define defaults settings for templates
+ * Get defaults settings for the email Customizer templates.
  *
  * @since 2.5.0
  *
