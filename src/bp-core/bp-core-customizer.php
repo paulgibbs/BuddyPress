@@ -125,20 +125,6 @@ function bp_email_get_customizer_settings() {
 	$defaults = bp_email_get_customizer_defaults();
 
 	$settings = array(
-		'bp_mailtpl_opts[from_name]' => array(
-			'type'                 => 'option',
-			'default'              => $defaults['from_name'],
-			'transport'            => 'postMessage',
-			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'sanitize_text_field',
-		),
-		'bp_mailtpl_opts[from_email]' => array(
-			'type'                 => 'option',
-			'default'              => $defaults['from_email'],
-			'transport'            => 'postMessage',
-			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'sanitize_text_field',
-		),
 		'bp_mailtpl_opts[template]' => array(
 			'type'                 => 'option',
 			'default'              => $defaults['template'],
@@ -444,8 +430,6 @@ function bp_email_get_customizer_controls() {
  */
 function bp_email_get_customizer_defaults() {
 	$defaults = array(
-		'from_name'         => get_bloginfo( 'name' ),
-		'from_email'        => get_bloginfo( 'admin_email' ),
 		'template'          => 'boxed',
 		'body_bg'           => '#ddd',
 		'footer_text'       => '&copy;' . date( 'Y' ) .' ' . get_bloginfo( 'name' ),
