@@ -131,7 +131,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_text_field',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[from_email]' => array(
 			'type'                 => 'option',
@@ -139,7 +138,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_text_field',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[template]' => array(
 			'type'                 => 'option',
@@ -147,7 +145,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'refresh',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_templates',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[body_bg]' => array(
 			'type'                 => 'option',
@@ -155,7 +152,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[header_logo]' => array(
 			'type'                 => 'option',
@@ -163,7 +159,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => '',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[header_logo_text]' => array(
 			'type'                 => 'option',
@@ -171,7 +166,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[header_aligment]' => array(
 			'type'                 => 'option',
@@ -179,7 +173,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_alignment',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[header_bg]' => array(
 			'type'                 => 'option',
@@ -187,7 +180,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[header_text_size]' => array(
 			'type'                 => 'option',
@@ -195,7 +187,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[header_text_color]' => array(
 			'type'                 => 'option',
@@ -203,7 +194,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[email_body_bg]' => array(
 			'type'                 => 'option',
@@ -211,7 +201,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[body_text_size]' => array(
 			'type'                 => 'option',
@@ -219,7 +208,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[body_text_color]' => array(
 			'type'                 => 'option',
@@ -227,7 +215,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[footer_text]' => array(
 			'type'                 => 'option',
@@ -235,7 +222,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[footer_aligment]' => array(
 			'type'                 => 'option',
@@ -243,7 +229,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_alignment',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[footer_bg]' => array(
 			'type'                 => 'option',
@@ -251,7 +236,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[footer_text_size]' => array(
 			'type'                 => 'option',
@@ -259,7 +243,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'bp_sanitize_customizer_text',
-			'sanitize_js_callback' => '',
 		),
 		'bp_mailtpl_opts[footer_text_color]' => array(
 			'type'                 => 'option',
@@ -267,8 +250,7 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
-			'sanitize_js_callback' => '',
-		)
+		),
 	);
 
 	return apply_filters( 'bp_email_get_customizer_settings', $settings );
