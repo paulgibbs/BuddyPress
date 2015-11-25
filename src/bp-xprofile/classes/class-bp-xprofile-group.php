@@ -723,7 +723,7 @@ class BP_XProfile_Group {
 
 		<div class="wrap">
 
-			<h2><?php echo esc_html( $title ); ?></h2>
+			<h1><?php echo esc_html( $title ); ?></h1>
 
 			<?php if ( ! empty( $message ) ) : ?>
 
@@ -744,7 +744,7 @@ class BP_XProfile_Group {
 								</div>
 							</div>
 							<div class="postbox">
-								<h3><?php esc_html_e( 'Field Group Description', 'buddypress' ); ?></h3>
+								<h2><?php esc_html_e( 'Field Group Description', 'buddypress' ); ?></h2>
 								<div class="inside">
 									<label for="group_description" class="screen-reader-text"><?php esc_html_e( 'Add description', 'buddypress' ); ?></label>
 									<textarea name="group_description" id="group_description" rows="8" cols="60"><?php echo esc_textarea( $this->description ); ?></textarea>
@@ -766,7 +766,7 @@ class BP_XProfile_Group {
 							do_action( 'xprofile_group_before_submitbox', $this ); ?>
 
 							<div id="submitdiv" class="postbox">
-								<h3><?php _e( 'Submit', 'buddypress' ); ?></h3>
+								<h2><?php _e( 'Submit', 'buddypress' ); ?></h2>
 								<div class="inside">
 									<div id="submitcomment" class="submitbox">
 										<div id="major-publishing-actions">

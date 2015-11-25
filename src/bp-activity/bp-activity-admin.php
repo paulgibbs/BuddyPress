@@ -360,9 +360,8 @@ function bp_activity_admin_load() {
 		// "We'd like to shoot the monster, could you move, please?"
 		foreach ( $activity_ids as $activity_id ) {
 			// @todo: Check the permissions on each
-			//if ( ! current_user_can( 'bp_edit_activity', $activity_id ) )
+			// if ( ! current_user_can( 'bp_edit_activity', $activity_id ) )
 			// continue;
-
 			// Get the activity from the database.
 			$activity = new BP_Activity_Activity( $activity_id );
 			if ( empty( $activity->component ) ) {
@@ -565,7 +564,7 @@ function bp_activity_admin_load() {
 		 *
 		 * @since 1.6.0
 		 *
-		 * @param array Array holding activity object and ID that holds error.
+		 * @param array $value Array holding activity object and ID that holds error.
 		 */
 		do_action_ref_array( 'bp_activity_admin_edit_after', array( &$activity, $error ) );
 
@@ -656,7 +655,7 @@ function bp_activity_admin_edit() {
 	do_action_ref_array( 'bp_activity_admin_edit', array( &$activity ) ); ?>
 
 	<div class="wrap">
-		<h2><?php printf( __( 'Editing Activity (ID #%s)', 'buddypress' ), number_format_i18n( (int) $_REQUEST['aid'] ) ); ?></h2>
+		<h1><?php printf( __( 'Editing Activity (ID #%s)', 'buddypress' ), number_format_i18n( (int) $_REQUEST['aid'] ) ); ?></h1>
 
 		<?php if ( ! empty( $activity ) ) : ?>
 
@@ -667,14 +666,14 @@ function bp_activity_admin_edit() {
 						<div id="post-body-content">
 							<div id="postdiv">
 								<div id="bp_activity_action" class="postbox">
-									<h3><?php _e( 'Action', 'buddypress' ); ?></h3>
+									<h2><?php _e( 'Action', 'buddypress' ); ?></h2>
 									<div class="inside">
 										<?php wp_editor( stripslashes( $activity->action ), 'bp-activities-action', array( 'media_buttons' => false, 'textarea_rows' => 7, 'teeny' => true, 'quicktags' => array( 'buttons' => 'strong,em,link,block,del,ins,img,code,spell,close' ) ) ); ?>
 									</div>
 								</div>
 
 								<div id="bp_activity_content" class="postbox">
-									<h3><?php _e( 'Content', 'buddypress' ); ?></h3>
+									<h2><?php _e( 'Content', 'buddypress' ); ?></h2>
 									<div class="inside">
 										<?php wp_editor( stripslashes( $activity->content ), 'bp-activities-content', array( 'media_buttons' => false, 'teeny' => true, 'quicktags' => array( 'buttons' => 'strong,em,link,block,del,ins,img,code,spell,close' ) ) ); ?>
 									</div>
@@ -978,7 +977,7 @@ function bp_activity_admin_index() {
 	do_action( 'bp_activity_admin_index', $messages ); ?>
 
 	<div class="wrap">
-		<h2>
+		<h1>
 			<?php if ( !empty( $_REQUEST['aid'] ) ) : ?>
 				<?php printf( __( 'Activity related to ID #%s', 'buddypress' ), number_format_i18n( (int) $_REQUEST['aid'] ) ); ?>
 			<?php else : ?>
@@ -988,7 +987,7 @@ function bp_activity_admin_index() {
 			<?php if ( !empty( $_REQUEST['s'] ) ) : ?>
 				<span class="subtitle"><?php printf( __( 'Search results for &#8220;%s&#8221;', 'buddypress' ), wp_html_excerpt( esc_html( stripslashes( $_REQUEST['s'] ) ), 50 ) ); ?></span>
 			<?php endif; ?>
-		</h2>
+		</h1>
 
 		<?php // If the user has just made a change to an activity item, display the status messages. ?>
 		<?php if ( !empty( $messages ) ) : ?>
@@ -1650,7 +1649,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 		<div class="response-links">
 
 		<?php
-		// Activity permalink
+		// Activity permalink.
 		$activity_permalink = '';
 		if ( ! $item['is_spam'] ) {
 			$activity_permalink = '<a href="' . bp_activity_get_permalink( $item['id'], (object) $item ) . '" class="comments-view-item-link">' . __( 'View Activity', 'buddypress' ) . '</a>';
