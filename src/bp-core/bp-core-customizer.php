@@ -122,7 +122,7 @@ function bp_email_get_customizer_sections() {
  * @return array
  */
 function bp_email_get_customizer_settings() {
-	$defaults = bp_email_get_customizer_defaults();
+	$defaults = bp_email_get_customizer_settings_defaults();
 
 	$settings = array(
 		'bp_mailtpl_opts[template]' => array(
@@ -428,7 +428,7 @@ function bp_email_get_customizer_controls() {
  *
  * @return array
  */
-function bp_email_get_customizer_defaults() {
+function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
 		'template'          => 'boxed',
 		'body_bg'           => '#ddd',
@@ -446,7 +446,7 @@ function bp_email_get_customizer_defaults() {
 		'body_text_color'   => '#222',
 	);
 
-	return apply_filters( 'bp_email_get_customizer_defaults', $defaults );
+	return apply_filters( 'bp_email_get_customizer_settings_defaults', $defaults );
 }
 
 
