@@ -486,7 +486,7 @@ function bp_sanitize_customizer_templates( $input ) {
  */
 function bp_customizer_sanitize_callback_alignment( $input ) {
 	$valid = array( 'center', 'left', 'right', );
-	return ( in_array( $input, $valid, true ) ? $input : 'center';
+	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
 }
 
 
