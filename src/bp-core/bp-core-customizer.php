@@ -489,25 +489,16 @@ function bp_sanitize_customizer_text( $input ) {
 }
 
 /**
- * Sanitize call back for CSS alignments.
+ * Sanitization callback for CSS alignment settings.
  *
  * @since 2.5.0
  *
  * @param $input string to sanitize
  * @return string
  */
-function bp_sanitize_customizer_aligment( $input ) {
-	$valid = array(
-		'center',
-		'left',
-		'right',
-	);
-
-	if ( in_array( $input, $valid, true ) ) {
-		return $input;
-	} else {
-		return '';  // djpaultodo: Set a sensible default?
-	}
+function bp_customizer_sanitize_callback_alignment( $input ) {
+	$valid = array( 'center', 'left', 'right', );
+	return ( in_array( $input, $valid, true ) ? $input : 'center';
 }
 
 
