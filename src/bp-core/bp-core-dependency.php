@@ -246,23 +246,25 @@ function bp_customize_register( WP_Customize_Manager $customizer ) {
 	 */
 	do_action( 'bp_customize_register', $customizer );
 
-	if ( ! empty( $_GET['bp_customizer'] ) ) {
-		$action    = sanitize_text_field( $_GET['bp_customizer'] );
-		$whitelist = apply_filters( 'bp_customize_actions', array( 'email' ), $customizer );
-
-		if ( ! in_array( $action, $whitelist, true ) ) {
-			return;
-		}
-
-		/**
-		 * Fires once the Customizer has loaded, allow scripts and styles to be initialized.
-		 *
-		 * @since 2.5.0
-		 *
-		 * @param WP_Customize_Manager $customizer Customizer instance.
-		 */
-		do_action( "bp_customize_register_for_{$action}", $customizer );
+	if ( empty( $_GET['bp_customizer'] ) ) {
+		return;
 	}
+
+	$action    = sanitize_text_field( $_GET['bp_customizer'] );
+	$whitelist = apply_filters( 'bp_customize_actions', array( 'email' ), $customizer );
+
+	if ( ! in_array( $action, $whitelist, true ) ) {
+		return;
+	}
+
+	/**
+	 * Fires once the Customizer has loaded, allow scripts and styles to be initialized.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param WP_Customize_Manager $customizer Customizer instance.
+	 */
+	do_action( "bp_customize_register_for_{$action}", $customizer );
 }
 
 /**
