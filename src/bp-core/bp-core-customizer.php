@@ -131,7 +131,7 @@ function bp_email_get_customizer_settings() {
 			'default'              => $defaults['template'],
 			'transport'            => 'refresh',
 			'capability'           => 'bp_moderate',
-			'sanitize_callback'    => 'bp_sanitize_customizer_templates',
+			'sanitize_callback'    => 'bp_customizer_sanitize_callback_email_template',
 		),
 		'bp_mailtpl_opts[body_bg]' => array(
 			'type'                 => 'option',
@@ -450,19 +450,15 @@ function bp_email_get_customizer_settings_defaults() {
 	return apply_filters( 'bp_email_get_customizer_settings_defaults', $defaults );
 }
 
-
-
-
-
 /**
- * Sanitize callback for template select.
+ * Sanitize callback for template selection setting.
  *
  * @since 2.5.0
  *
  * @param $input string to sanitize
  * @return string
  */
-function bp_sanitize_customizer_templates( $input ) {
+function bp_customizer_sanitize_callback_email_template( $input ) {
 	$valid = apply_filters( 'bp_sanitize_customizer_templates',
 		array(
 			'boxed'     => __( 'Simple Theme', 'buddypress' ),
@@ -470,11 +466,7 @@ function bp_sanitize_customizer_templates( $input ) {
 		)
 	);
 
-	if ( array_key_exists( $input, $valid, true ) ) {
-		return $input;
-	}
-
-	return '';  // djpaultodo: Set a sensible default?
+	return ( array_key_exists( $input, $valid, true ) ? $input : 'boxed';
 }
 
 /**
