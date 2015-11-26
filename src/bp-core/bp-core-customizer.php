@@ -70,7 +70,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 */
 
 	add_filter( 'customize_section_active', 'bp_email_hide_other_customizer_sections', 10, 2 );
-	add_action( 'bp_screens', 'bp_email_customizer_load_template' );
+	add_action( 'bp_screens', 'bp_email_screen_customizer' );
 }
 add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
 
@@ -495,7 +495,7 @@ function bp_customizer_sanitize_callback_alignment( $input ) {
  *
  * @since 2.5.0
  */
-function bp_email_customizer_load_template() {
+function bp_email_screen_customizer() {
 	if ( ! is_customize_preview() || ! ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) ) {
 		return;
 	}
