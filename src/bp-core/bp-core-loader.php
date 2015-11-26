@@ -301,6 +301,7 @@ class BP_Core extends BP_Component {
 				'labels'            => bp_get_email_post_type_labels(),
 				'menu_icon'         => 'dashicons-email',
 				'public'            => false,
+				'publicly_queryable' => is_customize_preview() && bp_current_user_can( 'bp_moderate' ),
 				'query_var'         => false,
 				'rewrite'           => false,
 				'show_in_admin_bar' => false,
