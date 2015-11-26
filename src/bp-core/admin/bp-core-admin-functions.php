@@ -989,13 +989,14 @@ function bp_admin_email_templates_button( $editor_id ) {
 		);
 	}
 
-	$link = add_query_arg(
+	$post_link = get_sample_permalink( get_the_ID() );
+	$link      = add_query_arg(
 		array(
 			'bp_customizer' => 'email',
 			'return'        => rawurlencode( $return_url ),
 			'url'           => rawurlencode( home_url( '/?bp_customizer=email' ) ),  // djpaultodo Check this?
 		),
-		admin_url( 'customize.php' )
+		$post_link[0]
 	);
 
 	printf(
