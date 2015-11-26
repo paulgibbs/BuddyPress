@@ -114,20 +114,24 @@ function bp_email_screen_customizer() {
 function bp_email_get_customizer_sections() {
 	return apply_filters( 'bp_email_get_customizer_sections', array(
 		'section_bp_mailtpl_template' => array(
-			'title' => __( 'Template', 'buddypress' ),
-			'panel' => 'bp_mailtpl',
+			'capability' => 'bp_moderate',
+			'title'      => __( 'Template', 'buddypress' ),
+			'panel'      => 'bp_mailtpl',
 		),
 		'section_bp_mailtpl_header' => array(
-			'title' => __( 'Email Header', 'buddypress' ),
-			'panel' => 'bp_mailtpl',
+			'capability' => 'bp_moderate',
+			'title'      => __( 'Email Header', 'buddypress' ),
+			'panel'      => 'bp_mailtpl',
 		),
 		'section_bp_mailtpl_body' => array(
-			'title' => __( 'Email Body', 'buddypress' ),
-			'panel' => 'bp_mailtpl',
+			'capability' => 'bp_moderate',
+			'title'      => __( 'Email Body', 'buddypress' ),
+			'panel'      => 'bp_mailtpl',
 		),
 		'section_bp_mailtpl_footer' => array(
-			'title' => __( 'Footer', 'buddypress' ),
-			'panel' => 'bp_mailtpl',
+			'capability' => 'bp_moderate',
+			'title'      => __( 'Footer', 'buddypress' ),
+			'panel'      => 'bp_mailtpl',
 		),
 	) );
 }
