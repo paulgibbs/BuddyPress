@@ -994,7 +994,7 @@ function bp_admin_email_templates_button( $editor_id ) {
 		array(
 			'bp_customizer' => 'email',
 			'return'        => rawurlencode( $return_url ),
-			'url'           => rawurlencode( $post_link[0] ),
+			'url'           => rawurlencode( $post_link[0] . '&bp_customizer=email' ),
 		),
 		admin_url( 'customize.php' )
 	);
