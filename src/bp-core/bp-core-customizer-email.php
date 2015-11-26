@@ -1,6 +1,6 @@
 <?php
 /**
- * BuddyPress Email Templates Customizer.
+ * BuddyPress Customizer implementation for email.
  *
  * @since 2.5.0
  *
