@@ -2587,8 +2587,9 @@ function bp_email_post_type() {
 	/**
 	 * Return the unique ID of the post type for emails.
 	 *
-	 * @return string The unique forum post type id
 	 * @since 2.5.0
+	 *
+	 * @return string The unique forum post type id
 	 */
 	function bp_get_email_post_type() {
 		return apply_filters( 'bp_get_email_post_type', buddypress()->email_post_type );
@@ -2597,8 +2598,9 @@ function bp_email_post_type() {
 /**
  * Return labels used by the email post type.
  *
- * @return array
  * @since 2.5.0
+ *
+ * @return array
  */
 function bp_get_email_post_type_labels() {
 	return apply_filters( 'bp_get_email_post_type_labels', array(
@@ -2622,8 +2624,9 @@ function bp_get_email_post_type_labels() {
 /**
  * Return array of features that the email post type supports.
  *
- * @return array
  * @since 2.5.0
+ *
+ * @return array
  */
 function bp_get_email_post_type_supports() {
 	return apply_filters( 'bp_get_email_post_type_supports', array(
