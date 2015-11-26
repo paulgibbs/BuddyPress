@@ -466,7 +466,7 @@ function bp_customizer_sanitize_callback_email_template( $input ) {
 		)
 	);
 
-	return ( array_key_exists( $input, $valid, true ) ? $input : 'boxed';
+	return ( array_key_exists( $input, $valid, true ) ) ? $input : 'boxed';
 }
 
 /**
