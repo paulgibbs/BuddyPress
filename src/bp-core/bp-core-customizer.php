@@ -88,6 +88,23 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
 }
 
 /**
+ * Load template in the customizer before WordPress template is included
+ *
+ * @since 2.5.0
+ */
+function bp_email_screen_customizer() {
+	if ( ! is_customize_preview() || ! ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) ) {
+		return;
+	}
+
+	$css     = bp_email_get_customizer_styles();
+	$content = bp_email_get_customizer_template();
+
+	echo $content;
+	exit();
+}
+
+/**
  * Get email sections for the Customizer.
  *
  * @since 2.5.0
@@ -480,31 +497,6 @@ function bp_customizer_sanitize_callback_email_template( $input ) {
 function bp_customizer_sanitize_callback_alignment( $input ) {
 	$valid = array( 'center', 'left', 'right', );
 	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
-}
-
-
-
-
-
-
-
-
-
-/**
- * Load template in the customizer before WordPress template is included
- *
- * @since 2.5.0
- */
-function bp_email_screen_customizer() {
-	if ( ! is_customize_preview() || ! ( isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email' ) ) {
-		return;
-	}
-
-	$css     = bp_email_get_customizer_styles();
-	$content = bp_email_get_customizer_template();
-
-	echo $content;
-	exit();
 }
 
 /**
