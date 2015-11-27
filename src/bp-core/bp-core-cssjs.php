@@ -45,6 +45,7 @@ function bp_core_register_common_scripts() {
 
 		// 2.4
 		'bp-cover-image' => array( 'file' => "{$url}cover-image{$min}.js", 'dependencies' => array(), 'footer' => true ),
+
 	) );
 
 	$version = bp_get_version();
