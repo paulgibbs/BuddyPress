@@ -4,6 +4,16 @@
  * @group BP_Email
  */
 class BP_Tests_Email extends BP_UnitTestCase {
+	public function setUp() {
+		parent::setUp();
+		remove_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
+	}
+
+	public function tearDown() {
+		add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
+		parent::tearDown();
+	}
+
 	public function test_valid_from_with_no_name() {
 		$email = new BP_Email( 'fake_type' );
 
