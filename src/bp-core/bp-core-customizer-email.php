@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 
-	/**
+	/*
 	 * Add email items.
 	 */
 	$wp_customize->add_panel( 'bp_mailtpl', array(
@@ -47,10 +47,10 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	}
 
 
-	/**
+	/*
 	 * Enqueue scripts/styles.
 	 *
-	 * Scripts can't be registered in {@link bp_core_register_common_styles} etc because
+	 * Scripts can't be registered in bp_core_register_common_styles() etc because
 	 * the Customizer loads very, very early.
 	 */
 
@@ -65,7 +65,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	);
 
 
-	/**
+	/*
 	 * Hook actions/filters for further configuration.
 	 */
 
