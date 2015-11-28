@@ -158,7 +158,7 @@ function bp_email_get_customizer_settings() {
 		'bp_mailtpl_opts[template]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['template'],
-			'sanitize_callback'    => 'bp_customizer_sanitize_callback_email_template',
+			'sanitize_callback'    => 'bp_email_sanitize_customizer_email_template',
 			'transport'            => 'refresh',
 			'type'                 => 'option',
 		),
@@ -503,7 +503,7 @@ function bp_email_get_customizer_settings_defaults() {
  * @param $input string to sanitize.
  * @return string
  */
-function bp_customizer_sanitize_callback_email_template( $input ) {
+function bp_email_sanitize_customizer_email_template( $input ) {
 
 	/**
 	 * Filter email Customizer's template setting's whitelist.
@@ -530,7 +530,7 @@ function bp_customizer_sanitize_callback_email_template( $input ) {
  * @param string $input string to sanitize.
  * @return string
  */
-function bp_customizer_sanitize_callback_alignment( $input ) {
+function bp_email_sanitize_customizer_alignment( $input ) {
 	$valid = array( 'center', 'left', 'right', );
 	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
 }
