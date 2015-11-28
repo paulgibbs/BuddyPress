@@ -303,7 +303,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_body_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose email background color', 'buddypress' )
+			'description' => __( 'Choose email background color', 'buddypress' ),
 			'label'       => __( 'Background Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_template',
 			'settings'    => 'bp_mailtpl_opts[body_bg]',
@@ -311,7 +311,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_header' => array(
 			'class'       => 'WP_Customize_Image_Control',
-			'description' => __( 'Add an image to use in header. Leave empty to use text instead', 'buddypress' )
+			'description' => __( 'Add an image to use in header. Leave empty to use text instead', 'buddypress' ),
 			'label'       => __( 'Logo', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_mailtpl_opts[header_logo]',
@@ -320,7 +320,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_header_logo_text' => array(
 			'class'       => 'WP_Customize_Control',
-			'description' => __( 'Add text to your mail header', 'buddypress' )
+			'description' => __( 'Add text to your mail header', 'buddypress' ),
 			'label'       => __( 'Logo', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_mailtpl_opts[header_logo_text]',
@@ -345,7 +345,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_header_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose header background color', 'buddypress' )
+			'description' => __( 'Choose header background color', 'buddypress' ),
 			'label'       => __( 'Background Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_mailtpl_opts[header_bg]',
@@ -367,7 +367,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_header_text_color' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose header text color', 'buddypress' )
+			'description' => __( 'Choose header text color', 'buddypress' ),
 			'label'       => __( 'Text Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_mailtpl_opts[header_text_color]',
@@ -375,7 +375,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_email_body_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose email body background color', 'buddypress' )
+			'description' => __( 'Choose email body background color', 'buddypress' ),
 			'label'       => __( 'Background Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_body',
 			'settings'    => 'bp_mailtpl_opts[email_body_bg]',
@@ -397,7 +397,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_body_text_color' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose body text color', 'buddypress' )
+			'description' => __( 'Choose body text color', 'buddypress' ),
 			'label'       => __( 'Text Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_body',
 			'settings'    => 'bp_mailtpl_opts[body_text_color]',
@@ -405,7 +405,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_footer' => array(
 			'class'       => 'WP_Customize_Control',
-			'description' => __('Change the email footer here', 'buddypress' )
+			'description' => __('Change the email footer here', 'buddypress' ),
 			'label'       => __( 'Footer text', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_footer',
 			'settings'    => 'bp_mailtpl_opts[footer_text]',
@@ -430,7 +430,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_footer_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose footer background color', 'buddypress' )
+			'description' => __( 'Choose footer background color', 'buddypress' ),
 			'label'       => __( 'Background Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_footer',
 			'settings'    => 'bp_mailtpl_opts[footer_bg]',
@@ -452,7 +452,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_footer_text_color' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose footer text color', 'buddypress' )
+			'description' => __( 'Choose footer text color', 'buddypress' ),
 			'label'       => __( 'Text Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_footer',
 			'settings'    => 'bp_mailtpl_opts[footer_text_color]',
