@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.5.0
  *
- * @param WP_Customize_Manager $wp_customize
+ * @param WP_Customize_Manager $wp_customize The Customizer object.
  */
 function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 
@@ -38,11 +38,22 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 		$wp_customize->add_setting( $setting_id, $args );
 	}
 
-	require dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
-	do_action( 'bp_core_customizer_register_sections', $wp_customize, $sections );
+	/**
+	 * HTML range customizer control.
+	 */
+	require_once dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
+
+	/**
+	 * Fires to let plugins register extra Customizer controls for emails.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param WP_Customize_Manager $wp_customize The Customizer object.
+	 */
+	do_action( 'bp_core_customizer_register_sections', $wp_customize );
 
 	$controls = bp_email_get_customizer_controls();
-	foreach( $controls as $control_id => $args ) {
+	foreach ( $controls as $control_id => $args ) {
 		$wp_customize->add_control( new $args['class']( $wp_customize, $control_id, $args ) );
 	}
 
@@ -94,6 +105,14 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
  * @return array
  */
 function bp_email_get_customizer_sections() {
+
+	/**
+	 * Filter Customizer sections for emails.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $sections Email Customizer sections to add.
+	 */
 	return apply_filters( 'bp_email_get_customizer_sections', array(
 		'section_bp_mailtpl_template' => array(
 			'capability' => 'bp_moderate',
@@ -128,7 +147,14 @@ function bp_email_get_customizer_sections() {
 function bp_email_get_customizer_settings() {
 	$defaults = bp_email_get_customizer_settings_defaults();
 
-	$settings = array(
+	/**
+	 * Filter Customizer settings for emails.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $settings Email Customizer settings to add.
+	 */
+	return apply_filters( 'bp_email_get_customizer_settings', array(
 		'bp_mailtpl_opts[template]' => array(
 			'type'                 => 'option',
 			'default'              => $defaults['template'],
@@ -241,9 +267,7 @@ function bp_email_get_customizer_settings() {
 			'capability'           => 'bp_moderate',
 			'sanitize_callback'    => 'sanitize_hex_color',
 		),
-	);
-
-	return apply_filters( 'bp_email_get_customizer_settings', $settings );
+	) );
 }
 
 /**
@@ -254,6 +278,14 @@ function bp_email_get_customizer_settings() {
  * @return array
  */
 function bp_email_get_customizer_controls() {
+
+	/**
+	 * Filter Customizer controls for emails.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $controls Email Customizer controls to add.
+	 */
 	return apply_filters( 'bp_email_get_customizer_controls', array(
 		'bp_mailtpl_template' => array(
 			'class'       => 'WP_Customize_Control',
@@ -436,7 +468,7 @@ function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
 		'template'          => 'boxed',
 		'body_bg'           => '#ddd',
-		'footer_text'       => '&copy;' . date( 'Y' ) .' ' . get_bloginfo( 'name' ),
+		'footer_text'       => '&copy;' . date( 'Y' ) . ' ' . get_bloginfo( 'name' ),
 		'footer_aligment'   => 'center',
 		'footer_bg'         => '#eee',
 		'footer_text_size'  => '12',
@@ -450,6 +482,13 @@ function bp_email_get_customizer_settings_defaults() {
 		'body_text_color'   => '#222',
 	);
 
+	/**
+	 * Filter email Customizer settings' default values.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $defaults Settings default values.
+	 */
 	return apply_filters( 'bp_email_get_customizer_settings_defaults', $defaults );
 }
 
@@ -458,10 +497,18 @@ function bp_email_get_customizer_settings_defaults() {
  *
  * @since 2.5.0
  *
- * @param $input string to sanitize
+ * @param $input string to sanitize.
  * @return string
  */
 function bp_customizer_sanitize_callback_email_template( $input ) {
+
+	/**
+	 * Filter email Customizer's template setting's whitelist.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $defaults Settings default values.
+	 */
 	$valid = apply_filters( 'bp_sanitize_customizer_templates',
 		array(
 			'boxed'     => __( 'Simple Theme', 'buddypress' ),
@@ -477,7 +524,7 @@ function bp_customizer_sanitize_callback_email_template( $input ) {
  *
  * @since 2.5.0
  *
- * @param $input string to sanitize
+ * @param string $input string to sanitize.
  * @return string
  */
 function bp_customizer_sanitize_callback_alignment( $input ) {
