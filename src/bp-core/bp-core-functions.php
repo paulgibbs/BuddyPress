@@ -2838,21 +2838,21 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 }
 
 /**
- * Get absolute path to the template for the specified email object.
+ * Get the paths to possible templates for the specified email object.
  *
  * @since 2.5.0
  *
  * @param WP_Post $object Post to get email template for.
- * @return string
+ * @return array
  */
 function bp_email_get_template( WP_Post $object ) {
 
 	/**
-	 * Filter the email template's path.
+	 * Filter the possible template paths for the specified email object.
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $template_path
+	 * @param array $templates
 	 */
 	return apply_filters( 'bp_email_get_template', array(
 		"single-{$object->post_type}-{$object->post_name}.php",
