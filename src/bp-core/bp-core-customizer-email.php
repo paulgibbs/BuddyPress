@@ -81,6 +81,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 */
 
 	add_filter( 'customize_section_active', 'bp_email_hide_other_customizer_sections', 10, 2 );
+	add_action( 'template_include', 'bp_email_override_customizer_template', 8 );
 }
 add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
 
@@ -533,4 +534,31 @@ function bp_email_sanitize_customizer_email_template( $input ) {
 function bp_email_sanitize_customizer_alignment( $input ) {
 	$valid = array( 'center', 'left', 'right', );
 	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
+}
+
+/**
+ * When previewing an email in the Customizer, change the template used to display it.
+ *
+ * @since 2.5.0
+ *
+ * @param string $template Path to current template (probably single.php).
+ * @return string New template path.
+ */
+function bp_email_override_customizer_template( $template ) {
+	$object = get_queried_object();
+	if ( empty( $object->post_type ) || $object->post_type !== bp_get_email_post_type() || ! is_customize_preview() ) {
+		return $template;
+	}
+
+	/**
+	 * Filter template used to display email in the Customizer.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template Path to current template (probably single.php).
+	 */
+	return apply_filters( 'bp_email_override_customizer_template',
+		bp_locate_template( bp_email_get_template( $object ), false ),
+		$template
+	);
 }
