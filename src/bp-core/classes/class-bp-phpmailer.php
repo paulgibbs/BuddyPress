@@ -42,7 +42,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	public function bp_email( BP_Email $email ) {
 		global $phpmailer;
 
-		/**
+		/*
 		 * Resets.
 		 */
 
@@ -53,7 +53,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->Sender = '';
 
 
-		/**
+		/*
 		 * Set up.
 		 */
 
@@ -62,11 +62,11 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		$phpmailer->Hostname = self::get_hostname();
 
 
-		/**
+		/*
 		 * Content.
 		 */
 
-		$phpmailer->msgHTML( $email->get( 'body', 'replace-tokens' ), '', 'wp_strip_all_tags' );  // todo: is this adequate?
+		$phpmailer->msgHTML( $email->get( 'body', 'replace-tokens' ), '', 'wp_strip_all_tags' );  // djpaulgibbs: is this adequate?
 		$phpmailer->Subject = $email->get( 'subject', 'replace-tokens' );
 
 		$recipient = $email->get( 'from' );
@@ -128,7 +128,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	}
 
 
-	/**
+	/*
 	 * Utility/helper functions.
 	 */
 

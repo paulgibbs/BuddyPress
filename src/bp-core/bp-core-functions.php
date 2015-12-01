@@ -2577,7 +2577,7 @@ function bp_upload_dir() {
 /** Post Types *****************************************************************/
 
 /**
- * Output the unique ID of the post type for emails.
+ * Output the name of the email post type.
  *
  * @since 2.5.0
  */
@@ -2585,13 +2585,21 @@ function bp_email_post_type() {
 	echo bp_get_email_post_type();
 }
 	/**
-	 * Return the unique ID of the post type for emails.
+	 * Returns the name of the email post type.
 	 *
 	 * @since 2.5.0
 	 *
-	 * @return string The unique forum post type id
+	 * @return string The name of the email post type.
 	 */
 	function bp_get_email_post_type() {
+
+		/**
+		 * Filters the name of the email post type.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $post_type Email post type name.
+		 */
 		return apply_filters( 'bp_get_email_post_type', buddypress()->email_post_type );
 	}
 
@@ -2603,6 +2611,14 @@ function bp_email_post_type() {
  * @return array
  */
 function bp_get_email_post_type_labels() {
+
+	/**
+	 * Filters email post type labels.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string[] $labels Associative array (name => label).
+	 */
 	return apply_filters( 'bp_get_email_post_type_labels', array(
 		'add_new'               => _x( 'Add New', 'email post type label', 'buddypress' ),
 		'add_new_item'          => _x( 'Add a New Email', 'email post type label', 'buddypress' ),
@@ -2629,6 +2645,14 @@ function bp_get_email_post_type_labels() {
  * @return array
  */
 function bp_get_email_post_type_supports() {
+
+	/**
+	 * Filters the features that the email post type supports.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string[] $features Supported features.
+	 */
 	return apply_filters( 'bp_get_email_post_type_supports', array(
 		'editor',
 		'revisions',
@@ -2640,7 +2664,7 @@ function bp_get_email_post_type_supports() {
 /** Taxonomies *****************************************************************/
 
 /**
- * Output the unique ID of the taxonomy for email types.
+ * Output the name of the email type taxonomy.
  *
  * @since 2.5.0
  */
@@ -2648,13 +2672,21 @@ function bp_email_tax_type() {
 	echo bp_get_email_tax_type();
 }
 	/**
-	 * Return the unique ID of the taxonomy for email types.
+	 * Return the name of the email type taxonomy.
 	 *
 	 * @since 2.5.0
 	 *
 	 * @return string The unique email taxonomy type ID.
 	 */
 	function bp_get_email_tax_type() {
+
+		/**
+		 * Filters the name of the email type taxonomy.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $taxonomy Email type taxonomy name.
+		 */
 		return apply_filters( 'bp_get_email_tax_type', buddypress()->email_taxonomy_type );
 	}
 
@@ -2663,9 +2695,17 @@ function bp_email_tax_type() {
  *
  * @since 2.5.0
  *
- * @return array
+ * @return string[]
  */
 function bp_get_email_tax_type_labels() {
+
+	/**
+	 * Filters email type taxonomy labels.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string[] $labels Associative array (name => label).
+	 */
 	return apply_filters( 'bp_get_email_tax_type_labels', array(
 		'add_new_item'          => _x( 'New Email Type', 'email type taxonomy label', 'buddypress' ),
 		'all_items'             => _x( 'All Email Types', 'email type taxonomy label', 'buddypress' ),
@@ -2715,23 +2755,52 @@ function bp_get_email( $email_type ) {
 		),
 	);
 
+	/**
+	 * Filters arguments used to find an email post type object.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $args Arguments for get_posts() used to fetch a post object.
+	 * @param string $email_type Unique identifier for a particular type of email.
+	 */
 	$args = apply_filters( 'bp_get_email_args', $args, $email_type );
 	$post = get_posts( $args );
 	if ( ! $post ) {
 		return new WP_Error( 'missing_email', __FUNCTION__, array( $email_type, $args ) );
 	}
 
+	/**
+	 * Filters arguments used to create the BP_Email object.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param WP_Post $post Post object containing the contents of the email.
+	 * @param string $email_type Unique identifier for a particular type of email.
+	 * @param array $args Arguments used with get_posts() to fetch a post object.
+	 * @param WP_Post[] All posts retrieved by get_posts( $args ). May only contain $post.
+	 */
 	$post  = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
 	$email = new BP_Email( $email_type );
 
 
-	/**
+	/*
 	 * Set some email properties for convenience.
 	 */
 
 	// Post object (sets subject and body).
 	$email->post_object( $post );
 
+	/**
+	 * Filters the BP_Email object returned by bp_get_email().
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param BP_Email $email An object representing a single email, ready for mailing.
+	 * @param WP_Post $post Post object containing the contents of the email.
+	 * @param string $email_type Unique identifier for a particular type of email.
+	 * @param array $args Arguments used with get_posts() to fetch a post object.
+	 * @param WP_Post[] All posts retrieved by get_posts( $args ). May only contain $post.
+	 */
 	return apply_filters( 'bp_get_email', $email, $email_type, $args, $post );
 }
 
@@ -2745,7 +2814,7 @@ function bp_get_email( $email_type ) {
  * @since 2.5.0
  *
  * @param string $email_type Type of email being sent.
- * @param string|array $to Array or comma-separated list of email addresses to the email to.
+ * @param string[]|string $to Array or comma-separated list of email addresses to the email to.
  * @param array $args {
  *     Optional. Array of extra. parameters.
  *
@@ -2776,12 +2845,18 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 
 	$func_args = func_get_args();  // PHP 5.2
 
-	// Filter this to skip BP's email handling and instead send everything to wp_mail().
-	$must_use_wpmail = apply_filters(
-		'bp_mail_use_legacy_support',
-		$wp_html_emails || ! $is_default_wpmail,
-		$func_args
-	);
+	/**
+	 * Filter this to skip BP's email handling and instead send everything to wp_mail().
+	 *
+	 * This is done if wp_mail_content_type() has been configured for HTML,
+	 * or if wp_mail() has been redeclared (it's a pluggable function).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param bool $use_wp_mail Whether to fallback to the regular wp_mail() function or not.
+	 * @param array All arguments passed to bp_send_email().
+	 */
+	$must_use_wpmail = apply_filters( 'bp_mail_use_wp_mail', $wp_html_emails || ! $is_default_wpmail, $func_args );
 
 	// Backward compatibility with unported pre-2.4 code, and other wp_mail() plugins.
 	if ( ! is_array( $args ) || func_num_args() > 3 || $must_use_wpmail ) {
@@ -2801,7 +2876,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	), 'send_email' );
 
 
-	/**
+	/*
 	 * Build the email.
 	 */
 
@@ -2819,10 +2894,26 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	}
 
 
-	/**
+	/*
 	 * Send the email.
 	 */
 
+	/**
+	 * Filter the email delivery class.
+	 *
+	 * Defaults to BP_PHPMailer, which as you can guess, implements PHPMailer.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $deliver_class The email delivery class name.
+	 * @param string $email_type Type of email being sent.
+	 * @param string[]|string $to Array or comma-separated list of email addresses to the email to.
+	 * @param array $args {
+	 *     Optional. Array of extra. parameters.
+	 *
+	 *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
+	 * }
+	 */
 	$delivery_class = apply_filters( 'bp_send_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
 	if ( ! class_exists( $delivery_class ) ) {
 		return new WP_Error( 'missing_class', __CLASS__, $this );
@@ -2831,6 +2922,14 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	$delivery = new $delivery_class();
 	$status   = $delivery->bp_email( $email );
 
+	/**
+	 * Triggered once BuddyPress has tried to send the email.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param BP_Email $email The email to send.
+	 * @param bool $status False if some error occurred. Otherwise, sending was attempted.
+	 */
 	do_action( 'bp_sent_email', $email, $status );
 
 	return $status;
