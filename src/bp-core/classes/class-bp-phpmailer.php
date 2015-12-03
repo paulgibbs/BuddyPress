@@ -90,9 +90,9 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		}
 
 		$recipient = $email->get( 'cc' );
-		foreach ( $recipient as $addreaa => $name ) {
+		foreach ( $recipient as $address => $name ) {
 			try {
-				$phpmailer->AddCc( $addreaa, $name );
+				$phpmailer->AddCc( $address, $name );
 			} catch ( phpmailerException $e ) {
 			}
 		}
