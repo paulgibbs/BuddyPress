@@ -156,13 +156,6 @@ function bp_email_get_customizer_settings() {
 	 * @param array $settings Email Customizer settings to add.
 	 */
 	return apply_filters( 'bp_email_get_customizer_settings', array(
-		'bp_mailtpl_opts[template]' => array(
-			'capability'           => 'bp_moderate',
-			'default'              => $defaults['template'],
-			'sanitize_callback'    => 'bp_email_sanitize_customizer_email_template',
-			'transport'            => 'refresh',
-			'type'                 => 'option',
-		),
 		'bp_mailtpl_opts[body_bg]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['body_bg'],
@@ -288,20 +281,6 @@ function bp_email_get_customizer_controls() {
 	 * @param array $controls Email Customizer controls to add.
 	 */
 	return apply_filters( 'bp_email_get_customizer_controls', array(
-		'bp_mailtpl_template' => array(
-			'class'       => 'WP_Customize_Control',
-			'description' => '',
-			'label'       => __( 'Choose one', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_template',
-			'settings'    => 'bp_mailtpl_opts[template]',
-			'type'        => 'select',
-
-			'choices'     => apply_filters( 'bp_mailtpl/template_choices', array(
-				'boxed'     => 'Boxed',
-				'fullwidth' => 'Fullwidth'
-			) ),
-		),
-
 		'bp_mailtpl_body_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose email background color', 'buddypress' ),
@@ -483,7 +462,6 @@ function bp_email_get_customizer_settings_defaults() {
 		'header_bg'         => '#be3631',
 		'header_text_color' => '#fff',
 		'header_text_size'  => '30',
-		'template'          => 'boxed',
 	);
 
 	/**
@@ -494,33 +472,6 @@ function bp_email_get_customizer_settings_defaults() {
 	 * @param array $defaults Settings default values.
 	 */
 	return apply_filters( 'bp_email_get_customizer_settings_defaults', $defaults );
-}
-
-/**
- * Sanitize callback for template selection setting.
- *
- * @since 2.5.0
- *
- * @param $input string to sanitize.
- * @return string
- */
-function bp_email_sanitize_customizer_email_template( $input ) {
-
-	/**
-	 * Filter email Customizer's template setting's whitelist.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param array $defaults Settings default values.
-	 */
-	$valid = apply_filters( 'bp_sanitize_customizer_templates',
-		array(
-			'boxed'     => __( 'Simple Theme', 'buddypress' ),
-			'fullwidth' => __( 'Fullwidth', 'buddypress' )
-		)
-	);
-
-	return ( array_key_exists( $input, $valid, true ) ) ? $input : 'boxed';
 }
 
 /**
