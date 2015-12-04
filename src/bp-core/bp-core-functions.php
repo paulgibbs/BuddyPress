@@ -2885,7 +2885,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 		return $email;
 	}
 
-	// From, subject, body are set automatically.
+	// From, subject, content are set automatically.
 	$email->to( $to );
 	$email->tokens( $args['tokens'] );
 

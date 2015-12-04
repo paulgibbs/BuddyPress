@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class BP_Email {
 	/**
-	 * The Post object containing the email body and subject.
+	 * The Post object containing the email content and subject.
 	 *
 	 * @since 2.5.0
 	 *
@@ -89,13 +89,13 @@ class BP_Email {
 	protected $subject = '';
 
 	/**
-	 * Email body.
+	 * Email content.
 	 *
 	 * @since 2.5.0
 	 *
 	 * @var string
 	 */
-	protected $body = '';
+	protected $content = '';
 
 	/**
 	 * Token names and replacement values for this email.
@@ -288,22 +288,22 @@ class BP_Email {
 	}
 
 	/**
-	 * Set the email body.
+	 * Set the email content.
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $body Email body. Assumed to be HTML.
+	 * @param string $content Email content. Assumed to be HTML.
 	 * @return BP_Email
 	 */
-	public function body( $body ) {
-		$this->body = apply_filters( 'bp_email_set_body', $body, $this );
+	public function content( $content ) {
+		$this->content = apply_filters( 'bp_email_set_content', $content, $this );
 		return $this;
 	}
 
 	/**
-	 * Set the Post object containing the email body template.
+	 * Set the Post object containing the email content template.
 	 *
-	 * Also sets the email's subject and body from the Post, for convenience.
+	 * Also sets the email's subject and content from the Post, for convenience.
 	 *
 	 * @since 2.5.0
 	 *
@@ -314,7 +314,7 @@ class BP_Email {
 		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
 
 		$this->subject( $this->get( 'post_object' )->post_title );
-		$this->body( $this->get( 'post_object' )->post_content );
+		$this->content( $this->get( 'post_object' )->post_content );
 
 		return $this;
 	}
@@ -413,7 +413,7 @@ class BP_Email {
 		$retval = true;
 
 		// BCC, CC, and token properties are optional.
-		if ( ! $this->get( 'from' ) || ! $this->get( 'to' ) || ! $this->get( 'subject' ) || ! $this->get( 'body' ) ) {
+		if ( ! $this->get( 'from' ) || ! $this->get( 'to' ) || ! $this->get( 'subject' ) || ! $this->get( 'content' ) ) {
 			$retval = new WP_Error( 'missing_parameter', __CLASS__, $this );
 		}
 
