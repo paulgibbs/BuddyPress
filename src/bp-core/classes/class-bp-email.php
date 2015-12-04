@@ -389,7 +389,7 @@ class BP_Email {
 
 		// Replace tokens.
 		if ( $transform === 'replace-tokens' ) {
-			$retval = $this->replace_tokens( $retval );
+			$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) ) {
 		}
 
 		return apply_filters( 'bp_email_get_property', $retval, $property, $transform, $this );
@@ -457,17 +457,17 @@ class BP_Email {
 	}
 
 	/**
-	 * Replace all tokens in the specified field with appropriate values.
+	 * Replace all tokens in the input with appropriate values.
 	 *
 	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.5.0
 	 *
 	 * @param string $text
+	 * @param array $tokens Token names and replacement values for the $text.
 	 * @return string
 	 */
-	protected function replace_tokens( $text ) {
-		$tokens = $this->get( 'tokens' );
+	public static function replace_tokens( $text, $tokens ) {
 		foreach ( $tokens as $token => &$replacement ) {
 			if ( is_callable( $replacement ) ) {
 				$replacement = call_user_func( $replacement );
