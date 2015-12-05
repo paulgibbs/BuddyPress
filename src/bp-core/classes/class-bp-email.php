@@ -88,6 +88,15 @@ class BP_Email {
 	protected $subject = '';
 
 	/**
+	 * Email template (the HTML wrapper around the email content).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @var string
+	 */
+	protected $template = '';
+
+	/**
 	 * Addressee details (to).
 	 *
 	 * @since 2.5.0
@@ -296,7 +305,22 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function content( $content ) {
+		// djpaultodo kses this?
 		$this->content = apply_filters( 'bp_email_set_content', $content, $this );
+		return $this;
+	}
+
+	/**
+	 * Set the email template (the HTML wrapper around the email content).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template Email template. Assumed to be HTML.
+	 * @return BP_Email
+	 */
+	public function template( $template ) {
+		// djpaultodo kses this?
+		$this->template = apply_filters( 'bp_email_set_template', $template, $this );
 		return $this;
 	}
 
