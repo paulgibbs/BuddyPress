@@ -2731,8 +2731,8 @@ function bp_get_email_tax_type_labels() {
 /**
  * Get an BP_Email object for the specified email type.
  *
- * This function pre-populates the object with the subject and body from the appropriate email post type item.
- * It does not replace placeholder tokens in the content with real values.
+ * This function pre-populates the object with the subject, content, and template from the appropriate
+ * email post type item. It does not replace placeholder tokens in the content with real values.
  *
  * @since 2.5.0
  *
@@ -2787,7 +2787,7 @@ function bp_get_email( $email_type ) {
 	 * Set some email properties for convenience.
 	 */
 
-	// Post object (sets subject and body).
+	// Post object (sets subject, content, template).
 	$email->post_object( $post );
 
 	/**

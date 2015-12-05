@@ -306,7 +306,7 @@ class BP_Email {
 	/**
 	 * Set the Post object containing the email content template.
 	 *
-	 * Also sets the email's subject and content from the Post, for convenience.
+	 * Also sets the email's subject, content, and template from the Post, for convenience.
 	 *
 	 * @since 2.5.0
 	 *
@@ -316,8 +316,18 @@ class BP_Email {
 	public function post_object( WP_Post $post ) {
 		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
 
-		$this->subject( $this->get( 'post_object' )->post_title );
-		$this->content( $this->get( 'post_object' )->post_content );
+		if ( is_a( $this->post_object, 'WP_Post' ) ) {
+			$this->subject( $this->post_object->post_title );
+			$this->content( $this->post_object->post_content );
+
+			ob_start();
+
+			// Load the template.
+			bp_locate_template( bp_email_get_template( $this->post_object ), true, false );
+ 			$this->template( ob_get_contents() );
+
+  		ob_end_clean();
+		}
 
 		return $this;
 	}
@@ -437,7 +447,13 @@ class BP_Email {
 		$retval = true;
 
 		// BCC, CC, and token properties are optional.
-		if ( ! $this->get( 'from' ) || ! $this->get( 'to' ) || ! $this->get( 'subject' ) || ! $this->get( 'content' ) ) {
+		if (
+			! $this->get( 'from' ) ||
+			! $this->get( 'to' ) ||
+			! $this->get( 'subject' ) ||
+			! $this->get( 'content' ) ||
+			! $this->get( 'template' )
+		) {
 			$retval = new WP_Error( 'missing_parameter', __CLASS__, $this );
 		}
 
