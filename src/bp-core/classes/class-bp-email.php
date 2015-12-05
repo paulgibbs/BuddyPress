@@ -169,54 +169,38 @@ class BP_Email {
 	}
 
 
-	/**
+	/*
 	 * Psuedo setters/getters.
 	 */
 
 	/**
-	 * Set the email's "from" address and name.
+	 * Getter function to expose object properties.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.5.0
-	 *
-	 * @param string $email_address
-	 * @param string $name Optional "from" name.
-	 * @return BP_Email
+	 * @param string $property Name of property to access.
+	 * @param string $tranform Optional. How to transform the return value.
+	 *                         Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return mixed Returns null if property does not exist, otherwise the value.
 	 */
-	public function from( $email_address, $name = '' ) {
-		$from = array();
-
-		if ( is_email( $email_address ) ) {
-			$from = array( sanitize_email( $email_address ) => $name );
+	public function get( $property, $transform = 'raw' ) {
+		if ( ! property_exists( $this, $property ) ) {
+			return null;
 		}
 
-		$this->from = apply_filters( 'bp_email_set_from', $from, $email_address, $name, $this );
+		$retval = apply_filters( "bp_email_get_{$property}", $this->$property, $property, $transform, $this );
 
-		return $this;
+		// Replace tokens.
+		if ( $transform === 'replace-tokens' ) {
+			$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) ) {
+		}
+
+		return apply_filters( 'bp_email_get_property', $retval, $property, $transform, $this );
 	}
 
 	/**
-	 * Set the email's "reply to" address and name.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string $email_address
-	 * @param string $name Optional "reply to" name.
-	 * @return BP_Email
-	 */
-	public function reply_to( $email_address, $name = '' ) {
-		$reply_to = array();
-
-		if ( is_email( $email_address ) ) {
-			$reply_to = array( sanitize_email( $email_address ) => $name );
-		}
-
-		$this->reply_to = apply_filters( 'bp_email_set_reply_to', $reply_to, $email_address, $name, $this );
-
-		return $this;
-	}
-
-	/**
-	 * Set the email's "to" address.
+	 * Set the email's "bcc" address.
 	 *
 	 * To set a single address, the first parameter is the address and the second the name.
 	 * To set multiple addresses, for each array item, the key is the email address and
@@ -224,15 +208,15 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string|string[] $to_address If array, key is email address, value is the name.
+	 * @param string|string[] $bcc_address If array, key is email address, value is the name.
 	 *     If string, this is the email address.
-	 * @param string $name Optional. If $to_address is not an array, this is the "from" name.
+	 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
 	 *     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
-	public function to( $to_address, $name = '' ) {
-		$to       = $this->parse_and_sanitize_addresses( $to_address, $name );
-		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $name, $this );
+	public function bcc( $bcc_address, $name = '' ) {
+		$bcc       = $this->parse_and_sanitize_addresses( $bcc_address, $name );
+		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
 
 		return $this;
 	}
@@ -260,43 +244,6 @@ class BP_Email {
 	}
 
 	/**
-	 * Set the email's "bcc" address.
-	 *
-	 * To set a single address, the first parameter is the address and the second the name.
-	 * To set multiple addresses, for each array item, the key is the email address and
-	 * the value is the name.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string|string[] $bcc_address If array, key is email address, value is the name.
-	 *     If string, this is the email address.
-	 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
-	 *     Otherwise, the parameter is not used.
-	 * @return BP_Email
-	 */
-	public function bcc( $bcc_address, $name = '' ) {
-		$bcc       = $this->parse_and_sanitize_addresses( $bcc_address, $name );
-		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
-
-		return $this;
-	}
-
-	/**
-	 * Set the email subject.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string $subject
-	 * @return BP_Email
-	 */
-	public function subject( $subject ) {
-		$subject       = sanitize_text_field( $subject );
-		$this->subject = apply_filters( 'bp_email_set_subject', $subject, $this );
-
-		return $this;
-	}
-
-	/**
 	 * Set the email content.
 	 *
 	 * @since 2.5.0
@@ -311,59 +258,22 @@ class BP_Email {
 	}
 
 	/**
-	 * Set the email template (the HTML wrapper around the email content).
+	 * Set the email's "from" address and name.
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $template Email template. Assumed to be HTML.
+	 * @param string $email_address
+	 * @param string $name Optional "from" name.
 	 * @return BP_Email
 	 */
-	public function template( $template ) {
-		// djpaultodo kses this?
-		$this->template = apply_filters( 'bp_email_set_template', $template, $this );
-		return $this;
-	}
+	public function from( $email_address, $name = '' ) {
+		$from = array();
 
-	/**
-	 * Set the Post object containing the email content template.
-	 *
-	 * Also sets the email's subject and content from the Post, for convenience.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param WP_Post $post
-	 * @return BP_Email
-	 */
-	public function post_object( WP_Post $post ) {
-		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
-
-		$this->subject( $this->get( 'post_object' )->post_title );
-		$this->content( $this->get( 'post_object' )->post_content );
-
-		return $this;
-	}
-
-	/**
-	 * Set token names and replacement values for this email.
-	 *
-	 * In templates, tokens are inserted with a Handlebars-like syntax, e.g. `{{token_name}}`.
-	 * { and } are reserved characters. There's no need to specify these brackets in your token names.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param array $tokens Key/value pairs of token name/value. Values are a string or a callable function.
-	 * @return BP_Email
-	 */
-	public function tokens( array $tokens ) {
-		$formatted_tokens = array();
-
-		foreach ( $tokens as $name => $value ) {
-			// Wrap token name in {{brackets}}.
-			$name                      = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
-			$formatted_tokens[ $name ] = $value;
+		if ( is_email( $email_address ) ) {
+			$from = array( sanitize_email( $email_address ) => $name );
 		}
 
-		$this->tokens = apply_filters( 'bp_email_set_tokens', $formatted_tokens, $tokens, $this );
+		$this->from = apply_filters( 'bp_email_set_from', $from, $email_address, $name, $this );
 
 		return $this;
 	}
@@ -394,33 +304,123 @@ class BP_Email {
 	}
 
 	/**
-	 * Getter function to expose object properties.
+	 * Set the Post object containing the email content template.
 	 *
-	 * Unlike most other methods in this class, this one is not chainable.
+	 * Also sets the email's subject and content from the Post, for convenience.
 	 *
 	 * @since 2.5.0
-	 * @param string $property Name of property to access.
-	 * @param string $tranform Optional. How to transform the return value.
-	 *                         Accepts 'raw' (default) or 'replace-tokens'.
-	 * @return mixed Returns null if property does not exist, otherwise the value.
+	 *
+	 * @param WP_Post $post
+	 * @return BP_Email
 	 */
-	public function get( $property, $transform = 'raw' ) {
-		if ( ! property_exists( $this, $property ) ) {
-			return null;
+	public function post_object( WP_Post $post ) {
+		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
+
+		$this->subject( $this->get( 'post_object' )->post_title );
+		$this->content( $this->get( 'post_object' )->post_content );
+
+		return $this;
+	}
+
+	/**
+	 * Set the email's "reply to" address and name.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $email_address
+	 * @param string $name Optional "reply to" name.
+	 * @return BP_Email
+	 */
+	public function reply_to( $email_address, $name = '' ) {
+		$reply_to = array();
+
+		if ( is_email( $email_address ) ) {
+			$reply_to = array( sanitize_email( $email_address ) => $name );
 		}
 
-		$retval = apply_filters( "bp_email_get_{$property}", $this->$property, $property, $transform, $this );
+		$this->reply_to = apply_filters( 'bp_email_set_reply_to', $reply_to, $email_address, $name, $this );
 
-		// Replace tokens.
-		if ( $transform === 'replace-tokens' ) {
-			$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) ) {
+		return $this;
+	}
+
+	/**
+	 * Set the email subject.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $subject
+	 * @return BP_Email
+	 */
+	public function subject( $subject ) {
+		$subject       = sanitize_text_field( $subject );
+		$this->subject = apply_filters( 'bp_email_set_subject', $subject, $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set the email template (the HTML wrapper around the email content).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template Email template. Assumed to be HTML.
+	 * @return BP_Email
+	 */
+	public function template( $template ) {
+		// djpaultodo kses this?
+		$this->template = apply_filters( 'bp_email_set_template', $template, $this );
+		return $this;
+	}
+
+	/**
+	 * Set the email's "to" address.
+	 *
+	 * To set a single address, the first parameter is the address and the second the name.
+	 * To set multiple addresses, for each array item, the key is the email address and
+	 * the value is the name.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string|string[] $to_address If array, key is email address, value is the name.
+	 *     If string, this is the email address.
+	 * @param string $name Optional. If $to_address is not an array, this is the "from" name.
+	 *     Otherwise, the parameter is not used.
+	 * @return BP_Email
+	 */
+	public function to( $to_address, $name = '' ) {
+		$to       = $this->parse_and_sanitize_addresses( $to_address, $name );
+		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $name, $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set token names and replacement values for this email.
+	 *
+	 * In templates, tokens are inserted with a Handlebars-like syntax, e.g. `{{token_name}}`.
+	 * { and } are reserved characters. There's no need to specify these brackets in your token names.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $tokens Key/value pairs of token name/value. Values are a string or a callable function.
+	 * @return BP_Email
+	 */
+	public function tokens( array $tokens ) {
+		$formatted_tokens = array();
+
+		foreach ( $tokens as $name => $value ) {
+			// Wrap token name in {{brackets}}.
+			$name                      = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
+			$formatted_tokens[ $name ] = $value;
 		}
 
-		return apply_filters( 'bp_email_get_property', $retval, $property, $transform, $this );
+		$this->tokens = apply_filters( 'bp_email_set_tokens', $formatted_tokens, $tokens, $this );
+
+		return $this;
 	}
 
 
-	/**
+	/*
 	 * Sanitisation and validation logic.
 	 */
 
@@ -445,7 +445,7 @@ class BP_Email {
 	}
 
 
-	/**
+	/*
 	 * Utility functions.
 	 *
 	 * Unlike other methods in this class, utility functions are not chainable.
