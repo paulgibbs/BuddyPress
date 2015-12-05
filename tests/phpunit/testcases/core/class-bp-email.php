@@ -276,4 +276,14 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertTrue( is_wp_error( $result ) );
 		$this->assertSame( $result->get_error_code(), 'missing_parameter' );
 	}
+
+	public function test_validation_with_missing_template() {
+		$email  = new BP_Email( 'fake_type' );
+		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' )->content( 'testing' )->template( '' );
+		$result = $email->validate();
+
+		// Template has a default value, but it can't be blank.
+		$this->assertTrue( is_wp_error( $result ) );
+		$this->assertSame( $result->get_error_code(), 'missing_parameter' );
+	}
 }
