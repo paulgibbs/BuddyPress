@@ -165,12 +165,12 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertSame( $email->get( 'subject' ), $message );
 	}
 
-	public function test_valid_body() {
+	public function test_valid_content() {
 		$message = 'test';
 		$email   = new BP_Email( 'fake_type' );
 
-		$email->body( $message );
-		$this->assertSame( $email->get( 'body' ), $message );
+		$email->content( $message );
+		$this->assertSame( $email->get( 'content' ), $message );
 	}
 
 	public function test_tokens() {
@@ -200,7 +200,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 	public function test_validation() {
 		$email = new BP_Email( 'fake_type' );
-		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' )->body( 'testing' );
+		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' )->content( 'testing' );
 
 		$this->assertTrue( $email->validate() );
 	}
