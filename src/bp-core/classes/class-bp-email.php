@@ -94,7 +94,7 @@ class BP_Email {
 	 *
 	 * @var string
 	 */
-	protected $template = '';
+	protected $template = '{{content}}';
 
 	/**
 	 * Addressee details (to).
