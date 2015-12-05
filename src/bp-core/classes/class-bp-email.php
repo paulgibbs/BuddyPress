@@ -200,6 +200,31 @@ class BP_Email {
 	}
 
 	/**
+	 * Set email headers.
+	 *
+	 * Does NOT let you override to/from, etc. Use the methods provided to set those.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param array $headers Key/value pairs of heade name/values (strings).
+	 * @return BP_Email
+	 */
+	public function headers( array $headers ) {
+		$new_headers = array();
+
+		foreach ( $headers as $name => $content ) {
+			$content = str_replace( ':', '', $content );
+			$name    = str_replace( ':', '', $name );
+
+			$new_headers[ $name ] = $content;
+		}
+
+		$this->headers = apply_filters( 'bp_email_set_headers', $new_headers, $headers, $this );
+
+		return $this;
+	}
+
+	/**
 	 * Set the email's "bcc" address.
 	 *
 	 * To set a single address, the first parameter is the address and the second the name.
@@ -274,31 +299,6 @@ class BP_Email {
 		}
 
 		$this->from = apply_filters( 'bp_email_set_from', $from, $email_address, $name, $this );
-
-		return $this;
-	}
-
-	/**
-	 * Set email headers.
-	 *
-	 * Does NOT let you override to/from, etc. Use the methods provided to set those.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param array $headers Key/value pairs of heade name/values (strings).
-	 * @return BP_Email
-	 */
-	public function headers( array $headers ) {
-		$new_headers = array();
-
-		foreach ( $headers as $name => $content ) {
-			$content = str_replace( ':', '', $content );
-			$name    = str_replace( ':', '', $name );
-
-			$new_headers[ $name ] = $content;
-		}
-
-		$this->headers = apply_filters( 'bp_email_set_headers', $new_headers, $headers, $this );
 
 		return $this;
 	}
