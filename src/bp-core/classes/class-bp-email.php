@@ -617,7 +617,8 @@ class BP_Email {
 		 * @since 2.5.0
 		 *
 		 * @param string $text
+		 * @param array $tokens Token names and replacement values for the $text.
 		 */
-		return apply_filters( 'bp_email_replace_tokens', $text );
+		return apply_filters( 'bp_email_replace_tokens', $text, $tokens );
 	}
 }
