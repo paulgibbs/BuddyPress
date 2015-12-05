@@ -179,24 +179,48 @@ class BP_Email {
 	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.5.0
-	 * @param string $property Name of property to access.
+	 * @param string $property_name Property to access.
 	 * @param string $tranform Optional. How to transform the return value.
 	 *                         Accepts 'raw' (default) or 'replace-tokens'.
 	 * @return mixed Returns null if property does not exist, otherwise the value.
 	 */
-	public function get( $property, $transform = 'raw' ) {
-		if ( ! property_exists( $this, $property ) ) {
+	public function get( $property_name, $transform = 'raw' ) {
+		if ( ! property_exists( $this, $property_name ) ) {
 			return null;
 		}
 
-		$retval = apply_filters( "bp_email_get_{$property}", $this->$property, $property, $transform, $this );
+		/**
+		 * Filters the value of the specified email property.
+		 *
+		 * This is a dynamic filter dependent on the specified key.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $property_value Property value.
+		 * @param string $property_name
+		 * @param string $transform How to transform the return value.
+		 *                          Accepts 'raw' (default) or 'replace-tokens'.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
+		$retval = apply_filters( "bp_email_get_{$property}", $this->$property_name, $property_name, $transform, $this );
 
 		// Replace tokens.
 		if ( $transform === 'replace-tokens' ) {
 			$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) ) {
 		}
 
-		return apply_filters( 'bp_email_get_property', $retval, $property, $transform, $this );
+		/**
+		 * Filters the value of the specified email $property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $retval Property value.
+		 * @param string $property_name
+		 * @param string $transform How to transform the return value.
+		 *                          Accepts 'raw' (default) or 'replace-tokens'.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
+		return apply_filters( 'bp_email_get_property', $retval, $property_name, $transform, $this );
 	}
 
 	/**
@@ -206,7 +230,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param array $headers Key/value pairs of heade name/values (strings).
+	 * @param array $headers Key/value pairs of header name/values (strings).
 	 * @return BP_Email
 	 */
 	public function headers( array $headers ) {
@@ -219,7 +243,15 @@ class BP_Email {
 			$new_headers[ $name ] = $content;
 		}
 
-		$this->headers = apply_filters( 'bp_email_set_headers', $new_headers, $headers, $this );
+		/**
+		 * Filters the new value of the headers email property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $new_headers Key/value pairs of new header name/values (strings).
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
+		$this->headers = apply_filters( 'bp_email_set_headers', $new_headers, $this );
 
 		return $this;
 	}
@@ -234,13 +266,26 @@ class BP_Email {
 	 * @since 2.5.0
 	 *
 	 * @param string|string[] $bcc_address If array, key is email address, value is the name.
-	 *     If string, this is the email address.
+	 *                                     If string, this is the email address.
 	 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
-	 *     Otherwise, the parameter is not used.
+	 *                     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
 	public function bcc( $bcc_address, $name = '' ) {
-		$bcc       = $this->parse_and_sanitize_addresses( $bcc_address, $name );
+		$bcc = $this->parse_and_sanitize_addresses( $bcc_address, $name );
+
+		/**
+		 * Filters the new value of the BCC email property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $bcc Key/value pairs of BCC addresses/names.
+		 * @param string|string[] $bcc_address If array, key is email address, value is the name.
+		 *                                     If string, this is the email address.
+		 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
+		 *                     Otherwise, the parameter is not used.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
 
 		return $this;
@@ -256,13 +301,26 @@ class BP_Email {
 	 * @since 2.5.0
 	 *
 	 * @param string|string[] $cc_address If array, key is email address, value is the name.
-	 *     If string, this is the email address.
+	 *                                   If string, this is the email address.
 	 * @param string $name Optional. If $cc_address is not an array, this is the "from" name.
-	 *     Otherwise, the parameter is not used.
+	 *                      Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
 	public function cc( $cc_address, $name = '' ) {
 		$cc       = $this->parse_and_sanitize_addresses( $cc_address, $name );
+
+		/**
+		 * Filters the new value of the CC email property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $cc Key/value pairs of CC addresses/names.
+		 * @param string|string[] $cc_address If array, key is email address, value is the name.
+		 *                                    If string, this is the email address.
+		 * @param string $name Optional. If $cc_address is not an array, this is the "from" name.
+		 *                     Otherwise, the parameter is not used.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $name, $this );
 
 		return $this;
@@ -278,7 +336,17 @@ class BP_Email {
 	 */
 	public function content( $content ) {
 		// djpaultodo kses this?
+
+		/**
+		 * Filters the new value of the content email property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $content Email content. Assumed to be HTML.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->content = apply_filters( 'bp_email_set_content', $content, $this );
+
 		return $this;
 	}
 
@@ -358,11 +426,20 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $subject
+	 * @param string $subject Email subject.
 	 * @return BP_Email
 	 */
 	public function subject( $subject ) {
-		$subject       = sanitize_text_field( $subject );
+		$subject = sanitize_text_field( $subject );
+
+		/**
+		 * Filters the new value of the subject email property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $subject Email subject.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->subject = apply_filters( 'bp_email_set_subject', $subject, $this );
 
 		return $this;
@@ -378,7 +455,17 @@ class BP_Email {
 	 */
 	public function template( $template ) {
 		// djpaultodo kses this?
+
+		/**
+		 * Filters the new value of the template email property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $template Email template. Assumed to be HTML.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->template = apply_filters( 'bp_email_set_template', $template, $this );
+
 		return $this;
 	}
 
@@ -457,6 +544,14 @@ class BP_Email {
 			$retval = new WP_Error( 'missing_parameter', __CLASS__, $this );
 		}
 
+		/**
+		 * Filters whether the email passes basic validation checks.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param bool|WP_Error $retval Returns true if validation succesful, else a descriptive WP_Error.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		return apply_filters( 'bp_email_validate', $retval, $this );
 	}
 
@@ -515,6 +610,14 @@ class BP_Email {
 		}
 
 		$text = strtr( $text, $tokens );
-		return apply_filters( 'bp_email_replace_tokens', $text, $this );
+
+		/**
+		 * Filters text that has had tokens replaced.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $text
+		 */
+		return apply_filters( 'bp_email_replace_tokens', $text );
 	}
 }
