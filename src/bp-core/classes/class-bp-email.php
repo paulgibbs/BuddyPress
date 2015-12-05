@@ -16,22 +16,31 @@ defined( 'ABSPATH' ) || exit;
  */
 class BP_Email {
 	/**
-	 * The Post object containing the email content and subject.
+	 * Addressee details (BCC).
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var WP_Post
+	 * @var array Associative pairing of "bcc" name (key) and email addresses (value).
 	 */
-	protected $post_object = null;
+	protected $bcc = array();
 
 	/**
-	 * Unique identifier for this particular type of email.
+	 * Addressee details (CC).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @var array Associative pairing of "cc" name (key) and email addresses (value).
+	 */
+	protected $cc = array();
+
+	/**
+	 * Email content.
 	 *
 	 * @since 2.5.0
 	 *
 	 * @var string
 	 */
-	protected $type = '';
+	protected $content = '';
 
 	/**
 	 * Sender details.
@@ -43,6 +52,24 @@ class BP_Email {
 	protected $from = array();
 
 	/**
+	 * Email headers.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @var array Associative pairing of email header name/value.
+	 */
+	protected $headers = array();
+
+	/**
+	 * The Post object (the source of the email's content and subject).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @var WP_Post
+	 */
+	protected $post_object = null;
+
+	/**
 	 * Reply To details.
 	 *
 	 * @since 2.5.0
@@ -50,6 +77,15 @@ class BP_Email {
 	 * @var array Associative pairing of  "reply to" name (key) and email addresses (value).
 	 */
 	protected $reply_to = array();
+
+	/**
+	 * Email subject.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @var string
+	 */
+	protected $subject = '';
 
 	/**
 	 * Addressee details (to).
@@ -62,40 +98,13 @@ class BP_Email {
 	protected $to = array();
 
 	/**
-	 * Addressee details (CC).
-	 *
-	 * @since 2.5.0
-	 *
-	 * @var array Associative pairing of "cc" name (key) and email addresses (value).
-	 */
-	protected $cc = array();
-
-	/**
-	 * Addressee details (BCC).
-	 *
-	 * @since 2.5.0
-	 *
-	 * @var array Associative pairing of "bcc" name (key) and email addresses (value).
-	 */
-	protected $bcc = array();
-
-	/**
-	 * Email subject.
+	 * Unique identifier for this particular type of email.
 	 *
 	 * @since 2.5.0
 	 *
 	 * @var string
 	 */
-	protected $subject = '';
-
-	/**
-	 * Email content.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @var string
-	 */
-	protected $content = '';
+	protected $type = '';
 
 	/**
 	 * Token names and replacement values for this email.
@@ -105,15 +114,6 @@ class BP_Email {
 	 * @var array Associative pairing of token name (key) and replacement value (value).
 	 */
 	protected $tokens = array();
-
-	/**
-	 * Email headers.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @var array Associative pairing of email header name/value.
-	 */
-	protected $headers = array();
 
 	/**
 	 * Constructor.
