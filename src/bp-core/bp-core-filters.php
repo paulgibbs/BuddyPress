@@ -1125,7 +1125,7 @@ function bp_core_set_default_email_tokens( $tokens, $property, $transform, $emai
 	$tokens['{{site.description}}'] = bp_get_option( 'blogdescription' );
 	$tokens['{{site.name}}']        = bp_get_option( 'blogname' );
 	$tokens['{{site.url}}']         = home_url();
-	$tokens['{{content}}']          = array( $email, '_get_content_and_replace_tokens' );
+	$tokens['{{content}}']          = $email->get( 'content', 'replace-tokens' );
 
 	return $tokens;
 }
