@@ -206,7 +206,7 @@ class BP_Email {
 
 		// Replace tokens.
 		if ( $transform === 'replace-tokens' ) {
-			$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) ) {
+			$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) );
 		}
 
 		/**
