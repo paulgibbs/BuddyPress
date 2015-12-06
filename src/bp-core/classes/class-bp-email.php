@@ -179,6 +179,7 @@ class BP_Email {
 	 * Unlike most other methods in this class, this one is not chainable.
 	 *
 	 * @since 2.5.0
+	 *
 	 * @param string $property_name Property to access.
 	 * @param string $tranform Optional. How to transform the return value.
 	 *                         Accepts 'raw' (default) or 'replace-tokens'.
@@ -303,7 +304,7 @@ class BP_Email {
 	 * @param string|string[] $cc_address If array, key is email address, value is the name.
 	 *                                   If string, this is the email address.
 	 * @param string $name Optional. If $cc_address is not an array, this is the "from" name.
-	 *                      Otherwise, the parameter is not used.
+	 *                     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
 	public function cc( $cc_address, $name = '' ) {
@@ -479,9 +480,9 @@ class BP_Email {
 	 * @since 2.5.0
 	 *
 	 * @param string|string[] $to_address If array, key is email address, value is the name.
-	 *     If string, this is the email address.
+	 *                                    If string, this is the email address.
 	 * @param string $name Optional. If $to_address is not an array, this is the "from" name.
-	 *     Otherwise, the parameter is not used.
+	 *                     Otherwise, the parameter is not used.
 	 * @return BP_Email
 	 */
 	public function to( $to_address, $name = '' ) {
