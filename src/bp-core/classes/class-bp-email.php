@@ -203,7 +203,7 @@ class BP_Email {
 		 *                          Accepts 'raw' (default) or 'replace-tokens'.
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
-		$retval = apply_filters( "bp_email_get_{$property}", $this->$property_name, $property_name, $transform, $this );
+		$retval = apply_filters( "bp_email_get_{$property_name}", $this->$property_name, $property_name, $transform, $this );
 
 		// Replace tokens.
 		if ( $transform === 'replace-tokens' ) {
