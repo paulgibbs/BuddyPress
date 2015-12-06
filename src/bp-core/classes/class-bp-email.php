@@ -622,4 +622,22 @@ class BP_Email {
 		 */
 		return apply_filters( 'bp_email_replace_tokens', $text, $tokens );
 	}
+
+	/**
+	 * An internal-only callback method to get the email content and replace tokens.
+	 *
+	 * Essentially a wrapper function used by {@see bp_core_set_default_email_tokens},
+	 * it's invoked with PHP's array callable syntax, which doesn't support arguments,
+	 * which is why we have this bad boy.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 * @access private
+	 *
+	 * @return string Returns email content with tokens replaced.
+	 */
+	final public function _get_content_and_replace_tokens() {
+		return $this->get( 'content', 'replace-tokens' );
+	}
 }
