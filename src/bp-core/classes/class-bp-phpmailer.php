@@ -35,9 +35,10 @@ class BP_PHPMailer implements BP_Email_Delivery {
 	/**
 	 * Send email(s).
 	 *
-	 * @param BP_Email $email Email to send.
-	 * @return bool False if some error occurred.
 	 * @since 2.5.0
+	 *
+	 * @param BP_Email $email Email to send.
+	 * @return bool|WP_Error Returns true if email send, else a descriptive WP_Error.
 	 */
 	public function bp_email( BP_Email $email ) {
 		global $phpmailer;

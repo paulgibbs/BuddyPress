@@ -20,7 +20,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Associative pairing of "bcc" name (key) and email addresses (value).
+	 * @var string[] Associative pairing of "bcc" name (key) and email addresses (value).
 	 */
 	protected $bcc = array();
 
@@ -29,7 +29,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Associative pairing of "cc" name (key) and email addresses (value).
+	 * @var string[] Associative pairing of "cc" name (key) and email addresses (value).
 	 */
 	protected $cc = array();
 
@@ -47,7 +47,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Associative pairing of "from" name (key) and email addresses (value).
+	 * @var string[] Associative pairing of "from" name (key) and email addresses (value).
 	 */
 	protected $from = array();
 
@@ -56,7 +56,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Associative pairing of email header name/value.
+	 * @var string[] Associative pairing of email header name/value.
 	 */
 	protected $headers = array();
 
@@ -74,7 +74,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Associative pairing of  "reply to" name (key) and email addresses (value).
+	 * @var string[] Associative pairing of  "reply to" name (key) and email addresses (value).
 	 */
 	protected $reply_to = array();
 
@@ -101,7 +101,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Associative pairing of "to" name (key) and email addresses (value).
+	 * @var string[] Associative pairing of "to" name (key) and email addresses (value).
 	 * }
 	 */
 	protected $to = array();
@@ -120,7 +120,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var array Associative pairing of token name (key) and replacement value (value).
+	 * @var string[] Associative pairing of token name (key) and replacement value (value).
 	 */
 	protected $tokens = array();
 
@@ -231,7 +231,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param array $headers Key/value pairs of header name/values (strings).
+	 * @param string[] $headers Key/value pairs of header name/values (strings).
 	 * @return BP_Email
 	 */
 	public function headers( array $headers ) {
@@ -249,7 +249,7 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $new_headers Key/value pairs of new header name/values (strings).
+		 * @param string[] $new_headers Key/value pairs of new header name/values (strings).
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
 		$this->headers = apply_filters( 'bp_email_set_headers', $new_headers, $this );
@@ -280,7 +280,7 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $bcc Key/value pairs of BCC addresses/names.
+		 * @param string[] $bcc Key/value pairs of BCC addresses/names.
 		 * @param string|string[] $bcc_address If array, key is email address, value is the name.
 		 *                                     If string, this is the email address.
 		 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
@@ -315,7 +315,7 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $cc Key/value pairs of CC addresses/names.
+		 * @param string[] $cc Key/value pairs of CC addresses/names.
 		 * @param string|string[] $cc_address If array, key is email address, value is the name.
 		 *                                    If string, this is the email address.
 		 * @param string $name Optional. If $cc_address is not an array, this is the "from" name.
@@ -372,7 +372,7 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $from Associative pairing of "from" name (key) and email addresses (value).
+		 * @param string[] $from Associative array of "from" name (key) and addresses (value).
 		 * @param string $email_address From address.
 		 * @param string $name From name.
 		 * @param BP_Email $this Current instance of the email type class.
@@ -440,7 +440,7 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $reply_to Associative pairing of "reply to" name (key) and email addresses (value).
+		 * @param string[] $reply_to Associative array of "reply to" name (key) and addresses (value).
 		 * @param string $email_address "Reply to" address.
 		 * @param string $name "Reply to" name.
 		 * @param BP_Email $this Current instance of the email type class.
@@ -521,7 +521,7 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $to Associative pairing of "to" name (key) and email addresses (value).
+		 * @param string[] $to Associative array of "to" name (key) and addresses (value).
 		 * @param string $to_address "To" address.
 		 * @param string $name "To" name.
 		 * @param BP_Email $this Current instance of the email type class.
@@ -539,7 +539,8 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param array $tokens Key/value pairs of token name/value. Values are a string or a callable function.
+	 * @param string[] $tokens Associative array, contains key/value pairs of token name/value.
+	 *                         Values are a string or a callable function.
 	 * @return BP_Email
 	 */
 	public function tokens( array $tokens ) {
@@ -556,8 +557,8 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param array $formatted_tokens Associative pairing of token names (key) and replacement values (value).
-		 * @param array $to Associative pairing of unformatted token names (key) and replacement values (value).
+		 * @param string[] $formatted_tokens Associative pairing of token names (key) and replacement values (value).
+		 * @param string[] $tokens Associative pairing of unformatted token names (key) and replacement values (value).
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
 		$this->tokens = apply_filters( 'bp_email_set_tokens', $formatted_tokens, $tokens, $this );
