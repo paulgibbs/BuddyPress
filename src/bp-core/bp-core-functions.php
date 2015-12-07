@@ -2956,7 +2956,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
  * @since 2.5.0
  *
  * @param WP_Post $object Post to get email template for.
- * @return array
+ * @return string[]
  */
 function bp_email_get_template( WP_Post $object ) {
 
@@ -2965,7 +2965,7 @@ function bp_email_get_template( WP_Post $object ) {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param array $templates
+	 * @param string[] $templates
 	 */
 	return apply_filters( 'bp_email_get_template', array(
 		"single-{$object->post_type}-{$object->post_name}.php",
