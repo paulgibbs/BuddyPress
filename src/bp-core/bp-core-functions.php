@@ -2821,8 +2821,9 @@ function bp_get_email( $email_type ) {
  *
  *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
  * }
- * @return bool|WP_Error Bool if the email is sent or not.
- *         If a WP_Error is returned, there was a failure.
+ * @return bool|WP_Error True if the email was sent successfully. Otherwise, a WP_Error object
+ *                       describing why the email failed to send. The contents will vary based
+ *                       on the email delivery class you are using.
  */
 function bp_send_email( $email_type, $to, $args = array() ) {
 	static $is_default_wpmail = null;
@@ -2923,15 +2924,28 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	$delivery = new $delivery_class();
 	$status   = $delivery->bp_email( $email );
 
-	/**
-	 * Triggered once BuddyPress has tried to send the email.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param BP_Email $email The email to send.
-	 * @param bool $status False if some error occurred. Otherwise, sending was attempted.
-	 */
-	do_action( 'bp_sent_email', $email, $status );
+	if ( is_wp_error( $status ) ) {
+		/**
+		 * Fires after BuddyPress has tried - and failed - to send an email.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param WP_Error $error A WP_Error object describing why the email failed to send. The contents
+		 *                        will vary based on the email delivery class you are using.
+		 */
+ 		do_action( 'bp_send_email_failure', status );
+
+	} else {
+		/**
+		 * Fires after BuddyPress has succesfully sent an email.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param BP_Email $email The email to send.
+		 * @param bool $status True if the email was sent successfully.
+		 */
+		do_action( 'bp_send_email_success', $email, $status );
+	}
 
 	return $status;
 }
