@@ -245,7 +245,7 @@ class BP_Email {
 		}
 
 		/**
-		 * Filters the new value of the headers email property.
+		 * Filters the new value of the email's "headers" property.
 		 *
 		 * @since 2.5.0
 		 *
@@ -276,7 +276,7 @@ class BP_Email {
 		$bcc = $this->parse_and_sanitize_addresses( $bcc_address, $name );
 
 		/**
-		 * Filters the new value of the BCC email property.
+		 * Filters the new value of the email's "BCC" property.
 		 *
 		 * @since 2.5.0
 		 *
@@ -308,10 +308,10 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function cc( $cc_address, $name = '' ) {
-		$cc       = $this->parse_and_sanitize_addresses( $cc_address, $name );
+		$cc = $this->parse_and_sanitize_addresses( $cc_address, $name );
 
 		/**
-		 * Filters the new value of the CC email property.
+		 * Filters the new value of the email's "CC" property.
 		 *
 		 * @since 2.5.0
 		 *
@@ -339,7 +339,7 @@ class BP_Email {
 		// djpaultodo kses this?
 
 		/**
-		 * Filters the new value of the content email property.
+		 * Filters the new value of the email's "content" property.
 		 *
 		 * @since 2.5.0
 		 *
@@ -367,6 +367,16 @@ class BP_Email {
 			$from = array( sanitize_email( $email_address ) => $name );
 		}
 
+		/**
+		 * Filters the new value of the email's "from" property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $from Associative pairing of "from" name (key) and email addresses (value).
+		 * @param string $email_address From address.
+		 * @param string $name From name.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->from = apply_filters( 'bp_email_set_from', $from, $email_address, $name, $this );
 
 		return $this;
@@ -383,6 +393,14 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function post_object( WP_Post $post ) {
+		/**
+		 * Filters the new value of the email's "post object" property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param WP_Post $post A Post.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
 
 		if ( is_a( $this->post_object, 'WP_Post' ) ) {
@@ -417,6 +435,16 @@ class BP_Email {
 			$reply_to = array( sanitize_email( $email_address ) => $name );
 		}
 
+		/**
+		 * Filters the new value of the email's "reply to" property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $reply_to Associative pairing of "reply to" name (key) and email addresses (value).
+		 * @param string $email_address "Reply to" address.
+		 * @param string $name "Reply to" name.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->reply_to = apply_filters( 'bp_email_set_reply_to', $reply_to, $email_address, $name, $this );
 
 		return $this;
@@ -486,7 +514,18 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function to( $to_address, $name = '' ) {
-		$to       = $this->parse_and_sanitize_addresses( $to_address, $name );
+		$to = $this->parse_and_sanitize_addresses( $to_address, $name );
+
+		/**
+		 * Filters the new value of the email's "to" property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $to Associative pairing of "to" name (key) and email addresses (value).
+		 * @param string $to_address "To" address.
+		 * @param string $name "To" name.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->to = apply_filters( 'bp_email_set_to', $to, $to_address, $name, $this );
 
 		return $this;
@@ -512,6 +551,15 @@ class BP_Email {
 			$formatted_tokens[ $name ] = $value;
 		}
 
+		/**
+		 * Filters the new value of the email's "tokens" property.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param array $formatted_tokens Associative pairing of token names (key) and replacement values (value).
+		 * @param array $to Associative pairing of unformatted token names (key) and replacement values (value).
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
 		$this->tokens = apply_filters( 'bp_email_set_tokens', $formatted_tokens, $tokens, $this );
 
 		return $this;
