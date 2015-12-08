@@ -24,7 +24,7 @@ $settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defa
 		<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
 			<tr>
 				<td align="center" valign="top">
-					<table border="0" cellpadding="0" cellspacing="0" width="<?php echo $settings['template'] === 'boxed' ? '680px' : '100%';?>" id="template_container">
+					<table border="0" cellpadding="0" cellspacing="0" width="680px" id="template_container">
 						<tr>
 							<td align="center" valign="top">
 								<!-- Header -->
