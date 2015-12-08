@@ -59,7 +59,7 @@ $settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defa
 									<tr>
 										<td valign="top">
 											<div id="bp_mailtpl_body">
-												%%MAILCONTENT%%
+												{{content}}
 											</div>
 										</td>
 									</tr>
