@@ -124,7 +124,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		try {
 			return $phpmailer->Send();
 		} catch ( phpmailerException $e ) {
-			return new WP_Error( $e->getCode(), $e->getMessage(), $email ) );
+			return new WP_Error( $e->getCode(), $e->getMessage(), $email );
 		}
 	}
 
