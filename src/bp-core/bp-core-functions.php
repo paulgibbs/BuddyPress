@@ -2930,10 +2930,11 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param WP_Error $error A WP_Error object describing why the email failed to send. The contents
-		 *                        will vary based on the email delivery class you are using.
+		 * @param WP_Error $status A WP_Error object describing why the email failed to send. The contents
+		 *                         will vary based on the email delivery class you are using.
+		 * @param BP_Email $email The email we tried to send.
 		 */
- 		do_action( 'bp_send_email_failure', status );
+ 		do_action( 'bp_send_email_failure', $status, $email );
 
 	} else {
 		/**
@@ -2941,10 +2942,10 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param BP_Email $email The email to send.
 		 * @param bool $status True if the email was sent successfully.
+		 * @param BP_Email $email The email sent.
 		 */
-		do_action( 'bp_send_email_success', $email, $status );
+		do_action( 'bp_send_email_success', $status, $email );
 	}
 
 	return $status;
