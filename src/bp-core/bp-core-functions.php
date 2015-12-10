@@ -2891,8 +2891,9 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	$email->to( $to );
 	$email->tokens( $args['tokens'] );
 
-	if ( ! $email->validate() ) {
-		return new WP_Error( 'email_validation', __CLASS__, $email );
+	$status = $email->validate();
+	if ( is_wp_error( $status ) ) {
+		return $status;
 	}
 
 
