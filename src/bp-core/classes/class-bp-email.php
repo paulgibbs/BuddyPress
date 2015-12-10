@@ -197,7 +197,7 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string $property_value Property value.
+		 * @param mixed $property_value Property value.
 		 * @param string $property_name
 		 * @param string $transform How to transform the return value.
 		 *                          Accepts 'raw' (default) or 'replace-tokens'.
@@ -205,9 +205,19 @@ class BP_Email {
 		 */
 		$retval = apply_filters( "bp_email_get_{$property_name}", $this->$property_name, $property_name, $transform, $this );
 
-		// Replace tokens.
-		if ( $transform === 'replace-tokens' ) {
-			$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) );
+		switch ( $transform ) {
+			// Special-case to fill the $template with the email $content.
+			case 'add-content':
+				$retval = str_replace( '{{content}}', $this->get( 'content', 'replace-tokens' ), $retval );
+				// Fall through.
+
+			case 'replace-tokens':
+				$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) );
+				// Fall through.
+
+			case 'raw':
+			default:
+				// Do nothing.
 		}
 
 		/**
