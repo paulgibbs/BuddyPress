@@ -11,10 +11,12 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Set "From" name in outgoing email to the site name.
  *
+ * @deprecated 2.5.0
+ *
  * @return string The blog name for the root blog.
  */
 function bp_core_email_from_name_filter() {
-	_deprecated_function( __FUNCTION__, '2.4' );
+	_deprecated_function( __FUNCTION__, '2.5' );
 
 	/**
 	 * Filters the "From" name in outgoing email to the site name.
@@ -40,7 +42,7 @@ function bp_core_email_from_name_filter() {
  * @return mixed
  */
 function bp_core_deprecated_email_filters( $value, $property, $transform, $email ) {
-	$pre_2_4_emails = array(
+	$pre_2_5_emails = array(
 		'activity-at-message',
 		'activity-comment',
 		'activity-comment-author',
@@ -64,7 +66,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 	$tokens     = $email->get( 'tokens' );
 
 	// Backpat for pre-2.5 emails only.
-	if ( ! in_array( $email_type, $pre_2_4_emails, true ) ) {
+	if ( ! in_array( $email_type, $pre_2_5_emails, true ) ) {
 		add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 		return $value;
 	}
@@ -221,7 +223,7 @@ add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
  * @return mixed
  */
 function bp_core_deprecated_email_actions( $email, $delivery_status ) {
-	$pre_2_4_emails = array(
+	$pre_2_5_emails = array(
 		'activity-at-message',
 		'activity-comment',
 		'activity-comment-author',
@@ -247,7 +249,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 	$tokens        = $email->get( 'tokens' );
 
 	// Backpat for pre-2.5 emails only.
-	if ( ! in_array( $email_type, $pre_2_4_emails, true ) ) {
+	if ( ! in_array( $email_type, $pre_2_5_emails, true ) ) {
 		add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
 		return $value;
 	}
