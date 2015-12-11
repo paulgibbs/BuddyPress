@@ -554,6 +554,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( '{{poster_name}} mentioned you in an update', 'email subject', 'buddypress' ),
 			'post_content' => _x( "{{poster_name}} mentioned you in the group \"{{group_name}}\":\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email body', 'buddypress' ),
 		),
+		'core-user-registration' => array(
+			'post_title'   => _x( 'Activate Your Account', 'email subject', 'buddypress' ),
+			'post_content' => _x( "Thanks for registering! To complete the activation of your account please click the following link:\n\n{{activate_url}}", 'email body', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.

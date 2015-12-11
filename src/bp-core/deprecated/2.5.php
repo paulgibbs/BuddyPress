@@ -205,6 +205,59 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_activity_at_message_notification_message', $value, $tokens['{{poster_name}}'], $tokens['{{content}}'], $tokens['{{message_link}}'], '' );
 		}
+
+	} elseif ( $email_type === 'core-user-registration' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the email that the notification is going to upon successful registration without blog.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param array $value User email the notification is being sent to.
+			 *                     Array key is email address, value is the name.
+			 * @param string $user The user's login name.
+			 * @param array $value User email the notification is being sent to (again).
+			 *                     Array key is email address, value is the name.
+			 * @param string $key  The activation key created in wpmu_signup_blog().
+			 * @param array $meta  Array of meta values for the created site.
+			 */
+			$value = apply_filters( 'bp_core_activation_signup_user_notification_to', $value, $tokens['{{user}}'], $value, $tokens['{{key}}'], $tokens['{{meta}}'] );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the subject that the notification uses upon successful registration without blog.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value      Email notification subject text.
+			 * @param string $user       The user's login name.
+			 * @param string $user_email The user's email address.
+			 * @param string $key        The activation key created in wpmu_signup_blog().
+			 * @param array $meta        Array of meta values for the created site.
+			 */
+			$value = apply_filters( 'bp_core_activation_signup_user_notification_subject', $value, $tokens['{{user}}'], $tokens['{{user_email}}'], $tokens['{{key}}'], $tokens['{{meta}}'] );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the message that the notification uses upon successful registration without blog.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value      The message to use.
+			 * @param string $user       The user's login name.
+			 * @param string $user_email The user's email address.
+			 * @param string $key        The activation key created in wpmu_signup_blog().
+			 * @param array $meta        Array of meta values for the created site.
+			 */
+			$value = apply_filters( 'bp_core_activation_signup_user_notification_message', $value, $tokens['{{user}}'], $tokens['{{user_email}}'], $tokens['{{key}}'], $tokens['{{meta}}'] );
+		}
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
@@ -263,7 +316,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 *
 		 * @param int    $user_id       ID of the original activity item author.
 		 * @param string $email_subject Email notification subject text.
-		 * @param string $email_content    Email notification message text.
+		 * @param string $email_content Email notification message text.
 		 * @param int    $comment_id    ID for the newly received comment.
 		 * @param int    $commenter_id  ID of the user who made the comment.
 		 * @param array  $params        Deprecated in 2.5; now an empty array.
@@ -279,7 +332,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 *
 		 * @param int    $user_id       ID of the parent activity item author.
 		 * @param string $email_subject Email notification subject text.
-		 * @param string $email_content    Email notification message text.
+		 * @param string $email_content Email notification message text.
 		 * @param int    $comment_id    ID for the newly received comment.
 		 * @param int    $commenter_id  ID of the user who made the comment.
 		 * @param array  $params        Deprecated in 2.5; now an empty array.
@@ -294,12 +347,29 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @deprecated 2.5.0 Use the filters in BP_Email.
 		 *
 		 * @param BP_Activity_Activity $activity         Activity Item object.
-		 * @param string               $email_subject          Email notification subject text.
-		 * @param string               $email_content          Email notification message text.
+		 * @param string               $email_subject    Email notification subject text.
+		 * @param string               $email_content    Email notification message text.
 		 * @param string               $content          Content of the @mention.
 		 * @param int                  $receiver_user_id The ID of the user who is receiving the update.
 		 */
 		do_action( 'bp_activity_sent_mention_email', $tokens['activity'], $email_subject, $email_content, $tokens['{{content}}'], $tokens['{{receiver_user_id}}'] );
+
+	} elseif ( $email_type === 'core-user-registration' ) {
+		/**
+		 * Fires after the sending of the notification to new users for successful registration without blog.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email.
+		 *
+		 * @param string $admin_email   Admin Email address for the site.
+		 * @param string $email_subject Subject used in the notification email.
+		 * @param string $email_content Message used in the notification email.
+		 * @param string $user          The user's login name.
+		 * @param string $user_email    The user's email address.
+		 * @param string $key           The activation key created in wpmu_signup_blog().
+		 * @param array  $meta          Array of meta values for the created site. Default empty array.
+		 */
+		do_action( 'bp_core_sent_user_signup_email', bp_get_option( 'admin_email' ), $email_subject, $email_content, $user, $user_email, $key, $meta );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );

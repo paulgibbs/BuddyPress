@@ -515,8 +515,8 @@ add_filter( 'wpmu_signup_blog_notification', 'bp_core_activation_signup_blog_not
  * @return bool|string True on success, false on failure.
  */
 function bp_core_activation_signup_user_notification( $user, $user_email, $key, $meta ) {
-
 	if ( is_admin() ) {
+
 		// If the user is created from the WordPress Add User screen, don't send BuddyPress signup notifications.
 		if( in_array( get_current_screen()->id, array( 'user', 'user-network' ) ) ) {
 			// If the Super Admin want to skip confirmation email.
@@ -528,7 +528,7 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 				return $user;
 			}
 
-		/**
+		/*
 		 * There can be a case where the user was created without the skip confirmation
 		 * And the super admin goes in pending accounts to resend it. In this case, as the
 		 * meta['password'] is not set, the activation url must be WordPress one.
@@ -542,73 +542,16 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 		}
 	}
 
-	// Set up activation link.
-	$activate_url = bp_get_activation_page() . "?key=$key";
-	$activate_url = esc_url( $activate_url );
-
-	// Email contents.
-	$message = sprintf( __( "Thanks for registering! To complete the activation of your account please click the following link:\n\n%1\$s\n\n", 'buddypress' ), $activate_url );
-	$subject = bp_get_email_subject( array( 'text' => __( 'Activate Your Account', 'buddypress' ) ) );
-
-	/**
-	 * Filters the email that the notification is going to upon successful registration without blog.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $user_email The user's email address.
-	 * @param string $user       The user's login name.
-	 * @param string $user_email The user's email address.
-	 * @param string $key        The activation key created in wpmu_signup_blog().
-	 * @param array  $meta       Array of meta values for the created site.
-	 */
-	$to      = apply_filters( 'bp_core_activation_signup_user_notification_to',   $user_email, $user, $user_email, $key, $meta );
-
-	/**
-	 * Filters the subject that the notification uses upon successful registration without blog.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $subject    The subject to use.
-	 * @param string $user       The user's login name.
-	 * @param string $user_email The user's email address.
-	 * @param string $key        The activation key created in wpmu_signup_blog().
-	 * @param array  $meta       Array of meta values for the created site.
-	 */
-	$subject = apply_filters( 'bp_core_activation_signup_user_notification_subject', $subject, $user, $user_email, $key, $meta );
-
-	/**
-	 * Filters the message that the notification uses upon successful registration without blog.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $message    The message to use.
-	 * @param string $user       The user's login name.
-	 * @param string $user_email The user's email address.
-	 * @param string $key        The activation key created in wpmu_signup_blog().
-	 * @param array  $meta       Array of meta values for the created site.
-	 */
-	$message = apply_filters( 'bp_core_activation_signup_user_notification_message', $message, $user, $user_email, $key, $meta );
-
-	// Send the email.
-	bp_send_email( 'core-user-registration', $to, $subject, $message );
-
-	// Set up the $admin_email to pass to the filter.
-	$admin_email = bp_get_option( 'admin_email' );
-
-	/**
-	 * Fires after the sending of the notification to new users for successful registration without blog.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $admin_email Admin Email address for the site.
-	 * @param string $subject     Subject used in the notification email.
-	 * @param string $message     Message used in the notification email.
-	 * @param string $user        The user's login name.
-	 * @param string $user_email  The user's email address.
-	 * @param string $key         The activation key created in wpmu_signup_blog().
-	 * @param array  $meta        Array of meta values for the created site. Default empty array.
-	 */
-	do_action( 'bp_core_sent_user_signup_email', $admin_email, $subject, $message, $user, $user_email, $key, $meta );
+	$args = array(
+		'tokens' => array(
+			'activate_url' => esc_url( bp_get_activation_page() . '?key=' . urlencode( $key ) ),
+			'key'          => $key,
+			'meta'         => $meta,
+			'user'         => $user,
+			'user_email'   => $user_email,
+		),
+	);
+	bp_send_email( 'core-user-registration', $to, $args );
 
 	// Return false to stop the original WPMU function from continuing.
 	return false;
