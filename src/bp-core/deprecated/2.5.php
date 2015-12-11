@@ -100,7 +100,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_subject', $value, $tokens['{{poster_name}}'] );
 
-		} elseif ( $property === 'body' ) {
+		} elseif ( $property === 'content' ) {
 			/**
 			 * Filters the new comment notification message that will be sent to user.
 			 *
@@ -145,7 +145,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_comment_author_subject', $value, $tokens['{{poster_name}}'] );
 
-		} elseif ( $property === 'body' ) {
+		} elseif ( $property === 'content' ) {
 			/**
 			 * Filters the new comment reply notification message that will be sent to user.
 			 *
@@ -190,7 +190,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_activity_at_message_notification_subject', $value, $tokens['{{poster_name}}'] );
 
-		} elseif ( $property === 'body' ) {
+		} elseif ( $property === 'content' ) {
 			/**
 			 * Filters the @mention notification message that will be sent to user.
 			 *
@@ -243,7 +243,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 	);
 
 	remove_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
-	$email_body    = $email->get( 'body' );
+	$email_content = $email->get( 'content' );
 	$email_subject = $email->get( 'subject' );
 	$email_type    = $email->get( 'type' );
 	$tokens        = $email->get( 'tokens' );
@@ -263,12 +263,12 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 *
 		 * @param int    $user_id       ID of the original activity item author.
 		 * @param string $email_subject Email notification subject text.
-		 * @param string $email_body    Email notification message text.
+		 * @param string $email_content    Email notification message text.
 		 * @param int    $comment_id    ID for the newly received comment.
 		 * @param int    $commenter_id  ID of the user who made the comment.
 		 * @param array  $params        Deprecated in 2.5; now an empty array.
 		 */
-		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['{{original_activity.user_id}}'], $email_subject, $email_body, $tokens['{{comment_id}}'], $tokens['{{commenter_id}}'], array() );
+		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['{{original_activity.user_id}}'], $email_subject, $email_content, $tokens['{{comment_id}}'], $tokens['{{commenter_id}}'], array() );
 
 	} elseif ( $email_type === 'activity-comment-author' ) {
 		/**
@@ -279,12 +279,12 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 *
 		 * @param int    $user_id       ID of the parent activity item author.
 		 * @param string $email_subject Email notification subject text.
-		 * @param string $email_body    Email notification message text.
+		 * @param string $email_content    Email notification message text.
 		 * @param int    $comment_id    ID for the newly received comment.
 		 * @param int    $commenter_id  ID of the user who made the comment.
 		 * @param array  $params        Deprecated in 2.5; now an empty array.
 		 */
-		do_action( 'bp_activity_sent_reply_to_reply_email', $tokens['{{parent_comment.user_id}}'], $email_subject, $email_body, $tokens['{{comment_id}}'], $tokens['{{commenter_id}}'], array() );
+		do_action( 'bp_activity_sent_reply_to_reply_email', $tokens['{{parent_comment.user_id}}'], $email_subject, $email_content, $tokens['{{comment_id}}'], $tokens['{{commenter_id}}'], array() );
 
 	} elseif ( $email_type === 'activity-at-message' || $email_type === 'groups-at-message' ) {
 		/**
@@ -295,11 +295,11 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 *
 		 * @param BP_Activity_Activity $activity         Activity Item object.
 		 * @param string               $email_subject          Email notification subject text.
-		 * @param string               $email_body          Email notification message text.
+		 * @param string               $email_content          Email notification message text.
 		 * @param string               $content          Content of the @mention.
 		 * @param int                  $receiver_user_id The ID of the user who is receiving the update.
 		 */
-		do_action( 'bp_activity_sent_mention_email', $tokens['activity'], $email_subject, $email_body, $tokens['{{content}}'], $tokens['{{receiver_user_id}}'] );
+		do_action( 'bp_activity_sent_mention_email', $tokens['activity'], $email_subject, $email_content, $tokens['{{content}}'], $tokens['{{receiver_user_id}}'] );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
