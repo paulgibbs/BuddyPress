@@ -20,83 +20,32 @@ defined( 'ABSPATH' ) || exit;
  * When a friendship is requested, an email and a BP notification are sent to
  * the user of whom friendship has been requested ($friend_id).
  *
+ * @since 1.0
+ *
  * @param int $friendship_id ID of the friendship object.
  * @param int $initiator_id  ID of the user who initiated the request.
  * @param int $friend_id     ID of the request recipient.
  * @return bool
  */
 function friends_notification_new_request( $friendship_id, $initiator_id, $friend_id ) {
-
-	$initiator_name = bp_core_get_user_displayname( $initiator_id );
-
-	if ( 'no' == bp_get_user_meta( (int) $friend_id, 'notification_friends_friendship_request', true ) )
+	if ( 'no' == bp_get_user_meta( (int) $friend_id, 'notification_friends_friendship_request', true ) ) {
 		return false;
+	}
 
-	$ud                = get_userdata( $friend_id );
-	$all_requests_link = bp_core_get_user_domain( $friend_id ) . bp_get_friends_slug() . '/requests/';
-	$settings_slug     = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-	$settings_link     = trailingslashit( bp_core_get_user_domain( $friend_id ) .  $settings_slug . '/notifications' );
-	$initiator_link    = bp_core_get_user_domain( $initiator_id );
+	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 
-	// Set up and send the message.
-	$to       = $ud->user_email;
-	$subject  = bp_get_email_subject( array( 'text' => sprintf( __( 'New friendship request from %s', 'buddypress' ), $initiator_name ) ) );
-	$message  = sprintf( __(
-'%1$s wants to add you as a friend.
-
-To view all of your pending friendship requests: %2$s
-
-To view %3$s\'s profile: %4$s
-
----------------------
-', 'buddypress' ), $initiator_name, $all_requests_link, $initiator_name, $initiator_link );
-
-	/**
-	 * Filters the email address for who is getting the friend request.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $to Email address for who is getting the friend request.
-	 */
-	$to      = apply_filters( 'friends_notification_new_request_to', $to );
-
-	/**
-	 * Filters the subject for the friend request email.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $subject        Subject line to be used in friend request email.
-	 * @param string $initiator_name Name of the person requesting friendship.
-	 */
-	$subject = apply_filters( 'friends_notification_new_request_subject', $subject, $initiator_name );
-
-	/**
-	 * Filters the message for the friend request email.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $message           Message to be used in friend request email.
-	 * @param string $initiator_name    Name of the person requesting friendship.
-	 * @param string $initiator_link    Profile link of person requesting friendship.
-	 * @param string $all_requests_link User's friends request management link.
-	 * @param string $settings_link     Email recipient's settings management link.
-	 */
-	$message = apply_filters( 'friends_notification_new_request_message', $message, $initiator_name, $initiator_link, $all_requests_link, $settings_link );
-
-	bp_send_email( 'friends-request', $to, $subject, $message );
-
-	/**
-	 * Fires after the new friend request email is sent.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int    $friend_id     ID of the request recipient.
-	 * @param string $subject       Text for the friend request subject field.
-	 * @param string $message       Text for the friend request message field.
-	 * @param int    $friendship_id ID of the friendship object.
-	 * @param int    $initiator_id  ID of the friendship requester.
-	 */
-	do_action( 'bp_friends_sent_request_email', $friend_id, $subject, $message, $friendship_id, $initiator_id );
+	$args = array(
+		'tokens' => array(
+			'all_requests_link' => bp_core_get_user_domain( $friend_id ) . bp_get_friends_slug() . '/requests/',
+			'friend_id'         => $friend_id,
+			'friendship_id'     => $friendship_id,
+			'initiator_id'      => $initiator_id,
+			'initiator_link'    => bp_core_get_user_domain( $initiator_id ),
+			'initiator_name'    => bp_core_get_user_displayname( $initiator_id ),
+			'settings_link'     => trailingslashit( bp_core_get_user_domain( $friend_id ) . $settings_slug . '/notifications' ),
+		),
+	);
+	bp_send_email( 'friends-request', get_userdata( $friend_id )->user_email, $args );
 }
 add_action( 'friends_friendship_requested', 'friends_notification_new_request', 10, 3 );
 

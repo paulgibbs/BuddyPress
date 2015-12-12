@@ -562,6 +562,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( 'Activate {{site}}', 'email subject', 'buddypress' ),
 			'post_content' => _x( "{{user}},\n\nThanks for registering! To complete the activation of your account and blog, please click the following link:\n\n{{activate_url}}\n\nAfter you activate, you can visit your blog here:\n\n{{site}}", 'email content', 'buddypress' ),
 		),
+		'friends-request' => array(
+			'post_title'   => _x( 'New friendship request from {{initiator_name}}', 'email subject', 'buddypress' ),
+			'post_content' => _x( "{{initiator_name}} wants to add you as a friend.\n\nTo view all of your pending friendship requests: {{all_requests_link}}\n\nTo view {{initiator_name}}'s profile: {{initiator_link}}", 'email content', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.

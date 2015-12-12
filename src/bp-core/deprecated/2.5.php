@@ -318,6 +318,50 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_blog_notification_message', $value, $tokens['{{domain}}'], $tokens['{{path}}'], $tokens['title'], $tokens['{{user}}'], $tokens['{{user_email}}'], $tokens['{{key}}'], array() );
 		}
+
+	} elseif ( $email_type === 'friends-request' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the email address for who is getting the friend request.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value Email address for who is getting the friend request.
+			 */
+			$value = apply_filters( 'friends_notification_new_request_to', $value );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the subject for the friend request email.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value          Subject line to be used in friend request email.
+			 * @param string $initiator_name Name of the person requesting friendship.
+			 */
+			$value = apply_filters( 'friends_notification_new_request_subject', $value, $tokens['{{initiator_name}}'] );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the message for the friend request email.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value             Message to be used in friend request email.
+			 * @param string $initiator_name    Name of the person requesting friendship.
+			 * @param string $initiator_link    Profile link of person requesting friendship.
+			 * @param string $all_requests_link User's friends request management link.
+			 * @param string $settings_link     Email recipient's settings management link.
+			 */
+			$value = apply_filters( 'friends_notification_new_request_message', $value, $tokens['{{initiator_name}}'], $tokens['{{initiator_link}}'], $tokens['{{all_requests_link}}'], $tokens['{{settings_link}}'] );
+		}
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
@@ -465,6 +509,21 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param array  $meta          Deprecated in 2.5; now an empty array.
 		 */
 		do_action( 'bp_core_sent_blog_signup_email', bp_get_option( 'admin_email' ), $email_subject, $email_content, $tokens['{{domain}}'], $tokens['{{path}}'], $tokens['{{title}}'], $tokens['{{user}}'], $tokens['{{user_email}}'], $tokens['{{key}}'], array() );
+
+	} elseif ( $email_type === 'friends-request' ) {
+		/**
+		 * Fires after the new friend request email is sent.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email.
+		 *
+		 * @param int    $friend_id     ID of the request recipient.
+		 * @param string $email_subject Text for the friend request subject field.
+		 * @param string $email_content Text for the friend request message field.
+		 * @param int    $friendship_id ID of the friendship object.
+		 * @param int    $initiator_id  ID of the friendship requester.
+		 */
+		do_action( 'bp_friends_sent_request_email', $tokens['{{friend_id}}'], $email_subject, $email_content, $tokens['{{friendship_id}}'], $tokens['{{initiator_id}}'] );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
