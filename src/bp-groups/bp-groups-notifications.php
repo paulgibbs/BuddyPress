@@ -23,7 +23,6 @@ defined( 'ABSPATH' ) || exit;
  * @param BP_Groups_Group|null $old_group Group before new details were saved.
  */
 function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
-
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 
 	if ( $old_group instanceof BP_Groups_Group ) {
@@ -60,9 +59,7 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 		$changed_text = "\n\n" . implode( "\n", $changed );
 	}
 
-	$subject  = bp_get_email_subject( array( 'text' => __( 'Group Details Updated', 'buddypress' ) ) );
 	$user_ids = BP_Groups_Member::get_group_member_ids( $group->id );
-
 	foreach ( (array) $user_ids as $user_id ) {
 
 		// Continue if member opted out of receiving this email.
@@ -70,57 +67,19 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 			continue;
 		}
 
-		$ud = bp_core_get_core_userdata( $user_id );
-
-		// Set up and send the message.
-		$to = $ud->user_email;
-
-		$group_link    = bp_get_group_permalink( $group );
 		$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-		$settings_link = bp_core_get_user_domain( $user_id ) . $settings_slug . '/notifications/';
 
-		$message = sprintf( __(
-'Group details for the group "%1$s" were updated: %2$s
-
-To view the group: %3$s
-
----------------------
-', 'buddypress' ), $group->name, $changed_text, $group_link );
-
-		/**
-		 * Filters the user email that the group update notification will be sent to.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string $to User email the notification is being sent to.
-		 */
-		$to      = apply_filters( 'groups_notification_group_updated_to', $to );
-
-		/**
-		 * Filters the group update notification subject that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string          $subject Email notification subject text.
-		 * @param BP_Groups_Group $group   Object holding the current group instance. Passed by reference.
-		 */
-		$subject = apply_filters_ref_array( 'groups_notification_group_updated_subject', array( $subject, &$group ) );
-
-		/**
-		 * Filters the group update notification message that will be sent to user.
-		 *
-		 * @since 1.2.0
-		 *
-		 * @param string          $message       Email notification message text.
-		 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
-		 * @param string          $group_link    URL permalink to the group that was updated.
-		 * @param string          $settings_link URL permalink for the user's notification settings area.
-		 */
-		$message = apply_filters_ref_array( 'groups_notification_group_updated_message', array( $message, &$group, $group_link, $settings_link ) );
-
-		bp_send_email( 'groups-details-updated', $to, $subject, $message );
-
-		unset( $message, $to );
+		$args = array(
+			'tokens' => array(
+				'changed_text'  => $changed_text,
+				'group'         => $group,
+				'group_id'      => $group_id,
+				'group_link'    => bp_get_group_permalink( $group ),
+				'group.name'    => $group->name,
+				'settings_link' => bp_core_get_user_domain( $user_id ) . $settings_slug . '/notifications/',
+			),
+		);
+		bp_send_email( 'groups-details-updated', bp_core_get_core_userdata( $user_id )->user_email, $args );
 	}
 
 	/**
@@ -129,13 +88,14 @@ To view the group: %3$s
 	 * See https://buddypress.trac.wordpress.org/ticket/3644 for blank message parameter.
 	 *
 	 * @since 1.5.0
+	 * @since 2.5.0 $subject has been unset and is deprecated.
 	 *
 	 * @param array  $user_ids Array of user IDs to notify about the update.
-	 * @param string $subject  Email notification subject text.
+	 * @param string $subject  Deprecated in 2.5; now an empty string.
 	 * @param string $value    Empty string preventing PHP error.
 	 * @param int    $group_id ID of the group that was updated.
 	 */
-	do_action( 'bp_groups_sent_updated_email', $user_ids, $subject, '', $group_id );
+	do_action( 'bp_groups_sent_updated_email', $user_ids, '', '', $group_id );
 }
 
 /**

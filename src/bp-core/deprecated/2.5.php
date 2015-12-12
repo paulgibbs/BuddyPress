@@ -405,6 +405,46 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'friends_notification_accepted_request_message', $value, $tokens['{{friend_name}}'], $tokens['{{friend_link}}'], $tokens['{{settings_link}}'] );
 		}
+
+	} elseif ( $email_type === 'groups-details-updated' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the user email that the group update notification will be sent to.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value User email the notification is being sent to.
+			 */
+			$value = apply_filters( 'groups_notification_group_updated_to', $value );
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the group update notification subject that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value Email notification subject text.
+			 * @param BP_Groups_Group $group Object holding the current group instance. Passed by reference.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_group_updated_subject', array( $value, &$tokens['{{group}}'] ) );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the group update notification message that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value         Email notification message text.
+			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
+			 * @param string          $group_link    URL permalink to the group that was updated.
+			 * @param string          $settings_link URL permalink for the user's notification settings area.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_group_updated_message', array( $value, &$tokens['{{group}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
+		}
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );

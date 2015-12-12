@@ -570,6 +570,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( '{{friend_name}} accepted your friendship request', 'email subject', 'buddypress' ),
 			'post_content' => _x( "{{friend_name}} accepted your friend request.\n\nTo view {{friend_name}}'s profile: {{friend_link}}", 'email content', 'buddypress' ),
 		),
+		'groups-details-updated' => array(
+			'post_title'   => _x( 'Group Details Updated', 'email subject', 'buddypress' ),
+			'post_content' => _x( "Group details for the group \"{{group.name}}\" were updated: {{changed_text}}\n\nTo view the group: {{group_link}}", 'email content', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.
