@@ -480,12 +480,12 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 		'tokens' => array(
 			'activate_url' => esc_url( bp_get_activation_page() . '?key=' . urlencode( $key ) ),
 			'key'          => $key,
-			'meta'         => $meta,
 			'user'         => $user,
 			'user_email'   => $user_email,
+			'user_id'      => $user_id,
 		),
 	);
-	bp_send_email( 'core-user-registration', $to, $args );
+	bp_send_email( 'core-user-registration', $user_email, $args );
 
 	// Return false to stop the original WPMU function from continuing.
 	return false;
