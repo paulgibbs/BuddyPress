@@ -47,7 +47,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		'activity-comment',
 		'activity-comment-author',
 		'core-user-registration',
-		'core-user-registration-validation',
 		'core-user-registration-with-blog',
 		'friends-request',
 		'friends-request-accepted',
@@ -416,21 +415,37 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		do_action( 'bp_activity_sent_mention_email', $tokens['activity'], $email_subject, $email_content, $tokens['{{content}}'], $tokens['{{receiver_user_id}}'] );
 
 	} elseif ( $email_type === 'core-user-registration' ) {
-		/**
-		 * Fires after the sending of the notification to new users for successful registration without blog.
-		 *
-		 * @since 1.5.0
-		 * @deprecated 2.5.0 Use the filters in BP_Email.
-		 *
-		 * @param string $admin_email   Admin Email address for the site.
-		 * @param string $email_subject Subject used in the notification email.
-		 * @param string $email_content Message used in the notification email.
-		 * @param string $user          The user's login name.
-		 * @param string $user_email    The user's email address.
-		 * @param string $key           The activation key created in wpmu_signup_blog().
-		 * @param array  $meta          Array of meta values for the created site. Default empty array.
-		 */
-		do_action( 'bp_core_sent_user_signup_email', bp_get_option( 'admin_email' ), $email_subject, $email_content, $tokens['{{user}}'], $tokens['{{user_email}}'], $tokens['{{key}}'], $tokens['{{meta}}'] );
+		if ( ! empty( $tokens['{{user_id}}'] ) ) {
+			/**
+			 * Fires after the sending of activation email to a newly registered user.
+			 *
+			 * @since 1.5.0
+			 *
+			 * @param string $email_subject Subject for the sent email.
+			 * @param string $email_content Message for the sent email.
+			 * @param int    $user_id       ID of the new user.
+			 * @param string $user_email    Email address of the new user.
+			 * @param string $key           Activation key.
+			 */
+			do_action( 'bp_core_sent_user_validation_email', $email_subject, $email_content, $tokens['{{user_id}}'], $tokens['{{user_email}}'], $tokens['{{key}}'] );
+
+		} else {
+			/**
+			 * Fires after the sending of the notification to new users for successful registration without blog.
+			 *
+			 * @since 1.5.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $meta argument unset and deprecated.
+			 *
+			 * @param string $admin_email   Admin Email address for the site.
+			 * @param string $email_subject Subject used in the notification email.
+			 * @param string $email_content Message used in the notification email.
+			 * @param string $user          The user's login name.
+			 * @param string $user_email    The user's email address.
+			 * @param string $key           The activation key created in wpmu_signup_blog().
+			 * @param array  $meta          Deprecated in 2.5; now an empty array.
+			 */
+			do_action( 'bp_core_sent_user_signup_email', bp_get_option( 'admin_email' ), $email_subject, $email_content, $tokens['{{user}}'], $tokens['{{user_email}}'], $tokens['{{key}}'], array() );
+		}
 
 	} elseif ( $email_type === 'core-user-registration-with-blog' ) {
 		/**
