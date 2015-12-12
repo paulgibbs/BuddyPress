@@ -362,6 +362,49 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'friends_notification_new_request_message', $value, $tokens['{{initiator_name}}'], $tokens['{{initiator_link}}'], $tokens['{{all_requests_link}}'], $tokens['{{settings_link}}'] );
 		}
+
+	} elseif ( $email_type === 'friends-request-accepted' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the email address for whose friend request got accepted.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value Email address for whose friend request got accepted.
+			 */
+			$value = apply_filters( 'friends_notification_accepted_request_to', $value );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the subject for the friend request accepted email.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value       Subject line to be used in friend request accepted email.
+			 * @param string $friend_name Name of the person who accepted the friendship request.
+			 */
+			$value = apply_filters( 'friends_notification_accepted_request_subject', $value, $tokens['{{friend_name}}'] );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the message for the friend request accepted email.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value         Message to be used in friend request email.
+			 * @param string $friend_name   Name of the person who accepted the friendship request.
+			 * @param string $friend_link   Profile link of person who accepted the friendship request.
+			 * @param string $settings_link Email recipient's settings management link.
+			 */
+			$value = apply_filters( 'friends_notification_accepted_request_message', $value, $tokens['{{friend_name}}'], $tokens['{{friend_link}}'], $tokens['{{settings_link}}'] );
+		}
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
@@ -524,6 +567,21 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param int    $initiator_id  ID of the friendship requester.
 		 */
 		do_action( 'bp_friends_sent_request_email', $tokens['{{friend_id}}'], $email_subject, $email_content, $tokens['{{friendship_id}}'], $tokens['{{initiator_id}}'] );
+
+	} elseif ( $email_type === 'friends-request-accepted' ) {
+		/**
+		 * Fires after the friend request accepted email is sent.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email.
+		 *
+		 * @param int    $initiator_id  ID of the friendship requester.
+		 * @param string $email_subject Text for the friend request subject field.
+		 * @param string $email_content Text for the friend request message field.
+		 * @param int    $friendship_id ID of the friendship object.
+		 * @param int    $friend_id     ID of the request recipient.
+		 */
+		do_action( 'bp_friends_sent_accepted_email', $tokens['{{initiator_id}}'], $email_subject, $email_content, $tokens['{{friendship_id}}'] $tokens['{{friend_id}}'] );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );

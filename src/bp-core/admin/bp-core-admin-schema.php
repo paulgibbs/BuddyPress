@@ -566,6 +566,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( 'New friendship request from {{initiator_name}}', 'email subject', 'buddypress' ),
 			'post_content' => _x( "{{initiator_name}} wants to add you as a friend.\n\nTo view all of your pending friendship requests: {{all_requests_link}}\n\nTo view {{initiator_name}}'s profile: {{initiator_link}}", 'email content', 'buddypress' ),
 		),
+		'friends-request-accepted' => array(
+			'post_title'   => _x( '{{friend_name}} accepted your friendship request', 'email subject', 'buddypress' ),
+			'post_content' => _x( "{{friend_name}} accepted your friend request.\n\nTo view {{friend_name}}'s profile: {{friend_link}}", 'email content', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.
@@ -573,7 +577,7 @@ function bp_core_install_emails() {
 		$_defaults = bp_parse_args( array( 'tax_input' => array( bp_get_email_tax_type() => $id ) ), $defaults );
 		$data      = bp_parse_args( $email, $_defaults, 'install_email_' . $id );
 
-		// Non-HTML email text.
+		// Non-HTML email text. djpaultodo
 		if ( empty( $data['post-excerpt'] ) ) {
 			$data['post_excerpt'] = $data['post_content'];
 		}

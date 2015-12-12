@@ -55,79 +55,30 @@ add_action( 'friends_friendship_requested', 'friends_notification_new_request', 
  * When a friendship request is accepted, an email and a BP notification are
  * sent to the user who requested the friendship ($initiator_id).
  *
+ * @since 1.0
+ *
  * @param int $friendship_id ID of the friendship object.
  * @param int $initiator_id  ID of the user who initiated the request.
  * @param int $friend_id     ID of the request recipient.
  * @return bool
  */
 function friends_notification_accepted_request( $friendship_id, $initiator_id, $friend_id ) {
-
-	$friend_name = bp_core_get_user_displayname( $friend_id );
-
-	if ( 'no' == bp_get_user_meta( (int) $initiator_id, 'notification_friends_friendship_accepted', true ) )
+	if ( 'no' == bp_get_user_meta( (int) $initiator_id, 'notification_friends_friendship_accepted', true ) ) {
 		return false;
+	}
 
-	$ud            = get_userdata( $initiator_id );
-	$friend_link   = bp_core_get_user_domain( $friend_id );
 	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-	$settings_link = trailingslashit( bp_core_get_user_domain( $initiator_id ) . $settings_slug . '/notifications' );
 
-	// Set up and send the message.
-	$to       = $ud->user_email;
-	$subject  = bp_get_email_subject( array( 'text' => sprintf( __( '%s accepted your friendship request', 'buddypress' ), $friend_name ) ) );
-	$message  = sprintf( __(
-'%1$s accepted your friend request.
-
-To view %2$s\'s profile: %3$s
-
----------------------
-', 'buddypress' ), $friend_name, $friend_name, $friend_link );
-
-	/**
-	 * Filters the email address for whose friend request got accepted.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $to Email address for whose friend request got accepted.
-	 */
-	$to      = apply_filters( 'friends_notification_accepted_request_to', $to );
-
-	/**
-	 * Filters the subject for the friend request accepted email.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $subject     Subject line to be used in friend request accepted email.
-	 * @param string $friend_name Name of the person who accepted the friendship request.
-	 */
-	$subject = apply_filters( 'friends_notification_accepted_request_subject', $subject, $friend_name );
-
-	/**
-	 * Filters the message for the friend request accepted email.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $message       Message to be used in friend request email.
-	 * @param string $friend_name   Name of the person who accepted the friendship request.
-	 * @param string $friend_link   Profile link of person who accepted the friendship request.
-	 * @param string $settings_link Email recipient's settings management link.
-	 */
-	$message = apply_filters( 'friends_notification_accepted_request_message', $message, $friend_name, $friend_link, $settings_link );
-
-	bp_send_email( 'friends-request-accepted', $to, $subject, $message );
-
-	/**
-	 * Fires after the friend request accepted email is sent.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int    $initiator_id  ID of the friendship requester.
-	 * @param string $subject       Text for the friend request subject field.
-	 * @param string $message       Text for the friend request message field.
-	 * @param int    $friendship_id ID of the friendship object.
-	 * @param int    $friend_id     ID of the request recipient.
-	 */
-	do_action( 'bp_friends_sent_accepted_email', $initiator_id, $subject, $message, $friendship_id, $friend_id );
+	$args = array(
+		'tokens' => array(
+			'friend_id'     => $friend_id,
+			'friend_link'   => bp_core_get_user_domain( $friend_id ),
+			'friend_name'   => bp_core_get_user_displayname( $friend_id ),
+			'friendship_id' => $friendship_id,
+			'initiator_id'  => $initiator_id,
+		),
+	);
+	bp_send_email( 'friends-request-accepted', get_userdata( $initiator_id )->user_email, $args );
 }
 add_action( 'friends_friendship_accepted', 'friends_notification_accepted_request', 10, 3 );
 
