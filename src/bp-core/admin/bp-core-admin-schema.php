@@ -540,27 +540,27 @@ function bp_core_install_emails() {
 	$emails = array(
 		'activity-comment' => array(
 			'post_title'   => _x( '{{poster_name}} replied to one of your updates', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email body', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email content', 'buddypress' ),
 		),
 		'activity-comment-author' => array(
 			'post_title'   => _x( '{{poster_name}} replied to one of your comments', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo view the original activity, your comment and all replies, log in and visit: {{thread_link}}", 'email body', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo view the original activity, your comment and all replies, log in and visit: {{thread_link}}", 'email content', 'buddypress' ),
 		),
 		'activity-at-message' => array(
 			'post_title'   => _x( '{{poster_name}} mentioned you in an update', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} mentioned you in an update:\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email body', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} mentioned you in an update:\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email content', 'buddypress' ),
 		),
 		'groups-at-message' => array(
 			'post_title'   => _x( '{{poster_name}} mentioned you in an update', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} mentioned you in the group \"{{group_name}}\":\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email body', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} mentioned you in the group \"{{group_name}}\":\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email content', 'buddypress' ),
 		),
 		'core-user-registration' => array(
 			'post_title'   => _x( 'Activate Your Account', 'email subject', 'buddypress' ),
-			'post_content' => _x( "Thanks for registering! To complete the activation of your account please click the following link:\n\n{{activate_url}}", 'email body', 'buddypress' ),
+			'post_content' => _x( "Thanks for registering! To complete the activation of your account please click the following link:\n\n{{activate_url}}", 'email content', 'buddypress' ),
 		),
 		'core-user-registration-with-blog' => array(
 			'post_title'   => _x( 'Activate {{site}}', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{user}},\n\nThanks for registering! To complete the activation of your account and blog, please click the following link:\n\n{{activate_url}}\n\nAfter you activate, you can visit your blog here:\n\n{{site}}", 'email body', 'buddypress' ),
+			'post_content' => _x( "{{user}},\n\nThanks for registering! To complete the activation of your account and blog, please click the following link:\n\n{{activate_url}}\n\nAfter you activate, you can visit your blog here:\n\n{{site}}", 'email content', 'buddypress' ),
 		),
 	);
 
