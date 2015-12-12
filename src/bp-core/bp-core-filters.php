@@ -422,7 +422,6 @@ function bp_core_activation_signup_blog_notification( $domain, $path, $title, $u
 			'activate_url' => esc_url( bp_get_activation_page() . '?key=' . urlencode( $key ) ),
 			'domain'       => $domain,
 			'key'          => $key,
-			'meta'         => $meta,
 			'path'         => $path,
 			'site'         => esc_url( "http://{$domain}{$path}" ),
 			'title'        => $title,
@@ -478,7 +477,7 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 
 	$args = array(
 		'tokens' => array(
-			'activate_url' => esc_url( bp_get_activation_page() . '?key=' . urlencode( $key ) ),
+			'activate_url' => esc_url( trailingslashit( bp_get_activation_page() ) . "{$key}/" ),
 			'key'          => $key,
 			'user'         => $user,
 			'user_email'   => $user_email,
