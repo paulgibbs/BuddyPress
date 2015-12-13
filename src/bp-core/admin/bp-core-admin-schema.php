@@ -582,6 +582,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( 'You have been promoted in the group: "{{group.name}}"', 'email subject', 'buddypress' ),
 			'post_content' => _x( "You have been promoted to {{promoted_to}} for the group: \"{{group.name}}\".\n\nTo view the group please visit: {{group_link}}", 'email content', 'buddypress' ),
 		),
+		'groups-membership-request' => array(
+			'post_title'   => _x( 'Membership request for group: {{group.name}}', 'email subject', 'buddypress' ),
+			'post_content' => _x( "{{requesting_user_name}} wants to join the group \"{{group.name}}\".\n\nBecause you are the administrator of this group, you must either accept or reject the membership request.\n\nTo view all pending membership requests for this group, please visit:\n{{group_requests}}\n\nTo view {{requesting_user_name}}'s profile: {{profile_link}}", 'email content', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.

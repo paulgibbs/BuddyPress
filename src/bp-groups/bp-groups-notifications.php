@@ -127,108 +127,24 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 		return false;
 	}
 
-	// Username of the user requesting a membership: %1$s in mail.
-	$requesting_user_name = bp_core_get_user_displayname( $requesting_user_id );
-	$group                = groups_get_group( array( 'group_id' => $group_id ) );
+	$group         = groups_get_group( array( 'group_id' => $group_id ) );
+	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
 
-	// Group Administrator user's data.
-	$ud             = bp_core_get_core_userdata( $admin_id );
-	$group_requests = bp_get_group_permalink( $group ) . 'admin/membership-requests';
-
-	// Link to the user's profile who's requesting a membership: %3$s in mail.
-	$profile_link   = bp_core_get_user_domain( $requesting_user_id );
-
-	$settings_slug  = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-	// Link to the group administrator email settings: %s in "disable notifications" part of the email.
-	$settings_link  = bp_core_get_user_domain( $admin_id ) . $settings_slug . '/notifications/';
-
-	// Fetch the message, if there's one to fetch.
-	$membership = new BP_Groups_Member( false, false, $membership_id );
-
-	// Set up and send the message.
-	$to       = $ud->user_email;
-	$subject  = bp_get_email_subject( array( 'text' => sprintf( __( 'Membership request for group: %s', 'buddypress' ), $group->name ) ) );
-
-	if ( ! empty( $membership->comments ) ) {
-		$message = sprintf( __(
-'%1$s wants to join the group "%2$s".
-
-Message from %1$s: "%3$s"
-
-Because you are the administrator of this group, you must either accept or reject the membership request.
-
-To view all pending membership requests for this group, please visit:
-%4$s
-
-To view %5$s\'s profile: %6$s
-
----------------------
-', 'buddypress' ), $requesting_user_name, $group->name, esc_html( $membership->comments ), $group_requests, $requesting_user_name, $profile_link );
-
-	} else {
-
-		$message = sprintf( __(
-'%1$s wants to join the group "%2$s".
-
-Because you are the administrator of this group, you must either accept or reject the membership request.
-
-To view all pending membership requests for this group, please visit:
-%3$s
-
-To view %4$s\'s profile: %5$s
-
----------------------
-', 'buddypress' ), $requesting_user_name, $group->name, $group_requests, $requesting_user_name, $profile_link );
-	}
-
-	/**
-	 * Filters the user email that the group membership request will be sent to.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $to User email the request is being sent to.
-	 */
-	$to      = apply_filters( 'groups_notification_new_membership_request_to', $to );
-
-	/**
-	 * Filters the group membership request subject that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $subject Membership request email subject text.
-	 * @param BP_Groups_Group $group   Object holding the current group instance. Passed by reference.
-	 */
-	$subject = apply_filters_ref_array( 'groups_notification_new_membership_request_subject', array( $subject, &$group ) );
-
-	/**
-	 * Filters the group membership request message that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $message              Membership request email message text.
-	 * @param BP_Groups_Group $group                Object holding the current group instance. Passed by reference.
-	 * @param string          $requesting_user_name Username of who is requesting membership.
-	 * @param string          $profile_link         URL permalink for the profile for the user requesting membership.
-	 * @param string          $group_requests       URL permalink for the group requests screen for group being requested membership to.
-	 * @param string          $settings_link        URL permalink for the user's notification settings area.
-	 */
-	$message = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $message, &$group, $requesting_user_name, $profile_link, $group_requests, $settings_link ) );
-
-	bp_send_email( 'groups-membership-request', $to, $subject, $message );
-
-	/**
-	 * Fires after the notification is sent that a member has requested group membership.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int    $admin_id           ID of the group administrator.
-	 * @param string $subject            Email notification subject text.
-	 * @param string $message            Email notification message text.
-	 * @param int    $requesting_user_id ID of the user requesting membership.
-	 * @param int    $group_id           ID of the group receiving membership request.
-	 * @param int    $membership_id      ID of the group membership object.
-	 */
-	do_action( 'bp_groups_sent_membership_request_email', $admin_id, $subject, $message, $requesting_user_id, $group_id, $membership_id );
+	$args = array(
+		'tokens' => array(
+			'admin_id'             => $admin_id,
+			'group'                => $group,
+			'group.name'           => $group->name,
+			'group_id'             => $group_id,
+			'group_requests'       => bp_get_group_permalink( $group ) . 'admin/membership-requests',
+			'membership_id'        => $membership_id,
+			'profile_link'         => bp_core_get_user_domain( $requesting_user_id ),
+			'requesting_user_id'   => $requesting_user_id,
+			'requesting_user_name' => bp_core_get_user_displayname( $requesting_user_id ),
+			'settings_link'        => bp_core_get_user_domain( $admin_id ) . $settings_slug . '/notifications/',
+		),
+	);
+	bp_send_email( 'groups-membership-request', bp_core_get_core_userdata( $admin_id )->user_email, $args );
 }
 
 /**

@@ -538,6 +538,51 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_promoted_member_message', array( $value, &$tokens['{{group}}'], $tokens['{{promoted_to}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
 		}
+
+	} elseif ( $email_type === 'groups-membership-request' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the user email that the group membership request will be sent to.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param array $value User email the request is being sent to.
+			 */
+			$value = apply_filters( 'groups_notification_new_membership_request_to', $value );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the group membership request subject that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value Membership request email subject text.
+			 * @param BP_Groups_Group $group Object holding the current group instance. Passed by reference.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_new_membership_request_subject', array( $value, &$tokens['{{group}}'] ) );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the group membership request message that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value                Membership request email message text.
+			 * @param BP_Groups_Group $group                Object holding the current group instance. Passed by reference.
+			 * @param string          $requesting_user_name Username of who is requesting membership.
+			 * @param string          $profile_link         URL permalink for the profile for the user requesting membership.
+			 * @param string          $group_requests       URL permalink for the group requests screen for group being requested membership to.
+			 * @param string          $settings_link        URL permalink for the user's notification settings area.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $value, &$tokens['{{group}}'], $tokens['{{requesting_user_name}}'], $tokens['{{profile_link}}'], $tokens['{{group_requests}}'], $tokens['{{settings_link}}'] ) );
+		}
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
@@ -743,6 +788,22 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param int    $group_id      ID of the group that the user is a member of.
 		 */
 		do_action( 'bp_groups_sent_promoted_email', $tokens['{{user_id}}'], $email_subject, $email_content, $tokens['{{group_id}}'] );
+
+	} elseif ( $email_type === 'groups-membership-request' ) {
+		/**
+		 * Fires after the notification is sent that a member has requested group membership.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email.
+		 *
+		 * @param int    $admin_id           ID of the group administrator.
+		 * @param string $email_subject      Email notification subject text.
+		 * @param string $email_content      Email notification message text.
+		 * @param int    $requesting_user_id ID of the user requesting membership.
+		 * @param int    $group_id           ID of the group receiving membership request.
+		 * @param int    $membership_id      ID of the group membership object.
+		 */
+		do_action( 'bp_groups_sent_membership_request_email', $tokens['{{admin_id}}'], $email_subject, $email_content, $tokens['{{requesting_user_id}}'], $tokens['{{group_id}}'], $tokens['{{membership_id}}'] );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
