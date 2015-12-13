@@ -461,6 +461,9 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value User email the invite notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_group_invites_to', $value );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -490,6 +493,50 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string          $settings_link URL permalink for the user's notification settings area.
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_group_invites_message', array( $value, &$tokens['{{group}}'], $tokens['{{inviter_name}}'], $tokens['{{inviter_link}}'], $tokens['{{invites_link}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
+		}
+
+	} elseif ( $email_type === 'groups-member-promoted' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the user email that the group promotion notification will be sent to.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param array $value User email the promotion notification is being sent to.
+			 */
+			$value = apply_filters( 'groups_notification_promoted_member_to', $value );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the group promotion notification subject that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value Promotion notification email subject text.
+			 * @param BP_Groups_Group $group Object holding the current group instance. Passed by reference.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_promoted_member_subject', array( $value, &$tokens['{{group}}'] ) );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the group promotion notification message that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value         Promotion notification email message text.
+			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
+			 * @param string          $promoted_to   Role that the user was promoted to within the group.
+			 * @param string          $group_link    URL permalink for the group that the promotion was related to.
+			 * @param string          $settings_link URL permalink for the user's notification settings area.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_promoted_member_message', array( $value, &$tokens['{{group}}'], $tokens['{{promoted_to}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
 		}
 	}
 
@@ -682,6 +729,20 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param BP_Groups_Group $group            Group object.
 		 */
 		do_action( 'bp_groups_sent_invited_email', $tokens['{{invited_user_id}}'], $email_subject, $email_content, $tokens['{{group}}'] );
+
+	} elseif ( $email_type === 'groups-member-promoted' ) {
+		/**
+		 * Fires after the notification is sent that a member has been promoted.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email.
+		 *
+		 * @param int    $user_id       ID of the user who was promoted.
+		 * @param string $email_subject Email notification subject text.
+		 * @param string $email_content Email notification message text.
+		 * @param int    $group_id      ID of the group that the user is a member of.
+		 */
+		do_action( 'bp_groups_sent_promoted_email', $tokens['{{user_id}}'], $email_subject, $email_content, $tokens['{{group_id}}'] );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );

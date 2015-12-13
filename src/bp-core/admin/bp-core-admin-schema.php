@@ -578,6 +578,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( 'You have an invitation to the group: "{{group.name}}"', 'email subject', 'buddypress' ),
 			'post_content' => _x( "One of your friends {{inviter_name}} has invited you to the group: \"{{group.name}}\".\n\nTo view your group invites visit: {{invites_link}}\n\nTo view the group visit: {{group_link}}\n\nTo view {{inviter_name}}'s profile visit: {{inviter_link}}", 'email content', 'buddypress' ),
 		),
+		'groups-member-promoted' => array(
+			'post_title'   => _x( 'You have been promoted in the group: "{{group.name}}"', 'email subject', 'buddypress' ),
+			'post_content' => _x( "You have been promoted to {{promoted_to}} for the group: \"{{group.name}}\".\n\nTo view the group please visit: {{group_link}}", 'email content', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.

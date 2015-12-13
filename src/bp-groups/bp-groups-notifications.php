@@ -378,67 +378,20 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 	}
 
 	$group         = groups_get_group( array( 'group_id' => $group_id ) );
-	$ud            = bp_core_get_core_userdata($user_id);
-	$group_link    = bp_get_group_permalink( $group );
 	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-	$settings_link = bp_core_get_user_domain( $user_id ) . $settings_slug . '/notifications/';
 
-	// Set up and send the message.
-	$to       = $ud->user_email;
-	$subject  = bp_get_email_subject( array( 'text' => sprintf( __( 'You have been promoted in the group: "%s"', 'buddypress' ), $group->name ) ) );
-	$message  = sprintf( __(
-'You have been promoted to %1$s for the group: "%2$s".
-
-To view the group please visit: %3$s
-
----------------------
-', 'buddypress' ), $promoted_to, $group->name, $group_link );
-
-	/**
-	 * Filters the user email that the group promotion notification will be sent to.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $to User email the promotion notification is being sent to.
-	 */
-	$to      = apply_filters( 'groups_notification_promoted_member_to', $to );
-
-	/**
-	 * Filters the group promotion notification subject that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $subject Promotion notification email subject text.
-	 * @param BP_Groups_Group $group   Object holding the current group instance. Passed by reference.
-	 */
-	$subject = apply_filters_ref_array( 'groups_notification_promoted_member_subject', array( $subject, &$group ) );
-
-	/**
-	 * Filters the group promotion notification message that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $message       Promotion notification email message text.
-	 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
-	 * @param string          $promoted_to   Role that the user was promoted to within the group.
-	 * @param string          $group_link    URL permalink for the group that the promotion was related to.
-	 * @param string          $settings_link URL permalink for the user's notification settings area.
-	 */
-	$message = apply_filters_ref_array( 'groups_notification_promoted_member_message', array( $message, &$group, $promoted_to, $group_link, $settings_link ) );
-
-	bp_send_email( 'groups-member-promoted', $to, $subject, $message );
-
-	/**
-	 * Fires after the notification is sent that a member has been promoted.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int    $user_id  ID of the user who was promoted.
-	 * @param string $subject  Email notification subject text.
-	 * @param string $message  Email notification message text.
-	 * @param int    $group_id ID of the group that the user is a member of.
-	 */
-	do_action( 'bp_groups_sent_promoted_email', $user_id, $subject, $message, $group_id );
+	$args = array(
+		'tokens' => array(
+			'group'         => $group,
+			'group_id'      => $group_id,
+			'group_link'    => bp_get_group_permalink( $group ),
+			'group.name'    => $group->name,
+			'promoted_to'   => $promoted_to,
+			'settings_link' => bp_core_get_user_domain( $user_id ) . $settings_slug . '/notifications/',
+			'user_id'       => $user_id,
+		),
+	);
+	bp_send_email( 'groups-member-promoted', bp_core_get_core_userdata( $user_id->user_email ), $args );
 }
 add_action( 'groups_promoted_member', 'groups_notification_promoted_member', 10, 2 );
 
