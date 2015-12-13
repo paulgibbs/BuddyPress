@@ -328,7 +328,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param string $value Email address for who is getting the friend request.
+			 * @param array $value Email address for who is getting the friend request.
 			 */
 			$value = apply_filters( 'friends_notification_new_request_to', $value );
 			if ( ! is_array( $value ) ) {
@@ -372,7 +372,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param string $value Email address for whose friend request got accepted.
+			 * @param array $value Email address for whose friend request got accepted.
 			 */
 			$value = apply_filters( 'friends_notification_accepted_request_to', $value );
 			if ( ! is_array( $value ) ) {
@@ -415,9 +415,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param string $value User email the notification is being sent to.
+			 * @param array $value User email the notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_group_updated_to', $value );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -444,6 +447,49 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string          $settings_link URL permalink for the user's notification settings area.
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_group_updated_message', array( $value, &$tokens['{{group}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
+		}
+
+	} elseif ( $email_type === 'groups-invitation' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the user email that the group invite notification will be sent to.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string $value User email the invite notification is being sent to.
+			 */
+			$value = apply_filters( 'groups_notification_group_invites_to', $value );
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the group invite notification subject that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value Invite notification email subject text.
+			 * @param BP_Groups_Group $group Object holding the current group instance. Passed by reference.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_group_invites_subject', array( $value, &$tokens['{{group}}'] ) );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the group invite notification message that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value         Invite notification email message text.
+			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
+			 * @param string          $inviter_name  Username for the person doing the inviting.
+			 * @param string          $inviter_link  Profile link for the person doing the inviting.
+			 * @param string          $invites_link  URL permalink for the invited user's invite management screen.
+			 * @param string          $group_link    URL permalink for the group that the invite was related to.
+			 * @param string          $settings_link URL permalink for the user's notification settings area.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_group_invites_message', array( $value, &$tokens['{{group}}'], $tokens['{{inviter_name}}'], $tokens['{{inviter_link}}'], $tokens['{{invites_link}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
 		}
 	}
 
@@ -622,6 +668,20 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param int    $friend_id     ID of the request recipient.
 		 */
 		do_action( 'bp_friends_sent_accepted_email', $tokens['{{initiator_id}}'], $email_subject, $email_content, $tokens['{{friendship_id}}'] $tokens['{{friend_id}}'] );
+
+	} elseif ( $email_type === 'groups-invitation' ) {
+		/**
+		 * Fires after the notification is sent that a member has been invited to a group.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email.
+		 *
+		 * @param int             $invited_user_id  ID of the user who was invited.
+		 * @param string          $email_subject    Email notification subject text.
+		 * @param string          $email_content    Email notification message text.
+		 * @param BP_Groups_Group $group            Group object.
+		 */
+		do_action( 'bp_groups_sent_invited_email', $tokens['{{invited_user_id}}'], $email_subject, $email_content, $tokens['{{group}}'] );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );

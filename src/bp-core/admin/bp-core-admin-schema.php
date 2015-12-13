@@ -574,6 +574,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( 'Group Details Updated', 'email subject', 'buddypress' ),
 			'post_content' => _x( "Group details for the group \"{{group.name}}\" were updated: {{changed_text}}\n\nTo view the group: {{group_link}}", 'email content', 'buddypress' ),
 		),
+		'groups-invitation' => array(
+			'post_title'   => _x( 'You have an invitation to the group: "{{group.name}}"', 'email subject', 'buddypress' ),
+			'post_content' => _x( "One of your friends {{inviter_name}} has invited you to the group: \"{{group.name}}\".\n\nTo view your group invites visit: {{invites_link}}\n\nTo view the group visit: {{group_link}}\n\nTo view {{inviter_name}}'s profile visit: {{inviter_link}}", 'email content', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.

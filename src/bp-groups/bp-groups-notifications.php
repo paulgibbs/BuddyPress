@@ -460,10 +460,7 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 	}
 
 	// @todo $inviter_ud may be used for caching, test without it
-	$inviter_ud   = bp_core_get_core_userdata( $inviter_user_id );
-	$inviter_name = bp_core_get_userlink( $inviter_user_id, true, false, true );
-	$inviter_link = bp_core_get_user_domain( $inviter_user_id );
-	$group_link   = bp_get_group_permalink( $group );
+	$inviter_ud = bp_core_get_core_userdata( $inviter_user_id );
 
 	// Setup the ID for the invited user.
 	$invited_user_id = $member->user_id;
@@ -483,74 +480,22 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 		return false;
 	}
 
-	$invited_ud    = bp_core_get_core_userdata( $invited_user_id );
 	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-	$settings_link = bp_core_get_user_domain( $invited_user_id ) . $settings_slug . '/notifications/';
-	$invited_link  = bp_core_get_user_domain( $invited_user_id );
-	$invites_link  = trailingslashit( $invited_link . bp_get_groups_slug() . '/invites' );
+	$invited_link  = bp_core_get_user_domain( $invited_user_id ) . bp_get_groups_slug();
 
-	// Set up and send the message.
-	$to       = $invited_ud->user_email;
-	$subject  = bp_get_email_subject( array( 'text' => sprintf( __( 'You have an invitation to the group: "%s"', 'buddypress' ), $group->name ) ) );
-	$message  = sprintf( __(
-'One of your friends %1$s has invited you to the group: "%2$s".
-
-To view your group invites visit: %3$s
-
-To view the group visit: %4$s
-
-To view %5$s\'s profile visit: %6$s
-
----------------------
-', 'buddypress' ), $inviter_name, $group->name, $invites_link, $group_link, $inviter_name, $inviter_link );
-
-	/**
-	 * Filters the user email that the group invite notification will be sent to.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $to User email the invite notification is being sent to.
-	 */
-	$to      = apply_filters( 'groups_notification_group_invites_to', $to );
-
-	/**
-	 * Filters the group invite notification subject that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $subject Invite notification email subject text.
-	 * @param BP_Groups_Group $group   Object holding the current group instance. Passed by reference.
-	 */
-	$subject = apply_filters_ref_array( 'groups_notification_group_invites_subject', array( $subject, &$group ) );
-
-	/**
-	 * Filters the group invite notification message that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $message       Invite notification email message text.
-	 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
-	 * @param string          $inviter_name  Username for the person doing the inviting.
-	 * @param string          $inviter_link  Profile link for the person doing the inviting.
-	 * @param string          $invites_link  URL permalink for the invited user's invite management screen.
-	 * @param string          $group_link    URL permalink for the group that the invite was related to.
-	 * @param string          $settings_link URL permalink for the user's notification settings area.
-	 */
-	$message = apply_filters_ref_array( 'groups_notification_group_invites_message', array( $message, &$group, $inviter_name, $inviter_link, $invites_link, $group_link, $settings_link ) );
-
-	bp_send_email( 'groups-invitation', $to, $subject, $message );
-
-	/**
-	 * Fires after the notification is sent that a member has been invited to a group.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int             $invited_user_id  ID of the user who was invited.
-	 * @param string          $subject          Email notification subject text.
-	 * @param string          $message          Email notification message text.
-	 * @param BP_Groups_Group $group            Group object.
-	 */
-	do_action( 'bp_groups_sent_invited_email', $invited_user_id, $subject, $message, $group );
+	$args = array(
+		'tokens' => array(
+			'group'           => $group,
+			'group_link'      => bp_get_group_permalink( $group ),
+			'group.name'      => $group->name,
+			'invited_user_id' => $invited_user_id,
+			'inviter_link'    => bp_core_get_user_domain( $inviter_user_id ),
+			'inviter_name'    => bp_core_get_userlink( $inviter_user_id, true, false, true ),
+			'invites_link'    => trailingslashit( $invited_link . '/invites/' ),
+			'settings_link'   => bp_core_get_user_domain( $invited_user_id ) . $settings_slug . '/notifications/',
+		),
+	);
+	bp_send_email( 'groups-invitation', bp_core_get_core_userdata( $invited_user_id )->user_email, $args );
 }
 
 /** Notifications *************************************************************/
