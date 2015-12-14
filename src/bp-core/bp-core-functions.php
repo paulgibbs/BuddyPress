@@ -2633,6 +2633,7 @@ function bp_get_email_post_type_labels() {
 		'not_found_in_trash'    => _x( 'No emails found in Trash', 'email post type label', 'buddypress' ),
 		'search_items'          => _x( 'Search Emails', 'email post type label', 'buddypress' ),
 		'singular_name'         => _x( 'Email', 'email post type singular name', 'buddypress' ),
+		'uploaded_to_this_item' => _x( 'Uploaded to this email', 'email post type label', 'buddypress' ),
 		'view_item'             => _x( 'View Email', 'email post type label', 'buddypress' ),
 	) );
 }
