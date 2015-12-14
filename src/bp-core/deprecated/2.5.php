@@ -352,15 +352,15 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the message for the friend request email.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string $value             Message to be used in friend request email.
 			 * @param string $initiator_name    Name of the person requesting friendship.
 			 * @param string $initiator_link    Profile link of person requesting friendship.
 			 * @param string $all_requests_link User's friends request management link.
-			 * @param string $settings_link     Email recipient's settings management link.
+			 * @param string $settings_link     Deprecated in 2.5; now an empty string.
 			 */
-			$value = apply_filters( 'friends_notification_new_request_message', $value, $tokens['{{initiator_name}}'], $tokens['{{initiator_link}}'], $tokens['{{all_requests_link}}'], $tokens['{{settings_link}}'] );
+			$value = apply_filters( 'friends_notification_new_request_message', $value, $tokens['{{initiator_name}}'], $tokens['{{initiator_link}}'], $tokens['{{all_requests_link}}'], '' );
 		}
 
 	} elseif ( $email_type === 'friends-request-accepted' ) {
@@ -396,14 +396,14 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the message for the friend request accepted email.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string $value         Message to be used in friend request email.
 			 * @param string $friend_name   Name of the person who accepted the friendship request.
 			 * @param string $friend_link   Profile link of person who accepted the friendship request.
-			 * @param string $settings_link Email recipient's settings management link.
+			 * @param string $settings_link Deprecated in 2.5; now an empty string.
 			 */
-			$value = apply_filters( 'friends_notification_accepted_request_message', $value, $tokens['{{friend_name}}'], $tokens['{{friend_link}}'], $tokens['{{settings_link}}'] );
+			$value = apply_filters( 'friends_notification_accepted_request_message', $value, $tokens['{{friend_name}}'], $tokens['{{friend_link}}'], '' );
 		}
 
 	} elseif ( $email_type === 'groups-details-updated' ) {
@@ -439,14 +439,14 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the group update notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string          $value         Email notification message text.
 			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
 			 * @param string          $group_link    URL permalink to the group that was updated.
-			 * @param string          $settings_link URL permalink for the user's notification settings area.
+			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
 			 */
-			$value = apply_filters_ref_array( 'groups_notification_group_updated_message', array( $value, &$tokens['{{group}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
+			$value = apply_filters_ref_array( 'groups_notification_group_updated_message', array( $value, &$tokens['{{group}}'], $tokens['{{group_link}}'], '' ) );
 		}
 
 	} elseif ( $email_type === 'groups-invitation' ) {
@@ -482,7 +482,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the group invite notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string          $value         Invite notification email message text.
 			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
@@ -490,9 +490,9 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string          $inviter_link  Profile link for the person doing the inviting.
 			 * @param string          $invites_link  URL permalink for the invited user's invite management screen.
 			 * @param string          $group_link    URL permalink for the group that the invite was related to.
-			 * @param string          $settings_link URL permalink for the user's notification settings area.
+			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
 			 */
-			$value = apply_filters_ref_array( 'groups_notification_group_invites_message', array( $value, &$tokens['{{group}}'], $tokens['{{inviter_name}}'], $tokens['{{inviter_link}}'], $tokens['{{invites_link}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
+			$value = apply_filters_ref_array( 'groups_notification_group_invites_message', array( $value, &$tokens['{{group}}'], $tokens['{{inviter_name}}'], $tokens['{{inviter_link}}'], $tokens['{{invites_link}}'], $tokens['{{group_link}}'], '' ) );
 		}
 
 	} elseif ( $email_type === 'groups-member-promoted' ) {
@@ -528,15 +528,15 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the group promotion notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string          $value         Promotion notification email message text.
 			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
 			 * @param string          $promoted_to   Role that the user was promoted to within the group.
 			 * @param string          $group_link    URL permalink for the group that the promotion was related to.
-			 * @param string          $settings_link URL permalink for the user's notification settings area.
+			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
 			 */
-			$value = apply_filters_ref_array( 'groups_notification_promoted_member_message', array( $value, &$tokens['{{group}}'], $tokens['{{promoted_to}}'], $tokens['{{group_link}}'], $tokens['{{settings_link}}'] ) );
+			$value = apply_filters_ref_array( 'groups_notification_promoted_member_message', array( $value, &$tokens['{{group}}'], $tokens['{{promoted_to}}'], $tokens['{{group_link}}'], '' ) );
 		}
 
 	} elseif ( $email_type === 'groups-membership-request' ) {
@@ -581,7 +581,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string          $group_requests       URL permalink for the group requests screen for group being requested membership to.
 			 * @param string          $settings_link        URL permalink for the user's notification settings area.
 			 */
-			$value = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $value, &$tokens['{{group}}'], $tokens['{{requesting_user_name}}'], $tokens['{{profile_link}}'], $tokens['{{group_requests}}'], $tokens['{{settings_link}}'] ) );
+			$value = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $value, &$tokens['{{group}}'], $tokens['{{requesting_user_name}}'], $tokens['{{profile_link}}'], $tokens['{{group_requests}}'], '' ) );
 		}
 
 	} elseif ( $email_type === 'messages-unread' ) {
@@ -619,17 +619,18 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the message notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email. $ud argument unset and deprecated.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *                   $settings_link and $ud arguments unset and deprecated.
 			 *
 			 * @param string $value         Email notification message text.
 			 * @param string $sender_name   Name of the person who sent the message.
 			 * @param string $subject       Email notification subject text.
 			 * @param string $content       Content of the message.
 			 * @param string $message_link  URL permalink for the message.
-			 * @param string $settings_link URL permalink for the user's notification settings area.
+			 * @param string $settings_link Deprecated in 2.5; now an empty string.
 			 * @param bool   $ud            Deprecated in 2.5; now a bool (false).
 			 */
-			$value = apply_filters( 'messages_notification_new_message_message', $value, $tokens['{{sender_name}}'], $tokens['{{subject}}'], $tokens['{{content}}'], $tokens['{{message_link}}'], $tokens['{{settings_link}}'], false );
+			$value = apply_filters( 'messages_notification_new_message_message', $value, $tokens['{{sender_name}}'], $tokens['{{subject}}'], $tokens['{{content}}'], $tokens['{{message_link}}'], '', false );
 		}
 	}
 
