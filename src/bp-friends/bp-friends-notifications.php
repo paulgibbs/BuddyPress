@@ -32,8 +32,6 @@ function friends_notification_new_request( $friendship_id, $initiator_id, $frien
 		return false;
 	}
 
-	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-
 	$args = array(
 		'tokens' => array(
 			'all_requests_link' => bp_core_get_user_domain( $friend_id ) . bp_get_friends_slug() . '/requests/',
@@ -42,7 +40,6 @@ function friends_notification_new_request( $friendship_id, $initiator_id, $frien
 			'initiator_id'      => $initiator_id,
 			'initiator_link'    => bp_core_get_user_domain( $initiator_id ),
 			'initiator_name'    => bp_core_get_user_displayname( $initiator_id ),
-			'settings_link'     => trailingslashit( bp_core_get_user_domain( $friend_id ) . $settings_slug . '/notifications' ),
 		),
 	);
 	bp_send_email( 'friends-request', get_userdata( $friend_id )->user_email, $args );

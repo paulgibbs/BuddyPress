@@ -67,8 +67,6 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 			continue;
 		}
 
-		$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-
 		$args = array(
 			'tokens' => array(
 				'changed_text'  => $changed_text,
@@ -76,7 +74,6 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 				'group_id'      => $group_id,
 				'group_link'    => bp_get_group_permalink( $group ),
 				'group.name'    => $group->name,
-				'settings_link' => bp_core_get_user_domain( $user_id ) . $settings_slug . '/notifications/',
 			),
 		);
 		bp_send_email( 'groups-details-updated', bp_core_get_core_userdata( $user_id )->user_email, $args );
@@ -127,10 +124,8 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 		return false;
 	}
 
-	$group         = groups_get_group( array( 'group_id' => $group_id ) );
-	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-
-	$args = array(
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$args  = array(
 		'tokens' => array(
 			'admin_id'             => $admin_id,
 			'group'                => $group,
@@ -141,7 +136,6 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 			'profile_link'         => bp_core_get_user_domain( $requesting_user_id ),
 			'requesting_user_id'   => $requesting_user_id,
 			'requesting_user_name' => bp_core_get_user_displayname( $requesting_user_id ),
-			'settings_link'        => bp_core_get_user_domain( $admin_id ) . $settings_slug . '/notifications/',
 		),
 	);
 	bp_send_email( 'groups-membership-request', bp_core_get_core_userdata( $admin_id )->user_email, $args );
@@ -293,17 +287,14 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 		return false;
 	}
 
-	$group         = groups_get_group( array( 'group_id' => $group_id ) );
-	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-
-	$args = array(
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$args  = array(
 		'tokens' => array(
 			'group'         => $group,
 			'group_id'      => $group_id,
 			'group_link'    => bp_get_group_permalink( $group ),
 			'group.name'    => $group->name,
 			'promoted_to'   => $promoted_to,
-			'settings_link' => bp_core_get_user_domain( $user_id ) . $settings_slug . '/notifications/',
 			'user_id'       => $user_id,
 		),
 	);
@@ -349,10 +340,8 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 		return false;
 	}
 
-	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-	$invited_link  = bp_core_get_user_domain( $invited_user_id ) . bp_get_groups_slug();
-
-	$args = array(
+	$invited_link = bp_core_get_user_domain( $invited_user_id ) . bp_get_groups_slug();
+	$args         = array(
 		'tokens' => array(
 			'group'           => $group,
 			'group_link'      => bp_get_group_permalink( $group ),
@@ -361,7 +350,6 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 			'inviter_link'    => bp_core_get_user_domain( $inviter_user_id ),
 			'inviter_name'    => bp_core_get_userlink( $inviter_user_id, true, false, true ),
 			'invites_link'    => trailingslashit( $invited_link . '/invites/' ),
-			'settings_link'   => bp_core_get_user_domain( $invited_user_id ) . $settings_slug . '/notifications/',
 		),
 	);
 	bp_send_email( 'groups-invitation', bp_core_get_core_userdata( $invited_user_id )->user_email, $args );
