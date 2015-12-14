@@ -586,6 +586,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( 'Membership request for group: {{group.name}}', 'email subject', 'buddypress' ),
 			'post_content' => _x( "{{requesting_user_name}} wants to join the group \"{{group.name}}\".\n\nBecause you are the administrator of this group, you must either accept or reject the membership request.\n\nTo view all pending membership requests for this group, please visit:\n{{group_requests}}\n\nTo view {{requesting_user_name}}'s profile: {{profile_link}}", 'email content', 'buddypress' ),
 		),
+		'messages-unread' => array(
+			'post_title'   => _x( 'New message from {{sender_name}}', 'email subject', 'buddypress' ),
+			'post_content' => _x( "{{sender_name}} sent you a new message:\n\nSubject: {{subject}}\n\n\"{{content}}\"\n\nTo view and read your messages please log in and visit: {{message_link}}", 'email subject', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.

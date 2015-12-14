@@ -583,6 +583,54 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $value, &$tokens['{{group}}'], $tokens['{{requesting_user_name}}'], $tokens['{{profile_link}}'], $tokens['{{group_requests}}'], $tokens['{{settings_link}}'] ) );
 		}
+
+	} elseif ( $email_type === 'messages-unread' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the user email that the message notification will be sent to.
+			 *
+			 * @since 1.2.0
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $ud argument unset and deprecated.
+			 *
+			 * @param array $value User email the message notification is being sent to.
+			 * @param bool  $ud Deprecated in 2.5; now a bool (false).
+			 */
+			$value = apply_filters( 'messages_notification_new_message_to', $value, false );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the message notification subject that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $ud argument unset and deprecated.
+			 *
+			 * @param string $value       Email notification subject text.
+			 * @param string $sender_name Name of the person who sent the message.
+			 * @param bool   $ud          Deprecated in 2.5; now a bool (false).
+			 */
+			$value = apply_filters( 'messages_notification_new_message_subject', $value, $tokens['{{sender_name}}'], false );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the message notification message that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $ud argument unset and deprecated.
+			 *
+			 * @param string $value         Email notification message text.
+			 * @param string $sender_name   Name of the person who sent the message.
+			 * @param string $subject       Email notification subject text.
+			 * @param string $content       Content of the message.
+			 * @param string $message_link  URL permalink for the message.
+			 * @param string $settings_link URL permalink for the user's notification settings area.
+			 * @param bool   $ud            Deprecated in 2.5; now a bool (false).
+			 */
+			$value = apply_filters( 'messages_notification_new_message_message', $value, $tokens['{{sender_name}}'], $tokens['{{subject}}'], $tokens['{{content}}'], $tokens['{{message_link}}'], $tokens['{{settings_link}}'], false );
+		}
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
