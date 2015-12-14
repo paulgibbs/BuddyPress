@@ -759,7 +759,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param int    $friendship_id ID of the friendship object.
 		 * @param int    $friend_id     ID of the request recipient.
 		 */
-		do_action( 'bp_friends_sent_accepted_email', $tokens['{{initiator_id}}'], $email_subject, $email_content, $tokens['{{friendship_id}}'] $tokens['{{friend_id}}'] );
+		do_action( 'bp_friends_sent_accepted_email', $tokens['{{initiator_id}}'], $email_subject, $email_content, $tokens['{{friendship_id}}'], $tokens['{{friend_id}}'] );
 
 	} elseif ( $email_type === 'groups-invitation' ) {
 		/**
