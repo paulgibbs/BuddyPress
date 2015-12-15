@@ -632,6 +632,22 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'messages_notification_new_message_message', $value, $tokens['{{sender_name}}'], $tokens['{{subject}}'], $tokens['{{content}}'], $tokens['{{message_link}}'], '', false );
 		}
+
+	} elseif ( $email_type === 'settings-verify-email-change' ) {
+		if ( $property === 'content' ) {
+			/**
+			 * Filter the email text sent when a user changes emails.
+			 *
+			 * @since 2.1.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $update_user argument unset and deprecated.
+			 *
+			 * @param string  $value          Text of the email.
+			 * @param string  $user_email     New user email that the current user has changed to.
+			 * @param string  $old_user_email Existing email address for the current user.
+			 * @param bool    $update_user    Deprecated in 2.5; now a bool (false).
+			 */
+			$value = apply_filters( 'bp_new_user_email_content', $value, $tokens['{{user_email}}'], $tokens['{{old_user_email}}'], false );
+		}
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );

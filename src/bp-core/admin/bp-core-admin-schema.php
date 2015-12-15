@@ -590,6 +590,10 @@ function bp_core_install_emails() {
 			'post_title'   => _x( 'New message from {{sender_name}}', 'email subject', 'buddypress' ),
 			'post_content' => _x( "{{sender_name}} sent you a new message:\n\nSubject: {{subject}}\n\n\"{{content}}\"\n\nTo view and read your messages please log in and visit: {{message_link}}", 'email subject', 'buddypress' ),
 		),
+		'settings-verify-email-change' => array(
+			'post_title'   => _x( 'Verify your new email address', 'email subject', 'buddypress' ),
+			'post_content' => _x( "Dear {{displayname}},\n\nYou recently changed the email address associated with your account on {{site_name}}.\nIf this is correct, please click on the following link to complete the change:\n\n{{verify_link}}\n\nYou can safely ignore and delete this email if you do not want to take this action or if you have received this email in error.\n\nThis email has been sent to {{user_email}}.", 'email content', 'buddypress' ),
+		),
 	);
 
 	// Add these posts.
