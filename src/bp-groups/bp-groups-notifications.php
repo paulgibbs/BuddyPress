@@ -158,9 +158,7 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 	if ( bp_is_active( 'notifications' ) ) {
 
 		// What type of acknowledgement.
-		$type = ! empty( $accepted )
-			? 'membership_request_accepted'
-			: 'membership_request_rejected';
+		$type = ! empty( $accepted ) ? 'membership_request_accepted' : 'membership_request_rejected';
 
 		bp_notifications_add_notification( array(
 			'user_id'           => $requesting_user_id,
@@ -175,79 +173,22 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 		return false;
 	}
 
-	$group         = groups_get_group( array( 'group_id' => $group_id ) );
-	$ud            = bp_core_get_core_userdata( $requesting_user_id );
-	$group_link    = bp_get_group_permalink( $group );
-	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-	$settings_link = bp_core_get_user_domain( $requesting_user_id ) . $settings_slug . '/notifications/';
-	$to            = $ud->user_email;
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
+	$to    = bp_core_get_core_userdata( $requesting_user_id )->user_email;
 
-	// Set up and send the message.
+	$args = array(
+		'tokens' => array(
+			'group'      => $group,
+			'group_link' => bp_get_group_permalink( $group ),
+			'group.name' => $group->name,
+		),
+	);
+
 	if ( ! empty( $accepted ) ) {
-		$subject = bp_get_email_subject( array( 'text' => sprintf( __( 'Membership request for group "%s" accepted', 'buddypress' ), $group->name ) ) );
-		$message = sprintf( __(
-'Your membership request for the group "%1$s" has been accepted.
-
-To view the group please login and visit: %2$s
-
----------------------
-', 'buddypress' ), $group->name, $group_link );
-
+		bp_send_email( 'groups-membership-request-accepted', $to, $args );
 	} else {
-		$subject = bp_get_email_subject( array( 'text' => sprintf( __( 'Membership request for group "%s" rejected', 'buddypress' ), $group->name ) ) );
-		$message = sprintf( __(
-'Your membership request for the group "%1$s" has been rejected.
-
-To submit another request please log in and visit: %2$s
-
----------------------
-', 'buddypress' ), $group->name, $group_link );
+		bp_send_email( 'groups-membership-request-rejected', $to, $args );
 	}
-
-	/**
-	 * Filters the user email that the group membership request result will be sent to.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $to User email the request result is being sent to.
-	 */
-	$to      = apply_filters( 'groups_notification_membership_request_completed_to', $to );
-
-	/**
-	 * Filters the group membership request result subject that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $subject Membership request result email subject text.
-	 * @param BP_Groups_Group $group   Object holding the current group instance. Passed by reference.
-	 */
-	$subject = apply_filters_ref_array( 'groups_notification_membership_request_completed_subject', array( $subject, &$group ) );
-
-	/**
-	 * Filters the group membership request result message that will be sent to user.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string          $message       Membership request result email message text.
-	 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
-	 * @param string          $group_link    URL permalink for the group that was requested membership for.
-	 * @param string          $settings_link URL permalink for the user's notification settings area.
-	 */
-	$message = apply_filters_ref_array( 'groups_notification_membership_request_completed_message', array( $message, &$group, $group_link, $settings_link ) );
-
-	bp_send_email( 'groups-membership-request-accepted', $to, $subject, $message );
-
-	/**
-	 * Fires after the notification is sent that a membership has been approved.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int    $requesting_user_id ID of the user whose membership was approved.
-	 * @param string $subject            Email notification subject text.
-	 * @param string $message            Email notification message text.
-	 * @param int    $group_id           ID of the group that was joined.
-	 */
-	do_action( 'bp_groups_sent_membership_approved_email', $requesting_user_id, $subject, $message, $group_id );
 }
 add_action( 'groups_membership_accepted', 'groups_notification_membership_request_completed', 10, 3 );
 add_action( 'groups_membership_rejected', 'groups_notification_membership_request_completed', 10, 3 );

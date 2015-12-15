@@ -56,6 +56,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		'groups-member-promoted',
 		'groups-membership-request',
 		'groups-membership-request-accepted',
+		'groups-membership-request-rejected',
 		'messages-unread',
 		'settings-verify-email-change',
 	);
@@ -584,6 +585,48 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			$value = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $value, &$tokens['{{group}}'], $tokens['{{requesting_user_name}}'], $tokens['{{profile_link}}'], $tokens['{{group_requests}}'], '' ) );
 		}
 
+	} elseif ( $email_type === 'groups-membership-request-accepted' || $email_type === 'groups-membership-request-rejected' ) {
+		if ( $property === 'to' ) {
+			/**
+			 * Filters the user email that the group membership request result will be sent to.
+			 *
+			 * @since 2.5.0 Argument type changes from string to array.
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param array $value User email the request is being sent to.
+			 */
+			$value = apply_filters( 'groups_notification_membership_request_completed_to', $value );
+			if ( ! is_array( $value ) ) {
+				$value = array( $value => '' );
+			}
+
+		} elseif ( $property === 'subject' ) {
+			/**
+			 * Filters the group membership request result subject that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 *
+			 * @param string          $value Membership request result email subject text.
+			 * @param BP_Groups_Group $group Object holding the current group instance. Passed by reference.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_membership_request_completed_subject', array( $value, &$tokens['{{group}}'] ) );
+
+		} elseif ( $property === 'content' ) {
+			/**
+			 * Filters the group membership request result message that will be sent to user.
+			 *
+			 * @since 1.2.0
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
+			 *
+			 * @param string          $value         Membership request result email message text.
+			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
+			 * @param string          $group_link    URL permalink for the group that was requested membership for.
+			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
+			 */
+			$value = apply_filters_ref_array( 'groups_notification_membership_request_completed_message', array( $value, &$tokens['{{group}}'], $tokens['{{group_link}}'], '' ) );
+		}
+
 	} elseif ( $email_type === 'messages-unread' ) {
 		if ( $property === 'to' ) {
 			/**
@@ -680,6 +723,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		'groups-member-promoted',
 		'groups-membership-request',
 		'groups-membership-request-accepted',
+		'groups-membership-request-rejected',
 		'messages-unread',
 		'settings-verify-email-change',
 	);
@@ -869,6 +913,20 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param int    $membership_id      ID of the group membership object.
 		 */
 		do_action( 'bp_groups_sent_membership_request_email', $tokens['{{admin_id}}'], $email_subject, $email_content, $tokens['{{requesting_user_id}}'], $tokens['{{group_id}}'], $tokens['{{membership_id}}'] );
+
+	} elseif ( $email_type === 'groups-membership-request-accepted' || $email_type === 'groups-membership-request-rejected' ) {
+		/**
+		 * Fires after the notification is sent that a membership has been approved.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.5.0 Use the filters in BP_Email.
+		 *
+		 * @param int    $requesting_user_id ID of the user whose membership was approved.
+		 * @param string $email_subject      Email notification subject text.
+		 * @param string $email_content      Email notification message text.
+		 * @param int    $group_id           ID of the group that was joined.
+		 */
+		do_action( 'bp_groups_sent_membership_approved_email', $tokens['{{requesting_user_id}}'], $email_subject, $email_content, $tokens['{{group_id}}'] );
 	}
 
 	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
