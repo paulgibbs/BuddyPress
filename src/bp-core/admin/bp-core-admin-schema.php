@@ -606,17 +606,21 @@ function bp_core_install_emails() {
 
 	// Add these posts.
 	foreach ( $emails as $id => $email ) {
-		$_defaults = bp_parse_args( array( 'tax_input' => array( bp_get_email_tax_type() => $id ) ), $defaults );
-		$data      = bp_parse_args( $email, $_defaults, 'install_email_' . $id );
+		$data = bp_parse_args( $email, $defaults, 'install_email_' . $id );
+
+		// HTML email text.
+		$data['post_content'] = wpautop( $data['post_content'] );
 
 		// Non-HTML email text. djpaultodo
 		if ( empty( $data['post-excerpt'] ) ) {
 			$data['post_excerpt'] = $data['post_content'];
 		}
 
-		// HTML email text.
-		$data['post_content'] = wpautop( $data['post_content'] );
+		$post_id = wp_insert_post( $data );
+		if ( ! $post_id ) {
+			continue;
+		}
 
-		wp_insert_post( $data );
+		wp_set_post_terms( $post_id, $id, bp_get_email_tax_type() );
 	}
 }
