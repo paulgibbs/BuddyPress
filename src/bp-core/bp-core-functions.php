@@ -2978,6 +2978,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
  * @return string[]
  */
 function bp_email_get_template( WP_Post $object ) {
+	$single = "single-{$object->post_type}";
 
 	/**
 	 * Filter the possible template paths for the specified email object.
@@ -2987,9 +2988,9 @@ function bp_email_get_template( WP_Post $object ) {
 	 * @param string[] $templates
 	 */
 	return apply_filters( 'bp_email_get_template', array(
-		"single-{$object->post_type}-{$object->post_name}.php",
-		"single-{$object->post_type}.php",
-		'assets/emails/bp-email.php',
-		'single.php',
+		"{$single}-{$object->post_name}.php",
+		"{$single}.php",
+		"assets/emails/{$single}.php",  // djpaultodo remove this
+		'assets/emails/bp-email.php',   // djpaultodo remove this
 	), $object );
 }
