@@ -128,8 +128,8 @@ $settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defa
 	</style>
 
 </head>
-<body width="100%" height="100%" bgcolor="#222222" style="Margin: 0;">
-<table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="#222222" style="border-collapse:collapse;"><tr><td valign="top">
+<body class="body_bg" width="100%" height="100%" bgcolor="<?php echo esc_attr( $settings['body_bg'] ); ?>" style="Margin: 0;">
+<table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="<?php echo esc_attr( $settings['body_bg'] ); ?>" style="border-collapse:collapse;" class="body_bg"><tr><td valign="top">
 	<center style="width: 100%;">
 
 		<!-- Visually Hidden Preheader Text : BEGIN -->

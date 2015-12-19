@@ -9,7 +9,7 @@
 	wp.customize( 'bp_mailtpl_opts[body_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#body' ).css( 'background-color', newval );
+				$( '.body_bg' ).attr( 'bgcolor', newval );
 			}
 		});
 	});

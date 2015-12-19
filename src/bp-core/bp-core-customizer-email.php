@@ -450,7 +450,7 @@ function bp_email_get_customizer_controls() {
  */
 function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
-		'body_bg'           => '#ddd',
+		'body_bg'           => '#222222',
 		'body_text_color'   => '#222',
 		'body_text_size'    => '14',
 		'email_body_bg'     => '#fbfbfb',
