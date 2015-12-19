@@ -24,8 +24,8 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 * Add email items.
 	 */
 	$wp_customize->add_panel( 'bp_mailtpl', array(
-		'description'   => __( 'Customize the look of your BuddyPress emails', 'buddypress' ),
-		'title'         => __( 'Email Templates', 'buddypress' ),
+		'description' => __( 'Customize the look of your BuddyPress emails', 'buddypress' ),
+		'title'       => __( 'Email Templates', 'buddypress' ),
 	) );
 
 	$sections = bp_email_get_customizer_sections();
