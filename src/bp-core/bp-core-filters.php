@@ -896,6 +896,8 @@ add_filter( 'dynamic_sidebar_params', '_bp_core_inject_bp_widget_css_class' );
 /**
  * Add custom headers to outgoing emails.
  *
+ * @since 2.5.0
+ *
  * @param array $headers
  * @param string $property Name of property. Unused.
  * @param string $tranform Return value transformation. Unused.
@@ -912,6 +914,8 @@ add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
 
 /**
  * Add default email tokens.
+ *
+ * @since 2.5.0
  *
  * @param array $tokens Email tokens.
  * @return array
