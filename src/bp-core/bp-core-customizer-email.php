@@ -80,7 +80,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 * Hook actions/filters for further configuration.
 	 */
 
-	add_filter( 'customize_section_active', 'bp_email_hide_other_customizer_sections', 10, 2 );
+	add_filter( 'customize_section_active', 'bp_email_hide_other_customizer_sections', 12, 2 );
 	add_action( 'template_include', 'bp_email_override_customizer_template', 8 );
 }
 add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
