@@ -296,5 +296,6 @@ $settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defa
 		</div>
 	</center>
 </td></tr></table>
+<?php if ( is_customize_preview() ) wp_footer(); ?>
 </body>
 </html>
