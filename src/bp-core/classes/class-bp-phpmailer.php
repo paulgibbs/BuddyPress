@@ -72,36 +72,36 @@ class BP_PHPMailer implements BP_Email_Delivery {
 
 		$recipient = $email->get( 'from' );
 		try {
-			$phpmailer->SetFrom( key( $recipient ), current( $recipient ) );
+			$phpmailer->SetFrom( $recipient->get_address(), $recipient->get_name() );
 		} catch ( phpmailerException $e ) {
 		}
 
 		$recipient = $email->get( 'reply_to' );
 		try {
-			$phpmailer->addReplyTo( key( $recipient ), current( $recipient ) );
+			$phpmailer->addReplyTo( $recipient->get_address(), $recipient->get_name() );
 		} catch ( phpmailerException $e ) {
 		}
 
-		$recipient = $email->get( 'to' );
-		foreach ( $recipient as $address => $name ) {
+		$recipients = $email->get( 'to' );
+		foreach ( $recipients as $recipient ) {
 			try {
-				$phpmailer->AddAddress( $address, $name );
+				$phpmailer->AddAddress( $recipient->get_address(), $recipient->get_name() );
 			} catch ( phpmailerException $e ) {
 			}
 		}
 
-		$recipient = $email->get( 'cc' );
-		foreach ( $recipient as $address => $name ) {
+		$recipients = $email->get( 'cc' );
+		foreach ( $recipients as $recipient ) {
 			try {
-				$phpmailer->AddCc( $address, $name );
+				$phpmailer->AddCc( $recipient->get_address(), $recipient->get_name() );
 			} catch ( phpmailerException $e ) {
 			}
 		}
 
-		$recipient = $email->get( 'bcc' );
-		foreach ( $recipient as $address => $name ) {
+		$recipients = $email->get( 'bcc' );
+		foreach ( $recipients as $recipient ) {
 			try {
-				$phpmailer->AddBcc( $address, $name );
+				$phpmailer->AddBcc( $recipient->get_address(), $recipient->get_name() );
 			} catch ( phpmailerException $e ) {
 			}
 		}
