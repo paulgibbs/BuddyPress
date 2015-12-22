@@ -190,6 +190,10 @@ class BP_Email {
 			return null;
 		}
 
+/*		if ( is_a( $this->$property_name, 'BP_Email_Recipient', true ) ) {
+			$retval = $this->$property_name->
+		}*/
+
 		/**
 		 * Filters the value of the specified email property.
 		 *
@@ -372,7 +376,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function from( $email_address, $name = '' ) {
-		$from = array( new BP_Email_Recipient( $email_address, $name ) );
+		$from = new BP_Email_Recipient( $email_address, $name );
 
 		/**
 		 * Filters the new value of the email's "from" property.
@@ -438,7 +442,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function reply_to( $email_address, $name = '' ) {
-		$reply_to = array( new BP_Email_Recipient( $email_address, $name ) );
+		$reply_to = new BP_Email_Recipient( $email_address, $name );
 
 		/**
 		 * Filters the new value of the email's "reply to" property.
