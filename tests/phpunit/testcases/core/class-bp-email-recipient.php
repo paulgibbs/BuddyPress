@@ -9,9 +9,9 @@ class BP_Email_Recipient_Tests extends BP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-			'user_email'    => 'test@example.com',
-			'user_nicename' => 'Unit Test',
 		$this->u1 = $this->factory->user->create( array(
+			'display_name' => 'Unit Test',
+			'user_email'   => 'test@example.com',
 		) );
 	}
 
