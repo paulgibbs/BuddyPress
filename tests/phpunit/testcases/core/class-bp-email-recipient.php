@@ -69,4 +69,12 @@ class BP_Email_Recipient_Tests extends BP_UnitTestCase {
 		$this->assertEmpty( $recipient->get_address() );
 		$this->assertEmpty( $recipient->get_name() );
 	}
+
+	public function test_get_wp_user_object_from_email_address() {
+		$recipient = new BP_Email_Recipient( 'test@example.com' );
+		$recipient = $recipient->get_user( 'search-email' );
+
+		$this->assertSame( $this->u1, $recipient->ID );
+		$this->assertSame( 'test@example.com', $recipient->user_email );
+	}
 }

@@ -143,9 +143,16 @@ class BP_Email_Recipient {
 	 *
 	 * @since 2.5.0
 	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'search-email'.
 	 * @return WP_User|null WP_User object, or null if not set.
 	 */
-	public function get_user() {
+	public function get_user( $transform = 'raw' ) {
+
+		// If transform "search-email", find the WP_User if not already set.
+		if ( $transform === 'search-email' && ! $this->user_object && $this->address ) {
+			$this->user_object = get_user_by( 'email', $this->address );
+		}
 
 		/**
 		 * Filters the WP_User object for this recipient before it's returned.
@@ -153,8 +160,10 @@ class BP_Email_Recipient {
 		 * @since 2.5.0
 		 *
 		 * @param WP_User $name WP_User object for this recipient, or null if not set.
+		 * @param string $transform Optional. How the return value was transformed.
+		 *                          Accepts 'raw' (default) or 'search-email'.
 		 * @param BP_Email $recipient $this Current instance of the email recipient class.
 		 */
-		return apply_filters( 'bp_email_recipient_get_name', $this->user_object, $this );
+		return apply_filters( 'bp_email_recipient_get_name', $this->user_object, $transform, $this );
 	}
 }
