@@ -190,10 +190,6 @@ class BP_Email {
 			return null;
 		}
 
-/*		if ( is_a( $this->$property_name, 'BP_Email_Recipient', true ) ) {
-			$retval = $this->$property_name->
-		}*/
-
 		/**
 		 * Filters the value of the specified email property.
 		 *
