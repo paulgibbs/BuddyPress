@@ -139,7 +139,7 @@ class BP_Email_Recipient {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @return WP_User
+	 * @return WP_User|null WP_User object, or null if not set.
 	 */
 	public function get_user() {
 
@@ -148,7 +148,7 @@ class BP_Email_Recipient {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param WP_User $name WP_User object for this recipient.
+		 * @param WP_User $name WP_User object for this recipient, or null if not set.
 		 * @param BP_Email $recipient $this Current instance of the email recipient class.
 		 */
 		return apply_filters( 'bp_email_recipient_get_name', $this->user_object, $this );
