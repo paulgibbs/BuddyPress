@@ -4,15 +4,15 @@
  * @group BP_Email_Recipient
  */
 class BP_Email_Recipient_Tests extends BP_UnitTestCase {
-	protected function $u1;
+	protected $u1;
 
 	public function setUp() {
 		parent::setUp();
 
-		$this->u1 = $this->factory->user->create(
 			'user_email'    => 'test@example.com',
 			'user_nicename' => 'Unit Test',
-		);
+		$this->u1 = $this->factory->user->create( array(
+		) );
 	}
 
 	public function test_return_with_address_and_name() {
