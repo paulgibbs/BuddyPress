@@ -65,19 +65,16 @@ class BP_Email_Recipient {
 
 		// Array, address and name.
 		} else {
-			if ( is_array( $email_or_user ) ) {
+			if ( ! is_array( $email_or_user ) ) {
+				$email_or_user = array( $email_or_user => $name );
+			}
 
-				// Handle numeric arrays.
-				if ( is_int( key( $email_or_user ) ) ) {
-					$address = current( $email_or_user );
-				} else {
-					$address = key( $email_or_user );
-					$name    = current( $email_or_user );
-				}
-
+			// Handle numeric arrays.
+			if ( is_int( key( $email_or_user ) ) ) {
+				$address = current( $email_or_user );
 			} else {
-				$address = $email_or_user;
-				$name    = $name;
+				$address = key( $email_or_user );
+				$name    = current( $email_or_user );
 			}
 
 			if ( is_email( $address ) ) {
