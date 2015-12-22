@@ -37,7 +37,7 @@ function bp_core_email_from_name_filter() {
  *
  * @param mixed $value
  * @param string $property Name of property.
- * @param string $tranform Return value transformation. Unused.
+ * @param string $transform Return value transformation. Unused.
  * @param BP_Email $email Email object reference.
  * @return mixed
  */

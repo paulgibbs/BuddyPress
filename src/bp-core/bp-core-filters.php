@@ -900,7 +900,7 @@ add_filter( 'dynamic_sidebar_params', '_bp_core_inject_bp_widget_css_class' );
  *
  * @param array $headers
  * @param string $property Name of property. Unused.
- * @param string $tranform Return value transformation. Unused.
+ * @param string $transform Return value transformation. Unused.
  * @param BP_Email $email Email object reference.
  * @return array
  */

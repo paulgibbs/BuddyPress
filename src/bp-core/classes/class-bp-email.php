@@ -181,7 +181,7 @@ class BP_Email {
 	 * @since 2.5.0
 	 *
 	 * @param string $property_name Property to access.
-	 * @param string $tranform Optional. How to transform the return value.
+	 * @param string $transform Optional. How to transform the return value.
 	 *                         Accepts 'raw' (default) or 'replace-tokens'.
 	 * @return mixed Returns null if property does not exist, otherwise the value.
 	 */
