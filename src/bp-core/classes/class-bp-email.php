@@ -20,7 +20,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var string[] Associative pairing of "bcc" name (key) and email addresses (value).
+	 * @var BP_Email_Recipient[] BCC recipients.
 	 */
 	protected $bcc = array();
 
@@ -29,7 +29,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var string[] Associative pairing of "cc" name (key) and email addresses (value).
+	 * @var BP_Email_Recipient[] CC recipients.
 	 */
 	protected $cc = array();
 
@@ -47,9 +47,9 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var string[] Associative pairing of "from" name (key) and email addresses (value).
+	 * @var BP_Email_Recipient Sender details.
 	 */
-	protected $from = array();
+	protected $from = null;
 
 	/**
 	 * Email headers.
@@ -74,9 +74,9 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var string[] Associative pairing of  "reply to" name (key) and email addresses (value).
+	 * @var BP_Email_Recipient "Reply to" details.
 	 */
-	protected $reply_to = array();
+	protected $reply_to = null;
 
 	/**
 	 * Email subject.
@@ -101,7 +101,7 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @var string[] Associative pairing of "to" name (key) and email addresses (value).
+	 * @var BP_Email_Recipient[] Email recipients.
 	 * }
 	 */
 	protected $to = array();
@@ -271,30 +271,30 @@ class BP_Email {
 	 * Set the email's "bcc" address.
 	 *
 	 * To set a single address, the first parameter is the address and the second the name.
+	 * You can also pass a user ID or a WP_User object.
+	 *
 	 * To set multiple addresses, for each array item, the key is the email address and
 	 * the value is the name.
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string|string[] $bcc_address If array, key is email address, value is the name.
-	 *                                     If string, this is the email address.
-	 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
-	 *                     Otherwise, the parameter is not used.
+	 * @param string|array|int|WP_User $bcc_address Either a email address, user ID, WP_User object,
+	 *                                              or an array containg the address and name.
+	 * @param string $name Optional. If $bcc_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
 	public function bcc( $bcc_address, $name = '' ) {
-		$bcc = $this->parse_and_sanitize_addresses( $bcc_address, $name );
+		$bcc = array( new BP_Email_Recipient( $bcc_address, $name ) );
 
 		/**
 		 * Filters the new value of the email's "BCC" property.
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string[] $bcc Key/value pairs of BCC addresses/names.
-		 * @param string|string[] $bcc_address If array, key is email address, value is the name.
-		 *                                     If string, this is the email address.
-		 * @param string $name Optional. If $bcc_address is not an array, this is the "from" name.
-		 *                     Otherwise, the parameter is not used.
+		 * @param BP_Email_Recipient[] $bcc BCC recipients.
+		 * @param string|array|int|WP_User $bcc_address Either a email address, user ID, WP_User object,
+		 *                                              or an array containg the address and name.
+		 * @param string $name Optional. If $bcc_address is a string, this is the recipient's name.
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
 		$this->bcc = apply_filters( 'bp_email_set_bcc', $bcc, $bcc_address, $name, $this );
@@ -306,30 +306,30 @@ class BP_Email {
 	 * Set the email's "cc" address.
 	 *
 	 * To set a single address, the first parameter is the address and the second the name.
+	 * You can also pass a user ID or a WP_User object.
+	 *
 	 * To set multiple addresses, for each array item, the key is the email address and
 	 * the value is the name.
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string|string[] $cc_address If array, key is email address, value is the name.
-	 *                                   If string, this is the email address.
-	 * @param string $name Optional. If $cc_address is not an array, this is the "from" name.
-	 *                     Otherwise, the parameter is not used.
+	 * @param string|array|int|WP_User $cc_address Either a email address, user ID, WP_User object,
+	 *                                             or an array containg the address and name.
+	 * @param string $name Optional. If $cc_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
 	public function cc( $cc_address, $name = '' ) {
-		$cc = $this->parse_and_sanitize_addresses( $cc_address, $name );
+		$cc = array( new BP_Email_Recipient( $cc_address, $name ) );
 
 		/**
 		 * Filters the new value of the email's "CC" property.
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string[] $cc Key/value pairs of CC addresses/names.
-		 * @param string|string[] $cc_address If array, key is email address, value is the name.
-		 *                                    If string, this is the email address.
-		 * @param string $name Optional. If $cc_address is not an array, this is the "from" name.
-		 *                     Otherwise, the parameter is not used.
+		 * @param BP_Email_Recipient[] $cc CC recipients.
+		 * @param string|array|int|WP_User $cc_address Either a email address, user ID, WP_User object,
+		 *                                             or an array containg the address and name.
+		 * @param string $name Optional. If $cc_address is a string, this is the recipient's name.
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
 		$this->cc = apply_filters( 'bp_email_set_cc', $cc, $cc_address, $name, $this );
@@ -366,25 +366,23 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $email_address
-	 * @param string $name Optional "from" name.
+	 * @param string|array|int|WP_User $email_address Either a email address, user ID, WP_User object,
+	 *                                                or an array containg the address and name.
+	 * @param string $name Optional. If $email_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
 	public function from( $email_address, $name = '' ) {
-		$from = array();
-
-		if ( is_email( $email_address ) ) {
-			$from = array( sanitize_email( $email_address ) => $name );
-		}
+		$from = array( new BP_Email_Recipient( $email_address, $name ) );
 
 		/**
 		 * Filters the new value of the email's "from" property.
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string[] $from Associative array of "from" name (key) and addresses (value).
-		 * @param string $email_address From address.
-		 * @param string $name From name.
+		 * @param BP_Email_Recipient $from Sender details.
+		 * @param string|array|int|WP_User $email_address Either a email address, user ID, WP_User object,
+		 *                                                or an array containg the address and name.
+		 * @param string $name Optional. If $email_address is a string, this is the recipient's name.
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
 		$this->from = apply_filters( 'bp_email_set_from', $from, $email_address, $name, $this );
@@ -434,25 +432,23 @@ class BP_Email {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $email_address
-	 * @param string $name Optional "reply to" name.
+	 * @param string|array|int|WP_User $email_address Either a email address, user ID, WP_User object,
+	 *                                                or an array containg the address and name.
+	 * @param string $name Optional. If $email_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
 	public function reply_to( $email_address, $name = '' ) {
-		$reply_to = array();
-
-		if ( is_email( $email_address ) ) {
-			$reply_to = array( sanitize_email( $email_address ) => $name );
-		}
+		$reply_to = array( new BP_Email_Recipient( $email_address, $name ) );
 
 		/**
 		 * Filters the new value of the email's "reply to" property.
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string[] $reply_to Associative array of "reply to" name (key) and addresses (value).
-		 * @param string $email_address "Reply to" address.
-		 * @param string $name "Reply to" name.
+		 * @param BP_Email_Recipient $reply_to "Reply to" recipient.
+		 * @param string|array|int|WP_User $email_address Either a email address, user ID, WP_User object,
+		 *                                                or an array containg the address and name.
+		 * @param string $name Optional. If $email_address is a string, this is the recipient's name.
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
 		$this->reply_to = apply_filters( 'bp_email_set_reply_to', $reply_to, $email_address, $name, $this );
@@ -512,26 +508,27 @@ class BP_Email {
 	 * Set the email's "to" address.
 	 *
 	 * To set a single address, the first parameter is the address and the second the name.
+	 * You can also pass a user ID or a WP_User object.
+	 *
 	 * To set multiple addresses, for each array item, the key is the email address and
 	 * the value is the name.
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string|string[] $to_address If array, key is email address, value is the name.
-	 *                                    If string, this is the email address.
-	 * @param string $name Optional. If $to_address is not an array, this is the "from" name.
-	 *                     Otherwise, the parameter is not used.
+	 * @param string|array|int|WP_User $to_address Either a email address, user ID, WP_User object,
+	 *                                             or an array containg the address and name.
+	 * @param string $name Optional. If $to_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
 	public function to( $to_address, $name = '' ) {
-		$to = $this->parse_and_sanitize_addresses( $to_address, $name );
+		$to = new BP_Email_Recipient( $to_address, $name );
 
 		/**
 		 * Filters the new value of the email's "to" property.
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string[] $to Associative array of "to" name (key) and addresses (value).
+		 * @param BP_Email_Recipient[] "To" recipients.
 		 * @param string $to_address "To" address.
 		 * @param string $name "To" name.
 		 * @param BP_Email $this Current instance of the email type class.
