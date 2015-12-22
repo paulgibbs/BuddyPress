@@ -918,13 +918,31 @@ add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
  * @since 2.5.0
  *
  * @param array $tokens Email tokens.
+ * @param string $property_name Unused.
+ * @param string $transform Unused.
+ * @param BP_Email $email Email being sent.
  * @return array
  */
-function bp_core_set_default_email_tokens( $tokens ) {
+function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, $email ) {
 	$tokens['{{site.admin-email}}'] = bp_get_option( 'admin_email' );
 	$tokens['{{site.description}}'] = bp_get_option( 'blogdescription' );
 	$tokens['{{site.name}}']        = bp_get_option( 'blogname' );
 	$tokens['{{site.url}}']         = home_url();
+
+	// Who is the email going to?
+	$recipient = array_shift( $email->get( 'to' ) );
+	if ( $recipient ) {
+		$recipient = $recipient->get_user( 'search-email' );
+
+		if ( $recipient ) {
+			// Unsubscribe link.
+			$tokens['{{unsubscribe}}'] = sprintf(
+				'%s%s/notifications/',
+				bp_core_get_user_domain( $recipient->ID ),
+				function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings'
+			);
+		}
+	}
 
 	return $tokens;
 }
