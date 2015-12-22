@@ -53,8 +53,9 @@ class BP_Email_Recipient {
 	 * @param string $name Optional. If $email_or_user is a string, this is the recipient's name.
 	 */
 	public function __construct( $email_or_user, $name = '' ) {
+
 		// User ID, WP_User object.
-		if ( ctype_digit( $email_or_user ) || is_object( $email_or_user ) ) {
+		if ( is_int( $email_or_user ) || is_object( $email_or_user ) ) {
 			$this->user_object = is_object( $email_or_user ) ? $email_or_user : get_user_by( 'ID', $email_or_user );
 
 			if ( $this->user_object ) {
