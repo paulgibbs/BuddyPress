@@ -623,35 +623,6 @@ class BP_Email {
 	 */
 
 	/**
-	 * Parse and sanitize email addresses.
-	 *
-	 * Unlike most other methods in this class, this one is not chainable.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string|string[] $raw_address If array, key is email address, value is the name.
-	 *                                     If string, this is the email address.
-	 * @param string $name Optional. If $raw_address is not an array, this is the "from" name.
-	 *                     Otherwise, the parameter is not used.
-	 * @return array
-	 */
-	protected function parse_and_sanitize_addresses( $raw_address, $name = '' ) {
-		if ( ! is_array( $raw_address ) ) {
-			$raw_address = array( $raw_address => $name );
-		}
-
-		$addresses = array();
-
-		foreach ( $raw_address as $email => $recipient ) {
-			if ( is_email( $email ) ) {
-				$addresses[ sanitize_email( $email ) ] = $recipient;
-			}
-		}
-
-		return $addresses;
-	}
-
-	/**
 	 * Replace all tokens in the input with appropriate values.
 	 *
 	 * Unlike most other methods in this class, this one is not chainable.
