@@ -946,4 +946,4 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 
 	return $tokens;
 }
-add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6 );
+add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
