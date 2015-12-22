@@ -929,6 +929,9 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 	$tokens['{{site.name}}']        = bp_get_option( 'blogname' );
 	$tokens['{{site.url}}']         = home_url();
 
+	// Default values for tokens set conditionally below.
+	$tokens['{{unsubscribe}}'] = '';
+
 	// Who is the email going to?
 	$recipient = array_shift( $email->get( 'to' ) );
 	if ( $recipient ) {
