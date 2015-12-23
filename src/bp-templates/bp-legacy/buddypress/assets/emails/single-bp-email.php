@@ -280,7 +280,7 @@ $settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defa
 					<td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
 						Company Name<br><span class="mobile-link--footer">123 Fake Street, SpringField, OR, 97477 US</span><br><span class="mobile-link--footer">(123) 456-7890</span>
 						<br><br>
-						<a href="{{unsubscribe}}" style="color:#888888; text-decoration:underline;">unsubscribe</a>
+						<a href="{{unsubscribe}}" style="color:#888888; text-decoration:underline;"><?php _ex( 'unsubscribe', 'email', 'buddypress' ); ?></a>
 					</td>
 				</tr>
 			</table>
