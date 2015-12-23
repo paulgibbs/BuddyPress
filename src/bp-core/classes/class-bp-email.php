@@ -521,7 +521,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function to( $to_address, $name = '' ) {
-		$to = new BP_Email_Recipient( $to_address, $name );
+		$to = array( new BP_Email_Recipient( $to_address, $name ) );
 
 		/**
 		 * Filters the new value of the email's "to" property.
