@@ -939,11 +939,11 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 
 		if ( $recipient ) {
 			// Unsubscribe link.
-			$tokens['{{unsubscribe}}'] = sprintf(
+			$tokens['{{unsubscribe}}'] = esc_url( sprintf(
 				'%s%s/notifications/',
 				bp_core_get_user_domain( $recipient->ID ),
 				function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings'
-			);
+			) );
 		}
 	}
 
