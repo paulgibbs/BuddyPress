@@ -136,7 +136,7 @@
 	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[footer_text]', function( value ) {
 		value.bind(function( newval ) {
-			$( '#credit' ).text( newval );
+			$( '.footer_text' ).text( newval );
 		});
 	});
 })( jQuery );

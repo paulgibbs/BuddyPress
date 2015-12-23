@@ -106,7 +106,6 @@ $settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defa
 		}
 
 		/* What it does: A work-around for iOS meddling in triggered links. */
-		.mobile-link--footer a,
 		a[x-apple-data-detectors] {
 			color:inherit !important;
 			text-decoration: underline !important;
@@ -278,7 +277,7 @@ $settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defa
 			<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">
 				<tr>
 					<td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
-						Company Name<br><span class="mobile-link--footer">123 Fake Street, SpringField, OR, 97477 US</span><br><span class="mobile-link--footer">(123) 456-7890</span>
+						<span class="footer_text"><?php echo esc_html( $settings['footer_text'] ); ?></span>
 						<br><br>
 						<a href="{{unsubscribe}}" style="color:#888888; text-decoration:underline;"><?php _ex( 'unsubscribe', 'email', 'buddypress' ); ?></a>
 					</td>
