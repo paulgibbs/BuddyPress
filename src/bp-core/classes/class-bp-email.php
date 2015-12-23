@@ -507,6 +507,11 @@ class BP_Email {
 	/**
 	 * Set the email's "to" address.
 	 *
+	 * IMPORTANT NOTE: the assumption with all emails sent by (and belonging to) BuddyPress itself
+	 * is that there will only be a single `$to_address`. This is to simplify token and templating
+	 * logic (for example, if multiple recipients, the "unsubscribe" link in the emails will all
+	 * only link to the first recipient).
+	 *
 	 * To set a single address, the first parameter is the address and the second the name.
 	 * You can also pass a user ID or a WP_User object.
 	 *
