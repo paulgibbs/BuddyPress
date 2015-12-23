@@ -19,6 +19,9 @@ defined( 'ABSPATH' ) || exit;
  * @param WP_Customize_Manager $wp_customize The Customizer object.
  */
 function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
+	if ( ! bp_is_email_customizer() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
+		return;
+	}
 
 	/*
 	 * Add email items.
@@ -50,7 +53,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 *
 	 * @param WP_Customize_Manager $wp_customize The Customizer object.
 	 */
-	do_action( 'bp_core_customizer_register_sections', $wp_customize );
+	do_action( 'bp_email_customizer_register_sections', $wp_customize );
 
 	$controls = bp_email_get_customizer_controls();
 	foreach ( $controls as $control_id => $args ) {
@@ -84,7 +87,18 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	add_action( 'template_include', 'bp_email_override_customizer_template', 8 );
 	$wp_customize->remove_panel( 'widgets' );  // WP 4.4
 }
-add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
+add_action( 'bp_customize_register', 'bp_email_init_customizer' );
+
+/**
+ * Are we looking at the email customizer?
+ *
+ * @since 2.5.0
+ *
+ * @return bool
+ */
+function bp_is_email_customizer() {
+	return isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email';
+}
 
 /**
  * Only show email sections in the Customizer.
@@ -96,6 +110,10 @@ add_action( 'bp_customize_register_for_email', 'bp_email_init_customizer' );
  * @return bool
  */
 function bp_email_hide_other_customizer_sections( $active, $section ) {
+	if ( ! bp_is_email_customizer() ) {
+		return $active;
+	}
+
 	return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
 }
 
@@ -517,8 +535,7 @@ function bp_email_sanitize_customizer_alignment( $input ) {
  * @return string New template path.
  */
 function bp_email_override_customizer_template( $template ) {
-	$object = get_queried_object();
-	if ( empty( $object->post_type ) || $object->post_type !== bp_get_email_post_type() || ! is_customize_preview() ) {
+	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
 		return $template;
 	}
 
@@ -530,7 +547,7 @@ function bp_email_override_customizer_template( $template ) {
 	 * @param string $template Path to current template (probably single.php).
 	 */
 	return apply_filters( 'bp_email_override_customizer_template',
-		bp_locate_template( bp_email_get_template( $object ), false ),
+		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
 		$template
 	);
 }
