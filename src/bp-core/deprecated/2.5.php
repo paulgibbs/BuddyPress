@@ -72,6 +72,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 	}
 
 	if ( $property === 'to' ) {
+		$value          = array_shift( $value );
 		$recipient_name = $value->get_name();     // Value - name
 		$value          = $value->get_address();  // Key - email
 	}
@@ -699,7 +700,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 	}
 
 	if ( $property === 'to' ) {
-		$value = new BP_Email_Recipient( $value );
+		$value = array( new BP_Email_Recipient( $value ) );
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
