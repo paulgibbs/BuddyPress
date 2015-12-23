@@ -635,6 +635,8 @@ class BP_Email {
 			if ( is_callable( $replacement ) ) {
 				$replacement = call_user_func( $replacement );
 			}
+
+			$replacement = esc_html( $replacement );
 		}
 
 		$text = strtr( $text, $tokens );
