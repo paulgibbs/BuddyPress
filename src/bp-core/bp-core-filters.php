@@ -932,16 +932,17 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 	// Default values for tokens set conditionally below.
 	$tokens['{{unsubscribe}}'] = '';
 
-	// Who is the email going to?
-	$recipient = array_shift( $email->get( 'to' ) );
-	if ( $recipient ) {
-		$recipient = $recipient->get_user( 'search-email' );
 
-		if ( $recipient ) {
+	// Who is the email going to?
+	$recipient = $email->get( 'to' );
+	if ( $recipient ) {
+
+		$user = $recipient->get_user( 'search-email' );
+		if ( $user ) {
 			// Unsubscribe link.
 			$tokens['{{unsubscribe}}'] = esc_url( sprintf(
 				'%s%s/notifications/',
-				bp_core_get_user_domain( $recipient->ID ),
+				bp_core_get_user_domain( $user->ID ),
 				function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings'
 			) );
 		}
