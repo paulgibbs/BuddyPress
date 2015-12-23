@@ -42,7 +42,7 @@ function friends_notification_new_request( $friendship_id, $initiator_id, $frien
 			'initiator_name'    => bp_core_get_user_displayname( $initiator_id ),
 		),
 	);
-	bp_send_email( 'friends-request', get_userdata( $friend_id )->user_email, $args );
+	bp_send_email( 'friends-request', $friend_id, $args );
 }
 add_action( 'friends_friendship_requested', 'friends_notification_new_request', 10, 3 );
 
@@ -75,7 +75,7 @@ function friends_notification_accepted_request( $friendship_id, $initiator_id, $
 			'initiator_id'  => $initiator_id,
 		),
 	);
-	bp_send_email( 'friends-request-accepted', get_userdata( $initiator_id )->user_email, $args );
+	bp_send_email( 'friends-request-accepted', $initiator_id, $args );
 }
 add_action( 'friends_friendship_accepted', 'friends_notification_accepted_request', 10, 3 );
 

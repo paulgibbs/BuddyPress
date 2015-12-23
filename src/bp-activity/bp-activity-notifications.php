@@ -77,8 +77,7 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
 			),
 		);
 
-		$recipient = get_user_by( 'id', $receiver_user_id );
-		bp_send_email( $email_type, $recipient->user_email, $args );
+		bp_send_email( $email_type, $receiver_user_id, $args );
 	}
 }
 
@@ -135,8 +134,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 			),
 		);
 
-		$recipient = get_user_by( 'id', $original_activity->user_id );
-		bp_send_email( 'activity-comment', $recipient->user_email, $args );
+		bp_send_email( 'activity-comment', $original_activity->user_id, $args );
 	}
 
 
@@ -162,8 +160,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 			),
 		);
 
-		$recipient = get_user_by( 'id', $parent_comment->user_id );
-		bp_send_email( 'activity-comment-author', $recipient->user_email, $args );
+		bp_send_email( 'activity-comment-author', $parent_comment->user_id, $args );
 	}
 }
 

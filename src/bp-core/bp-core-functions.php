@@ -2832,7 +2832,8 @@ function bp_get_email( $email_type ) {
  * @since 2.5.0
  *
  * @param string $email_type Type of email being sent.
- * @param string[]|string $to Array or comma-separated list of email addresses to the email to.
+ * @param string|array|int|WP_User $to Either a email address, user ID, WP_User object,
+ *                                     or an array containg the address and name.
  * @param array $args {
  *     Optional. Array of extra. parameters.
  *

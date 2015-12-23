@@ -2210,7 +2210,7 @@ function bp_core_signup_send_validation_email( $user_id, $user_email, $key ) {
 			'user_id'      => $user_id,
 		),
 	);
-	bp_send_email( 'core-user-registration', $user_email, $args );
+	bp_send_email( 'core-user-registration', $user_id, $args );
 }
 
 /**

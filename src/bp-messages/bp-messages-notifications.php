@@ -65,7 +65,7 @@ function messages_notification_new_message( $raw_args = array() ) {
 				'subject'      => stripslashes( wp_filter_kses( $subject ) ),
 			),
 		);
-		bp_send_email( 'messages-unread', $ud->user_email, $args );
+		bp_send_email( 'messages-unread', $ud, $args );
 	}
 
 	/**

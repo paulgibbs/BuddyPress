@@ -76,7 +76,7 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 				'group.name'    => $group->name,
 			),
 		);
-		bp_send_email( 'groups-details-updated', bp_core_get_core_userdata( $user_id )->user_email, $args );
+		bp_send_email( 'groups-details-updated', $user_id, $args );
 	}
 
 	/**
@@ -138,7 +138,7 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 			'requesting_user_name' => bp_core_get_user_displayname( $requesting_user_id ),
 		),
 	);
-	bp_send_email( 'groups-membership-request', bp_core_get_core_userdata( $admin_id )->user_email, $args );
+	bp_send_email( 'groups-membership-request', $admin_id, $args );
 }
 
 /**
@@ -174,9 +174,7 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 	}
 
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
-	$to    = bp_core_get_core_userdata( $requesting_user_id )->user_email;
-
-	$args = array(
+	$args  = array(
 		'tokens' => array(
 			'group'      => $group,
 			'group_link' => bp_get_group_permalink( $group ),
@@ -185,9 +183,9 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 	);
 
 	if ( ! empty( $accepted ) ) {
-		bp_send_email( 'groups-membership-request-accepted', $to, $args );
+		bp_send_email( 'groups-membership-request-accepted', $requesting_user_id, $args );
 	} else {
-		bp_send_email( 'groups-membership-request-rejected', $to, $args );
+		bp_send_email( 'groups-membership-request-rejected', $requesting_user_id, $args );
 	}
 }
 add_action( 'groups_membership_accepted', 'groups_notification_membership_request_completed', 10, 3 );
@@ -239,7 +237,7 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 			'user_id'       => $user_id,
 		),
 	);
-	bp_send_email( 'groups-member-promoted', bp_core_get_core_userdata( $user_id->user_email ), $args );
+	bp_send_email( 'groups-member-promoted', $user_id, $args );
 }
 add_action( 'groups_promoted_member', 'groups_notification_promoted_member', 10, 2 );
 
@@ -293,7 +291,7 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 			'invites_link'    => trailingslashit( $invited_link . '/invites/' ),
 		),
 	);
-	bp_send_email( 'groups-invitation', bp_core_get_core_userdata( $invited_user_id )->user_email, $args );
+	bp_send_email( 'groups-invitation', $invited_user_id, $args );
 }
 
 /** Notifications *************************************************************/
