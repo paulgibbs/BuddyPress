@@ -71,6 +71,11 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		return $value;
 	}
 
+	if ( $property === 'to' ) {
+		$recipient_name = $value->get_name();     // Value - name
+		$value          = $value->get_address();  // Key - email
+	}
+
 	if ( $email_type === 'activity-comment' ) {
 		if ( $property === 'to' ) {
 			/**
@@ -85,7 +90,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -130,7 +135,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_comment_author_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -175,7 +180,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_activity_at_message_notification_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -225,7 +230,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_user_notification_to', $value, $tokens['{{user}}'], $value, $tokens['{{key}}'], array() );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -280,7 +285,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_blog_notification_to', $value, $tokens['{{domain}}'], $tokens['{{path}}'], $tokens['title'], $tokens['{{user}}'], $tokens['{{user_email}}'], $tokens['{{key}}'], array() );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -333,7 +338,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'friends_notification_new_request_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -377,7 +382,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'friends_notification_accepted_request_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -420,7 +425,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'groups_notification_group_updated_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -463,7 +468,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'groups_notification_group_invites_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -509,7 +514,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'groups_notification_promoted_member_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -553,7 +558,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'groups_notification_new_membership_request_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -597,7 +602,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'groups_notification_membership_request_completed_to', $value );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -641,7 +646,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'messages_notification_new_message_to', $value, false );
 			if ( ! is_array( $value ) ) {
-				$value = array( $value => '' );
+				$value = array( $value => $recipient_name );
 			}
 
 		} elseif ( $property === 'subject' ) {
@@ -691,6 +696,10 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_new_user_email_content', $value, $tokens['{{user_email}}'], $tokens['{{old_user_email}}'], false );
 		}
+	}
+
+	if ( $property === 'to' ) {
+		$value = new BP_Email_Recipient( $value );
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
