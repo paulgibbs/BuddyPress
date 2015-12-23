@@ -429,7 +429,7 @@ function bp_core_activation_signup_blog_notification( $domain, $path, $title, $u
 			'user_email'   => $user_email,
 		),
 	);
-	bp_send_email( 'core-user-registration-with-blog', $to, $args );
+	bp_send_email( 'core-user-registration-with-blog', $user_email, $args );
 
 	// Return false to stop the original WPMU function from continuing.
 	return false;
