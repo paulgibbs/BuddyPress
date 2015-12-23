@@ -14,6 +14,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[header_logo]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -24,6 +25,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[header_logo_text]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -32,6 +34,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[header_aligment]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -40,6 +43,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[header_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -48,6 +52,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[header_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -56,6 +61,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[header_text_color]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -64,6 +70,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[email_body_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -72,6 +79,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[body_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -80,6 +88,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[body_text_color]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -88,6 +97,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[footer_aligment]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -96,6 +106,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[footer_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -104,6 +115,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[footer_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -112,6 +124,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[footer_text_color]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -120,6 +133,7 @@
 		});
 	});
 
+	// djpaultodo
 	wp.customize( 'bp_mailtpl_opts[footer_text]', function( value ) {
 		value.bind(function( newval ) {
 			$( '#credit' ).text( newval );
