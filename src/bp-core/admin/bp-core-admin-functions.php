@@ -992,9 +992,10 @@ function bp_admin_email_templates_button( $editor_id ) {
 	$post_link = get_sample_permalink( get_the_ID() );
 	$link      = add_query_arg(
 		array(
-			'bp_customizer' => 'email',
-			'return'        => rawurlencode( $return_url ),
-			'url'           => rawurlencode( $post_link[0] . '&bp_customizer=email' ),
+			'autofocus[panel]' => 'bp_mailtpl',
+			'bp_customizer'    => 'email',
+			'return'           => rawurlencode( $return_url ),
+			'url'              => rawurlencode( $post_link[0] . '&bp_customizer=email' ),
 		),
 		admin_url( 'customize.php' )
 	);
