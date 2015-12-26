@@ -14,4 +14,17 @@
 			$this.parent().find( '.range-value' ).html( $this.val() );
 		});
 	});
+
+	$.ajaxPrefilter(function( request ) {
+		if ( ! request.hasOwnProperty( 'data' ) ) {
+			return;
+		}
+
+		var args = request.data.split( '&' );
+		if ( $.inArray( 'wp_customize=on', args ) == -1 || $.inArray( 'action=customize_save', args ) == -1 ) {
+			return;
+		}
+
+		// customize_save. add argument. djpaultodo get from custom JS
+	});
 })( jQuery );
