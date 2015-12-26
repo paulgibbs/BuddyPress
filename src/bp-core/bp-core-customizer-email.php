@@ -81,8 +81,8 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_enqueue_script(
-			'bp-customizer-emails-handler',
-			"{$bp->plugin_url}/bp-core/admin/js/customizer-emails-handler{$min}.js",
+			'bp-customizer-emails',
+			"{$bp->plugin_url}/bp-core/admin/js/customizer-emails{$min}.js",
 			array( 'customize-preview' ),
 			bp_get_version()
 		);
