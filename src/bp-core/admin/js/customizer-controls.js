@@ -10,9 +10,8 @@
 
 		// Range control
 		$( '.customize-control-range input' ).on( 'input', function() {
-			var val = $( this ).val();
-			$( this ).parent().find( '.range-value' ).html( val );
+			var $this = $( this );
+			$this.parent().find( '.range-value' ).html( $this.val() );
 		});
-
-	} );
+	});
 })( jQuery );
