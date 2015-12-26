@@ -6,7 +6,7 @@
  */
 
 (function( $ ) {
-	$( window ).load(function() {
+	$( window ).on( 'load', function() {
 
 		// Range control
 		$( '.customize-control-range input' ).on( 'input', function() {
@@ -14,5 +14,5 @@
 			$( this ).parent().find( '.range-value' ).html( val );
 		});
 
-	});
+	} );
 })( jQuery );
