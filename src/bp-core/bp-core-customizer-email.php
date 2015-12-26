@@ -19,6 +19,8 @@ defined( 'ABSPATH' ) || exit;
  * @param WP_Customize_Manager $wp_customize The Customizer object.
  */
 function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
+	$bp = buddypress();
+
 	if ( ! bp_is_email_customizer() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 		return;
 	}
@@ -76,8 +78,6 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 		 * Scripts can't be registered in bp_core_register_common_styles() etc because
 		 * the Customizer loads very, very early.
 		 */
-
-		$bp  = buddypress();
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_enqueue_script(
