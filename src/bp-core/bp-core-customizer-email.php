@@ -62,30 +62,31 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 
 
 	/*
-	 * Enqueue scripts/styles.
-	 *
-	 * Scripts can't be registered in bp_core_register_common_styles() etc because
-	 * the Customizer loads very, very early.
-	 */
-
-	$bp  = buddypress();
-	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
-	wp_enqueue_script(
-		'bp-customizer-emails',
-		"{$bp->plugin_url}/bp-core/admin/js/customizer-emails{$min}.js",
-		array( 'customize-preview' ),
-		bp_get_version()
-	);
-
-
-	/*
 	 * Hook actions/filters for further configuration.
 	 */
 
 	add_filter( 'customize_section_active', 'bp_email_hide_other_customizer_sections', 12, 2 );
 	add_action( 'template_include', 'bp_email_override_customizer_template', 8 );
 	$wp_customize->remove_panel( 'widgets' );  // WP 4.4
+
+	if ( is_customize_preview() ) {
+		/*
+		 * Enqueue scripts/styles.
+		 *
+		 * Scripts can't be registered in bp_core_register_common_styles() etc because
+		 * the Customizer loads very, very early.
+		 */
+
+		$bp  = buddypress();
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+		wp_enqueue_script(
+			'bp-customizer-emails-handler',
+			"{$bp->plugin_url}/bp-core/admin/js/customizer-emails-handler{$min}.js",
+			array( 'customize-preview' ),
+			bp_get_version()
+		);
+	}
 }
 add_action( 'bp_customize_register', 'bp_email_init_customizer' );
 
