@@ -42,7 +42,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	}
 
 	/**
-	 * HTML range customizer control.
+	 * BP_Customizer_Control_Range class.
 	 */
 	require_once dirname( __FILE__ ) . '/classes/class-bp-customizer-control-range.php';
 
