@@ -118,6 +118,58 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
 	return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
 }
 
+function bp_email_customizer_inline_js() {
+}
+
+
+/**
+ * Sanitization callback for CSS alignment settings.
+ *
+ * @since 2.5.0
+ *
+ * @param string $input string to sanitize.
+ * @return string
+ */
+function bp_email_sanitize_customizer_alignment( $input ) {
+	$valid = array( 'center', 'left', 'right', );
+	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
+}
+
+/**
+ * When previewing an email in the Customizer, change the template used to display it.
+ *
+ * @since 2.5.0
+ *
+ * @param string $template Path to current template (probably single.php).
+ * @return string New template path.
+ */
+function bp_email_override_customizer_template( $template ) {
+	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
+		return $template;
+	}
+
+		// Localize the script with new data
+		add_action( 'wp_footer', function(){
+			echo '<script type="text/javascript">
+			a tiny bit better
+			</script>
+			';
+		});
+		//wp_localize_script( 'bp-customizer-emails', 'BPCustomizerEmails', array(
+
+	/**
+	 * Filter template used to display email in the Customizer.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template Path to current template (probably single.php).
+	 */
+	return apply_filters( 'bp_email_override_customizer_template',
+		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
+		$template
+	);
+}
+
 /**
  * Get email sections for the Customizer.
  *
@@ -512,43 +564,4 @@ function bp_email_get_customizer_settings_defaults() {
 	 * @param array $defaults Settings default values.
 	 */
 	return apply_filters( 'bp_email_get_customizer_settings_defaults', $defaults );
-}
-
-/**
- * Sanitization callback for CSS alignment settings.
- *
- * @since 2.5.0
- *
- * @param string $input string to sanitize.
- * @return string
- */
-function bp_email_sanitize_customizer_alignment( $input ) {
-	$valid = array( 'center', 'left', 'right', );
-	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
-}
-
-/**
- * When previewing an email in the Customizer, change the template used to display it.
- *
- * @since 2.5.0
- *
- * @param string $template Path to current template (probably single.php).
- * @return string New template path.
- */
-function bp_email_override_customizer_template( $template ) {
-	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
-		return $template;
-	}
-
-	/**
-	 * Filter template used to display email in the Customizer.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string $template Path to current template (probably single.php).
-	 */
-	return apply_filters( 'bp_email_override_customizer_template',
-		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
-		$template
-	);
 }
