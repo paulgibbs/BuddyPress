@@ -84,7 +84,8 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 			'bp-customizer-emails',
 			"{$bp->plugin_url}/bp-core/admin/js/customizer-emails{$min}.js",
 			array( 'customize-preview' ),
-			bp_get_version()
+			bp_get_version(),
+			true
 		);
 	}
 }
