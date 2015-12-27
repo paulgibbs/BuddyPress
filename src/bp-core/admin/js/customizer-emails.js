@@ -3,6 +3,8 @@
  *
  * If you're looking to add JS for every instance of a control, don't add it here.
  * The file only implements the Customizer controls for Emails.
+ *
+ * @since 2.5.0
  */
 
 (function( $ ) {
