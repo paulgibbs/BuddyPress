@@ -119,10 +119,6 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
 	return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
 }
 
-function bp_email_customizer_inline_js() {
-}
-
-
 /**
  * Sanitization callback for CSS alignment settings.
  *
@@ -149,14 +145,11 @@ function bp_email_override_customizer_template( $template ) {
 		return $template;
 	}
 
-		// Localize the script with new data
-		add_action( 'wp_footer', function(){
-			echo '<script type="text/javascript">
-			a tiny bit better
-			</script>
-			';
-		});
-		//wp_localize_script( 'bp-customizer-emails', 'BPCustomizerEmails', array(
+	// Done here because we don't know the post ID when Customizer is loading.
+	wp_localize_script( 'bp-customizer-emails', 'BPEmails', array(
+		'ID'    => get_the_ID(),
+		'nonce' => wp_create_nonce( 'bp-email-' . get_the_ID() ),
+	) );
 
 	/**
 	 * Filter template used to display email in the Customizer.
