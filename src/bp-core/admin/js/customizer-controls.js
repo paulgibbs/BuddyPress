@@ -9,7 +9,7 @@
 
 /* global BPEmails */
 
-(function( $, undefined ) {
+(function( $ ) {
 	$( window ).on( 'load', function() {
 
 		/**
@@ -30,7 +30,7 @@
 	 * @since 2.5.0
 	 */
 	$.ajaxPrefilter(function( request ) {
-		if ( request.data === undefined ) {
+		if ( request.data === 'undefined' ) {
 			return;
 		}
 
@@ -40,12 +40,9 @@
 		}
 
 		// See bp_email_override_customizer_template()
-		if ( typeof BPEmails === undefined ) {
+		if ( typeof window.BPEmails === 'undefined' ) {
 			return;
 		}
 
-		console.log('kite', request);
-		//BPEmails.ID
-		//BPEmails.nonce = 'bp-email-' . $post_id
 	});
 })( jQuery );
