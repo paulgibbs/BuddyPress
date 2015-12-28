@@ -87,6 +87,8 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 			bp_get_version(),
 			true
 		);
+
+		add_action( 'customize_controls_print_footer_scripts', 'bp_email_customizer_inline_js' );
 	}
 }
 add_action( 'bp_customize_register', 'bp_email_init_customizer' );
@@ -120,6 +122,30 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
 }
 
 /**
+ * Add inline JS to store info about the screen inside the Customizer's preview.
+ *
+ * Used by customizer-emails.js to append this info to the AJAX request made
+ * when the Customizer's "save" button is pressed.
+ *
+ * @since 2.5.0
+ */
+function bp_email_customizer_inline_js() {
+	// Not cached, but used only in the Customizer, so acceptable.
+	// @todo Use wp_customize->get_preview_url() in WP 4.4+.
+	$post_id = url_to_postid( $GLOBALS['url'] );
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$data = wp_json_encode( array(
+		'ID'    => $post_id,
+		'nonce' => wp_create_nonce( "bp-email-{$post_id}" ),
+	) );
+
+	echo "<script type='text/javascript'>window.BPEmails = {$data};</script>";
+}
+
+/**
  * Sanitization callback for CSS alignment settings.
  *
  * @since 2.5.0
@@ -144,12 +170,6 @@ function bp_email_override_customizer_template( $template ) {
 	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
 		return $template;
 	}
-
-	// Done here because we don't know the post ID when Customizer is loading.
-	wp_localize_script( 'bp-customizer-emails', 'BPEmails', array(
-		'ID'    => get_the_ID(),
-		'nonce' => wp_create_nonce( 'bp-email-' . get_the_ID() ),
-	) );
 
 	/**
 	 * Filter template used to display email in the Customizer.
