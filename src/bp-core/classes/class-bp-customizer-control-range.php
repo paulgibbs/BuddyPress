@@ -27,7 +27,7 @@ class BP_Customizer_Control_Range extends WP_Customize_Control {
 	 */
 	public function enqueue() {
 		wp_enqueue_script( 'bp-customizer-controls' );
-		wp_enqueue_style( 'bp-customizer' );
+		wp_enqueue_style( 'bp-customizer-controls' );
 	}
 
 	/**
