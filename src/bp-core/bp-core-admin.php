@@ -930,8 +930,8 @@ class BP_Admin {
 			),
 
 			// 2.5
-			'bp-customizer' => array(
-				'file'         => "{$url}customizer{$min}.css",
+			'bp-customizer-controls' => array(
+				'file'         => "{$url}customizer-controls{$min}.css",
 				'dependencies' => array(),
 			),
 		) );
