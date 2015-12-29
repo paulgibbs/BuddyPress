@@ -19,15 +19,10 @@ defined( 'ABSPATH' ) || exit;
  * @param WP_Customize_Manager $wp_customize The Customizer object.
  */
 function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
-	$bp = buddypress();
-
 	if ( ! bp_is_email_customizer() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 		return;
 	}
 
-	/*
-	 * Add email items.
-	 */
 	$wp_customize->add_panel( 'bp_mailtpl', array(
 		'description' => __( 'Customize the appearance of emails sent by BuddyPress.', 'buddypress' ),
 		'title'       => _x( 'Emails', 'email customizer title', 'buddypress' ),
@@ -73,11 +68,12 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 
 	if ( is_customize_preview() ) {
 		/*
-		 * Enqueue scripts/styles.
+		 * Enqueue scripts/styles for the Customizer's preview window.
 		 *
 		 * Scripts can't be registered in bp_core_register_common_styles() etc because
 		 * the Customizer loads very, very early.
 		 */
+		$bp  = buddypress();
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_enqueue_script(
@@ -90,7 +86,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 
 		wp_enqueue_script(
 			'bp-customizer-receiver-emails',
-			"{$bp->plugin_url}/bp-core/admin/js/customizer-receiver-emails{$min}.js",
+			"{$bp->plugin_url}bp-core/admin/js/customizer-receiver-emails{$min}.js",
 			array( 'customize-preview' ),
 			bp_get_version(),
 			true
