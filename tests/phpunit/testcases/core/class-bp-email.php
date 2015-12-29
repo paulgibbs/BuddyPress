@@ -33,7 +33,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 	}
 
 	public function test_valid_template() {
-		$message = '{{test}}';
+		$message = 'test';
 		$email   = new BP_Email( 'fake_type' );
 
 		$email->template( $message );
@@ -41,13 +41,13 @@ class BP_Tests_Email extends BP_UnitTestCase {
 	}
 
 	public function test_tokens() {
-		$original = array( 'test1' => 'hello', '{{test2}}' => 'world' );
+		$original = array( 'test1' => 'hello', 'test2' => 'world' );
 
 		$email = new BP_Email( 'fake_type' );
 		$email->tokens( $original );
 
 		$this->assertSame(
-			array( '{{test1}}', '{{test2}}' ),
+			array( 'test1', 'test2' ),
 			array_keys( $email->get( 'tokens' ) )
 		);
 
@@ -78,7 +78,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$this->assertSame(
 			array_keys( $email->get( 'tokens' ) ),
-			array( '{{test1}}' )
+			array( 'test1' )
 		);
 	}
 

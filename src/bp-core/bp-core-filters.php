@@ -923,13 +923,13 @@ add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
  * @return array
  */
 function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, $email ) {
-	$tokens['{{site.admin-email}}'] = bp_get_option( 'admin_email' );
-	$tokens['{{site.description}}'] = bp_get_option( 'blogdescription' );
-	$tokens['{{site.name}}']        = bp_get_option( 'blogname' );
-	$tokens['{{site.url}}']         = home_url();
+	$tokens['site.admin-email'] = bp_get_option( 'admin_email' );
+	$tokens['site.description'] = bp_get_option( 'blogdescription' );
+	$tokens['site.name']        = bp_get_option( 'blogname' );
+	$tokens['site.url']         = home_url();
 
 	// Default values for tokens set conditionally below.
-	$tokens['{{unsubscribe}}'] = '';
+	$tokens['unsubscribe'] = '';
 
 
 	// Who is the email going to?
@@ -939,7 +939,7 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 		$user = array_shift( $recipient )->get_user( 'search-email' );
 		if ( $user ) {
 			// Unsubscribe link.
-			$tokens['{{unsubscribe}}'] = esc_url( sprintf(
+			$tokens['unsubscribe'] = esc_url( sprintf(
 				'%s%s/notifications/',
 				bp_core_get_user_domain( $user->ID ),
 				function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings'
