@@ -62,8 +62,8 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 * Hook actions/filters for further configuration.
 	 */
 
-	add_action( 'customize_controls_enqueue_scripts', 'bp_email_enqueue_scripts' );
-	add_filter( 'customize_section_active', 'bp_email_hide_other_customizer_sections', 12, 2 );
+	add_action( 'customize_controls_enqueue_scripts', 'bp_email_customizer_enqueue_scripts' );
+	add_filter( 'customize_section_active', 'bp_email_customizer_hide_sections', 12, 2 );
 	add_action( 'template_include', 'bp_email_override_customizer_template', 8 );
 	$wp_customize->widgets = null;
 
@@ -106,7 +106,7 @@ function bp_is_email_customizer() {
  *
  * @since 2.5.0
  */
-function bp_email_enqueue_scripts() {
+function bp_email_customizer_enqueue_scripts() {
 	wp_enqueue_script( 'bp-customizer-emails' );
 };
 
@@ -119,7 +119,7 @@ function bp_email_enqueue_scripts() {
  * @param WP_Customize_Section $section {@see WP_Customize_Section} instance.
  * @return bool
  */
-function bp_email_hide_other_customizer_sections( $active, $section ) {
+function bp_email_customizer_hide_sections( $active, $section ) {
 	if ( ! bp_is_email_customizer() ) {
 		return $active;
 	}
