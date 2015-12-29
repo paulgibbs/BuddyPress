@@ -154,19 +154,6 @@ function bp_email_customizer_inline_js() {
 }
 
 /**
- * Sanitization callback for CSS alignment settings.
- *
- * @since 2.5.0
- *
- * @param string $input string to sanitize.
- * @return string
- */
-function bp_email_sanitize_customizer_alignment( $input ) {
-	$valid = array( 'center', 'left', 'right', );
-	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
-}
-
-/**
  * When previewing an email in the Customizer, change the template used to display it.
  *
  * @since 2.5.0
