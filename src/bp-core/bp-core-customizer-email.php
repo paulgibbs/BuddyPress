@@ -128,30 +128,6 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
 }
 
 /**
- * Add inline JS to store info about the screen inside the Customizer's preview.
- *
- * Used by customizer-receiver-emails.js to append this info to the AJAX request made
- * when the Customizer's "save" button is pressed.
- *
- * @since 2.5.0
- */
-function bp_email_customizer_inline_js() {
-	// Not cached, but used only in the Customizer, so acceptable.
-	// @todo Use wp_customize->get_preview_url() in WP 4.4+.
-	$post_id = url_to_postid( $GLOBALS['url'] );
-	if ( ! $post_id ) {
-		return;
-	}
-
-	$data = wp_json_encode( array(
-		'ID'    => $post_id,
-		'nonce' => wp_create_nonce( "bp-email-{$post_id}" ),
-	) );
-
-	echo "<script type='text/javascript'>window.BPEmails = {$data};</script>";
-}
-
-/**
  * When previewing an email in the Customizer, change the template used to display it.
  *
  * @since 2.5.0
@@ -175,6 +151,30 @@ function bp_email_override_customizer_template( $template ) {
 		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
 		$template
 	);
+}
+
+/**
+ * Add inline JS to store info about the screen inside the Customizer's preview.
+ *
+ * Used by customizer-receiver-emails.js to append this info to the AJAX request made
+ * when the Customizer's "save" button is pressed.
+ *
+ * @since 2.5.0
+ */
+function bp_email_customizer_inline_js() {
+	// Not cached, but used only in the Customizer, so acceptable.
+	// @todo Use wp_customize->get_preview_url() in WP 4.4+.
+	$post_id = url_to_postid( $GLOBALS['url'] );
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$data = wp_json_encode( array(
+		'ID'    => $post_id,
+		'nonce' => wp_create_nonce( "bp-email-{$post_id}" ),
+	) );
+
+	echo "<script type='text/javascript'>window.BPEmails = {$data};</script>";
 }
 
 /**
