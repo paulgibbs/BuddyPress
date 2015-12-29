@@ -81,8 +81,8 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_enqueue_script(
-			'bp-customizer-emails',
-			"{$bp->plugin_url}/bp-core/admin/js/customizer-emails{$min}.js",
+			'bp-customizer-receiver-emails',
+			"{$bp->plugin_url}/bp-core/admin/js/customizer-receiver-emails{$min}.js",
 			array( 'customize-preview' ),
 			bp_get_version(),
 			true
@@ -124,7 +124,7 @@ function bp_email_hide_other_customizer_sections( $active, $section ) {
 /**
  * Add inline JS to store info about the screen inside the Customizer's preview.
  *
- * Used by customizer-emails.js to append this info to the AJAX request made
+ * Used by customizer-receiver-emails.js to append this info to the AJAX request made
  * when the Customizer's "save" button is pressed.
  *
  * @since 2.5.0
