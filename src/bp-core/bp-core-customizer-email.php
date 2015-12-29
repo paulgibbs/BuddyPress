@@ -130,14 +130,6 @@ function bp_email_customizer_hide_sections( $active, $section ) {
 }
 
 /**
- *
- * @since 2.5.0
- *
- */
-	}
-
-
-/**
  * Add inline JS to store info about the screen inside the Customizer's preview.
  *
  * Used by customizer-receiver-emails.js to append this info to the AJAX request made
