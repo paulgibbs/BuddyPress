@@ -259,7 +259,7 @@ function bp_email_get_customizer_settings() {
 		'bp_mailtpl_opts[header_aligment]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['header_aligment'],
-			'sanitize_callback'    => 'bp_sanitize_customizer_alignment',
+			'sanitize_callback'    => 'bp_sanitize_css_align_attr',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
@@ -315,7 +315,7 @@ function bp_email_get_customizer_settings() {
 		'bp_mailtpl_opts[footer_aligment]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_aligment'],
-			'sanitize_callback'    => 'bp_sanitize_customizer_alignment',
+			'sanitize_callback'    => 'bp_sanitize_css_align_attr',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
