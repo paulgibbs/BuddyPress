@@ -19,7 +19,7 @@
 		 */
 		$( '.customize-control-range input' ).on( 'input', function() {
 			var $this = $( this );
-			$this.parent().find( '.range-value' ).html( $this.val() );
+			$this.siblings( 'output' ).text( $this.val() );
 		});
 	});
 
