@@ -108,7 +108,7 @@ function bp_is_email_customizer() {
  */
 function bp_email_enqueue_scripts() {
 	wp_enqueue_script( 'bp-customizer-emails' );
-} );
+};
 
 /**
  * Only show email sections in the Customizer.
