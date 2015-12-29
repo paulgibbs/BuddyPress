@@ -972,6 +972,11 @@ class BP_Admin {
 				'dependencies' => array( 'jquery' ),
 				'footer'       => true,
 			),
+			'bp-customizer-emails' => array(
+				'file'         => "{$url}customizer-emails{$min}.js",
+				'dependencies' => array( 'jquery' ),
+				'footer'       => true,
+			),
 		) );
 
 
