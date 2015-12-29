@@ -130,30 +130,12 @@ function bp_email_customizer_hide_sections( $active, $section ) {
 }
 
 /**
- * When previewing an email in the Customizer, change the template used to display it.
  *
  * @since 2.5.0
  *
- * @param string $template Path to current template (probably single.php).
- * @return string New template path.
  */
-function bp_email_override_customizer_template( $template ) {
-	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
-		return $template;
 	}
 
-	/**
-	 * Filter template used to display email in the Customizer.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string $template Path to current template (probably single.php).
-	 */
-	return apply_filters( 'bp_email_override_customizer_template',
-		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
-		$template
-	);
-}
 
 /**
  * Add inline JS to store info about the screen inside the Customizer's preview.
@@ -177,6 +159,32 @@ function bp_email_customizer_inline_js() {
 	) );
 
 	echo "<script type='text/javascript'>window.BPEmails = {$data};</script>";
+}
+
+/**
+ * When previewing an email in the Customizer, change the template used to display it.
+ *
+ * @since 2.5.0
+ *
+ * @param string $template Path to current template (probably single.php).
+ * @return string New template path.
+ */
+function bp_email_override_customizer_template( $template ) {
+	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
+		return $template;
+	}
+
+	/**
+	 * Filter template used to display email in the Customizer.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template Path to current template (probably single.php).
+	 */
+	return apply_filters( 'bp_email_override_customizer_template',
+		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
+		$template
+	);
 }
 
 /**
