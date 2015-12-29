@@ -559,8 +559,7 @@ class BP_Email {
 		$formatted_tokens = array();
 
 		foreach ( $tokens as $name => $value ) {
-			// Wrap token name in {{brackets}}.
-			$name                      = '{{' . str_replace( array( '{', '}' ), '', $name ) . '}}';
+			$name                      = str_replace( array( '{', '}' ), '', $name );
 			$formatted_tokens[ $name ] = $value;
 		}
 
@@ -640,11 +639,18 @@ class BP_Email {
 			if ( is_callable( $replacement ) ) {
 				$replacement = call_user_func( $replacement );
 			}
-
-			$replacement = esc_html( $replacement );
 		}
 
-		$text = strtr( $text, $tokens );
+		$unescaped = array();
+		$escaped   = array();
+
+		foreach ( $tokens as $name => $replacement ) {
+			$unescaped[ '{{{' . $name . '}}}' ] = $replacement;
+			$escaped[ '{{' . $name . '}}' ]     = esc_html( $replacement );
+		}
+
+		$text = strtr( $text, $unescaped );  // Do first.
+		$text = strtr( $text, $escaped );
 
 		/**
 		 * Filters text that has had tokens replaced.
