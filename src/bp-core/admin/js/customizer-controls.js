@@ -44,5 +44,6 @@
 			return;
 		}
 
+		request.data = request.data + '&BPEmails=' + encodeURIComponent( JSON.stringify( window.BPEmails ) );
 	});
 })( jQuery );
