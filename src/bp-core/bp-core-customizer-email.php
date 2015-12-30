@@ -62,7 +62,6 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 * Hook actions/filters for further configuration.
 	 */
 
-	add_action( 'customize_controls_enqueue_scripts', 'bp_email_customizer_enqueue_scripts' );
 	add_filter( 'customize_section_active', 'bp_email_customizer_hide_sections', 12, 2 );
 	add_action( 'template_include', 'bp_email_override_customizer_template', 8 );
 	$wp_customize->widgets = null;
@@ -84,11 +83,7 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 			bp_get_version(),
 			true
 		);
-
-		add_action( 'customize_controls_print_footer_scripts', 'bp_email_customizer_inline_js' );
 	}
-
-	// set customize_preview_{$this->id}" to filter defaults for preview
 }
 add_action( 'bp_customize_register', 'bp_email_init_customizer' );
 
@@ -102,15 +97,6 @@ add_action( 'bp_customize_register', 'bp_email_init_customizer' );
 function bp_is_email_customizer() {
 	return isset( $_GET['bp_customizer'] ) && $_GET['bp_customizer'] === 'email';
 }
-
-/**
- * Load scripts or styles for the email customizer (not its preview).
- *
- * @since 2.5.0
- */
-function bp_email_customizer_enqueue_scripts() {
-	wp_enqueue_script( 'bp-customizer-emails' );
-};
 
 /**
  * Only show email sections in the Customizer.
@@ -127,30 +113,6 @@ function bp_email_customizer_hide_sections( $active, $section ) {
 	}
 
 	return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
-}
-
-/**
- * Add inline JS to store info about the screen inside the Customizer's preview.
- *
- * Used by customizer-receiver-emails.js to append this info to the AJAX request made
- * when the Customizer's "save" button is pressed.
- *
- * @since 2.5.0
- */
-function bp_email_customizer_inline_js() {
-	// Not cached, but used only in the Customizer, so acceptable.
-	// @todo Use wp_customize->get_preview_url() in WP 4.4+.
-	$post_id = url_to_postid( $GLOBALS['url'] );
-	if ( ! $post_id ) {
-		return;
-	}
-
-	$data = wp_json_encode( array(
-		'ID'    => $post_id,
-		'nonce' => wp_create_nonce( "bp-email-{$post_id}" ),
-	) );
-
-	echo "<script type='text/javascript'>window.BPEmails = {$data};</script>";
 }
 
 /**
@@ -242,105 +204,105 @@ function bp_email_get_customizer_settings() {
 			'default'              => $defaults['body_bg'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[header_logo]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => '',
 			'sanitize_callback'    => '',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[header_logo_text]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => '',
 			'sanitize_callback'    => 'sanitize_text_field',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[header_aligment]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['header_aligment'],
 			'sanitize_callback'    => 'bp_sanitize_css_align_attr',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[header_bg]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['header_bg'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[header_text_size]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['header_text_size'],
 			'sanitize_callback'    => 'sanitize_text_field',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[header_text_color]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['header_text_color'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[email_body_bg]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['email_body_bg'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[body_text_size]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['body_text_size'],
 			'sanitize_callback'    => 'sanitize_text_field',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[body_text_color]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['body_text_color'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[footer_text]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_text'],
 			'sanitize_callback'    => 'sanitize_text_field',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[footer_aligment]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_aligment'],
 			'sanitize_callback'    => 'bp_sanitize_css_align_attr',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[footer_bg]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_bg'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[footer_text_size]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_text_size'],
 			'sanitize_callback'    => 'sanitize_text_field',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 		'bp_mailtpl_opts[footer_text_color]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_text_color'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
-			'type'                 => 'bp_postmeta',
+			'type'                 => 'option',
 		),
 	) );
 }

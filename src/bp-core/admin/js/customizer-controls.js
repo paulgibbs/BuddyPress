@@ -7,8 +7,6 @@
  * @since 2.5.0
  */
 
-/* global BPEmails */
-
 (function( $ ) {
 	$( window ).on( 'load', function() {
 		/**
