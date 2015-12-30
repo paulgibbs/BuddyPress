@@ -974,7 +974,6 @@ class BP_Admin {
 			),
 		) );
 
-
 		$version = bp_get_version();
 
 		foreach ( $scripts as $id => $script ) {

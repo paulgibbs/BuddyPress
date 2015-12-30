@@ -206,27 +206,6 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
-		'bp_mailtpl_opts[header_logo]' => array(
-			'capability'           => 'bp_moderate',
-			'default'              => '',
-			'sanitize_callback'    => '',
-			'transport'            => 'postMessage',
-			'type'                 => 'option',
-		),
-		'bp_mailtpl_opts[header_logo_text]' => array(
-			'capability'           => 'bp_moderate',
-			'default'              => '',
-			'sanitize_callback'    => 'sanitize_text_field',
-			'transport'            => 'postMessage',
-			'type'                 => 'option',
-		),
-		'bp_mailtpl_opts[header_aligment]' => array(
-			'capability'           => 'bp_moderate',
-			'default'              => $defaults['header_aligment'],
-			'sanitize_callback'    => 'bp_sanitize_css_align_attr',
-			'transport'            => 'postMessage',
-			'type'                 => 'option',
-		),
 		'bp_mailtpl_opts[header_bg]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['header_bg'],
@@ -273,13 +252,6 @@ function bp_email_get_customizer_settings() {
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_text'],
 			'sanitize_callback'    => 'sanitize_text_field',
-			'transport'            => 'postMessage',
-			'type'                 => 'option',
-		),
-		'bp_mailtpl_opts[footer_aligment]' => array(
-			'capability'           => 'bp_moderate',
-			'default'              => $defaults['footer_aligment'],
-			'sanitize_callback'    => 'bp_sanitize_css_align_attr',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
@@ -330,43 +302,6 @@ function bp_email_get_customizer_controls() {
 			'label'       => __( 'Background Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_template',
 			'settings'    => 'bp_mailtpl_opts[body_bg]',
-		),
-
-		// djpaultodo
-		'bp_mailtpl_header' => array(
-			'class'       => 'WP_Customize_Image_Control',
-			'description' => __( 'Add an image to use in header. Leave empty to use text instead', 'buddypress' ),
-			'label'       => __( 'Logo', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_header',
-			'settings'    => 'bp_mailtpl_opts[header_logo]',
-			'type'        => 'image',
-		),
-
-		// djpaultodo
-		'bp_mailtpl_header_logo_text' => array(
-			'class'       => 'WP_Customize_Control',
-			'description' => __( 'Add text to your mail header', 'buddypress' ),
-			'label'       => __( 'Logo', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_header',
-			'settings'    => 'bp_mailtpl_opts[header_logo_text]',
-			'type'        => 'textarea',
-		),
-
-		// djpaultodo
-		'bp_mailtpl_aligment' => array(
-			'class'       => 'WP_Customize_Control',
-			'default'     => 'center',
-			'description' => __( 'Choose alignment for header', 'buddypress' ),
-			'label'       => __( 'Aligment', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_header',
-			'settings'    => 'bp_mailtpl_opts[header_aligment]',
-			'type'        => 'select',
-
-			'choices'     => array(
-				'left'   => __( 'Left', 'buddypress' ),
-				'center' => __( 'Center', 'buddypress' ),
-				'right'  => __( 'Right', 'buddypress' ),
-			),
 		),
 
 		// djpaultodo
@@ -446,23 +381,6 @@ function bp_email_get_customizer_controls() {
 		),
 
 		// djpaultodo
-		'bp_mailtpl_footer_aligment' => array(
-			'class'       => 'WP_Customize_Control',
-			'default'     => 'center',
-			'description' => __( 'Choose alignment for footer', 'buddypress' ),
-			'label'       => __( 'Aligment', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_footer',
-			'settings'    => 'bp_mailtpl_opts[footer_aligment]',
-			'type'        => 'select',
-
-			'choices' => array(
-				'left'   => __( 'Left', 'buddypress' ),
-				'center' => __( 'Center', 'buddypress' ),
-				'right'  => __( 'Right', 'buddypress' )
-			),
-		),
-
-		// djpaultodo
 		'bp_mailtpl_footer_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose footer background color', 'buddypress' ),
@@ -510,11 +428,9 @@ function bp_email_get_customizer_settings_defaults() {
 		'body_text_color'   => '#222',
 		'body_text_size'    => '14',
 		'email_body_bg'     => '#fbfbfb',
-		'footer_aligment'   => 'center',
 		'footer_bg'         => '#eee',
 		'footer_text_color' => '#777',
 		'footer_text_size'  => '12',
-		'header_aligment'   => 'center',
 		'header_bg'         => '#be3631',
 		'header_text_color' => '#fff',
 		'header_text_size'  => '30',

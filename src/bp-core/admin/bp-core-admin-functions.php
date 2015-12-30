@@ -959,19 +959,6 @@ function bp_core_admin_user_spammed_js() {
 }
 
 /**
- * Sanitization callback for CSS alignment settings.
- *
- * @since 2.5.0
- *
- * @param string $input string to sanitize.
- * @return string
- */
-function bp_sanitize_css_align_attr( $input ) {
-	$valid = array( 'center', 'left', 'right', );
-	return ( in_array( $input, $valid, true ) ) ? $input : 'center';
-}
-
-/**
  * Add a "customize" button to the emails post type in wp-admin.
  *
  * @since 2.5.0
