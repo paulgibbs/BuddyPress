@@ -38,7 +38,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-$settings = get_option( 'bp_mailtpl_opts', bp_email_get_customizer_settings_defaults() );
+$settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_defaults() );
 
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

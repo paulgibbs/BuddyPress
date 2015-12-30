@@ -11,7 +11,7 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-$settings       = get_option('bp_mailtpl_opts', bp_email_get_customizer_settings_defaults() );
+$settings       = get_option('bp_email_options', bp_email_get_customizer_settings_defaults() );
 $border_radius  = $settings['template'] == 'boxed' ? '6px' : '0px';
 ?>
 #body {
