@@ -72,7 +72,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertTrue( $email->validate() );
 	}
 
-	public function test_invalid_tokens() {
+	public function test_invalid_characters_are_stripped_from_tokens() {
 		$email = new BP_Email( 'fake_type' );
 		$email->tokens( array( 'te{st}1' => 'hello world' ) );
 
@@ -80,6 +80,28 @@ class BP_Tests_Email extends BP_UnitTestCase {
 			array_keys( $email->get( 'tokens' ) ),
 			array( 'test1' )
 		);
+	}
+
+	public function test_token_are_escaped() {
+		$token = '<blink>';
+		$email = new BP_Email( 'fake_type' );
+		$email->content( '{{test}}' )->tokens( array( 'test' => $token ) );
+
+		$this->assertSame(
+			$email->get( 'content', 'replace-tokens' ),
+			esc_html( $token )
+		),
+	}
+
+	public function test_token_are_not_escaped() {
+		$token = '<blink>';
+		$email = new BP_Email( 'fake_type' );
+		$email->content( '{{{test}}}' )->tokens( array( 'test' => $token ) );
+
+		$this->assertSame(
+			$email->get( 'content', 'replace-tokens' ),
+			$token
+		),
 	}
 
 	public function test_invalid_headers() {
