@@ -976,4 +976,4 @@ function bp_core_add_email_post_type_template( $template ) {
 		$template
 	);
 }
-add_action( 'bp_template_include', 'bp_email_override_customizer_template', 8 );
+add_action( 'bp_template_include', 'bp_core_add_email_post_type_template', 8 );
