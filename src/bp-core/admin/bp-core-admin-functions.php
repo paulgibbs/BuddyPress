@@ -810,6 +810,26 @@ function bp_admin_do_wp_nav_menu_meta_box() {
 }
 
 /**
+ * In Emails post editor, add notice linking to token documentation on Codex.
+ *
+ * @since 2.5.0
+ */
+function bp_admin_email_add_codex_link() {
+	if ( get_current_screen()->post_type !== bp_get_email_post_type() ) {
+		return;
+	}
+
+	bp_core_add_admin_notice(
+		sprintf(
+			__( 'Phrases wrapped in braces <code>{{ }}</code> are email tokens. <a href="%s">Learn about the tokens on the BuddyPress Codex</a>.', 'buddypress' ),
+			esc_url( 'https://codex.buddypress.org/TODO' )
+		),
+		'error'
+	);
+}
+add_action( 'admin_head-post.php', 'bp_admin_email_add_codex_link' );
+
+/**
  * Restrict various items from view if editing a BuddyPress menu.
  *
  * If a person is editing a BP menu item, that person should not be able to
