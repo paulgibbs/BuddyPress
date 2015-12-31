@@ -950,3 +950,30 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 	return $tokens;
 }
 add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
+
+/**
+ * Add theme compat. folder to WP template stack for Email post types.
+ *
+ * @since 2.5.0
+ *
+ * @param string $template Path to current template (probably single.php).
+ * @return string New template path.
+ */
+function bp_core_add_email_post_type_template( $template ) {
+	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
+		return $template;
+	}
+
+	/**
+	 * Filter template used to display email in the Customizer.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $template Path to current template (probably single.php).
+	 */
+	return apply_filters( 'bp_core_add_email_post_type_template',
+		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
+		$template
+	);
+}
+add_action( 'bp_template_include', 'bp_email_override_customizer_template', 8 );

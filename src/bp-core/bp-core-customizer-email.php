@@ -63,7 +63,6 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 */
 
 	add_filter( 'customize_section_active', 'bp_email_customizer_hide_sections', 12, 2 );
-	add_action( 'template_include', 'bp_email_override_customizer_template', 8 );
 	$wp_customize->widgets = null;
 
 	if ( is_customize_preview() ) {
@@ -113,32 +112,6 @@ function bp_email_customizer_hide_sections( $active, $section ) {
 	}
 
 	return in_array( $section->id, array_keys( bp_email_get_customizer_sections() ), true );
-}
-
-/**
- * When previewing an email in the Customizer, change the template used to display it.
- *
- * @since 2.5.0
- *
- * @param string $template Path to current template (probably single.php).
- * @return string New template path.
- */
-function bp_email_override_customizer_template( $template ) {
-	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
-		return $template;
-	}
-
-	/**
-	 * Filter template used to display email in the Customizer.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string $template Path to current template (probably single.php).
-	 */
-	return apply_filters( 'bp_email_override_customizer_template',
-		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
-		$template
-	);
 }
 
 /**
