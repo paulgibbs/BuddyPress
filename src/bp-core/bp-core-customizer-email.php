@@ -425,3 +425,41 @@ function bp_email_get_customizer_settings_defaults() {
 	 */
 	return apply_filters( 'bp_email_get_customizer_settings_defaults', $defaults );
 }
+
+/**
+ * Implements a JS redirect to the Customizer, previewing a randomly selected email.
+ *
+ * @since 2.5.0
+ */
+function bp_email_redirect_to_customizer() {
+	$email = get_posts( array(
+		'orderby'          => 'rand',
+		'post_status'      => 'publish',
+		'post_type'        => bp_get_email_post_type(),
+		'posts_per_page'   => 1,
+		'suppress_filters' => false,
+	) );
+
+	$preview_url = admin_url();
+
+	if ( $email ) {
+		$preview_url = get_post_permalink( $email[0]->ID ) . '&bp_customizer=email';
+	}
+
+	$redirect_url = add_query_arg(
+		array(
+			'autofocus[panel]' => 'bp_mailtpl',
+			'bp_customizer'    => 'email',
+			'return'           => rawurlencode( admin_url() ),
+			'url'              => rawurlencode( $preview_url ),
+		),
+		admin_url( 'customize.php' )
+	);
+
+	printf(
+		'<script type="text/javascript">window.location = "%s";</script>',
+		$redirect_url
+	);
+
+	exit;
+}

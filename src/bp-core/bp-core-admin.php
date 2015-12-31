@@ -164,8 +164,6 @@ class BP_Admin {
 		// On non-multisite, catch.
 		add_action( 'load-users.php', 'bp_core_admin_user_manage_spammers' );
 
-		add_action( 'media_buttons', 'bp_admin_email_templates_button' );
-
 		/* Filters ***********************************************************/
 
 		// Add link to settings page.
@@ -299,7 +297,14 @@ class BP_Admin {
 			'bp_core_admin_tools'
 		);
 
-		// Fudge the highlighted subnav item when on a BuddyPress admin page.
+		$hooks[] = add_theme_page(
+			_x( 'Emails', 'email customizer title', 'buddypress' ),
+			_x( 'Emails', 'email customizer title', 'buddypress' ),
+			'bp_moderate',
+			'bp-emails-customizer-redirect',
+			'bp_email_redirect_to_customizer'
+		);
+
 		foreach( $hooks as $hook ) {
 			add_action( "admin_head-$hook", 'bp_core_modify_admin_menu_highlight' );
 		}
