@@ -17,35 +17,6 @@
 	});
 
 	// djpaultodo
-	wp.customize( 'bp_email_options[header_logo]', function( value ) {
-		value.bind(function( newval ) {
-			if ( newval.length ) {
-				$( '#logo a' ).html( '<img src="' + newval + '">' );
-			} else {
-				$( '#logo a' ).html( '' );
-			}
-		});
-	});
-
-	// djpaultodo
-	wp.customize( 'bp_email_options[header_logo_text]', function( value ) {
-		value.bind(function( newval ) {
-			if ( newval.length ) {
-				$( '#logo a' ).text( newval );
-			}
-		});
-	});
-
-	// djpaultodo
-	wp.customize( 'bp_email_options[header_aligment]', function( value ) {
-		value.bind(function( newval ) {
-			if ( newval.length ) {
-				$( '#logo' ).css( 'text-align', newval );
-			}
-		});
-	});
-
-	// djpaultodo
 	wp.customize( 'bp_email_options[header_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -95,15 +66,6 @@
 		value.bind(function( newval ) {
 			if ( newval.length ) {
 				$( '#bp_mailtpl_body' ).css( 'color', newval );
-			}
-		});
-	});
-
-	// djpaultodo
-	wp.customize( 'bp_email_options[footer_aligment]', function( value ) {
-		value.bind(function( newval ) {
-			if ( newval.length ) {
-				$( '#credit' ).css( 'text-align', newval );
 			}
 		});
 	});
