@@ -189,7 +189,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[header_text_size]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['header_text_size'],
-			'sanitize_callback'    => 'sanitize_text_field',
+			'sanitize_callback'    => 'intval',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
@@ -210,7 +210,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[body_text_size]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['body_text_size'],
-			'sanitize_callback'    => 'sanitize_text_field',
+			'sanitize_callback'    => 'intval',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
@@ -238,7 +238,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[footer_text_size]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_text_size'],
-			'sanitize_callback'    => 'sanitize_text_field',
+			'sanitize_callback'    => 'intval',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
