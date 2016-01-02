@@ -70,11 +70,10 @@
 		});
 	});
 
-	// djpaultodo
 	wp.customize( 'bp_email_options[footer_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#template_footer' ).css( 'background-color', newval );
+				$( '.footer_bg' ).attr( 'bgcolor', newval );
 			}
 		});
 	});

@@ -266,7 +266,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 			<!-- Email Body : END -->
 
 			<!-- Email Footer : BEGIN -->
-			<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">
+			<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;" bgcolor="<?php echo esc_attr( $settings['footer_bg'] ); ?>" class="footer_bg">
 				<tr>
 					<td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
 						<span class="footer_text"><?php echo esc_html( $settings['footer_text'] ); ?></span>
