@@ -96,7 +96,6 @@
 		});
 	});
 
-	// djpaultodo
 	wp.customize( 'bp_email_options[footer_text]', function( value ) {
 		value.bind(function( newval ) {
 			$( '.footer_text' ).text( newval );

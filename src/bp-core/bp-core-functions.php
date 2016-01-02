@@ -2593,6 +2593,32 @@ function bp_upload_dir() {
 }
 
 
+/** Customizer *****************************************************************/
+
+/**
+ * Utility function to sanitize text and strip all tags for Customiser callbacks.
+ *
+ * @since 2.5.0
+ *
+ * @param string $raw
+ * @return string
+ */
+function bp_customizer_sanitize_text_no_html( $raw ) {
+	$input = sanitize_text_field( $raw );
+	$input = wp_strip_all_tags( $input );
+
+	/**
+	 * Filiters the sanitized text for Customiser callbacks.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $input Sanitized text.
+	 * @param string $raw Original text.
+	 */
+	return apply_filters( 'bp_customizer_sanitize_text_no_html', $input, $raw );
+}
+
+
 /** Post Types *****************************************************************/
 
 /**

@@ -224,7 +224,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[footer_text]' => array(
 			'capability'           => 'bp_moderate',
 			'default'              => $defaults['footer_text'],
-			'sanitize_callback'    => 'sanitize_text_field',
+			'sanitize_callback'    => 'bp_customizer_sanitize_text_no_html',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
@@ -353,7 +353,6 @@ function bp_email_get_customizer_controls() {
 			'type'        => 'textarea',
 		),
 
-		// djpaultodo
 		'bp_mailtpl_footer_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose footer background color', 'buddypress' ),
