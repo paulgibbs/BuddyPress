@@ -399,14 +399,14 @@ function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
 		'body_bg'           => '#222222',
 		'body_text_color'   => '#222',
-		'body_text_size'    => '14',
+		'body_text_size'    => 14,
 		'email_body_bg'     => '#fbfbfb',
 		'footer_bg'         => '#222222',
 		'footer_text_color' => '#777',
-		'footer_text_size'  => '12',
+		'footer_text_size'  => 12,
 		'header_bg'         => '#be3631',
 		'header_text_color' => '#fff',
-		'header_text_size'  => '30',
+		'header_text_size'  => 30,
 
 		'footer_text' => sprintf(
 			/* translators: email disclaimer, e.g. "© 2015 Site Name". */
