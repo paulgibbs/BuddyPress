@@ -15,7 +15,7 @@ $settings       = get_option('bp_email_options', bp_email_get_customizer_setting
 $border_radius  = $settings['template'] == 'boxed' ? '6px' : '0px';
 ?>
 #body {
-	background-color: <?php echo $settings['body_bg']; ?>;
+	background-color: <?php echo $settings['template_bg']; ?>;
 	width:100%;
 	-webkit-text-size-adjust:none !important;
 	margin:0;
@@ -45,8 +45,8 @@ $border_radius  = $settings['template'] == 'boxed' ? '6px' : '0px';
 	vertical-align:middle;
 }
 
-#mailtpl_body_bg {
-	background-color: <?php echo $settings['email_body_bg'];?>;
+#mailtpl_template_bg {
+	background-color: <?php echo $settings['body_bg'];?>;
 }
 #mailtpl_body {
 	color: <?php echo $settings['body_text_color'];?>;

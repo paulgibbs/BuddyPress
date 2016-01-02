@@ -8,10 +8,10 @@
  */
 
 (function( $ ) {
-	wp.customize( 'bp_email_options[body_bg]', function( value ) {
+	wp.customize( 'bp_email_options[template_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '.body_bg' ).attr( 'bgcolor', newval );
+				$( '.template_bg' ).attr( 'bgcolor', newval );
 			}
 		});
 	});
@@ -44,10 +44,10 @@
 	});
 
 	// djpaultodo
-	wp.customize( 'bp_email_options[email_body_bg]', function( value ) {
+	wp.customize( 'bp_email_options[body_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#bp_mailtpl_body_bg' ).css( 'background-color', newval );
+				$( '.body_bg' ).attr( 'bgcolor', newval );
 			}
 		});
 	});

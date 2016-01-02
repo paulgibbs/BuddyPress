@@ -172,9 +172,9 @@ function bp_email_get_customizer_settings() {
 	 * @param array $settings Email Customizer settings to add.
 	 */
 	return apply_filters( 'bp_email_get_customizer_settings', array(
-		'bp_email_options[body_bg]' => array(
+		'bp_email_options[template_bg]' => array(
 			'capability'           => 'bp_moderate',
-			'default'              => $defaults['body_bg'],
+			'default'              => $defaults['template_bg'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
@@ -200,9 +200,9 @@ function bp_email_get_customizer_settings() {
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
 		),
-		'bp_email_options[email_body_bg]' => array(
+		'bp_email_options[body_bg]' => array(
 			'capability'           => 'bp_moderate',
-			'default'              => $defaults['email_body_bg'],
+			'default'              => $defaults['body_bg'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
@@ -269,12 +269,12 @@ function bp_email_get_customizer_controls() {
 	 * @param array $controls Email Customizer controls to add.
 	 */
 	return apply_filters( 'bp_email_get_customizer_controls', array(
-		'bp_mailtpl_body_bg' => array(
+		'bp_mailtpl_template_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose email background color', 'buddypress' ),
 			'label'       => __( 'Background Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_template',
-			'settings'    => 'bp_email_options[body_bg]',
+			'settings'    => 'bp_email_options[template_bg]',
 		),
 
 		// djpaultodo
@@ -311,12 +311,12 @@ function bp_email_get_customizer_controls() {
 		),
 
 		// djpaultodo
-		'bp_mailtpl_email_body_bg' => array(
+		'bp_mailtpl_body_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose email body background color', 'buddypress' ),
 			'label'       => __( 'Background Color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_body',
-			'settings'    => 'bp_email_options[email_body_bg]',
+			'settings'    => 'bp_email_options[body_bg]',
 		),
 
 		// djpaultodo
@@ -396,15 +396,15 @@ function bp_email_get_customizer_controls() {
  */
 function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
-		'body_bg'           => '#222222',
+		'template_bg'       => '#222222',
 		'body_text_color'   => '#222',
 		'body_text_size'    => 14,
-		'email_body_bg'     => '#fbfbfb',
+		'body_bg'           => '#ffffff',
 		'footer_bg'         => '#222222',
 		'footer_text_color' => '#777',
 		'footer_text_size'  => 12,
 		'header_bg'         => '#be3631',
-		'header_text_color' => '#fff',
+		'header_text_color' => '#ffffff',
 		'header_text_size'  => 30,
 
 		'footer_text' => sprintf(

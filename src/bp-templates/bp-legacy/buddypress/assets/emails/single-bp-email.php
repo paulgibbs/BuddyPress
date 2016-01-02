@@ -127,8 +127,8 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 	</style>
 
 </head>
-<body class="body_bg" width="100%" height="100%" bgcolor="<?php echo esc_attr( $settings['body_bg'] ); ?>" style="Margin: 0;">
-<table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="<?php echo esc_attr( $settings['body_bg'] ); ?>" style="border-collapse:collapse;" class="body_bg"><tr><td valign="top">
+<body class="template_bg" width="100%" height="100%" bgcolor="<?php echo esc_attr( $settings['template_bg'] ); ?>" style="Margin: 0;">
+<table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="<?php echo esc_attr( $settings['template_bg'] ); ?>" style="border-collapse:collapse;" class="template_bg"><tr><td valign="top">
 	<center style="width: 100%;">
 
 		<!-- Visually Hidden Preheader Text : BEGIN -->
@@ -155,7 +155,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 			<!-- Email Header : END -->
 
 			<!-- Email Body : BEGIN -->
-			<table cellspacing="0" cellpadding="0" border="0" align="center" bgcolor="#ffffff" width="100%" style="max-width: 600px;">
+			<table cellspacing="0" cellpadding="0" border="0" align="center" bgcolor="<?php echo esc_attr( $settings['body_bg'] ); ?>" width="100%" style="max-width: 600px;" class="body_bg">
 
 				<!-- 1 Column Text : BEGIN -->
 				<tr>
@@ -187,7 +187,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 
 				<!-- Two Even Columns : BEGIN -->
 				<tr>
-					<td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%">
+					<td align="center" height="100%" valign="top" width="100%">
 						<!--[if mso]>
 						<table cellspacing="0" cellpadding="0" border="0" align="center" width="560">
 						<tr>

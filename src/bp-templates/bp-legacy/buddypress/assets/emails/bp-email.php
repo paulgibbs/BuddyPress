@@ -53,7 +53,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 					<!-- Body -->
 					<table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_body">
 						<tr>
-							<td valign="top" id="bp_mailtpl_body_bg">
+							<td valign="top" id="bp_mailtpl_template_bg">
 								<!-- Content -->
 								<table border="0" cellpadding="20" cellspacing="0" width="100%">
 									<tr>
