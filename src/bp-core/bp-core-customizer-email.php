@@ -411,7 +411,7 @@ function bp_email_get_customizer_settings_defaults() {
 		'footer_text' => sprintf(
 			/* translators: email disclaimer, e.g. "© 2015 Site Name". */
 			_x( '&copy; %s %s', 'email', 'buddypress' ),
-			date( 'Y' ),
+			date_i18n( 'Y' ),
 			bp_get_option( 'blogname' )
 		)
 	);
