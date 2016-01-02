@@ -157,14 +157,6 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 			<!-- Email Body : BEGIN -->
 			<table cellspacing="0" cellpadding="0" border="0" align="center" bgcolor="#ffffff" width="100%" style="max-width: 600px;">
 
-				<!-- Hero Image, Flush : BEGIN -->
-				<tr>
-				  <td>
-					<img src="http://placehold.it/600x300" width="600" height="" alt="alt_text" border="0" align="center" style="width: 100%; max-width: 600px; height: auto;">
-				  </td>
-				</tr>
-				<!-- Hero Image, Flush : END -->
-
 				<!-- 1 Column Text : BEGIN -->
 				<tr>
 					<td>
