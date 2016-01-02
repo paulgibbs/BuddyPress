@@ -4,6 +4,7 @@
  *
  * @package BuddyPress
  * @subpackage MembersAdminClasses
+ * @since 2.3.0
  */
 
 // Exit if accessed directly.
@@ -118,6 +119,8 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 * Specific signups columns.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @return array
 	 */
 	public function get_columns() {
 
@@ -239,7 +242,7 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_cb( $signup_object = null ) {
 	?>
@@ -253,7 +256,7 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_username( $signup_object = null ) {
 		$avatar	= get_avatar( $signup_object->user_email, 32 );
@@ -328,7 +331,7 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_email( $signup_object = null ) {
 		printf( '<a href="mailto:%1$s">%2$s</a>', esc_attr( $signup_object->user_email ), esc_html( $signup_object->user_email ) );
@@ -339,7 +342,7 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_registered( $signup_object = null ) {
 		echo mysql2date( 'Y/m/d', $signup_object->registered );
@@ -350,7 +353,7 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_date_sent( $signup_object = null ) {
 		echo mysql2date( 'Y/m/d', $signup_object->date_sent );
@@ -361,7 +364,7 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object Signup object instance.
+	 * @param object|null $signup_object Signup object instance.
 	 */
 	public function column_count_sent( $signup_object = null ) {
 		echo absint( $signup_object->count_sent );
@@ -488,6 +491,8 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 * Specific signups columns.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @return array
 	 */
 	public function get_columns() {
 
@@ -601,9 +606,9 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 *
 	 * @since 2.4.0
 	 *
-	 * @param object $signup_object Signup being acted upon.
-	 * @param string $column_name   Current column name.
-	 * @param string $primary       Primary column name.
+	 * @param object|null $signup_object Signup being acted upon.
+	 * @param string      $column_name   Current column name.
+	 * @param string      $primary       Primary column name.
 	 * @return string
 	 */
 	protected function handle_row_actions( $signup_object = null, $column_name = '', $primary = '' ) {
@@ -629,7 +634,7 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_username( $signup_object = null ) {
 		$avatar	= get_avatar( $signup_object->user_email, 32 );
@@ -686,7 +691,7 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_name( $signup_object = null ) {
 		echo esc_html( $signup_object->user_name );
@@ -697,7 +702,7 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_email( $signup_object = null ) {
 		printf( '<a href="mailto:%1$s">%2$s</a>', esc_attr( $signup_object->user_email ), esc_html( $signup_object->user_email ) );
@@ -708,7 +713,7 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $signup_object The signup data object.
+	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_registered( $signup_object = null ) {
 		global $mode;

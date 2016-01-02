@@ -6,6 +6,7 @@
  *
  * @package BuddyPress
  * @subpackage ActivityFunctions
+ * @since 1.5.0
  */
 
 // Exit if accessed directly.
@@ -1790,9 +1791,9 @@ function bp_activity_post_update( $args = '' ) {
  *
  * @since 2.2.0
  *
- * @param int     $post_id ID of the new post.
- * @param WP_Post $post    Post object.
- * @param int     $user_id ID of the post author.
+ * @param int          $post_id ID of the new post.
+ * @param WP_Post|null $post    Post object.
+ * @param int          $user_id ID of the post author.
  * @return int|bool The ID of the activity on success. False on error.
  */
 function bp_activity_post_type_publish( $post_id = 0, $post = null, $user_id = 0 ) {
@@ -1927,7 +1928,7 @@ function bp_activity_post_type_publish( $post_id = 0, $post = null, $user_id = 0
  *
  * @since 2.2.0
  *
- * @param WP_Post $post Post item.
+ * @param WP_Post|null $post Post item.
  * @return bool True on success, false on failure.
  */
 function bp_activity_post_type_update( $post = null ) {
@@ -1995,8 +1996,8 @@ function bp_activity_post_type_update( $post = null ) {
  *
  * @since 2.2.0
  *
- * @param  int     $post_id ID of the post being unpublished.
- * @param  WP_Post $post    Post object.
+ * @param int          $post_id ID of the post being unpublished.
+ * @param WP_Post|null $post    Post object.
  * @return bool True on success, false on failure.
  */
 function bp_activity_post_type_unpublish( $post_id = 0, $post = null ) {
@@ -2193,8 +2194,11 @@ function bp_activity_get_activity_id( $args = '' ) {
 	 * Filters the activity ID being requested.
 	 *
 	 * @since 1.2.0
+	 * @since 2.5.0 Added the `$r` and `$args` parameters.
 	 *
 	 * @param BP_Activity_Activity $value ID returned by BP_Activity_Activity get_id() method with provided arguments.
+	 * @param array                $r     Parsed function arguments.
+	 * @param array                $args  Arguments passed to the function.
 	 */
 	return apply_filters( 'bp_activity_get_activity_id', BP_Activity_Activity::get_id(
 		$r['user_id'],
@@ -2205,7 +2209,7 @@ function bp_activity_get_activity_id( $args = '' ) {
 		$r['action'],
 		$r['content'],
 		$r['date_recorded']
-	) );
+	), $r, $args );
 }
 
 /**

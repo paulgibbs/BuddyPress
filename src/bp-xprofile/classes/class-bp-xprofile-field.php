@@ -4,6 +4,7 @@
  *
  * @package BuddyPress
  * @subpackage XProfileClasses
+ * @since 1.0.0
  */
 
 // Exit if accessed directly.
@@ -194,9 +195,9 @@ class BP_XProfile_Field {
 	 * @global object $wpdb
 	 * @global object $userdata
 	 *
-	 * @param int  $id Field ID.
-	 * @param int  $user_id User ID.
-	 * @param bool $get_data Get data.
+	 * @param int      $id Field ID.
+	 * @param int|null $user_id User ID.
+	 * @param bool     $get_data Get data.
 	 */
 	public function populate( $id, $user_id = null, $get_data = true ) {
 		global $wpdb, $userdata;

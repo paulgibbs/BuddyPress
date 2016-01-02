@@ -4,6 +4,7 @@
  *
  * @package BuddyPress
  * @subpackage GroupsTemplates
+ * @since 1.5.0
  */
 
 // Exit if accessed directly.
@@ -3597,7 +3598,7 @@ add_action( 'bp_groups_directory_group_filter', 'bp_group_backcompat_create_nav_
  *
  * @global BP_Groups_Template $groups_template Groups template object.
  *
- * @param object $group Group to get status message for. Optional; defaults to current group.
+ * @param object|null $group Group to get status message for. Optional; defaults to current group.
  */
 function bp_group_status_message( $group = null ) {
 	global $groups_template;
