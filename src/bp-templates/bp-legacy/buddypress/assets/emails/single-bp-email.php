@@ -162,7 +162,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 					<td>
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						  <tr>
-							<td style="padding: 40px; font-family: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #<?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
+							<td style="padding: 40px; font-family: sans-serif; mso-height-rule: exactly; line-height: 20px; color: <?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
 								One Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.
 								<br><br>
 								<!-- Button : Begin -->
@@ -191,7 +191,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 			<!-- Email Footer : BEGIN -->
 			<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;" bgcolor="<?php echo esc_attr( $settings['footer_bg'] ); ?>" class="footer_bg">
 				<tr>
-					<td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
+					<td style="padding: 40px 10px; width: 100%; font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height: 18px; text-align: center; color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>;" class="footer_text_color">
 						<span class="footer_text"><?php echo esc_html( $settings['footer_text'] ); ?></span>
 						<br><br>
 						<a href="{{unsubscribe}}" style="color:#888888; text-decoration:underline;"><?php _ex( 'unsubscribe', 'email', 'buddypress' ); ?></a>

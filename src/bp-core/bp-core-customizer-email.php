@@ -277,7 +277,6 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[template_bg]',
 		),
 
-		// djpaultodo
 		'bp_mailtpl_header_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose header background color', 'buddypress' ),
@@ -310,7 +309,6 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[header_text_color]',
 		),
 
-		// djpaultodo
 		'bp_mailtpl_body_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose email body background color', 'buddypress' ),
@@ -319,7 +317,6 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[body_bg]',
 		),
 
-		// djpaultodo
 		'bp_mailtpl_body_text_size' => array(
 			'class'       => 'BP_Customizer_Control_Range',
 			'description' => __( 'Slide to change text size', 'buddypress' ),
@@ -334,7 +331,6 @@ function bp_email_get_customizer_controls() {
 			),
 		),
 
-		// djpaultodo
 		'bp_mailtpl_body_text_color' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose body text color', 'buddypress' ),
@@ -343,7 +339,6 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[body_text_color]',
 		),
 
-		// djpaultodo
 		'bp_mailtpl_footer_text' => array(
 			'class'       => 'WP_Customize_Control',
 			'description' => __('Change the email footer here', 'buddypress' ),
@@ -376,7 +371,6 @@ function bp_email_get_customizer_controls() {
 			),
 		),
 
-		// djpaultodo
 		'bp_mailtpl_footer_text_color' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose footer text color', 'buddypress' ),
@@ -401,7 +395,7 @@ function bp_email_get_customizer_settings_defaults() {
 		'body_text_size'    => 15,
 		'body_bg'           => '#ffffff',
 		'footer_bg'         => '#222222',
-		'footer_text_color' => '#777',
+		'footer_text_color' => '#888888',
 		'footer_text_size'  => 12,
 		'header_bg'         => '#be3631',
 		'header_text_color' => '#ffffff',
