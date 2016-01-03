@@ -78,11 +78,10 @@
 		});
 	});
 
-	// djpaultodo
 	wp.customize( 'bp_email_options[footer_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#credit' ).css( 'font-size', newval + 'px' );
+				$( '.footer_text_size' ).css( 'font-size', newval + 'px' );
 			}
 		});
 	});

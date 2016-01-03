@@ -356,7 +356,6 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[footer_bg]',
 		),
 
-		// djpaultodo
 		'bp_mailtpl_footer_text_size' => array(
 			'class'       => 'BP_Customizer_Control_Range',
 			'description' => __( 'Slide to change text size', 'buddypress' ),
