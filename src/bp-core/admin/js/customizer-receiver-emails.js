@@ -29,7 +29,9 @@
 	wp.customize( 'bp_email_options[header_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#logo' ).css( 'font-size', newval + 'px' );
+				$( '#logo' )
+					.css( 'font-size', newval + 'px' )
+					.css( 'line-height', Math.floor( newval * 1.618 ) + 'px' );
 			}
 		});
 	});
@@ -43,7 +45,6 @@
 		});
 	});
 
-	// djpaultodo
 	wp.customize( 'bp_email_options[body_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -52,16 +53,16 @@
 		});
 	});
 
-	// djpaultodo
 	wp.customize( 'bp_email_options[body_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '.body_text_size' ).css( 'font-size', newval + 'px' );
+				$( '.body_text_size' )
+				.css( 'font-size', newval + 'px' )
+				.css( 'line-height', Math.floor( newval * 1.618 ) + 'px' );
 			}
 		});
 	});
 
-	// djpaultodo
 	wp.customize( 'bp_email_options[body_text_color]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
@@ -81,7 +82,9 @@
 	wp.customize( 'bp_email_options[footer_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '.footer_text_size' ).css( 'font-size', newval + 'px' );
+				$( '.footer_text_size' )
+					.css( 'font-size', newval + 'px' )
+					.css( 'line-height', Math.floor( newval * 1.618 ) + 'px' );
 			}
 		});
 	});
