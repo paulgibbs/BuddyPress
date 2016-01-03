@@ -56,7 +56,7 @@
 	wp.customize( 'bp_email_options[body_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#bp_mailtpl_body' ).css( 'font-size', newval + 'px' );
+				$( '.body_text_size' ).css( 'font-size', newval + 'px' );
 			}
 		});
 	});

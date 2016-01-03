@@ -162,7 +162,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 					<td>
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						  <tr>
-							<td style="padding: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #<?php echo esc_attr( $settings['body_text_color'] ); ?>;" class="body_text_color">
+							<td style="padding: 40px; font-family: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #<?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
 								One Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.
 								<br><br>
 								<!-- Button : Begin -->
