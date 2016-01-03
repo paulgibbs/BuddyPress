@@ -328,8 +328,8 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[body_text_size]',
 
 			'input_attrs' => array(
-				'max'  => 100,
-				'min'  => 1,
+				'max'  => 24,
+				'min'  => 8,
 				'step' => 1,
 			),
 		),
@@ -370,8 +370,8 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[footer_text_size]',
 
 			'input_attrs' => array(
-				'max'  => 100,
-				'min'  => 1,
+				'max'  => 24,
+				'min'  => 8,
 				'step' => 1,
 			),
 		),
