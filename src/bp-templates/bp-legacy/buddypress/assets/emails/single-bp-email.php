@@ -112,20 +112,6 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 		}
 	</style>
 
-	<!-- Progressive Enhancements -->
-	<style>
-		/* What it does: Hover styles for buttons */
-		.button-td,
-		.button-a {
-			transition: all 100ms ease-in;
-		}
-		.button-td:hover,
-		.button-a:hover {
-			background: #555555 !important;
-			border-color: #555555 !important;
-		}
-	</style>
-
 </head>
 <body class="template_bg" width="100%" height="100%" bgcolor="<?php echo esc_attr( $settings['template_bg'] ); ?>" style="Margin: 0;">
 <table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="<?php echo esc_attr( $settings['template_bg'] ); ?>" style="border-collapse:collapse;" class="template_bg"><tr><td valign="top">
@@ -164,18 +150,6 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 						  <tr>
 							<td style="padding: 40px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ) ?>; color: <?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
 								One Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.
-								<br><br>
-								<!-- Button : Begin -->
-								<table cellspacing="0" cellpadding="0" border="0" align="center" style="Margin: auto;">
-									<tr>
-										<td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-											<a href="http://www.google.com" style="background: #222222; border: 15px solid #222222; padding: 0 10px;color: #ffffff; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-												<!--[if mso]>&nbsp;&nbsp;&nbsp;&nbsp;<![endif]-->A Button<!--[if mso]>&nbsp;&nbsp;&nbsp;&nbsp;<![endif]-->
-											</a>
-										</td>
-									</tr>
-								</table>
-								<!-- Button : END -->
 								<br>
 								Two Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.
 							</td>
