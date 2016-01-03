@@ -65,7 +65,7 @@
 	wp.customize( 'bp_email_options[body_text_color]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '#bp_mailtpl_body' ).css( 'color', newval );
+				$( '.body_text_color' ).css( 'color', newval );
 			}
 		});
 	});
