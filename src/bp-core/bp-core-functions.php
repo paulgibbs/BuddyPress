@@ -2604,8 +2604,9 @@ function bp_upload_dir() {
  * @return string
  */
 function bp_customizer_sanitize_text_no_html( $raw ) {
-	$input = sanitize_text_field( $raw );
-	$input = wp_strip_all_tags( $input );
+	$input = str_replace( array( "\r", "\n", ), '%BPNEWLINE%', $raw );
+	$input = sanitize_text_field( $input );  // Strips tags.
+	$input = str_replace( '%BPNEWLINE%', "\n", $input );
 
 	/**
 	 * Filiters the sanitized text for Customiser callbacks.
