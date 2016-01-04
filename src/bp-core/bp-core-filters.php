@@ -926,9 +926,11 @@ add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
  */
 function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, $email ) {
 	$tokens['site.admin-email'] = bp_get_option( 'admin_email' );
-	$tokens['site.description'] = bp_get_option( 'blogdescription' );
-	$tokens['site.name']        = bp_get_option( 'blogname' );
 	$tokens['site.url']         = home_url();
+
+	// These options are escaped with esc_html on the way into the database in sanitize_option().
+	$tokens['site.description'] = wp_specialchars_decode( bp_get_option( 'blogdescription' ), ENT_QUOTES );
+	$tokens['site.name']        = wp_specialchars_decode( bp_get_option( 'blogname' ), ENT_QUOTES );
 
 	// Default values for tokens set conditionally below.
 	$tokens['unsubscribe'] = '';
