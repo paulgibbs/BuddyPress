@@ -131,10 +131,10 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 			<![endif]-->
 
 			<!-- Email Header : BEGIN -->
-			<table cellspacing="0" cellpadding="0" border="0" align="center" bgcolor="<?php echo esc_attr( $settings['header_bg'] ); ?>" width="100%" style="max-width: 600px;" class="header_bg">
+			<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;" class="header_bg">
 				<tr>
-					<td style="text-align: center; padding: 40px; font-family: sans-serif; mso-height-rule: exactly; color: <?php echo esc_attr( $settings['header_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['header_text_size'] . 'px' ); ?>" class="header_text_color header_text_size">
-						<?php echo get_bloginfo('name'); ?>
+					<td style="text-align: left; padding: 20px 0; font-family: sans-serif; mso-height-rule: exactly; color: <?php echo esc_attr( $settings['header_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['header_text_size'] . 'px' ); ?>" class="header_text_color header_text_size">
+						<?php echo bp_get_option( 'blogname' ); ?>
 					</td>
 				</tr>
 			</table>
