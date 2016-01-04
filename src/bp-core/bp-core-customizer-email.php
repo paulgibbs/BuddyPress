@@ -285,7 +285,6 @@ function bp_email_get_customizer_controls() {
 			'settings'    => 'bp_email_options[header_bg]',
 		),
 
-		// djpaultodo
 		'bp_mailtpl_header_text_size' => array(
 			'class'       => 'BP_Customizer_Control_Range',
 			'description' => __( 'Slide to change text size', 'buddypress' ),
@@ -300,7 +299,6 @@ function bp_email_get_customizer_controls() {
 			),
 		),
 
-		// djpaultodo
 		'bp_mailtpl_header_text_color' => array(
 			'class'       => 'WP_Customize_Color_Control',
 			'description' => __( 'Choose header text color', 'buddypress' ),
