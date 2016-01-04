@@ -44,15 +44,15 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>">
+	<meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>">
 	<meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
-  <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+	<title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
-  <!-- CSS Reset -->
+	<!-- CSS Reset -->
 	<style type="text/css">
-	  /* What it does: Remove spaces around the email design added by some email clients. */
-	  /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+		/* What it does: Remove spaces around the email design added by some email clients. */
+		/* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
 		html,
 		body {
 			Margin: 0 !important;
