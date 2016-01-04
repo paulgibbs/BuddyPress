@@ -94,7 +94,7 @@ class BP_Email {
 	 *
 	 * @var string
 	 */
-	protected $template = '{{content}}';
+	protected $template = '{{{content}}}';
 
 	/**
 	 * Addressee details (to).
@@ -208,7 +208,7 @@ class BP_Email {
 		switch ( $transform ) {
 			// Special-case to fill the $template with the email $content.
 			case 'add-content':
-				$retval = str_replace( '{{content}}', $this->get( 'content', 'replace-tokens' ), $retval );
+				$retval = str_replace( '{{{content}}}', $this->get( 'content', 'replace-tokens' ), $retval );
 				// Fall through.
 
 			case 'replace-tokens':

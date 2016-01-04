@@ -541,19 +541,19 @@ function bp_core_install_emails() {
 	$emails = array(
 		'activity-comment' => array(
 			'post_title'   => _x( '{{poster_name}} replied to one of your updates', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} replied to one of your updates:\n\n\"{{{content}}}\"\n\nTo view your original update and all comments, log in and visit: {{thread_link}}", 'email content', 'buddypress' ),
 		),
 		'activity-comment-author' => array(
 			'post_title'   => _x( '{{poster_name}} replied to one of your comments', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo view the original activity, your comment and all replies, log in and visit: {{thread_link}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} replied to one of your comments:\n\n\"{{{content}}}\"\n\nTo view the original activity, your comment and all replies, log in and visit: {{thread_link}}", 'email content', 'buddypress' ),
 		),
 		'activity-at-message' => array(
 			'post_title'   => _x( '{{poster_name}} mentioned you in an update', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} mentioned you in an update:\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} mentioned you in an update:\n\n\"{{{content}}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email content', 'buddypress' ),
 		),
 		'groups-at-message' => array(
 			'post_title'   => _x( '{{poster_name}} mentioned you in an update', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster_name}} mentioned you in the group \"{{group_name}}\":\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster_name}} mentioned you in the group \"{{group_name}}\":\n\n\"{{{content}}}\"\n\nTo view and respond to the message, log in and visit: {{message_link}}", 'email content', 'buddypress' ),
 		),
 		'core-user-registration' => array(
 			'post_title'   => _x( 'Activate Your Account', 'email subject', 'buddypress' ),
@@ -589,7 +589,7 @@ function bp_core_install_emails() {
 		),
 		'messages-unread' => array(
 			'post_title'   => _x( 'New message from {{sender_name}}', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{sender_name}} sent you a new message:\n\nSubject: {{subject}}\n\n\"{{content}}\"\n\nTo view and read your messages please log in and visit: {{message_link}}", 'email subject', 'buddypress' ),
+			'post_content' => _x( "{{sender_name}} sent you a new message:\n\nSubject: {{subject}}\n\n\"{{{content}}}\"\n\nTo view and read your messages please log in and visit: {{message_link}}", 'email subject', 'buddypress' ),
 		),
 		'settings-verify-email-change' => array(
 			'post_title'   => _x( 'Verify your new email address', 'email subject', 'buddypress' ),
