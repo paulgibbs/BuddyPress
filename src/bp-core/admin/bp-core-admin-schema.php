@@ -609,10 +609,7 @@ function bp_core_install_emails() {
 	foreach ( $emails as $id => $email ) {
 		$data = bp_parse_args( $email, $defaults, 'install_email_' . $id );
 
-		// HTML email text.
-		$data['post_content'] = wpautop( $data['post_content'] );
-
-		// Non-HTML email text. djpaultodo
+		// Plain text version.
 		if ( empty( $data['post-excerpt'] ) ) {
 			$data['post_excerpt'] = $data['post_content'];
 		}
