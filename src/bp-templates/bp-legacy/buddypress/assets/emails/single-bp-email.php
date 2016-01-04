@@ -148,9 +148,9 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 					<td>
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						  <tr>
-							<td style="padding: 40px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ) ?>; color: <?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
-								{{{content}}}
-							</td>
+								<td style="padding: 40px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ) ?>; color: <?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
+									{{{content}}}
+								</td>
 						  </tr>
 						</table>
 					</td>
