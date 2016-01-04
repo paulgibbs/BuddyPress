@@ -166,7 +166,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 					<td style="padding: 40px 10px; width: 100%; font-size: <?php echo esc_attr( $settings['footer_text_size'] . 'px' ); ?>; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['footer_text_size'] * 1.618 ) . 'px' ) ?>; text-align: center; color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>;" class="footer_text_color footer_text_size">
 						<span class="footer_text"><?php echo nl2br( $settings['footer_text'] ); ?></span>
 						<br><br>
-						<a href="{{unsubscribe}}" style="color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>; text-decoration: underline;"><?php _ex( 'unsubscribe', 'email', 'buddypress' ); ?></a>
+						<a href="{{{unsubscribe}}}" style="color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>; text-decoration: underline;"><?php _ex( 'unsubscribe', 'email', 'buddypress' ); ?></a>
 					</td>
 				</tr>
 			</table>
