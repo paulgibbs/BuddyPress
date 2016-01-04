@@ -118,7 +118,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 	<center style="width: 100%;">
 
 		<!-- Visually Hidden Preheader Text : BEGIN -->
-		<div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;">
+		<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
 			(Optional) This text will appear in the inbox preview, but not the email body.
 		</div>
 		<!-- Visually Hidden Preheader Text : END -->
