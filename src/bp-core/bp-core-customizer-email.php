@@ -398,7 +398,7 @@ function bp_email_get_customizer_settings_defaults() {
 		'footer_text_size'  => 12,
 		'header_bg'         => '#be3631',
 		'header_text_color' => '#ffffff',
-		'header_text_size'  => 30,
+		'header_text_size'  => 24,
 
 		'footer_text' => sprintf(
 			/* translators: email disclaimer, e.g. "© 2015 Site Name". */
