@@ -995,7 +995,7 @@ function bp_core_add_email_post_type_template( $template ) {
 	$template = ob_get_contents();
 	ob_end_clean();
 
-	echo str_replace( '{{{content}}}', get_post()->post_content, $template );
+	echo str_replace( '{{{content}}}', nl2br( get_post()->post_content ), $template );
 	return '';
 }
 add_action( 'bp_template_include', 'bp_core_add_email_post_type_template', 12 );
