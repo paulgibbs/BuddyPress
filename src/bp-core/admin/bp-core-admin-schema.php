@@ -611,7 +611,7 @@ function bp_core_install_emails() {
 
 		// Plain text version.
 		if ( empty( $data['post-excerpt'] ) ) {
-			$data['post_excerpt'] = $data['post_content'];
+			$data['post_excerpt'] = wp_strip_all_tags( $data['post_content'] );
 		}
 
 		$post_id = wp_insert_post( $data );
