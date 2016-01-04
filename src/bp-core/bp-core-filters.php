@@ -954,12 +954,18 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
 
 /**
- * Add theme compat. folder to WP template stack for Email post types.
+ * Find and render the template for Email posts (the Customizer and admin previews).
+ *
+ * Abuses the `template_include` filter which expects a string, but as we need to replace
+ * the `{{{content}}}` token with the post's content, we use object buffering to load the
+ * template, replace the token, and render it.
+ *
+ * The function returns an empty string to prevent WordPress rendering another template.
  *
  * @since 2.5.0
  *
- * @param string $template Path to current template (probably single.php).
- * @return string New template path.
+ * @param string $template Path to template (probably single.php).
+ * @return string
  */
 function bp_core_add_email_post_type_template( $template ) {
 	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
@@ -967,15 +973,27 @@ function bp_core_add_email_post_type_template( $template ) {
 	}
 
 	/**
-	 * Filter template used to display email in the Customizer.
+	 * Filter template used to display Email posts.
 	 *
 	 * @since 2.5.0
 	 *
 	 * @param string $template Path to current template (probably single.php).
 	 */
-	return apply_filters( 'bp_core_add_email_post_type_template',
+	$email_template = apply_filters( 'bp_core_add_email_post_type_template',
 		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
 		$template
 	);
+
+	if ( ! $email_template ) {
+		return $template;
+	}
+
+	ob_start();
+	include( $email_template );
+	$template = ob_get_contents();
+	ob_end_clean();
+
+	echo str_replace( '{{{content}}}', get_post()->post_content, $template );
+	return '';
 }
-add_action( 'bp_template_include', 'bp_core_add_email_post_type_template', 8 );
+add_action( 'bp_template_include', 'bp_core_add_email_post_type_template', 12 );
