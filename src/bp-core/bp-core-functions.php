@@ -3021,7 +3021,6 @@ function bp_email_get_template( WP_Post $object ) {
 	return apply_filters( 'bp_email_get_template', array(
 		"{$single}-{$object->post_name}.php",
 		"{$single}.php",
-		"assets/emails/{$single}.php",  // djpaultodo remove this
-		'assets/emails/bp-email.php',   // djpaultodo remove this
+		"assets/emails/{$single}.php",
 	), $object );
 }
