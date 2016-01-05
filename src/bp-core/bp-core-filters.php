@@ -958,7 +958,7 @@ add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
 /**
  * Find and render the template for Email posts (the Customizer and admin previews).
  *
- * Abuses the `template_include` filter which expects a string, but as we need to replace
+ * Misuses the `template_include` filter which expects a string, but as we need to replace
  * the `{{{content}}}` token with the post's content, we use object buffering to load the
  * template, replace the token, and render it.
  *
