@@ -12,6 +12,7 @@
 		value.bind(function( newval ) {
 			if ( newval.length ) {
 				$( '.template_bg' ).attr( 'bgcolor', newval );
+				$( 'hr' ).attr( 'color', newval );
 			}
 		});
 	});
@@ -51,9 +52,13 @@
 	wp.customize( 'bp_email_options[body_text_size]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
+				// 1.618 = golden mean.
 				$( '.body_text_size' )
-				.css( 'font-size', newval + 'px' )
-				.css( 'line-height', Math.floor( newval * 1.618 ) + 'px' );
+					.css( 'font-size', newval + 'px' )
+					.css( 'line-height', Math.floor( newval * 1.618 ) + 'px' );
+
+				// 1.35 = default body_text_size multipler. Gives default heading of 20px.
+				$( '.welcome' ).css( 'font-size', Math.floor( newval * 1.35 ) + 'px' );
 			}
 		});
 	});

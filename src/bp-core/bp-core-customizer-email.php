@@ -387,16 +387,16 @@ function bp_email_get_customizer_controls() {
  */
 function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
-		'template_bg'       => '#222222',
+		'template_bg'       => '#F7F3F0',
 		'body_text_color'   => '#555555',
 		'body_text_size'    => 15,
 		'body_bg'           => '#ffffff',
-		'footer_bg'         => '#222222',
-		'footer_text_color' => '#888888',
+		'footer_bg'         => '#F7F3F0',
+		'footer_text_color' => '#525252',
 		'footer_text_size'  => 12,
 		'header_bg'         => '#be3631',
-		'header_text_color' => '#ffffff',
-		'header_text_size'  => 24,
+		'header_text_color' => '#000000',
+		'header_text_size'  => 30,
 
 		'footer_text' => sprintf(
 			/* translators: email disclaimer, e.g. "© 2015 Site Name". */
