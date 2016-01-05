@@ -2918,6 +2918,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 			4 => 'attachments',
 		);
 
+		// djpaultodo - handle getting email content into wp_mail.
 		return call_user_func_array( 'wp_mail', bp_core_parse_args_array( $old_args_keys, $func_args ) );
 	}
 
