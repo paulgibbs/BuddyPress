@@ -423,6 +423,7 @@ function bp_email_get_customizer_settings_defaults() {
  */
 function bp_email_redirect_to_customizer() {
 	$email = get_posts( array(
+		'fields'           => 'ids',
 		'orderby'          => 'rand',
 		'post_status'      => 'publish',
 		'post_type'        => bp_get_email_post_type(),
@@ -433,7 +434,7 @@ function bp_email_redirect_to_customizer() {
 	$preview_url = admin_url();
 
 	if ( $email ) {
-		$preview_url = get_post_permalink( $email[0]->ID ) . '&bp_customizer=email';
+		$preview_url = get_post_permalink( $email[0] ) . '&bp_customizer=email';
 	}
 
 	$redirect_url = add_query_arg(
