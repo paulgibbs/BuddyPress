@@ -301,7 +301,7 @@ class BP_Admin {
 		$hooks[] = add_theme_page(
 			_x( 'Emails', 'screen heading', 'buddypress' ),
 			_x( 'Emails', 'screen heading', 'buddypress' ),
-			'bp_moderate',
+			$this->capability,
 			'bp-emails-customizer-redirect',
 			'bp_email_redirect_to_customizer'
 		);
