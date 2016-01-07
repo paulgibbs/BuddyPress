@@ -1001,10 +1001,10 @@ function bp_core_add_email_post_type_template( $template ) {
 	 * Link colours are applied directly in the email template before sending, so we
 	 * need to add an extra style here to set the colour for the Customizer or preview.
 	 */
-	$email_settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_defaults() );
+	$settings = bp_email_get_appearance_settings();
 	printf(
 		'<style>a { color: %s; }</style>',
-		esc_attr( $email_settings['highlight_color'] )
+		esc_attr( $settings['highlight_color'] )
 	);
 
 	return '';

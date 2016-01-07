@@ -388,8 +388,8 @@ function bp_email_get_customizer_controls() {
  *
  * @return array
  */
-function bp_email_get_customizer_settings_defaults() {
-	$defaults = array(
+function bp_email_get_appearance_settings() {
+	$default_args = array(
 		'body_bg'           => '#FFFFFF',
 		'body_text_color'   => '#555555',
 		'body_text_size'    => 15,
@@ -407,17 +407,14 @@ function bp_email_get_customizer_settings_defaults() {
 			_x( '&copy; %s %s', 'email', 'buddypress' ),
 			date_i18n( 'Y' ),
 			bp_get_option( 'blogname' )
-		)
+		),
 	);
 
-	/**
-	 * Filter email Customizer settings' default values.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param array $defaults Settings default values.
-	 */
-	return apply_filters( 'bp_email_get_customizer_settings_defaults', $defaults );
+	return bp_parse_args(
+		get_option( 'bp_email_options', array() ),
+		$default_args,
+		'email_appearance_settings'
+	);
 }
 
 /**
