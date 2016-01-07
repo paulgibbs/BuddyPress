@@ -8,10 +8,10 @@
  */
 
 (function( $ ) {
-	wp.customize( 'bp_email_options[template_bg]', function( value ) {
+	wp.customize( 'bp_email_options[email_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {
-				$( '.template_bg' ).attr( 'bgcolor', newval );
+				$( '.email_bg' ).attr( 'bgcolor', newval );
 				$( 'hr' ).attr( 'color', newval );
 			}
 		});

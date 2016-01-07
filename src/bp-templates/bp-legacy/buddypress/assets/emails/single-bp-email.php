@@ -116,8 +116,8 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 	</style>
 
 </head>
-<body class="template_bg" width="100%" height="100%" bgcolor="<?php echo esc_attr( $settings['template_bg'] ); ?>" style="Margin: 0;">
-<table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="<?php echo esc_attr( $settings['template_bg'] ); ?>" style="border-collapse:collapse;" class="template_bg"><tr><td valign="top">
+<body class="email_bg" width="100%" height="100%" bgcolor="<?php echo esc_attr( $settings['email_bg'] ); ?>" style="Margin: 0;">
+<table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="<?php echo esc_attr( $settings['email_bg'] ); ?>" style="border-collapse:collapse;" class="email_bg"><tr><td valign="top">
 	<center style="width: 100%;">
 
 		<!-- Visually Hidden Preheader Text : BEGIN -->
@@ -152,7 +152,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						  <tr>
 								<td style="padding: 20px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ) ?>; color: <?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
-									<span style="font-weight: bold; font-size: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.35 ) . 'px' ); ?>" class="welcome">Hi Paul Gibbs,</span><hr color="<?php echo esc_attr( $settings['template_bg'] ); ?>"><br>
+									<span style="font-weight: bold; font-size: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.35 ) . 'px' ); ?>" class="welcome">Hi Paul Gibbs,</span><hr color="<?php echo esc_attr( $settings['email_bg'] ); ?>"><br>
 									{{{content}}}
 								</td>
 						  </tr>

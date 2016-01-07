@@ -131,25 +131,20 @@ function bp_email_get_customizer_sections() {
 	 * @param array $sections Email Customizer sections to add.
 	 */
 	return apply_filters( 'bp_email_get_customizer_sections', array(
-		'section_bp_mailtpl_template' => array(
-			'capability' => 'bp_moderate',
-			'panel'      => 'bp_mailtpl',
-			'title'      => __( 'Template', 'buddypress' ),
-		),
 		'section_bp_mailtpl_header' => array(
 			'capability' => 'bp_moderate',
 			'panel'      => 'bp_mailtpl',
-			'title'      => __( 'Email Header', 'buddypress' ),
+			'title'      => _x( 'Header', 'email', 'buddypress' ),
 		),
 		'section_bp_mailtpl_body' => array(
 			'capability' => 'bp_moderate',
 			'panel'      => 'bp_mailtpl',
-			'title'      => __( 'Email Body', 'buddypress' ),
+			'title'      => _x( 'Body', 'email', 'buddypress' ),
 		),
 		'section_bp_mailtpl_footer' => array(
 			'capability' => 'bp_moderate',
 			'panel'      => 'bp_mailtpl',
-			'title'      => __( 'Footer', 'buddypress' ),
+			'title'      => _x( 'Footer', 'email', 'buddypress' ),
 		),
 	) );
 }
@@ -172,9 +167,9 @@ function bp_email_get_customizer_settings() {
 	 * @param array $settings Email Customizer settings to add.
 	 */
 	return apply_filters( 'bp_email_get_customizer_settings', array(
-		'bp_email_options[template_bg]' => array(
+		'bp_email_options[email_bg]' => array(
 			'capability'           => 'bp_moderate',
-			'default'              => $defaults['template_bg'],
+			'default'              => $defaults['email_bg'],
 			'sanitize_callback'    => 'sanitize_hex_color',
 			'transport'            => 'postMessage',
 			'type'                 => 'option',
@@ -269,25 +264,29 @@ function bp_email_get_customizer_controls() {
 	 * @param array $controls Email Customizer controls to add.
 	 */
 	return apply_filters( 'bp_email_get_customizer_controls', array(
-		'bp_mailtpl_template_bg' => array(
+		'bp_mailtpl_email_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose email background color', 'buddypress' ),
-			'label'       => __( 'Background Color', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_template',
-			'settings'    => 'bp_email_options[template_bg]',
+			'label'       => __( 'Email background color', 'buddypress' ),
+			'section'     => 'section_bp_mailtpl_header',
+			'settings'    => 'bp_email_options[email_bg]',
 		),
 
 		'bp_mailtpl_header_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose header background color', 'buddypress' ),
-			'label'       => __( 'Background Color', 'buddypress' ),
+			'label'       => __( 'Header background color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_email_options[header_bg]',
 		),
 
+		'bp_mailtpl_header_text_color' => array(
+			'class'       => 'WP_Customize_Color_Control',
+			'label'       => __( 'Text color', 'buddypress' ),
+			'section'     => 'section_bp_mailtpl_header',
+			'settings'    => 'bp_email_options[header_text_color]',
+		),
+
 		'bp_mailtpl_header_text_size' => array(
 			'class'       => 'BP_Customizer_Control_Range',
-			'description' => __( 'Slide to change text size', 'buddypress' ),
 			'label'       => __( 'Text size', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_email_options[header_text_size]',
@@ -299,25 +298,24 @@ function bp_email_get_customizer_controls() {
 			),
 		),
 
-		'bp_mailtpl_header_text_color' => array(
-			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose header text color', 'buddypress' ),
-			'label'       => __( 'Text Color', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_header',
-			'settings'    => 'bp_email_options[header_text_color]',
-		),
 
 		'bp_mailtpl_body_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose email body background color', 'buddypress' ),
-			'label'       => __( 'Background Color', 'buddypress' ),
+			'label'       => __( 'Background color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_body',
 			'settings'    => 'bp_email_options[body_bg]',
 		),
 
+
+		'bp_mailtpl_body_text_color' => array(
+			'class'       => 'WP_Customize_Color_Control',
+			'label'       => __( 'Text color', 'buddypress' ),
+			'section'     => 'section_bp_mailtpl_body',
+			'settings'    => 'bp_email_options[body_text_color]',
+		),
+
 		'bp_mailtpl_body_text_size' => array(
 			'class'       => 'BP_Customizer_Control_Range',
-			'description' => __( 'Slide to change text size', 'buddypress' ),
 			'label'       => __( 'Text size', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_body',
 			'settings'    => 'bp_email_options[body_text_size]',
@@ -329,13 +327,6 @@ function bp_email_get_customizer_controls() {
 			),
 		),
 
-		'bp_mailtpl_body_text_color' => array(
-			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose body text color', 'buddypress' ),
-			'label'       => __( 'Text Color', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_body',
-			'settings'    => 'bp_email_options[body_text_color]',
-		),
 
 		'bp_mailtpl_footer_text' => array(
 			'class'       => 'WP_Customize_Control',
@@ -348,15 +339,20 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_footer_bg' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose footer background color', 'buddypress' ),
-			'label'       => __( 'Background Color', 'buddypress' ),
+			'label'       => __( 'Background color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_footer',
 			'settings'    => 'bp_email_options[footer_bg]',
 		),
 
+		'bp_mailtpl_footer_text_color' => array(
+			'class'       => 'WP_Customize_Color_Control',
+			'label'       => __( 'Text color', 'buddypress' ),
+			'section'     => 'section_bp_mailtpl_footer',
+			'settings'    => 'bp_email_options[footer_text_color]',
+		),
+
 		'bp_mailtpl_footer_text_size' => array(
 			'class'       => 'BP_Customizer_Control_Range',
-			'description' => __( 'Slide to change text size', 'buddypress' ),
 			'label'       => __( 'Text size', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_footer',
 			'settings'    => 'bp_email_options[footer_text_size]',
@@ -367,14 +363,6 @@ function bp_email_get_customizer_controls() {
 				'step' => 1,
 			),
 		),
-
-		'bp_mailtpl_footer_text_color' => array(
-			'class'       => 'WP_Customize_Color_Control',
-			'description' => __( 'Choose footer text color', 'buddypress' ),
-			'label'       => __( 'Text Color', 'buddypress' ),
-			'section'     => 'section_bp_mailtpl_footer',
-			'settings'    => 'bp_email_options[footer_text_color]',
-		)
 	) );
 }
 
@@ -387,7 +375,7 @@ function bp_email_get_customizer_controls() {
  */
 function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
-		'template_bg'       => '#F7F3F0',
+		'email_bg'       => '#F7F3F0',
 		'body_text_color'   => '#555555',
 		'body_text_size'    => 15,
 		'body_bg'           => '#ffffff',
