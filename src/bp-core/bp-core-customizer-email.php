@@ -390,17 +390,17 @@ function bp_email_get_customizer_controls() {
  */
 function bp_email_get_customizer_settings_defaults() {
 	$defaults = array(
-		'body_bg'                => '#FFFFFF',
-		'body_text_color'        => '#555555',
-		'body_text_size'         => 15,
-		'email_bg'               => '#F7F3F0',
-		'footer_bg'              => '#F7F3F0',
-		'footer_text_color'      => '#525252',
-		'footer_text_size'       => 12,
-		'header_bg'              => '#F7F3F0',
-		'highlight_color'    => '#D84800',
-		'header_text_color'      => '#000000',
-		'header_text_size'       => 30,
+		'body_bg'           => '#FFFFFF',
+		'body_text_color'   => '#555555',
+		'body_text_size'    => 15,
+		'email_bg'          => '#F7F3F0',
+		'footer_bg'         => '#F7F3F0',
+		'footer_text_color' => '#525252',
+		'footer_text_size'  => 12,
+		'header_bg'         => '#F7F3F0',
+		'highlight_color'   => '#D84800',
+		'header_text_color' => '#000000',
+		'header_text_size'  => 30,
 
 		'footer_text' => sprintf(
 			/* translators: email disclaimer, e.g. "© 2016 Site Name". */
