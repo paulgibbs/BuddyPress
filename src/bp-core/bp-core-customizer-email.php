@@ -115,7 +115,7 @@ function bp_email_customizer_hide_sections( $active, $section ) {
 }
 
 /**
- * Get email sections for the Customizer.
+ * Get Customizer sections for emails.
  *
  * @since 2.5.0
  *
@@ -150,7 +150,7 @@ function bp_email_get_customizer_sections() {
 }
 
 /**
- * Get email settings for the Customizer.
+ * Get Customizer settings for emails.
  *
  * @since 2.5.0
  *
@@ -255,7 +255,7 @@ function bp_email_get_customizer_settings() {
 }
 
 /**
- * Get email controls for the Customizer.
+ * Get Customizer controls for emails.
  *
  * @since 2.5.0
  *
@@ -382,7 +382,7 @@ function bp_email_get_customizer_controls() {
 }
 
 /**
- * Get defaults settings for the email Customizer templates.
+ * Return email appearance settings.
  *
  * @since 2.5.0
  *
