@@ -134,7 +134,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 			<![endif]-->
 
 			<!-- Email Header : BEGIN -->
-			<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px; border-top: 7px solid #D84800" class="header_bg">
+			<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px; border-top: 7px solid <?php echo esc_attr( $settings['highlight_color'] ); ?>" class="header_bg">
 				<tr>
 					<td style="text-align: center; padding: 15px 0; font-family: sans-serif; mso-height-rule: exactly; font-weight: bold; color: <?php echo esc_attr( $settings['header_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['header_text_size'] . 'px' ); ?>" class="header_text_color header_text_size">
 						<?php echo bp_get_option( 'blogname' ); ?>
@@ -152,7 +152,7 @@ $settings = get_option( 'bp_email_options', bp_email_get_customizer_settings_def
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						  <tr>
 								<td style="padding: 20px; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.618 ) . 'px' ) ?>; color: <?php echo esc_attr( $settings['body_text_color'] ); ?>; font-size: <?php echo esc_attr( $settings['body_text_size'] . 'px' ); ?>" class="body_text_color body_text_size">
-									<span style="font-weight: bold; font-size: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.35 ) . 'px' ); ?>" class="welcome">Hi Paul Gibbs,</span><hr color="<?php echo esc_attr( $settings['email_bg'] ); ?>"><br>
+									<span style="font-weight: bold; font-size: <?php echo esc_attr( floor( $settings['body_text_size'] * 1.35 ) . 'px' ); ?>" class="welcome">Hi Paul Gibbs,</span><hr color="<?php echo esc_attr( $settings['highlight_color'] ); ?>"><br>
 									{{{content}}}
 								</td>
 						  </tr>

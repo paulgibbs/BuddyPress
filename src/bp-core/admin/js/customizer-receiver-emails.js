@@ -41,6 +41,15 @@
 		});
 	});
 
+	wp.customize( 'bp_email_options[highlight_color]', function( value ) {
+		value.bind(function( newval ) {
+			if ( newval.length ) {
+				$( '.header_bg' ).css( 'border-top-color', newval );
+				$( 'hr' ).attr( 'color', newval );
+			}
+		});
+	});
+
 	wp.customize( 'bp_email_options[body_bg]', function( value ) {
 		value.bind(function( newval ) {
 			if ( newval.length ) {

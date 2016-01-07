@@ -195,6 +195,12 @@ function bp_email_get_customizer_settings() {
 			'transport'         => 'postMessage',
 			'type'              => 'option',
 		),
+		'bp_email_options[highlight_color]' => array(
+			'capability'        => 'bp_moderate',
+			'default'           => $defaults['highlight_color'],
+			'sanitize_callback' => 'sanitize_hex_color',
+			'transport'         => 'postMessage',
+			'type'              => 'option',
 		),
 		'bp_email_options[body_bg]' => array(
 			'capability'        => 'bp_moderate',
