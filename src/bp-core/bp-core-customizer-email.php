@@ -157,7 +157,7 @@ function bp_email_get_customizer_sections() {
  * @return array
  */
 function bp_email_get_customizer_settings() {
-	$defaults = bp_email_get_customizer_settings_defaults();
+	$defaults = bp_email_get_appearance_settings();
 
 	/**
 	 * Filter Customizer settings for emails.
