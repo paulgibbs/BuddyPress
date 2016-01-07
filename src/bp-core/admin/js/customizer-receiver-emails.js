@@ -45,6 +45,7 @@
 		value.bind(function( newval ) {
 			if ( newval.length ) {
 				$( '.header_bg' ).css( 'border-top-color', newval );
+				$( 'a' ).css( 'color', newval );
 				$( 'hr' ).attr( 'color', newval );
 			}
 		});
