@@ -956,6 +956,50 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 add_filter( 'bp_email_get_tokens', 'bp_email_set_default_tokens', 6, 4 );
 
 /**
+ * Add email link styles to rendered email template.
+ *
+ * This is only used when the email content has been merged into the email template.
+ *
+ * @since 2.5.0
+ *
+ * @param string $retval Property value.
+ * @param string $property_name
+ * @param string $transform How the return value was transformed.
+ * @return string Updated value.
+ */
+function bp_email_add_link_color_to_template( $value, $property_name, $transform ) {
+
+	//
+	if ( $property_name !== 'template' || $transform !== 'add-content' ) {
+		return $value;
+	}
+
+	$settings    = bp_email_get_appearance_settings();
+	$replacement = 'style="color: ' . esc_attr( $settings['highlight_color'] ) . ';';
+
+	// Find all links.
+	preg_match_all( '#<a[^>]+>#i', $value, $links );
+	foreach ( $links as $link ) {
+		$new_link = $link = array_shift( $link );
+
+		// Add/modify style property.
+		if ( strpos( $link, 'style="' ) !== false ) {
+			$new_link = str_replace( 'style="', $replacement, $link );
+		} else {
+			$new_link = str_replace( '<a ', "<a {$replacement}\" ", $link );
+		}
+
+		if ( $new_link !== $link ) {
+			$value = str_replace( $link, $new_link, $value );
+		}
+	}
+
+	return $value;
+}
+add_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6, 3 );
+
+
+/**
  * Find and render the template for Email posts (the Customizer and admin previews).
  *
  * Misuses the `template_include` filter which expects a string, but as we need to replace
