@@ -70,11 +70,11 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 
 		$args = array(
 			'tokens' => array(
-				'changed_text'  => $changed_text,
-				'group'         => $group,
-				'group_id'      => $group_id,
-				'group_link'    => bp_get_group_permalink( $group ),
-				'group.name'    => $group->name,
+				'changed_text' => $changed_text,
+				'group'        => $group,
+				'group.id'     => $group_id,
+				'group.url'    => bp_get_group_permalink( $group ),
+				'group.name'   => $group->name,
 			),
 		);
 		bp_send_email( 'groups-details-updated', $user_id, $args );
@@ -128,15 +128,15 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 	$args  = array(
 		'tokens' => array(
-			'admin_id'             => $admin_id,
+			'admin.id'             => $admin_id,
 			'group'                => $group,
 			'group.name'           => $group->name,
-			'group_id'             => $group_id,
-			'group_requests'       => bp_get_group_permalink( $group ) . 'admin/membership-requests',
-			'membership_id'        => $membership_id,
-			'profile_link'         => bp_core_get_user_domain( $requesting_user_id ),
-			'requesting_user_id'   => $requesting_user_id,
-			'requesting_user_name' => bp_core_get_user_displayname( $requesting_user_id ),
+			'group.id'             => $group_id,
+			'group-requests.url'   => bp_get_group_permalink( $group ) . 'admin/membership-requests',
+			'membership.id'        => $membership_id,
+			'profile.url '         => bp_core_get_user_domain( $requesting_user_id ),
+			'requesting-user.id'   => $requesting_user_id,
+			'requesting-user.name' => bp_core_get_user_displayname( $requesting_user_id ),
 		),
 	);
 	bp_send_email( 'groups-membership-request', $admin_id, $args );
@@ -178,7 +178,7 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 	$args  = array(
 		'tokens' => array(
 			'group'      => $group,
-			'group_link' => bp_get_group_permalink( $group ),
+			'group.url'  => bp_get_group_permalink( $group ),
 			'group.name' => $group->name,
 		),
 	);
@@ -230,12 +230,12 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 	$args  = array(
 		'tokens' => array(
-			'group'         => $group,
-			'group_id'      => $group_id,
-			'group_link'    => bp_get_group_permalink( $group ),
-			'group.name'    => $group->name,
-			'promoted_to'   => $promoted_to,
-			'user_id'       => $user_id,
+			'group'       => $group,
+			'group.id'    => $group_id,
+			'group.url'   => bp_get_group_permalink( $group ),
+			'group.name'  => $group->name,
+			'promoted_to' => $promoted_to,
+			'user.id'     => $user_id,
 		),
 	);
 	bp_send_email( 'groups-member-promoted', $user_id, $args );
@@ -283,13 +283,13 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 	$invited_link = bp_core_get_user_domain( $invited_user_id ) . bp_get_groups_slug();
 	$args         = array(
 		'tokens' => array(
-			'group'           => $group,
-			'group_link'      => bp_get_group_permalink( $group ),
-			'group.name'      => $group->name,
-			'invited_user_id' => $invited_user_id,
-			'inviter_link'    => bp_core_get_user_domain( $inviter_user_id ),
-			'inviter_name'    => bp_core_get_userlink( $inviter_user_id, true, false, true ),
-			'invites_link'    => trailingslashit( $invited_link . '/invites/' ),
+			'group'               => $group,
+			'group.url'           => bp_get_group_permalink( $group ),
+			'group.name'          => $group->name,
+			'groups-invitation'   => $invited_user_id,
+			'inviter-profile.url' => bp_core_get_user_domain( $inviter_user_id ),
+			'inviter-profile.url' => bp_core_get_userlink( $inviter_user_id, true, false, true ),
+			'invites.url'         => trailingslashit( $invited_link . '/invites/' ),
 		),
 	);
 	bp_send_email( 'groups-invitation', $invited_user_id, $args );

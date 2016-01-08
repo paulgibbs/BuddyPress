@@ -61,8 +61,8 @@ function messages_notification_new_message( $raw_args = array() ) {
 		$args = array(
 			'tokens' => array(
 				'content'      => stripslashes( wp_filter_kses( $message ) ),
-				'message_link' => bp_core_get_user_domain( $recipient->user_id ) . bp_get_messages_slug() . '/',
-				'sender_name'  => stripslashes( $sender_name ),
+				'message.url' => bp_core_get_user_domain( $recipient->user_id ) . bp_get_messages_slug() . '/',
+				'sender.name'  => stripslashes( $sender_name ),
 				'subject'      => stripslashes( wp_filter_kses( $subject ) ),
 			),
 		);

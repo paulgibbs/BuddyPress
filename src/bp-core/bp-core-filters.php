@@ -421,14 +421,14 @@ add_filter( 'update_welcome_email', 'bp_core_filter_blog_welcome_email', 10, 4 )
 function bp_core_activation_signup_blog_notification( $domain, $path, $title, $user, $user_email, $key, $meta ) {
 	$args = array(
 		'tokens' => array(
-			'activate_url' => esc_url( bp_get_activation_page() . '?key=' . urlencode( $key ) ),
-			'domain'       => $domain,
-			'key'          => $key,
-			'path'         => $path,
-			'site'         => esc_url( "http://{$domain}{$path}" ),
-			'title'        => $title,
-			'user'         => $user,
-			'user_email'   => $user_email,
+			'activate-site.url' => esc_url( bp_get_activation_page() . '?key=' . urlencode( $key ) ),
+			'domain'            => $domain,
+			'key_blog'          => $key,
+			'path'              => $path,
+			'user-site.url'     => esc_url( "http://{$domain}{$path}" ),
+			'title'             => $title,
+			'user'              => $user,
+			'user.email'        => $user_email,
 		),
 	);
 	bp_send_email( 'core-user-registration-with-blog', $user_email, $args );
@@ -479,10 +479,10 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 
 	$args = array(
 		'tokens' => array(
-			'activate_url' => esc_url( trailingslashit( bp_get_activation_page() ) . "{$key}/" ),
+			'activate.url' => esc_url( trailingslashit( bp_get_activation_page() ) . "{$key}/" ),
 			'key'          => $key,
 			'user'         => $user,
-			'user_email'   => $user_email,
+			'user.email'   => $user_email,
 		),
 	);
 	bp_send_email( 'core-user-registration', $user_email, $args );

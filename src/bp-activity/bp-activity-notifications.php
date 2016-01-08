@@ -71,10 +71,10 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
 			'tokens' => array(
 				'activity'         => $activity,
 				'content'          => $content,
-				'group_name'       => $group_name,
-				'message_link'     => $message_link,
-				'poster_name'      => $poster_name,
-				'receiver_user_id' => $receiver_user_id,
+				'group.name'       => $group_name,
+				'mentioned.url'    => $message_link,
+				'poster.name'      => $poster_name,
+				'receiver-user.id' => $receiver_user_id,
 			),
 		);
 
@@ -126,12 +126,12 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	if ( $original_activity->user_id != $commenter_id && 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
 		$args = array(
 			'tokens' => array(
-				'comment_id'                => $comment_id,
-				'commenter_id'              => $commenter_id,
+				'comment.id'                => $comment_id,
+				'commenter.id'              => $commenter_id,
 				'content'                   => $content,
 				'original_activity.user_id' => $original_activity->user_id,
-				'poster_name'               => $poster_name,
-				'thread_link'               => $thread_link,
+				'poster.name'               => $poster_name,
+				'thread.url'                => $thread_link,
 			),
 		);
 
@@ -152,12 +152,12 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	if ( $parent_comment->user_id != $commenter_id && $original_activity->user_id != $parent_comment->user_id && 'no' != bp_get_user_meta( $parent_comment->user_id, 'notification_activity_new_reply', true ) ) {
 		$args = array(
 			'tokens' => array(
-				'comment_id'             => $comment_id,
-				'commenter_id'           => $commenter_id,
+				'comment.id'             => $comment_id,
+				'commenter.id'           => $commenter_id,
 				'content'                => $content,
-				'parent_comment.user_id' => $parent_comment->user_id,
-				'poster_name'            => $poster_name,
-				'thread_link'            => $thread_link,
+				'parent-comment-user.id' => $parent_comment->user_id,
+				'poster.name'            => $poster_name,
+				'thread.url'             => $thread_link,
 			),
 		);
 

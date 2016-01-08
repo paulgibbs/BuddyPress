@@ -106,10 +106,10 @@ function bp_settings_action_general() {
 					$args = array(
 						'tokens' => array(
 							'displayname'    => bp_core_get_user_displayname( bp_displayed_user_id() ),
-							'old_user_email' => $old_user_email,
-							'site_name'      => bp_get_site_name(),
-							'user_email'     => $user_email,
-							'verify_link'    => $verify_link,
+							'old-user.email' => $old_user_email,
+							'user-site.name' => bp_get_site_name(),
+							'user.email'     => $user_email,
+							'verify.url'     => $verify_link,
 						),
 					);
 					bp_send_email( 'settings-verify-email-change', bp_displayed_user_id(), $args );
