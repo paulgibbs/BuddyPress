@@ -90,7 +90,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertSame(
 			$email->get( 'content', 'replace-tokens' ),
 			esc_html( $token )
-		),
+		);
 	}
 
 	public function test_token_are_not_escaped() {
@@ -101,7 +101,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertSame(
 			$email->get( 'content', 'replace-tokens' ),
 			$token
-		),
+		);
 	}
 
 	public function test_invalid_headers() {
