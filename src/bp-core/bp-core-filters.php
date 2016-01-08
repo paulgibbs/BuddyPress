@@ -968,8 +968,6 @@ add_filter( 'bp_email_get_tokens', 'bp_email_set_default_tokens', 6, 4 );
  * @return string Updated value.
  */
 function bp_email_add_link_color_to_template( $value, $property_name, $transform ) {
-
-	//
 	if ( $property_name !== 'template' || $transform !== 'add-content' ) {
 		return $value;
 	}
