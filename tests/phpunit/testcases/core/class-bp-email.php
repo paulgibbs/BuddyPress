@@ -6,13 +6,13 @@
 class BP_Tests_Email extends BP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
-		remove_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
-		remove_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
+		remove_filter( 'bp_email_get_headers', 'bp_email_set_default_headers', 6, 4 );
+		remove_filter( 'bp_email_get_tokens', 'bp_email_set_default_tokens', 6, 4 );
 	}
 
 	public function tearDown() {
-		add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
-		add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
+		add_filter( 'bp_email_get_tokens', 'bp_email_set_default_tokens', 6, 4 );
+		add_filter( 'bp_email_get_headers', 'bp_email_set_default_headers', 6, 4 );
 		parent::tearDown();
 	}
 

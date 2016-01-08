@@ -905,13 +905,13 @@ add_filter( 'dynamic_sidebar_params', '_bp_core_inject_bp_widget_css_class' );
  * @param BP_Email $email Email object reference.
  * @return array
  */
-function bp_core_set_default_email_headers( $headers, $property, $transform, $email ) {
+function bp_email_set_default_headers( $headers, $property, $transform, $email ) {
 	$headers['X-BuddyPress']      = bp_get_version();
 	$headers['X-BuddyPress-Type'] = $email->get( 'type' );
 
 	return $headers;
 }
-add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
+add_filter( 'bp_email_get_headers', 'bp_email_set_default_headers', 6, 4 );
 
 /**
  * Add default email tokens.
@@ -924,7 +924,7 @@ add_filter( 'bp_email_get_headers', 'bp_core_set_default_email_headers', 6, 4 );
  * @param BP_Email $email Email being sent.
  * @return array
  */
-function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, $email ) {
+function bp_email_set_default_tokens( $tokens, $property_name, $transform, $email ) {
 	$tokens['site.admin-email'] = bp_get_option( 'admin_email' );
 	$tokens['site.url']         = home_url();
 
@@ -953,7 +953,7 @@ function bp_core_set_default_email_tokens( $tokens, $property_name, $transform, 
 
 	return $tokens;
 }
-add_filter( 'bp_email_get_tokens', 'bp_core_set_default_email_tokens', 6, 4 );
+add_filter( 'bp_email_get_tokens', 'bp_email_set_default_tokens', 6, 4 );
 
 /**
  * Find and render the template for Email posts (the Customizer and admin previews).
