@@ -2209,8 +2209,8 @@ function bp_core_signup_send_validation_email( $user_id, $user_email, $key ) {
 			'activate_url' => esc_url( trailingslashit( bp_get_activation_page() ) . "{$key}/" ),
 			'key'          => $key,
 			'user'         => '',
-			'user_email'   => $user_email,
-			'user_id'      => $user_id,
+			'user.email'   => $user_email,
+			'user.id'      => $user_id,
 		),
 	);
 	bp_send_email( 'core-user-registration', $user_id, $args );
