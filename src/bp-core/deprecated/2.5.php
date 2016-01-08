@@ -74,7 +74,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 	if ( $property === 'to' ) {
 		$value          = array_shift( $value );
 		$recipient_name = $value->get_name();     // Value - name
-		$value          = $value->get_address();  // Key - email
+		$value          = $value->get_address();  // Key   - email
 	}
 
 	if ( $email_type === 'activity-comment' ) {
@@ -83,16 +83,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the new comment notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value User email the notification is being sent to.
-			 *                     Array key is email address, value is the name.
+			 * @param string $value
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -128,16 +124,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the new comment reply notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value User email the notification is being sent to.
-			 *                     Array key is email address, value is the name.
+			 * @param string $value
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_comment_author_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -173,16 +165,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the @mention notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value User email the notification is being sent to.
-			 *                     Array key is email address, value is the name.
+			 * @param string $value
 			 */
 			$value = apply_filters( 'bp_activity_at_message_notification_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -218,11 +206,9 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the email that the notification is going to upon successful registration without blog.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email. $meta argument unset and deprecated.
 			 *
-			 * @param array $value User email the notification is being sent to.
-			 *                     Array key is email address, value is the name.
+			 * @param string $value User email the notification is being sent to.
 			 * @param string $user The user's login name.
 			 * @param array $value User email the notification is being sent to (again).
 			 *                     Array key is email address, value is the name.
@@ -230,9 +216,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param array $meta  Deprecated in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_user_notification_to', $value, $tokens['user'], $value, $tokens['key'], array() );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -271,11 +255,9 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the email that the notification is going to upon successful registration with blog.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email. $meta argument unset and deprecated.
 			 *
-			 * @param array $value       User email the notification is being sent to.
-			 *                           Array key is email address, value is the name.
+			 * @param string $value      User email the notification is being sent to.
 			 * @param string $domain     The new blog domain.
 			 * @param string $path       The new blog path.
 			 * @param string $title      The site title.
@@ -285,9 +267,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param array  $meta       Deprecated in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_blog_notification_to', $value, $tokens['domain'], $tokens['path'], $tokens['title'], $tokens['user'], $tokens['user.email'], $tokens['key_blog'], array() );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -332,15 +312,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the email address for who is getting the friend request.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value Email address for who is getting the friend request.
+			 * @param string $value
 			 */
 			$value = apply_filters( 'friends_notification_new_request_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -376,15 +353,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the email address for whose friend request got accepted.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value Email address for whose friend request got accepted.
+			 * @param string $value Email address for whose friend request got accepted.
 			 */
 			$value = apply_filters( 'friends_notification_accepted_request_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -419,15 +393,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the group update notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value User email the notification is being sent to.
+			 * @param string $value User email the notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_group_updated_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -462,15 +433,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the group invite notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
 			 * @param string $value User email the invite notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_group_invites_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -508,15 +476,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the group promotion notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value User email the promotion notification is being sent to.
+			 * @param string $value User email the promotion notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_promoted_member_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -552,15 +517,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the group membership request will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value User email the request is being sent to.
+			 * @param string $value User email the request is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_new_membership_request_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -596,15 +558,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			/**
 			 * Filters the user email that the group membership request result will be sent to.
 			 *
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *
-			 * @param array $value User email the request is being sent to.
+			 * @param string $value User email the request is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_membership_request_completed_to', $value );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -639,16 +598,13 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the user email that the message notification will be sent to.
 			 *
 			 * @since 1.2.0
-			 * @since 2.5.0 Argument type changes from string to array.
 			 * @deprecated 2.5.0 Use the filters in BP_Email. $ud argument unset and deprecated.
 			 *
-			 * @param array $value User email the message notification is being sent to.
+			 * @param string $value User email the message notification is being sent to.
 			 * @param bool  $ud Deprecated in 2.5; now a bool (false).
 			 */
 			$value = apply_filters( 'messages_notification_new_message_to', $value, false );
-			if ( ! is_array( $value ) ) {
-				$value = array( $value => $recipient_name );
-			}
+			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -697,10 +653,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 */
 			$value = apply_filters( 'bp_new_user_email_content', $value, $tokens['user.email'], $tokens['old-user.email'], false );
 		}
-	}
-
-	if ( $property === 'to' ) {
-		$value = array( new BP_Email_Recipient( $value ) );
 	}
 
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
