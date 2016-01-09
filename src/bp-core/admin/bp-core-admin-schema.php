@@ -541,43 +541,43 @@ function bp_core_install_emails() {
 	$emails = array(
 		'activity-comment' => array(
 			'post_title'   => _x( '{{poster.name}} replied to one of your updates', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster.name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, log in and visit: {{{thread.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster.name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, visit: {{{thread.url}}}", 'email content', 'buddypress' ),
 		),
 		'activity-comment-author' => array(
 			'post_title'   => _x( '{{poster.name}} replied to one of your comments', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster.name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo view the original activity, your comment and all replies, log in and visit: {{{thread.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster.name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo view your original update and all comments, visit: {{{thread.url}}}", 'email content', 'buddypress' ),
 		),
 		'activity-at-message' => array(
 			'post_title'   => _x( '{{poster.name}} mentioned you in an update', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster.name}} mentioned you in an update:\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{{mentioned.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster.name}} mentioned you in an update:\n\n\"{{content}}\"\n\nTo respond to the message, visit: {{{mentioned.url}}}", 'email content', 'buddypress' ),
 		),
 		'groups-at-message' => array(
 			'post_title'   => _x( '{{poster.name}} mentioned you in an update', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n\"{{content}}\"\n\nTo view and respond to the message, log in and visit: {{{group-mentioned.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n\"{{content}}\"\n\nTo respond to the message, visit: {{{group-mentioned.url}}}", 'email content', 'buddypress' ),
 		),
 		'core-user-registration' => array(
-			'post_title'   => _x( 'Activate Your Account', 'email subject', 'buddypress' ),
+			'post_title'   => _x( 'Activate your account', 'email subject', 'buddypress' ),
 			'post_content' => _x( "Thanks for registering! To complete the activation of your account please click the following link:\n\n{{{activate.url}}}", 'email content', 'buddypress' ),
 		),
 		'core-user-registration-with-blog' => array(
 			'post_title'   => _x( 'Activate {{{user-site.url}}}', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{user}},\n\nThanks for registering! To complete the activation of your account and blog, please click the following link:\n\n{{{activate-site.url}}}\n\nAfter you activate, you can visit your blog here:\n\n{{{user-site.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{user}},\n\nThanks for registering! To complete the activation of your account and site, please click the following link:\n\n{{{activate-site.url}}}\n\nAfter you activate, you can visit your site here:\n\n{{{user-site.url}}}", 'email content', 'buddypress' ),
 		),
 		'friends-request' => array(
 			'post_title'   => _x( 'New friendship request from {{initiator.name}}', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{initiator.name}} wants to add you as a friend.\n\nTo view all of your pending friendship requests: {{{friend-requests.url}}}\n\nTo view {{initiator.name}}'s profile: {{{initiator.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{initiator.name}} wants to add you as a friend.\n\nTo view all pending friendship requests: {{{friend-requests.url}}}\n\nTo view {{initiator.name}}'s profile: {{{initiator.url}}}", 'email content', 'buddypress' ),
 		),
 		'friends-request-accepted' => array(
 			'post_title'   => _x( '{{friend.name}} accepted your friendship request', 'email subject', 'buddypress' ),
-			'post_content' => _x( "{{friend.name}} accepted your friend request.\n\nTo view your new {{friend.name}}'s profile: {{{friendship,url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "{{friend.name}} accepted your friend request.\n\nTo view {{friend.name}}'s profile: {{{friendship,url}}}", 'email content', 'buddypress' ),
 		),
 		'groups-details-updated' => array(
-			'post_title'   => _x( 'Group Details Updated', 'email subject', 'buddypress' ),
+			'post_title'   => _x( 'Group details updated', 'email subject', 'buddypress' ),
 			'post_content' => _x( "Group details for the group \"{{group.name}}\" were updated: {{changed_text}}\n\nTo view the group: {{{group.url}}}", 'email content', 'buddypress' ),
 		),
 		'groups-invitation' => array(
 			'post_title'   => _x( 'You have an invitation to the group: "{{group.name}}"', 'email subject', 'buddypress' ),
-			'post_content' => _x( "One of your friends {{inviter.name}} has invited you to the group: \"{{group.name}}\".\n\nTo view your group invites visit: {{{invites.url}}}\n\nTo view the group visit: {{{group.url}}}\n\nTo view {{inviter.name}}'s profile visit: {{{inviter.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "One of your friends {{inviter.name}} has invited you to the group: \"{{group.name}}\".\n\nTo view your invitations to groups, visit: {{{invites.url}}}\n\nTo view this group visit: {{{group.url}}}\n\nTo view {{inviter.name}}'s profile visit: {{{inviter.url}}}", 'email content', 'buddypress' ),
 		),
 		'groups-member-promoted' => array(
 			'post_title'   => _x( 'You have been promoted in the group: "{{group.name}}"', 'email subject', 'buddypress' ),
@@ -597,11 +597,11 @@ function bp_core_install_emails() {
 		),
 		'groups-membership-request-accepted' => array(
 			'post_title'   => _x( 'Membership request for group "{{group.name}}" accepted', 'email subject', 'buddypress' ),
-			'post_content' => _x( "Your membership request for the group \"{{group.name}}\" has been accepted.\n\nTo view the group please login and visit: {{{group.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "Your membership request for the group \"{{group.name}}\" has been accepted.\n\nTo view the group please visit: {{{group.url}}}", 'email content', 'buddypress' ),
 		),
 		'groups-membership-request-rejected' => array(
 			'post_title'   => _x( 'Membership request for group "{{group.name}}" rejected', 'email subject', 'buddypress' ),
-			'post_content' => _x( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo view the group please login and visit: {{{group.url}}}", 'email content', 'buddypress' ),
+			'post_content' => _x( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo view the group please visit: {{{group.url}}}", 'email content', 'buddypress' ),
 		),
 	);
 
