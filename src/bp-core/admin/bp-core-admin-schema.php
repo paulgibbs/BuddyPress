@@ -609,7 +609,7 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Membership request for group: {{group.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{requesting-user.name}} wants to join the group \"{{group.name}}\".\n\As you are the administrator of this group, you must either accept or reject the membership request.\n\nTo view all pending membership requests, visit:\n{{{group-requests.url}}}\n\nTo view {{requesting-user.name}}'s profile, visit: {{{profile.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{requesting-user.name}} wants to join the group \"{{group.name}}\".\n\As you are the administrator of this group, you must either accept or reject the membership request.\n\nTo view all pending membership requests, visit: {{{group-requests.url}}}\n\nTo view {{requesting-user.name}}'s profile, visit: {{{profile.url}}}", 'email content', 'buddypress' ),
 		),
 		'messages-unread' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
