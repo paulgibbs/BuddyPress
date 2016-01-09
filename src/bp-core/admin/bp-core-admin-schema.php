@@ -633,7 +633,7 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Membership request for group "{{group.name}}" rejected', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo  request membership again, visit: {{{group.url}}}", 'buddypress' ),
+			'post_content' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo request membership again, visit: {{{group.url}}}", 'buddypress' ),
 		),
 	);
 
