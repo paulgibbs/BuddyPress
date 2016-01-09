@@ -655,6 +655,10 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		}
 	}
 
+	if ( $property === 'to' ) {
+		$value = array( $value );
+	}
+
 	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 	return $value;
 }
