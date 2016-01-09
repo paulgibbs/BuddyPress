@@ -138,24 +138,26 @@ class BP_Email {
 
 		// SERVER_NAME isn't always set (e.g CLI).
 		if ( ! empty( $_SERVER['SERVER_NAME'] ) ) {
-			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
-			if ( substr( $sitename, 0, 4 ) === 'www.' ) {
-				$sitename = substr( $sitename, 4 );
+			$domain = strtolower( $_SERVER['SERVER_NAME'] );
+			if ( substr( $domain, 0, 4 ) === 'www.' ) {
+				$domain = substr( $domain, 4 );
 			}
 
 		} elseif ( function_exists( 'gethostname' ) && gethostname() !== false ) {
-			$sitename = gethostname();
+			$domain = gethostname();
 
 		} elseif ( php_uname( 'n' ) !== false ) {
-			$sitename = php_uname( 'n' );
+			$domain = php_uname( 'n' );
 
 		} else {
-			$sitename = 'localhost.localdomain';
+			$domain = 'localhost.localdomain';
 		}
 
+		// This was escaped with esc_html on the way into the database in sanitize_option().
+		$site_name = wp_specialchars_decode( bp_get_option( 'blogname' ), ENT_QUOTES );
 
-		$this->from( "wordpress@$sitename", get_bloginfo( 'name' ) );
-		$this->reply_to( bp_get_option( 'admin_email' ), bp_get_option( 'blogname' ) );
+		$this->from( "wordpress@$domain", $site_name );
+		$this->reply_to( bp_get_option( 'admin_email' ), $site_name );
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
