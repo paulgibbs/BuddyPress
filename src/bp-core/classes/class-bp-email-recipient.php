@@ -59,8 +59,11 @@ class BP_Email_Recipient {
 			$this->user_object = is_object( $email_or_user ) ? $email_or_user : get_user_by( 'ID', $email_or_user );
 
 			if ( $this->user_object ) {
+				// This is escaped with esc_html in bp_core_get_user_displayname()
+				$name = wp_specialchars_decode( bp_core_get_user_displayname( $this->user_object->ID ), ENT_QUOTES );
+
 				$this->address = $this->user_object->user_email;
-				$this->name    = bp_core_get_user_displayname( $this->user_object->ID );
+				$this->name    = $name;
 			}
 
 		// Array, address and name.
