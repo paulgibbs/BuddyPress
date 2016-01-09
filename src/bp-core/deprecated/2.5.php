@@ -61,13 +61,13 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		'settings-verify-email-change',
 	);
 
-	remove_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
+	remove_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 20, 4 );
 	$email_type = $email->get( 'type' );
 	$tokens     = $email->get( 'tokens' );
+	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 20, 4 );
 
 	// Backpat for pre-2.5 emails only.
 	if ( ! in_array( $email_type, $pre_2_5_emails, true ) ) {
-		add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 		return $value;
 	}
 
@@ -659,10 +659,9 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 		$value = array( $value );
 	}
 
-	add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
 	return $value;
 }
-add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 4, 4 );
+add_filter( 'bp_email_get_property', 'bp_core_deprecated_email_filters', 20, 4 );
 
 /**
  * Add support for pre-2.5 email actions.
@@ -694,15 +693,15 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		'settings-verify-email-change',
 	);
 
-	remove_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
+	remove_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 20, 2 );
 	$email_content = $email->get( 'content' );
 	$email_subject = $email->get( 'subject' );
 	$email_type    = $email->get( 'type' );
 	$tokens        = $email->get( 'tokens' );
+	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 20, 2 );
 
 	// Backpat for pre-2.5 emails only.
 	if ( ! in_array( $email_type, $pre_2_5_emails, true ) ) {
-		add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
 		return $value;
 	}
 
@@ -894,7 +893,5 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 */
 		do_action( 'bp_groups_sent_membership_approved_email', $tokens['requesting-user.id'], $email_subject, $email_content, $tokens['group.id'] );
 	}
-
-	add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
 }
-add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 4, 2 );
+add_action( 'bp_sent_email', 'bp_core_deprecated_email_actions', 20, 2 );
