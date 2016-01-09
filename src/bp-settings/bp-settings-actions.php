@@ -107,7 +107,6 @@ function bp_settings_action_general() {
 						'tokens' => array(
 							'displayname'    => bp_core_get_user_displayname( bp_displayed_user_id() ),
 							'old-user.email' => $old_user_email,
-							'user-site.name' => bp_get_site_name(),
 							'user.email'     => $user_email,
 							'verify.url'     => esc_url( $verify_link ),
 						),

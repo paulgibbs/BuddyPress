@@ -543,97 +543,97 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} replied to one of your updates', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo view your original update and all comments, visit: {{{thread.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{poster.name}} replied to one of your updates:\n\n\"{{content}}\"\n\nTo reply or read all comments, visit: {{{thread.url}}}", 'buddypress' ),
 		),
 		'activity-comment-author' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} replied to one of your comments', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo view your original update and all comments, visit: {{{thread.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{poster.name}} replied to one of your comments:\n\n\"{{content}}\"\n\nTo reply or read all comments, visit: {{{thread.url}}}", 'buddypress' ),
 		),
 		'activity-at-message' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} mentioned you in an update', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} mentioned you in an update:\n\n\"{{content}}\"\n\nTo respond to the message, visit: {{{mentioned.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{poster.name}} mentioned you in an update:\n\n\"{{content}}\"\n\nTo reply, visit: {{{mentioned.url}}}", 'buddypress' ),
 		),
 		'groups-at-message' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} mentioned you in an update', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n\"{{content}}\"\n\nTo respond to the message, visit: {{{group-mentioned.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n\"{{content}}\"\n\nTo reply, visit: {{{group-mentioned.url}}}", 'buddypress' ),
 		),
 		'core-user-registration' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Activate your account', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "Thanks for registering! To complete the activation of your account, go to the following link:\n\n{{{activate.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "Thanks for registering!\n\nTo complete the activation of your account, go to the following link: {{{activate.url}}}", 'buddypress' ),
 		),
 		'core-user-registration-with-blog' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Activate {{{user-site.url}}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{user}},\n\nThanks for registering! To complete the activation of your account and site, go to the following link:\n\n{{{activate-site.url}}}\n\nAfter you activate, you can visit your site at:\n\n{{{user-site.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "Thanks for registering!\n\nTo complete the activation of your account and site, go to the following link: {{{activate-site.url}}}\n\nAfter you activate, you can visit your site at: {{{user-site.url}}}", 'buddypress' ),
 		),
 		'friends-request' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'New friendship request from {{initiator.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{initiator.name}} wants to add you as a friend.\n\nTo view all of your pending friendship requests, visit: {{{friend-requests.url}}}\n\nTo view {{initiator.name}}'s profile, visit: {{{initiator.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{initiator.name}} wants to add you as a friend.\n\nTo view all of your pending friendship requests, visit: {{{friend-requests.url}}}\n\nTo view {{initiator.name}}'s profile, visit: {{{initiator.url}}}", 'buddypress' ),
 		),
 		'friends-request-accepted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{friend.name}} accepted your friendship request', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{friend.name}} accepted your friend request.\n\nTo view {{friend.name}}'s profile, visit: {{{friendship,url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{friend.name}} accepted your friend request.\n\nTo learn more about them, visit their profile: {{{friendship.url}}}", 'buddypress' ),
 		),
 		'groups-details-updated' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Group details updated', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "Group details for the group \"{{group.name}}\" were updated: {{changed_text}}\n\nTo view the group, visit: {{{group.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "Group details for the group \"{{group.name}}\" were updated: {{changed_text}}\n\nTo view the group, visit: {{{group.url}}}", 'buddypress' ),
 		),
 		'groups-invitation' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'You have an invitation to the group: "{{group.name}}"', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "One of your friends {{inviter.name}} has invited you to the group: \"{{group.name}}\".\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo view this group, visit: {{{group.url}}}\n\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "One of your friends {{inviter.name}} has invited you to the group: \"{{group.name}}\".\n\nTo accept your invitation, visit: {{{invites.url}}}\n\nTo view this group, visit: {{{group.url}}}\n\nTo view {{inviter.name}}'s profile, visit: {{{inviter.url}}}", 'buddypress' ),
 		),
 		'groups-member-promoted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'You have been promoted in the group: "{{group.name}}"', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "You have been promoted to {{promoted_to}} for the group: \"{{group.name}}\".\n\nTo view the group, visit: {{{group.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "You have been promoted to {{promoted_to}} for the group: \"{{group.name}}\".\n\nTo view the group, visit: {{{group.url}}}", 'buddypress' ),
 		),
 		'groups-membership-request' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Membership request for group: {{group.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{requesting-user.name}} wants to join the group \"{{group.name}}\".\n\As you are the administrator of this group, you must either accept or reject the membership request.\n\nTo view all pending membership requests, visit: {{{group-requests.url}}}\n\nTo view {{requesting-user.name}}'s profile, visit: {{{profile.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "{{requesting-user.name}} wants to join the group \"{{group.name}}\". As you are the administrator of this group, you must either accept or reject the membership request.\n\nTo view all pending membership requests, visit: {{{group-requests.url}}}\n\nTo view {{requesting-user.name}}'s profile, visit: {{{profile.url}}}", 'buddypress' ),
 		),
 		'messages-unread' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'New message from {{sender.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{sender.name}} sent you a new message:\n\nSubject: {{subject}}\n\n\"{{content}}\"\n\nTo respond to this message, visit: {{{message.url}}}", 'buddypress' ),
+			'post_content' => __( "{{sender.name}} sent you a new message:\n\nSubject: {{subject}}\n\n\"{{content}}\"\n\nTo reply, visit: {{{message.url}}}", 'buddypress' ),
 		),
 		'settings-verify-email-change' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Verify your new email address', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "Dear {{displayname}},\n\nYou recently changed the email address associated with your account on {{user-site.name}}.\nIf this is correct, go to on the following link to complete the change:\n\n{{{verify.url}}}\n\nOtherwise, you can safely ignore and delete this email if you do not want to take this action or if you think you have received this email in error.\n\nThis email has been sent to {{user.email}}.", 'email content', 'buddypress' ),
+			'post_content' => __( "You recently changed the email address associated with your account on {{site.name}}.\nIf this is correct, go to the following link to complete the change: {{{verify.url}}}\n\nOtherwise, you can safely ignore and delete this email if you've changed your mind, or if you think you have received this email in error.", 'buddypress' ),
 		),
 		'groups-membership-request-accepted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Membership request for group "{{group.name}}" accepted', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "Your membership request for the group \"{{group.name}}\" has been accepted.\n\nTo view the group, visit: {{{group.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "Your membership request for the group \"{{group.name}}\" has been accepted.\n\nTo view the group, visit: {{{group.url}}}", 'buddypress' ),
 		),
 		'groups-membership-request-rejected' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'Membership request for group "{{group.name}}" rejected', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo view the group, visit: {{{group.url}}}", 'email content', 'buddypress' ),
+			'post_content' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo  request membership again, visit: {{{group.url}}}", 'buddypress' ),
 		),
 	);
 
