@@ -107,13 +107,13 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the new comment notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string $value         Email notification message text.
 			 * @param string $poster_name   Name of the person who made the comment.
 			 * @param string $content       Content of the comment.
 			 * @param string $thread_link   URL permalink for the activity thread.
-			 * @param string $deprecated    Optional. Removed in 2.5.0.
+			 * @param string $deprecated    Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_message', $value, $tokens['poster.name'], $tokens['content'], $tokens['thread.url'], '' );
 		}
@@ -148,12 +148,12 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the new comment reply notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string $value         Email notification message text.
 			 * @param string $poster_name   Name of the person who made the comment.
 			 * @param string $content       Content of the comment.
-			 * @param string $deprecated    Optional. Removed in 2.5.0.
+			 * @param string $deprecated    Removed in 2.5; now an empty string.
 			 * @param string $thread_link   URL permalink for the activity thread.
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_comment_author_message', $value, $tokens['poster.name'], $tokens['content'], '', $tokens['thread.url'] );
@@ -189,13 +189,13 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the @mention notification message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string $message       Email notification message text.
 			 * @param string $poster_name   Name of the person who made the @mention.
 			 * @param string $content       Content of the @mention.
 			 * @param string $message_link  URL permalink for the activity message.
-			 * @param string $deprecated    Optional. Removed in 2.5.0.
+			 * @param string $deprecated    Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters( 'bp_activity_at_message_notification_message', $value, $tokens['poster.name'], $tokens['content'], $tokens['mentioned.url'], '' );
 		}
@@ -213,7 +213,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param array $value User email the notification is being sent to (again).
 			 *                     Array key is email address, value is the name.
 			 * @param string $key  The activation key created in wpmu_signup_blog().
-			 * @param array $meta  Deprecated in 2.5; now an empty array.
+			 * @param array $meta  Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_user_notification_to', $value, $tokens['user'], $value, $tokens['key'], array() );
 			$value = new BP_Email_Recipient( $value, $recipient_name );
@@ -229,7 +229,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $user       The user's login name.
 			 * @param string $user_email The user's email address.
 			 * @param string $key        The activation key created in wpmu_signup_blog().
-			 * @param array $meta        Deprecated in 2.5; now an empty array.
+			 * @param array $meta        Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_user_notification_subject', $value, $tokens['user'], $tokens['user.email'], $tokens['key'], array() );
 
@@ -244,7 +244,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $user       The user's login name.
 			 * @param string $user_email The user's email address.
 			 * @param string $key        The activation key created in wpmu_signup_blog().
-			 * @param array $meta        Deprecated in 2.5; now an empty array.
+			 * @param array $meta        Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_user_notification_message', $value, $tokens['user'], $tokens['user.email'], $tokens['key'], array() );
 		}
@@ -264,7 +264,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $user       The user's login name.
 			 * @param string $user_email The user's email address.
 			 * @param string $key        The activation key created in wpmu_signup_blog().
-			 * @param array  $meta       Deprecated in 2.5; now an empty array.
+			 * @param array  $meta       Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_blog_notification_to', $value, $tokens['domain'], $tokens['path'], $tokens['title'], $tokens['user'], $tokens['user.email'], $tokens['key_blog'], array() );
 			$value = new BP_Email_Recipient( $value, $recipient_name );
@@ -283,7 +283,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $user       The user's login name.
 			 * @param string $user_email The user's email address.
 			 * @param string $key        The activation key created in wpmu_signup_blog().
-			 * @param array  $meta       Deprecated in 2.5; now an empty array.
+			 * @param array  $meta       Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_blog_notification_subject', $value, $tokens['domain'], $tokens['path'], $tokens['title'], $tokens['user'], $tokens['user.email'], $tokens['key_blog'], array() );
 
@@ -301,7 +301,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $user       The user's login name.
 			 * @param string $user_email The user's email address.
 			 * @param string $key        The activation key created in wpmu_signup_blog().
-			 * @param array  $meta       Deprecated in 2.5; now an empty array.
+			 * @param array  $meta       Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_blog_notification_message', $value, $tokens['domain'], $tokens['path'], $tokens['title'], $tokens['user'], $tokens['user.email'], $tokens['key_blog'], array() );
 		}
@@ -342,7 +342,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $initiator_name    Name of the person requesting friendship.
 			 * @param string $initiator_link    Profile link of person requesting friendship.
 			 * @param string $all_requests_link User's friends request management link.
-			 * @param string $settings_link     Deprecated in 2.5; now an empty string.
+			 * @param string $settings_link     Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters( 'friends_notification_new_request_message', $value, $tokens['initiator.name'], $tokens['initiator.url'], $tokens['friend-requests.url'], '' );
 		}
@@ -382,7 +382,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value         Message to be used in friend request email.
 			 * @param string $friend_name   Name of the person who accepted the friendship request.
 			 * @param string $friend_link   Profile link of person who accepted the friendship request.
-			 * @param string $settings_link Deprecated in 2.5; now an empty string.
+			 * @param string $settings_link Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters( 'friends_notification_accepted_request_message', $value, $tokens['friend.name'], $tokens['friendship.url'], '' );
 		}
@@ -422,7 +422,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string          $value         Email notification message text.
 			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
 			 * @param string          $group_link    URL permalink to the group that was updated.
-			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
+			 * @param string          $settings_link Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_group_updated_message', array( $value, &$tokens['group'], $tokens['group.url'], '' ) );
 		}
@@ -465,7 +465,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string          $inviter_link  Profile link for the person doing the inviting.
 			 * @param string          $invites_link  URL permalink for the invited user's invite management screen.
 			 * @param string          $group_link    URL permalink for the group that the invite was related to.
-			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
+			 * @param string          $settings_link Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_group_invites_message', array( $value, &$tokens['group'], $tokens['inviter-profile.name'], $tokens['inviter-profile.url'], $tokens['invites.url'], $tokens['group.url'], '' ) );
 		}
@@ -506,7 +506,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
 			 * @param string          $promoted_to   Role that the user was promoted to within the group.
 			 * @param string          $group_link    URL permalink for the group that the promotion was related to.
-			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
+			 * @param string          $settings_link Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_promoted_member_message', array( $value, &$tokens['group'], $tokens['promoted_to'], $tokens['group.url'], '' ) );
 		}
@@ -541,14 +541,14 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * Filters the group membership request message that will be sent to user.
 			 *
 			 * @since 1.2.0
-			 * @deprecated 2.5.0 Use the filters in BP_Email.
+			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
 			 * @param string          $value                Membership request email message text.
 			 * @param BP_Groups_Group $group                Object holding the current group instance. Passed by reference.
 			 * @param string          $requesting_user_name Username of who is requesting membership.
 			 * @param string          $profile_link         URL permalink for the profile for the user requesting membership.
 			 * @param string          $group_requests       URL permalink for the group requests screen for group being requested membership to.
-			 * @param string          $settings_link        URL permalink for the user's notification settings area.
+			 * @param string          $deprecated           Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_new_membership_request_message', array( $value, &$tokens['group'], $tokens['requesting-user.name'], $tokens['profile.url'], $tokens['group-requests.url'], '' ) );
 		}
@@ -584,10 +584,10 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @since 1.2.0
 			 * @deprecated 2.5.0 Use the filters in BP_Email. $settings_link argument unset and deprecated.
 			 *
-			 * @param string          $value         Membership request result email message text.
-			 * @param BP_Groups_Group $group         Object holding the current group instance. Passed by reference.
-			 * @param string          $group_link    URL permalink for the group that was requested membership for.
-			 * @param string          $settings_link Deprecated in 2.5; now an empty string.
+			 * @param string          $value      Membership request result email message text.
+			 * @param BP_Groups_Group $group      Object holding the current group instance. Passed by reference.
+			 * @param string          $group_link URL permalink for the group that was requested membership for.
+			 * @param string          $deprecated Removed in 2.5; now an empty string.
 			 */
 			$value = apply_filters_ref_array( 'groups_notification_membership_request_completed_message', array( $value, &$tokens['group'], $tokens['group.url'], '' ) );
 		}
@@ -600,8 +600,8 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @since 1.2.0
 			 * @deprecated 2.5.0 Use the filters in BP_Email. $ud argument unset and deprecated.
 			 *
-			 * @param string $value User email the message notification is being sent to.
-			 * @param bool  $ud Deprecated in 2.5; now a bool (false).
+			 * @param string $value      User email the message notification is being sent to.
+			 * @param bool   $deprecated Removed in 2.5; now a bool (false).
 			 */
 			$value = apply_filters( 'messages_notification_new_message_to', $value, false );
 			$value = new BP_Email_Recipient( $value, $recipient_name );
@@ -615,7 +615,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 *
 			 * @param string $value       Email notification subject text.
 			 * @param string $sender_name Name of the person who sent the message.
-			 * @param bool   $ud          Deprecated in 2.5; now a bool (false).
+			 * @param bool   $deprecated  Removed in 2.5; now a bool (false).
 			 */
 			$value = apply_filters( 'messages_notification_new_message_subject', $value, $tokens['sender.name'], false );
 
@@ -627,13 +627,13 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @deprecated 2.5.0 Use the filters in BP_Email.
 			 *                   $settings_link and $ud arguments unset and deprecated.
 			 *
-			 * @param string $value         Email notification message text.
-			 * @param string $sender_name   Name of the person who sent the message.
-			 * @param string $subject       Email notification subject text.
-			 * @param string $content       Content of the message.
-			 * @param string $message_link  URL permalink for the message.
-			 * @param string $settings_link Deprecated in 2.5; now an empty string.
-			 * @param bool   $ud            Deprecated in 2.5; now a bool (false).
+			 * @param string $value        Email notification message text.
+			 * @param string $sender_name  Name of the person who sent the message.
+			 * @param string $subject      Email notification subject text.
+			 * @param string $content      Content of the message.
+			 * @param string $message_link URL permalink for the message.
+			 * @param string $deprecated   Removed in 2.5; now an empty string.
+			 * @param bool   $deprecated   Removed in 2.5; now a bool (false).
 			 */
 			$value = apply_filters( 'messages_notification_new_message_message', $value, $tokens['sender.name'], $tokens['subject'], $tokens['content'], $tokens['message.url'], '', false );
 		}
@@ -649,7 +649,7 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string  $value          Text of the email.
 			 * @param string  $user_email     New user email that the current user has changed to.
 			 * @param string  $old_user_email Existing email address for the current user.
-			 * @param bool    $update_user    Deprecated in 2.5; now a bool (false).
+			 * @param bool    $deprecated     Removed in 2.5; now a bool (false).
 			 */
 			$value = apply_filters( 'bp_new_user_email_content', $value, $tokens['user.email'], $tokens['old-user.email'], false );
 		}
@@ -717,7 +717,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param string $email_content Email notification message text.
 		 * @param int    $comment_id    ID for the newly received comment.
 		 * @param int    $commenter_id  ID of the user who made the comment.
-		 * @param array  $params        Deprecated in 2.5; now an empty array.
+		 * @param array  $deprecated    Removed in 2.5; now an empty array.
 		 */
 		do_action( 'bp_activity_sent_reply_to_update_email', $tokens['original_activity.user_id'], $email_subject, $email_content, $tokens['comment.id'], $tokens['commenter.id'], array() );
 
@@ -733,7 +733,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param string $email_content Email notification message text.
 		 * @param int    $comment_id    ID for the newly received comment.
 		 * @param int    $commenter_id  ID of the user who made the comment.
-		 * @param array  $params        Deprecated in 2.5; now an empty array.
+		 * @param array  $deprecated    Removed in 2.5; now an empty array.
 		 */
 		do_action( 'bp_activity_sent_reply_to_reply_email', $tokens['parent-comment-user.id'], $email_subject, $email_content, $tokens['comment.id'], $tokens['commenter.id'], array() );
 
@@ -780,7 +780,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 			 * @param string $user          The user's login name.
 			 * @param string $user_email    The user's email address.
 			 * @param string $key           The activation key created in wpmu_signup_blog().
-			 * @param array  $meta          Deprecated in 2.5; now an empty array.
+			 * @param array  $meta          Removed in 2.5; now an empty array.
 			 */
 			do_action( 'bp_core_sent_user_signup_email', bp_get_option( 'admin_email' ), $email_subject, $email_content, $tokens['user'], $tokens['user.email'], $tokens['key'], array() );
 		}
@@ -801,7 +801,7 @@ function bp_core_deprecated_email_actions( $email, $delivery_status ) {
 		 * @param string $user          The user's login name.
 		 * @param string $user_email    The user's email address.
 		 * @param string $key           The activation key created in wpmu_signup_blog().
-		 * @param array  $meta          Deprecated in 2.5; now an empty array.
+		 * @param array  $meta          Removed in 2.5; now an empty array.
 		 */
 		do_action( 'bp_core_sent_blog_signup_email', bp_get_option( 'admin_email' ), $email_subject, $email_content, $tokens['domain'], $tokens['path'], $tokens['title'], $tokens['user'], $tokens['user.email'], $tokens['key_blog'], array() );
 
