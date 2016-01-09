@@ -73,7 +73,7 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 				'changed_text' => $changed_text,
 				'group'        => $group,
 				'group.id'     => $group_id,
-				'group.url'    => bp_get_group_permalink( $group ),
+				'group.url'    => esc_url( bp_get_group_permalink( $group ) ),
 				'group.name'   => $group->name,
 			),
 		);
@@ -132,9 +132,9 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 			'group'                => $group,
 			'group.name'           => $group->name,
 			'group.id'             => $group_id,
-			'group-requests.url'   => bp_get_group_permalink( $group ) . 'admin/membership-requests',
+			'group-requests.url'   => esc_url( bp_get_group_permalink( $group ) . 'admin/membership-requests' ),
 			'membership.id'        => $membership_id,
-			'profile.url'          => bp_core_get_user_domain( $requesting_user_id ),
+			'profile.url'          => esc_url( bp_core_get_user_domain( $requesting_user_id ) ),
 			'requesting-user.id'   => $requesting_user_id,
 			'requesting-user.name' => bp_core_get_user_displayname( $requesting_user_id ),
 		),
@@ -180,7 +180,7 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 			'group'              => $group,
 			'group.id'           => $group_id,
 			'group.name'         => $group->name,
-			'group.url'          => bp_get_group_permalink( $group ),
+			'group.url'          => esc_url( bp_get_group_permalink( $group ) ),
 			'requesting-user.id' => $requesting_user_id,
 		),
 	);
@@ -234,7 +234,7 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 		'tokens' => array(
 			'group'       => $group,
 			'group.id'    => $group_id,
-			'group.url'   => bp_get_group_permalink( $group ),
+			'group.url'   => esc_url( bp_get_group_permalink( $group ) ),
 			'group.name'  => $group->name,
 			'promoted_to' => $promoted_to,
 			'user.id'     => $user_id,
@@ -291,7 +291,7 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 			'inviter-profile.id'   => $invited_user_id,
 			'inviter-profile.name' => bp_core_get_userlink( $inviter_user_id, true, false, true ),
 			'inviter-profile.url'  => bp_core_get_user_domain( $inviter_user_id ),
-			'invites.url'          => trailingslashit( $invited_link . '/invites/' ),
+			'invites.url'          => esc_url( $invited_link . '/invites/' ),
 		),
 	);
 	bp_send_email( 'groups-invitation', $invited_user_id, $args );

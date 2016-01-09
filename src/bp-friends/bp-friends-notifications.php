@@ -35,11 +35,11 @@ function friends_notification_new_request( $friendship_id, $initiator_id, $frien
 
 	$args = array(
 		'tokens' => array(
-			'friend-requests.url' => bp_core_get_user_domain( $friend_id ) . bp_get_friends_slug() . '/requests/',
+			'friend-requests.url' => esc_url( bp_core_get_user_domain( $friend_id ) . bp_get_friends_slug() . '/requests/' ),
 			'friend.id'           => $friend_id,
 			'friendship.id'       => $friendship_id,
 			'initiator.id'        => $initiator_id,
-			'initiator.url'       => bp_core_get_user_domain( $initiator_id ),
+			'initiator.url'       => esc_url( bp_core_get_user_domain( $initiator_id ) ),
 			'initiator.name'      => bp_core_get_user_displayname( $initiator_id ),
 		),
 	);
@@ -70,7 +70,7 @@ function friends_notification_accepted_request( $friendship_id, $initiator_id, $
 	$args = array(
 		'tokens' => array(
 			'friend.id'      => $friend_id,
-			'friendship.url' => bp_core_get_user_domain( $friend_id ),
+			'friendship.url' => esc_url( bp_core_get_user_domain( $friend_id ) ),
 			'friend.name'    => bp_core_get_user_displayname( $friend_id ),
 			'friendship.id'  => $friendship_id,
 			'initiator.id'   => $initiator_id,

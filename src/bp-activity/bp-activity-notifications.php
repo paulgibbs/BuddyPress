@@ -131,7 +131,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 				'content'                   => $content,
 				'original_activity.user_id' => $original_activity->user_id,
 				'poster.name'               => $poster_name,
-				'thread.url'                => $thread_link,
+				'thread.url'                => esc_url( $thread_link ),
 			),
 		);
 
@@ -157,7 +157,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 				'content'                => $content,
 				'parent-comment-user.id' => $parent_comment->user_id,
 				'poster.name'            => $poster_name,
-				'thread.url'             => $thread_link,
+				'thread.url'             => esc_url( $thread_link ),
 			),
 		);
 

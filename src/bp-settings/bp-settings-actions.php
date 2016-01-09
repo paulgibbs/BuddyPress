@@ -100,7 +100,7 @@ function bp_settings_action_general() {
 					);
 
 					bp_update_user_meta( bp_displayed_user_id(), 'pending_email_change', $pending_email );
-					$verify_link = esc_url( bp_displayed_user_domain() . bp_get_settings_slug() . '/?verify_email_change=' . $hash );
+					$verify_link = bp_displayed_user_domain() . bp_get_settings_slug() . '/?verify_email_change=' . $hash;
 
 					// Send the verification email
 					$args = array(
@@ -109,7 +109,7 @@ function bp_settings_action_general() {
 							'old-user.email' => $old_user_email,
 							'user-site.name' => bp_get_site_name(),
 							'user.email'     => $user_email,
-							'verify.url'     => $verify_link,
+							'verify.url'     => esc_url( $verify_link ),
 						),
 					);
 					bp_send_email( 'settings-verify-email-change', bp_displayed_user_id(), $args );
