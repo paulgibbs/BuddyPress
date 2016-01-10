@@ -281,7 +281,7 @@ class BP_Email {
 			$content = str_replace( ':', '', $content );
 			$name    = str_replace( ':', '', $name );
 
-			$new_headers[ $name ] = $content;
+			$new_headers[ sanitize_key( $name ) ] = sanitize_text_field( $content );
 		}
 
 		/**
@@ -376,7 +376,6 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function content_html( $content ) {
-		// djpaultodo kses this?
 
 		/**
 		 * Filters the new value of the email's "content" property (HTML).
@@ -400,7 +399,6 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function content_plaintext( $content ) {
-		// djpaultodo kses this?
 
 		/**
 		 * Filters the new value of the email's "content" property (plain text).
@@ -484,6 +482,7 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function post_object( WP_Post $post ) {
+
 		/**
 		 * Filters the new value of the email's "post object" property.
 		 *
@@ -549,7 +548,6 @@ class BP_Email {
 	 * @return BP_Email
 	 */
 	public function subject( $subject ) {
-		$subject = sanitize_text_field( $subject );
 
 		/**
 		 * Filters the new value of the subject email property.
@@ -567,13 +565,15 @@ class BP_Email {
 	/**
 	 * Set the email template (the HTML wrapper around the email content).
 	 *
+	 * This needs to include the string "{{{content}}}" to have the post content added
+	 * when the email template is rendered.
+	 *
 	 * @since 2.5.0
 	 *
 	 * @param string $template Email template. Assumed to be HTML.
 	 * @return BP_Email
 	 */
 	public function template( $template ) {
-		// djpaultodo kses this?
 
 		/**
 		 * Filters the new value of the template email property.
@@ -643,7 +643,7 @@ class BP_Email {
 		$formatted_tokens = array();
 
 		foreach ( $tokens as $name => $value ) {
-			$name                      = str_replace( array( '{', '}' ), '', $name );
+			$name                      = str_replace( array( '{', '}' ), '', sanitize_text_field( $name ) );
 			$formatted_tokens[ $name ] = $value;
 		}
 

@@ -53,6 +53,7 @@ class BP_Email_Recipient {
 	 * @param string $name Optional. If $email_or_user is a string, this is the recipient's name.
 	 */
 	public function __construct( $email_or_user, $name = '' ) {
+		$name = sanitize_text_field( $name );
 
 		// User ID, WP_User object.
 		if ( is_int( $email_or_user ) || is_object( $email_or_user ) ) {
@@ -63,10 +64,10 @@ class BP_Email_Recipient {
 				$name = wp_specialchars_decode( bp_core_get_user_displayname( $this->user_object->ID ), ENT_QUOTES );
 
 				$this->address = $this->user_object->user_email;
-				$this->name    = $name;
+				$this->name    = sanitize_text_field( $name );
 			}
 
-		// Array, address and name.
+		// Array, address, and name.
 		} else {
 			if ( ! is_array( $email_or_user ) ) {
 				$email_or_user = array( $email_or_user => $name );
@@ -81,11 +82,10 @@ class BP_Email_Recipient {
 			}
 
 			if ( is_email( $address ) ) {
-				$address = sanitize_email( $address );
+				$this->address = sanitize_email( $address );
 			}
 
-			$this->address = $address;
-			$this->name    = $name;
+			$this->name = $name;
 		}
 
 		/**
