@@ -719,18 +719,16 @@ class BP_Email {
 	 * @return string
 	 */
 	public static function replace_tokens( $text, $tokens ) {
-		foreach ( $tokens as $token => &$replacement ) {
-			if ( is_callable( $replacement ) ) {
-				$replacement = call_user_func( $replacement );
-			}
-		}
-
 		$unescaped = array();
 		$escaped   = array();
 
-		foreach ( $tokens as $name => $replacement ) {
-			$unescaped[ '{{{' . $name . '}}}' ] = $replacement;
-			$escaped[ '{{' . $name . '}}' ]     = esc_html( $replacement );
+		foreach ( $tokens as $token => $value ) {
+			if ( is_callable( $value ) ) {
+				$value = call_user_func( $value );
+			}
+
+			$unescaped[ '{{{' . $token . '}}}' ] = $value;
+			$escaped[ '{{' . $token . '}}' ]     = esc_html( $value );
 		}
 
 		$text = strtr( $text, $unescaped );  // Do first.
