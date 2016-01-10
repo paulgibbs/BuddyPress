@@ -982,7 +982,7 @@ function bp_email_add_link_color_to_template( $value, $property_name, $transform
 	$replacement = 'style="color: ' . esc_attr( $settings['highlight_color'] ) . ';';
 
 	// Find all links.
-	preg_match_all( '#<a[^>]+>#i', $value, $links );
+	preg_match_all( '#<a[^>]+>#i', $value, $links, PREG_SET_ORDER );
 	foreach ( $links as $link ) {
 		$new_link = $link = array_shift( $link );
 
