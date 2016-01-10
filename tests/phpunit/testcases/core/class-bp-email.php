@@ -143,6 +143,16 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		// Template has a default value, but it can't be blank.
 		$this->assertTrue( is_wp_error( $result ) );
-		$this->assertSame( $result->get_error_code(), 'missing_parameter' );
+		$this->assertSame( 'missing_parameter', $result->get_error_code() );
+	}
+
+	public function test_invalid_tags_should_be_removed_from_html_content() {
+		$message = '<b>hello world</b><iframe src="https://example.com"></iframe><b>hello world</b>';
+		$email   = new BP_Email( 'fake_type' );
+
+		$email->content_html( $message );
+		$email->content_type( 'html' );
+
+		$this->assertSame( '<b>hello world</b><b>hello world</b>', $email->get( 'content' ) );
 	}
 }
