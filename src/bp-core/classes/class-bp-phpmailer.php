@@ -67,8 +67,16 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		 * Content.
 		 */
 
-		$phpmailer->msgHTML( $email->get( 'template', 'add-content' ), '', 'wp_strip_all_tags' );  // djpaultodo: is this adequate?
 		$phpmailer->Subject = $email->get( 'subject', 'replace-tokens' );
+
+		if ( $this->get( 'content_type' ) === 'html' ) {
+			$phpmailer->msgHTML( $email->get( 'template', 'add-content' ), '', 'wp_strip_all_tags' );
+			$phpmailer->AltBody = PHPMailer::normalizeBreaks( $email->get( 'template_plaintext', 'replace-tokens' ) );
+
+		} else {
+			$phpmailer->IsHTML( false );
+			$phpmailer->Body = PHPMailer::normalizeBreaks( $email->get( 'template_plaintext', 'replace-tokens' ) );
+		}
 
 		$recipient = $email->get( 'from' );
 		try {

@@ -34,13 +34,31 @@ class BP_Email {
 	protected $cc = array();
 
 	/**
-	 * Email content.
+	 * Email content (HTML).
 	 *
 	 * @since 2.5.0
 	 *
 	 * @var string
 	 */
-	protected $content = '';
+	protected $content_html = '';
+
+	/**
+	 * Email content (plain text).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @var string
+	 */
+	protected $content_plaintext = '';
+
+	/**
+	 * The content type to send the email in ("html" or "plaintext").
+	 *
+	 * @since 2.5.0
+	 *
+	 * @var string
+	 */
+	protected $content_type = 'html';
 
 	/**
 	 * Sender details.
@@ -184,13 +202,23 @@ class BP_Email {
 	 *
 	 * @param string $property_name Property to access.
 	 * @param string $transform Optional. How to transform the return value.
-	 *                         Accepts 'raw' (default) or 'replace-tokens'.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
 	 * @return mixed Returns null if property does not exist, otherwise the value.
 	 */
 	public function get( $property_name, $transform = 'raw' ) {
+		// "content" is replaced by HTML or plain text depending on $content_type.
+		if ( $property_name === 'content' ) {
+			$property_name = 'content_' . $this->get( 'content_type' );
+
+			if ( ! in_array( $property_name, array( 'content_html', 'content_plaintext', ), true ) ) {
+				$property_name = 'content_html';
+			}
+		}
+
 		if ( ! property_exists( $this, $property_name ) ) {
 			return null;
 		}
+
 
 		/**
 		 * Filters the value of the specified email property.
@@ -340,25 +368,78 @@ class BP_Email {
 	}
 
 	/**
-	 * Set the email content.
+	 * Set the email content (HTML).
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param string $content Email content. Assumed to be HTML.
+	 * @param string $content HTML email content.
 	 * @return BP_Email
 	 */
-	public function content( $content ) {
+	public function content_html( $content ) {
 		// djpaultodo kses this?
 
 		/**
-		 * Filters the new value of the email's "content" property.
+		 * Filters the new value of the email's "content" property (HTML).
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string $content Email content. Assumed to be HTML.
+		 * @param string $content HTML email content.
 		 * @param BP_Email $this Current instance of the email type class.
 		 */
-		$this->content = apply_filters( 'bp_email_set_content', $content, $this );
+		$this->content_html = apply_filters( 'bp_email_set_content_html', $content, $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set the email content (plain text).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $content Plain text email content.
+	 * @return BP_Email
+	 */
+	public function content_plaintext( $content ) {
+		// djpaultodo kses this?
+
+		/**
+		 * Filters the new value of the email's "content" property (plain text).
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $content Plain text email content.
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
+		$this->content_plaintext = apply_filters( 'bp_email_set_content_plaintext', $content, $this );
+
+		return $this;
+	}
+
+	/**
+	 * Set the content type (HTML or plain text) to send the email in.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $content_type Email content type ("html" or "plaintext").
+	 * @return BP_Email
+	 */
+	public function content_type( $content_type ) {
+		if ( ! in_array( $content_type, array( 'html', 'plaintext', ), true ) ) {
+			$class        = get_class_vars( get_class() );
+			$content_type = $class['content_type'];
+		}
+
+		/**
+		 * Filters the new value of the email's "content type" property.
+		 *
+		 * The content type (HTML or plain text) to send the email in.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $content_type Email content type ("html" or "plaintext").
+		 * @param BP_Email $this Current instance of the email type class.
+		 */
+		$this->content_type = apply_filters( 'bp_email_set_content_type', $content_type, $this );
 
 		return $this;
 	}
@@ -414,8 +495,9 @@ class BP_Email {
 		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
 
 		if ( is_a( $this->post_object, 'WP_Post' ) ) {
-			$this->subject( $this->post_object->post_title );
-			$this->content( $this->post_object->post_content );
+			$this->subject( $this->post_object->post_title )
+				->content_html( $this->post_object->post_content )
+				->content_plaintext( $this->post_object->post_excerpt );
 
 			ob_start();
 
