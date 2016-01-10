@@ -24,11 +24,23 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$this->assertSame( $email->get( 'subject' ), $message );
 	}
 
-	public function test_valid_content() {
+	public function test_valid_html_content() {
+		$message = '<b>test</b>';
+		$email   = new BP_Email( 'fake_type' );
+
+		$email->content_html( $message );
+		$email->content_type( 'html' );
+
+		$this->assertSame( $email->get( 'content' ), $message );
+	}
+
+	public function test_valid_plaintext_content() {
 		$message = 'test';
 		$email   = new BP_Email( 'fake_type' );
 
-		$email->content( $message );
+		$email->content_plaintext( $message );
+		$email->content_type( 'plaintext' );
+
 		$this->assertSame( $email->get( 'content' ), $message );
 	}
 
@@ -67,7 +79,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 	public function test_validation() {
 		$email = new BP_Email( 'fake_type' );
-		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' )->content( 'testing' );
+		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' );
+		$email->content_html( 'testing' );
 
 		$this->assertTrue( $email->validate() );
 	}
@@ -85,7 +98,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 	public function test_token_are_escaped() {
 		$token = '<blink>';
 		$email = new BP_Email( 'fake_type' );
-		$email->content( '{{test}}' )->tokens( array( 'test' => $token ) );
+		$email->content_html( '{{test}}' )->tokens( array( 'test' => $token ) );
 
 		$this->assertSame(
 			$email->get( 'content', 'replace-tokens' ),
@@ -96,7 +109,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 	public function test_token_are_not_escaped() {
 		$token = '<blink>';
 		$email = new BP_Email( 'fake_type' );
-		$email->content( '{{{test}}}' )->tokens( array( 'test' => $token ) );
+		$email->content_html( '{{{test}}}' )->tokens( array( 'test' => $token ) );
 
 		$this->assertSame(
 			$email->get( 'content', 'replace-tokens' ),
@@ -124,7 +137,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 	public function test_validation_with_missing_template() {
 		$email  = new BP_Email( 'fake_type' );
-		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' )->content( 'testing' )->template( '' );
+		$email->from( 'test1@example.com' )->to( 'test2@example.com' )->subject( 'testing' );
+		$email->content_html( 'testing' )->template( '' );
 		$result = $email->validate();
 
 		// Template has a default value, but it can't be blank.
