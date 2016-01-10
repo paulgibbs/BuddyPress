@@ -1011,7 +1011,7 @@ add_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6, 3
  * @param string $template Path to template (probably single.php).
  * @return string
  */
-function bp_core_add_email_post_type_template( $template ) {
+function bp_core_render_email_template( $template ) {
 	if ( get_post_type() !== bp_get_email_post_type() || ! is_single() ) {
 		return $template;
 	}
@@ -1023,7 +1023,7 @@ function bp_core_add_email_post_type_template( $template ) {
 	 *
 	 * @param string $template Path to current template (probably single.php).
 	 */
-	$email_template = apply_filters( 'bp_core_add_email_post_type_template',
+	$email_template = apply_filters( 'bp_core_render_email_template',
 		bp_locate_template( bp_email_get_template( get_queried_object() ), false ),
 		$template
 	);
@@ -1051,4 +1051,4 @@ function bp_core_add_email_post_type_template( $template ) {
 
 	return '';
 }
-add_action( 'bp_template_include', 'bp_core_add_email_post_type_template', 12 );
+add_action( 'bp_template_include', 'bp_core_render_email_template', 12 );
