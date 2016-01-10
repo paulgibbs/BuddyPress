@@ -226,7 +226,7 @@ function bp_email_get_customizer_settings() {
 		'bp_email_options[footer_text]' => array(
 			'capability'        => 'bp_moderate',
 			'default'           => $defaults['footer_text'],
-			'sanitize_callback' => 'bp_customizer_sanitize_text_no_html',
+			'sanitize_callback' => 'bp_sanitize_text_field_keep_linebreaks',
 			'transport'         => 'postMessage',
 			'type'              => 'option',
 		),

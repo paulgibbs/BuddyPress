@@ -2603,7 +2603,7 @@ function bp_upload_dir() {
  * @param string $raw
  * @return string
  */
-function bp_customizer_sanitize_text_no_html( $raw ) {
+function bp_sanitize_text_field_keep_linebreaks( $raw ) {
 	$input = str_replace( array( "\r", "\n", ), '%BPNEWLINE%', $raw );
 	$input = sanitize_text_field( $input );  // Strips tags.
 	$input = str_replace( '%BPNEWLINE%', "\n", $input );
@@ -2616,7 +2616,7 @@ function bp_customizer_sanitize_text_no_html( $raw ) {
 	 * @param string $input Sanitized text.
 	 * @param string $raw Original text.
 	 */
-	return apply_filters( 'bp_customizer_sanitize_text_no_html', $input, $raw );
+	return apply_filters( 'bp_sanitize_text_field_keep_linebreaks', $input, $raw );
 }
 
 
