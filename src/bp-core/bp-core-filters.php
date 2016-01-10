@@ -968,7 +968,7 @@ add_filter( 'bp_email_get_tokens', 'bp_email_set_default_tokens', 6, 4 );
  *
  * @since 2.5.0
  *
- * @param string $retval Property value.
+ * @param string $value Property value.
  * @param string $property_name
  * @param string $transform How the return value was transformed.
  * @return string Updated value.
