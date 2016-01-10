@@ -21,7 +21,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email   = new BP_Email( 'fake_type' );
 
 		$email->subject( $message );
-		$this->assertSame( $email->get( 'subject' ), $message );
+		$this->assertSame( $message, $email->get( 'subject' ) );
 	}
 
 	public function test_valid_html_content() {
@@ -31,7 +31,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->content_html( $message );
 		$email->content_type( 'html' );
 
-		$this->assertSame( $email->get( 'content' ), $message );
+		$this->assertSame( $message, $email->get( 'content' ) );
 	}
 
 	public function test_valid_plaintext_content() {
@@ -41,7 +41,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->content_plaintext( $message );
 		$email->content_type( 'plaintext' );
 
-		$this->assertSame( $email->get( 'content' ), $message );
+		$this->assertSame( $message, $email->get( 'content' ) );
 	}
 
 	public function test_valid_template() {
@@ -49,7 +49,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email   = new BP_Email( 'fake_type' );
 
 		$email->template( $message );
-		$this->assertSame( $email->get( 'template' ), $message );
+		$this->assertSame( $message, $email->get( 'template' ) );
 	}
 
 	public function test_tokens() {
@@ -74,7 +74,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$headers = array( 'custom_header' => 'custom_value' );
 		$email->headers( $headers );
-		$this->assertSame( $email->get( 'headers' ), $headers );
+		$this->assertSame( $headers, $email->get( 'headers' ) );
 	}
 
 	public function test_validation() {
@@ -90,8 +90,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->tokens( array( 'te{st}1' => 'hello world' ) );
 
 		$this->assertSame(
-			array_keys( $email->get( 'tokens' ) ),
-			array( 'test1' )
+			array( 'test1' ),
+			array_keys( $email->get( 'tokens' ) )
 		);
 	}
 
@@ -101,8 +101,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->content_html( '{{test}}' )->tokens( array( 'test' => $token ) );
 
 		$this->assertSame(
-			$email->get( 'content', 'replace-tokens' ),
-			esc_html( $token )
+			esc_html( $token ),
+			$email->get( 'content', 'replace-tokens' )
 		);
 	}
 
@@ -112,8 +112,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$email->content_html( '{{{test}}}' )->tokens( array( 'test' => $token ) );
 
 		$this->assertSame(
-			$email->get( 'content', 'replace-tokens' ),
-			$token
+			$token,
+			$email->get( 'content', 'replace-tokens' )
 		);
 	}
 
@@ -122,8 +122,8 @@ class BP_Tests_Email extends BP_UnitTestCase {
 
 		$headers = array( 'custom:header' => 'custom:value' );
 		$email->headers( $headers );
-		$this->assertNotSame( $email->get( 'headers' ), $headers );
-		$this->assertSame( $email->get( 'headers' ), array( 'customheader' => 'customvalue' ) );
+		$this->assertNotSame( $headers, $email->get( 'headers' ) );
+		$this->assertSame( array( 'customheader' => 'customvalue' ), $email->get( 'headers' ) );
 	}
 
 	public function test_validation_with_missing_required_data() {
@@ -132,7 +132,7 @@ class BP_Tests_Email extends BP_UnitTestCase {
 		$result = $email->validate();
 
 		$this->assertTrue( is_wp_error( $result ) );
-		$this->assertSame( $result->get_error_code(), 'missing_parameter' );
+		$this->assertSame( 'missing_parameter', $result->get_error_code() );
 	}
 
 	public function test_validation_with_missing_template() {
