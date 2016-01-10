@@ -63,7 +63,6 @@ function bp_email_init_customizer( WP_Customize_Manager $wp_customize ) {
 	 */
 
 	add_filter( 'customize_section_active', 'bp_email_customizer_hide_sections', 12, 2 );
-	$wp_customize->widgets = null;
 
 	if ( is_customize_preview() ) {
 		/*
