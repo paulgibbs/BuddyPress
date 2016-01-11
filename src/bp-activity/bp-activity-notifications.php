@@ -55,9 +55,15 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
 	$message_link = bp_activity_get_permalink( $activity_id );
 	$poster_name  = bp_core_get_user_displayname( $activity->user_id );
 
+ 	remove_filter( 'bp_get_activity_content_body', 'convert_smilies' );
+	remove_filter( 'bp_get_activity_content_body', 'wpautop' );
 	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+
 	/** This filter is documented in bp-activity/bp-activity-template.php */
 	$content = apply_filters( 'bp_get_activity_content_body', $activity->content );
+
+ 	add_filter( 'bp_get_activity_content_body', 'convert_smilies' );
+	add_filter( 'bp_get_activity_content_body', 'wpautop' );
 	add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 
 	// Now email the user with the contents of the message (if they have enabled email notifications).
