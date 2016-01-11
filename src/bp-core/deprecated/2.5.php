@@ -88,7 +88,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -129,7 +128,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value
 			 */
 			$value = apply_filters( 'bp_activity_new_comment_notification_comment_author_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -170,7 +168,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value
 			 */
 			$value = apply_filters( 'bp_activity_at_message_notification_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -216,7 +213,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param array $meta  Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_user_notification_to', $value, $tokens['user'], $value, $tokens['key'], array() );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -267,7 +263,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param array  $meta       Removed in 2.5; now an empty array.
 			 */
 			$value = apply_filters( 'bp_core_activation_signup_blog_notification_to', $value, $tokens['domain'], $tokens['path'], $tokens['title'], $tokens['user'], $tokens['user.email'], $tokens['key_blog'], array() );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -317,7 +312,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value
 			 */
 			$value = apply_filters( 'friends_notification_new_request_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -358,7 +352,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value Email address for whose friend request got accepted.
 			 */
 			$value = apply_filters( 'friends_notification_accepted_request_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -398,7 +391,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value User email the notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_group_updated_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -438,7 +430,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value User email the invite notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_group_invites_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -481,7 +472,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value User email the promotion notification is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_promoted_member_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -522,7 +512,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value User email the request is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_new_membership_request_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -563,7 +552,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param string $value User email the request is being sent to.
 			 */
 			$value = apply_filters( 'groups_notification_membership_request_completed_to', $value );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -604,7 +592,6 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 			 * @param bool   $deprecated Removed in 2.5; now a bool (false).
 			 */
 			$value = apply_filters( 'messages_notification_new_message_to', $value, false );
-			$value = new BP_Email_Recipient( $value, $recipient_name );
 
 		} elseif ( $property === 'subject' ) {
 			/**
@@ -656,7 +643,8 @@ function bp_core_deprecated_email_filters( $value, $property, $transform, $email
 	}
 
 	if ( $property === 'to' ) {
-		$value = array( $value );
+		// We always break apart $to, so we always need to rebuild it.
+		$value = array( new BP_Email_Recipient( $value, $recipient_name ) );
 	}
 
 	return $value;
