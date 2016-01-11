@@ -412,19 +412,15 @@ add_filter( 'update_welcome_email', 'bp_core_filter_blog_welcome_email', 10, 4 )
  * This function filter's WP's 'wpmu_signup_blog_notification', and replaces
  * WP's default welcome email with a BuddyPress-specific message.
  *
- * @see wpmu_signup_blog_notification() for a description of parameters.
- *
  * @param string $domain     The new blog domain.
  * @param string $path       The new blog path.
  * @param string $title      The site title.
  * @param string $user       The user's login name.
  * @param string $user_email The user's email address.
  * @param string $key        The activation key created in wpmu_signup_blog().
- * @param array  $meta       By default, contains the requested privacy setting and
- *                           lang_id.
- * @return bool True on success, false on failure.
+ * @return bool              Returns false to stop original WPMU function from continuing.
  */
-function bp_core_activation_signup_blog_notification( $domain, $path, $title, $user, $user_email, $key, $meta ) {
+function bp_core_activation_signup_blog_notification( $domain, $path, $title, $user, $user_email, $key ) {
 	$args = array(
 		'tokens' => array(
 			'activate-site.url' => esc_url( bp_get_activation_page() . '?key=' . urlencode( $key ) ),
@@ -442,7 +438,7 @@ function bp_core_activation_signup_blog_notification( $domain, $path, $title, $u
 	// Return false to stop the original WPMU function from continuing.
 	return false;
 }
-add_filter( 'wpmu_signup_blog_notification', 'bp_core_activation_signup_blog_notification', 1, 7 );
+add_filter( 'wpmu_signup_blog_notification', 'bp_core_activation_signup_blog_notification', 1, 6 );
 
 /**
  * Notify new users of a successful registration (without blog).
