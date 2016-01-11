@@ -115,13 +115,15 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
  */
 function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 0, $params = array() ) {
 	$original_activity = new BP_Activity_Activity( $params['activity_id'] );
-	$poster_name       = bp_core_get_user_displayname( $commenter_id );
-	$thread_link       = bp_activity_get_permalink( $params['activity_id'] );
 
 	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+	remove_filter( 'bp_get_activity_content_body', 'wpautop' );
+
 	/** This filter is documented in bp-activity/bp-activity-template.php */
 	$content = apply_filters( 'bp_get_activity_content_body', $params['content'] );
+
 	add_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+	add_filter( 'bp_get_activity_content_body', 'wpautop' );
 
 	if ( $original_activity->user_id != $commenter_id && 'no' != bp_get_user_meta( $original_activity->user_id, 'notification_activity_new_reply', true ) ) {
 		$args = array(
@@ -130,8 +132,8 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 				'commenter.id'              => $commenter_id,
 				'content'                   => $content,
 				'original_activity.user_id' => $original_activity->user_id,
-				'poster.name'               => $poster_name,
-				'thread.url'                => esc_url( $thread_link ),
+				'poster.name'               => bp_core_get_user_displayname( $commenter_id ),
+				'thread.url'                => esc_url( bp_activity_get_permalink( $params['activity_id'] ) ),
 			),
 		);
 
