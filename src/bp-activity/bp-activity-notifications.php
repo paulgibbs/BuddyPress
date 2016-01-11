@@ -111,10 +111,11 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
  * @param int   $comment_id   The comment id.
  * @param int   $commenter_id The ID of the user who posted the comment.
  * @param array $params       {@link bp_activity_new_comment()}.
- * @return bool
  */
 function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 0, $params = array() ) {
 	$original_activity = new BP_Activity_Activity( $params['activity_id'] );
+	$poster_name       = bp_core_get_user_displayname( $commenter_id );
+	$thread_link       = bp_activity_get_permalink( $params['activity_id'] );
 
 	remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
 	remove_filter( 'bp_get_activity_content_body', 'wpautop' );
@@ -132,8 +133,8 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 				'commenter.id'              => $commenter_id,
 				'content'                   => $content,
 				'original_activity.user_id' => $original_activity->user_id,
-				'poster.name'               => bp_core_get_user_displayname( $commenter_id ),
-				'thread.url'                => esc_url( bp_activity_get_permalink( $params['activity_id'] ) ),
+				'poster.name'               => $poster_name,
+				'thread.url'                => esc_url( $thread_link ),
 			),
 		);
 
@@ -146,7 +147,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 	 * author of the immediate parent comment.
 	 */
 	if ( empty( $params['parent_id'] ) || ( $params['activity_id'] == $params['parent_id'] ) ) {
-		return false;
+		return;
 	}
 
 	$parent_comment = new BP_Activity_Activity( $params['parent_id'] );
