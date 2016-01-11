@@ -31,7 +31,7 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 
 		if ( $group->name !== $old_group->name ) {
 			$changed[] = sprintf(
-				_x( '* Name changed from "%s" to "%s"', 'Group update email text', 'buddypress' ),
+				_x( '* Name changed from "%s" to "%s".', 'Group update email text', 'buddypress' ),
 				esc_html( $old_group->name ),
 				esc_html( $group->name )
 			);
@@ -39,7 +39,7 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 
 		if ( $group->description !== $old_group->description ) {
 			$changed[] = sprintf(
-				_x( '* Description changed from "%s" to "%s"', 'Group update email text', 'buddypress' ),
+				_x( '* Description changed from "%s" to "%s".', 'Group update email text', 'buddypress' ),
 				esc_html( $old_group->description ),
 				esc_html( $group->description )
 			);
@@ -57,7 +57,7 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
 
 	$changed_text = '';
 	if ( ! empty( $changed ) ) {
-		$changed_text = "\n\n" . implode( "\n", $changed );
+		$changed_text = implode( "\n", $changed );
 	}
 
 	$user_ids = BP_Groups_Member::get_group_member_ids( $group->id );
@@ -151,7 +151,6 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
  * @param int  $group_id           ID of the group.
  * @param bool $accepted           Optional. Whether the membership request was accepted.
  *                                 Default: true.
- * @return false|null
  */
 function groups_notification_membership_request_completed( $requesting_user_id = 0, $group_id = 0, $accepted = true ) {
 
@@ -165,13 +164,13 @@ function groups_notification_membership_request_completed( $requesting_user_id =
 			'user_id'           => $requesting_user_id,
 			'item_id'           => $group_id,
 			'component_name'    => buddypress()->groups->id,
-			'component_action'  => $type
+			'component_action'  => $type,
 		) );
 	}
 
 	// Bail if member opted out of receiving this email.
 	if ( 'no' === bp_get_user_meta( $requesting_user_id, 'notification_membership_request_completed', true ) ) {
-		return false;
+		return;
 	}
 
 	$group = groups_get_group( array( 'group_id' => $group_id ) );

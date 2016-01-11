@@ -26,11 +26,10 @@ defined( 'ABSPATH' ) || exit;
  * @param int $friendship_id ID of the friendship object.
  * @param int $initiator_id  ID of the user who initiated the request.
  * @param int $friend_id     ID of the request recipient.
- * @return bool
  */
 function friends_notification_new_request( $friendship_id, $initiator_id, $friend_id ) {
 	if ( 'no' == bp_get_user_meta( (int) $friend_id, 'notification_friends_friendship_request', true ) ) {
-		return false;
+		return;
 	}
 
 	$args = array(
@@ -58,11 +57,10 @@ add_action( 'friends_friendship_requested', 'friends_notification_new_request', 
  * @param int $friendship_id ID of the friendship object.
  * @param int $initiator_id  ID of the user who initiated the request.
  * @param int $friend_id     ID of the request recipient.
- * @return bool
  */
 function friends_notification_accepted_request( $friendship_id, $initiator_id, $friend_id ) {
 	if ( 'no' == bp_get_user_meta( (int) $initiator_id, 'notification_friends_friendship_accepted', true ) ) {
-		return false;
+		return;
 	}
 
 	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';

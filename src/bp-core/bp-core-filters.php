@@ -944,6 +944,7 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 
 		$user = array_shift( $recipient )->get_user( 'search-email' );
 		if ( $user ) {
+
 			// Unsubscribe link.
 			$tokens['unsubscribe'] = esc_url( sprintf(
 				'%s%s/notifications/',
