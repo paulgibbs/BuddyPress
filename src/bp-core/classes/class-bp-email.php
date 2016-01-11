@@ -727,6 +727,11 @@ class BP_Email {
 				$value = call_user_func( $value );
 			}
 
+			// Some tokens are objects or arrays for backwards compatibilty. See bp_core_deprecated_email_filters().
+			if ( ! is_scalar( $value ) ) {
+				continue;
+			}
+
 			$unescaped[ '{{{' . $token . '}}}' ] = $value;
 			$escaped[ '{{' . $token . '}}' ]     = esc_html( $value );
 		}
