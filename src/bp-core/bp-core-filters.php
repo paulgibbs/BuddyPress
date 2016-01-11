@@ -54,9 +54,10 @@ add_filter( 'bp_core_render_message_content', 'shortcode_unautop' );
 add_filter( 'bp_core_render_message_content', 'wp_kses_data', 5   );
 
 // Emails.
-add_filter( 'bp_email_set_content_html', 'wp_filter_post_kses' );
-add_filter( 'bp_email_set_content_plaintext', 'wp_strip_all_tags' );
-add_filter( 'bp_email_set_subject', 'sanitize_text_field' );
+add_filter( 'bp_email_set_content_html', 'wp_filter_post_kses', 6 );
+add_filter( 'bp_email_set_content_html', 'stripslashes', 8 );
+add_filter( 'bp_email_set_content_plaintext', 'wp_strip_all_tags', 6 );
+add_filter( 'bp_email_set_subject', 'sanitize_text_field', 6 );
 
 
 /**
