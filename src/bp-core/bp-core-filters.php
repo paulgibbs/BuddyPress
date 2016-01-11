@@ -449,7 +449,7 @@ add_filter( 'wpmu_signup_blog_notification', 'bp_core_activation_signup_blog_not
  * @param string $user_email The user's email address.
  * @param string $key        The activation key created in wpmu_signup_user().
  * @param array  $meta       By default, an empty array.
- * @return bool|string True on success, false on failure.
+ * @return bool|string       Returns false to stop original WPMU function from continuing.
  */
 function bp_core_activation_signup_user_notification( $user, $user_email, $key, $meta ) {
 	if ( is_admin() ) {

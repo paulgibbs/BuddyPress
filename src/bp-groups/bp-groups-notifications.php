@@ -105,7 +105,6 @@ function groups_notification_group_updated( $group_id = 0, $old_group = null ) {
  * @param int $admin_id           ID of the group admin.
  * @param int $group_id           ID of the group.
  * @param int $membership_id      ID of the group membership object.
- * @return false|null False on failure.
  */
 function groups_notification_new_membership_request( $requesting_user_id = 0, $admin_id = 0, $group_id = 0, $membership_id = 0 ) {
 
@@ -122,7 +121,7 @@ function groups_notification_new_membership_request( $requesting_user_id = 0, $a
 
 	// Bail if member opted out of receiving this email.
 	if ( 'no' === bp_get_user_meta( $admin_id, 'notification_groups_membership_request', true ) ) {
-		return false;
+		return;
 	}
 
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
@@ -200,7 +199,6 @@ add_action( 'groups_membership_rejected', 'groups_notification_membership_reques
  *
  * @param int $user_id  ID of the user.
  * @param int $group_id ID of the group.
- * @return false|null False on failure.
  */
 function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 
@@ -219,13 +217,13 @@ function groups_notification_promoted_member( $user_id = 0, $group_id = 0 ) {
 			'user_id'           => $user_id,
 			'item_id'           => $group_id,
 			'component_name'    => buddypress()->groups->id,
-			'component_action'  => $type
+			'component_action'  => $type,
 		) );
 	}
 
 	// Bail if admin opted out of receiving this email.
 	if ( 'no' === bp_get_user_meta( $user_id, 'notification_groups_admin_promotion', true ) ) {
-		return false;
+		return;
 	}
 
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
@@ -251,7 +249,6 @@ add_action( 'groups_promoted_member', 'groups_notification_promoted_member', 10,
  * @param BP_Groups_Group  $group           Group object.
  * @param BP_Groups_Member $member          Member object.
  * @param int              $inviter_user_id ID of the user who sent the invite.
- * @return null|false False on failure.
  */
 function groups_notification_group_invites( &$group, &$member, $inviter_user_id ) {
 
@@ -261,9 +258,7 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 	}
 
 	// @todo $inviter_ud may be used for caching, test without it
-	$inviter_ud = bp_core_get_core_userdata( $inviter_user_id );
-
-	// Setup the ID for the invited user.
+	$inviter_ud      = bp_core_get_core_userdata( $inviter_user_id );
 	$invited_user_id = $member->user_id;
 
 	// Trigger a BuddyPress Notification.
@@ -272,13 +267,13 @@ function groups_notification_group_invites( &$group, &$member, $inviter_user_id 
 			'user_id'          => $invited_user_id,
 			'item_id'          => $group->id,
 			'component_name'   => buddypress()->groups->id,
-			'component_action' => 'group_invite'
+			'component_action' => 'group_invite',
 		) );
 	}
 
 	// Bail if member opted out of receiving this email.
 	if ( 'no' === bp_get_user_meta( $invited_user_id, 'notification_groups_invite', true ) ) {
-		return false;
+		return;
 	}
 
 	$invited_link = bp_core_get_user_domain( $invited_user_id ) . bp_get_groups_slug();

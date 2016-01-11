@@ -63,8 +63,6 @@ function friends_notification_accepted_request( $friendship_id, $initiator_id, $
 		return;
 	}
 
-	$settings_slug = function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings';
-
 	$args = array(
 		'tokens' => array(
 			'friend.id'      => $friend_id,
