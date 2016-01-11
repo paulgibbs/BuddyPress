@@ -1000,7 +1000,6 @@ function bp_email_add_link_color_to_template( $value, $property_name, $transform
 }
 add_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6, 3 );
 
-
 /**
  * Find and render the template for Email posts (the Customizer and admin previews).
  *
