@@ -543,7 +543,7 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} replied to one of your updates', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} replied to one of your updates:\n\n<blockquote>\"{{content}}\"</blockquote>\n\n<a href=\"{{{thread.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
+			'post_content' => __( "{{poster.name}} replied to one of your updates:\n\n<blockquote>&quot;{{content}}&quot;</blockquote>\n\n<a href=\"{{{thread.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "{{poster.name}} replied to one of your updates:\n\n\"{{content}}\"\n\nGo to the discussion to reply or catch up on the conversation: {{{thread.url}}}", 'buddypress' ),
 		),
@@ -551,7 +551,7 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} replied to one of your comments', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} replied to one of your comments:\n\n<blockquote>\"{{content}}\"</blockquote>\n\n<a href=\"{{{thread.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
+			'post_content' => __( "{{poster.name}} replied to one of your comments:\n\n<blockquote>&quot;{{content}}&quot;</blockquote>\n\n<a href=\"{{{thread.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "{{poster.name}} replied to one of your comments:\n\n\"{{content}}\"\n\nGo to the discussion to reply or catch up on the conversation: {{{thread.url}}}", 'buddypress' ),
 		),
@@ -559,7 +559,7 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} mentioned you in a status update', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} mentioned you in a status update:\n\n<blockquote>\"{{content}}\"</blockquote>\n\n<a href=\"{{{mentioned.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
+			'post_content' => __( "{{poster.name}} mentioned you in a status update:\n\n<blockquote>&quot;{{content}}&quot;</blockquote>\n\n<a href=\"{{{mentioned.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "{{poster.name}} mentioned you in a status update:\n\n\"{{content}}\"\n\nGo to the discussion to reply or catch up on the conversation: {{{mentioned.url}}}", 'buddypress' ),
 		),
@@ -567,7 +567,7 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{poster.name}} mentioned you in an update', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n<blockquote>\"{{content}}\"</blockquote>\n\n<a href=\"{{{group-mentioned.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
+			'post_content' => __( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n<blockquote>&quot;{{content}}&quot;</blockquote>\n\n<a href=\"{{{group-mentioned.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n\"{{content}}\"\n\nGo to the discussion to reply or catch up on the conversation: {{{group-mentioned.url}}}", 'buddypress' ),
 		),
@@ -639,7 +639,7 @@ function bp_core_install_emails() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( 'New message from {{sender.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_content' => __( "{{sender.name}} sent you a new message: \"{{subject}}\"\n\n<blockquote>\"{{content}}\"</blockquote>\n\n<a href=\"{{{message.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
+			'post_content' => __( "{{sender.name}} sent you a new message: \"{{subject}}\"\n\n<blockquote>&quot;{{content}}&quot;</blockquote>\n\n<a href=\"{{{message.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "{{sender.name}} sent you a new message: \"{{subject}}\"\n\n\"{{content}}\"\n\nGo to the discussion to reply or catch up on the conversation: {{{message.url}}}", 'buddypress' ),
 		),
