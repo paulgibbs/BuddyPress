@@ -70,7 +70,7 @@ function bp_activity_at_message_notification( $activity_id, $receiver_user_id ) 
 		$args = array(
 			'tokens' => array(
 				'activity'         => $activity,
-				'content'          => $content,
+				'usermessage'      => wp_strip_all_tags( $content ),
 				'group.name'       => $group_name,
 				'mentioned.url'    => $message_link,
 				'poster.name'      => $poster_name,
@@ -133,7 +133,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 			'tokens' => array(
 				'comment.id'                => $comment_id,
 				'commenter.id'              => $commenter_id,
-				'content'                   => $content,
+				'usermessage'               => wp_strip_all_tags( $content ),
 				'original_activity.user_id' => $original_activity->user_id,
 				'poster.name'               => $poster_name,
 				'thread.url'                => esc_url( $thread_link ),
@@ -159,7 +159,7 @@ function bp_activity_new_comment_notification( $comment_id = 0, $commenter_id = 
 			'tokens' => array(
 				'comment.id'             => $comment_id,
 				'commenter.id'           => $commenter_id,
-				'content'                => $content,
+				'usermessage'            => wp_strip_all_tags( $content ),
 				'parent-comment-user.id' => $parent_comment->user_id,
 				'poster.name'            => $poster_name,
 				'thread.url'             => esc_url( $thread_link ),
