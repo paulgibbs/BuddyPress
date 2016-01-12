@@ -2893,36 +2893,6 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 		}
 	}
 
-
-	$func_args = func_get_args();  // PHP 5.2
-
-	/**
-	 * Filter this to skip BP's email handling and instead send everything to wp_mail().
-	 *
-	 * This is done if wp_mail_content_type() has been configured for HTML,
-	 * or if wp_mail() has been redeclared (it's a pluggable function).
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param bool $use_wp_mail Whether to fallback to the regular wp_mail() function or not.
-	 * @param array All arguments passed to bp_send_email().
-	 */
-	$must_use_wpmail = apply_filters( 'bp_mail_use_wp_mail', $wp_html_emails || ! $is_default_wpmail, $func_args );
-
-	// Backward compatibility with unported pre-2.4 code, and other wp_mail() plugins.
-	if ( ! is_array( $args ) || func_num_args() > 3 || $must_use_wpmail ) {
-		$old_args_keys = array(
-			0 => 'to',
-			1 => 'subject',
-			2 => 'message',
-			3 => 'headers',
-			4 => 'attachments',
-		);
-
-		// djpaultodo - handle getting email content into wp_mail.
-		return call_user_func_array( 'wp_mail', bp_core_parse_args_array( $old_args_keys, $func_args ) );
-	}
-
 	$args = bp_parse_args( $args, array(
 		'tokens' => array(),
 	), 'send_email' );
@@ -2944,6 +2914,27 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	$status = $email->validate();
 	if ( is_wp_error( $status ) ) {
 		return $status;
+	}
+
+	/**
+	 * Filter this to skip BP's email handling and instead send everything to wp_mail().
+	 *
+	 * This is done if wp_mail_content_type() has been configured for HTML,
+	 * or if wp_mail() has been redeclared (it's a pluggable function).
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param bool $use_wp_mail Whether to fallback to the regular wp_mail() function or not.
+	 * @param array All arguments passed to bp_send_email().
+	 */
+	$must_use_wpmail = apply_filters( 'bp_mail_use_wp_mail', $wp_html_emails || ! $is_default_wpmail, $func_args );
+
+	if ( $must_use_wpmail ) {
+		return wp_mail(
+			array_shift( $email->get( 'to' ) )->get_address(),
+			$email->get( 'subject', 'replace-tokens' ),
+			$email->get( 'content_plaintext', 'replace-tokens' )
+		);
 	}
 
 
