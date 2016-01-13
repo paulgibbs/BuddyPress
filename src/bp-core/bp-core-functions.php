@@ -2593,33 +2593,6 @@ function bp_upload_dir() {
 }
 
 
-/** Customizer *****************************************************************/
-
-/**
- * Utility function to sanitize text and strip all tags for Customiser callbacks.
- *
- * @since 2.5.0
- *
- * @param string $raw
- * @return string
- */
-function bp_sanitize_text_field_keep_linebreaks( $raw ) {
-	$input = str_replace( array( "\r", "\n", ), '%BPNEWLINE%', $raw );
-	$input = sanitize_text_field( $input );  // Strips tags.
-	$input = str_replace( '%BPNEWLINE%', "\n", $input );
-
-	/**
-	 * Filiters the sanitized text for Customiser callbacks.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string $input Sanitized text.
-	 * @param string $raw Original text.
-	 */
-	return apply_filters( 'bp_sanitize_text_field_keep_linebreaks', $input, $raw );
-}
-
-
 /** Post Types *****************************************************************/
 
 /**
