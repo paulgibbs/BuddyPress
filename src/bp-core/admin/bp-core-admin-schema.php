@@ -678,4 +678,11 @@ function bp_core_install_emails() {
 
 		wp_set_post_terms( $post_id, $id, bp_get_email_tax_type() );
 	}
+
+	/**
+	 * Fires after BuddyPress adds the posts for its emails.
+	 *
+	 * @since 2.5.0
+	 */
+	do_action( 'bp_core_install_emails' );
 }
