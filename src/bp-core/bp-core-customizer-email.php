@@ -286,7 +286,7 @@ function bp_email_get_customizer_controls() {
 
 		'bp_mailtpl_highlight_color' => array(
 			'class'       => 'WP_Customize_Color_Control',
-			'description' => 'killer snack',
+			'description' => __( 'Applied to links and other decorative areas.', 'buddypress' ),
 			'label'       => __( 'Highlight color', 'buddypress' ),
 			'section'     => 'section_bp_mailtpl_header',
 			'settings'    => 'bp_email_options[highlight_color]',
