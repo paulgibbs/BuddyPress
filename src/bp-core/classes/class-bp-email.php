@@ -714,7 +714,7 @@ class BP_Email {
 			bp_locate_template( bp_email_get_template( $this->post_object ), true, false );
  			$this->template( ob_get_contents() );
 
-  		ob_end_clean();
+			ob_end_clean();
 		}
 
 		return $this;
