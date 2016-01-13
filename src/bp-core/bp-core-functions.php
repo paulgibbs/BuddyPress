@@ -2783,7 +2783,7 @@ function bp_get_email( $email_type ) {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param array $args Arguments for get_posts() used to fetch a post object.
+	 * @param array  $args       Arguments for get_posts() used to fetch a post object.
 	 * @param string $email_type Unique identifier for a particular type of email.
 	 */
 	$args = apply_filters( 'bp_get_email_args', $args, $email_type );
@@ -2797,9 +2797,9 @@ function bp_get_email( $email_type ) {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param WP_Post $post Post object containing the contents of the email.
-	 * @param string $email_type Unique identifier for a particular type of email.
-	 * @param array $args Arguments used with get_posts() to fetch a post object.
+	 * @param WP_Post $post       Post object containing the contents of the email.
+	 * @param string  $email_type Unique identifier for a particular type of email.
+	 * @param array   $args       Arguments used with get_posts() to fetch a post object.
 	 * @param WP_Post[] All posts retrieved by get_posts( $args ). May only contain $post.
 	 */
 	$post  = apply_filters( 'bp_get_email_post', $post[0], $email_type, $args, $post );
@@ -2818,10 +2818,10 @@ function bp_get_email( $email_type ) {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @param BP_Email $email An object representing a single email, ready for mailing.
-	 * @param WP_Post $post Post object containing the contents of the email.
-	 * @param string $email_type Unique identifier for a particular type of email.
-	 * @param array $args Arguments used with get_posts() to fetch a post object.
+	 * @param BP_Email $email      An object representing a single email, ready for mailing.
+	 * @param WP_Post  $post       Post object containing the contents of the email.
+	 * @param string   $email_type Unique identifier for a particular type of email.
+	 * @param array    $args       Arguments used with get_posts() to fetch a post object.
 	 * @param WP_Post[] All posts retrieved by get_posts( $args ). May only contain $post.
 	 */
 	return apply_filters( 'bp_get_email', $email, $email_type, $args, $post );
@@ -2929,7 +2929,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	 * @param string $email_type Type of email being sent.
 	 * @param string[]|string $to Array or comma-separated list of email addresses to the email to.
 	 * @param array $args {
-	 *     Optional. Array of extra. parameters.
+	 *     Optional. Array of extra parameters.
 	 *
 	 *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
 	 * }

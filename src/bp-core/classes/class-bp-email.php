@@ -862,9 +862,11 @@ class BP_Email {
 		 *
 		 * @since 2.5.0
 		 *
-		 * @param string[] $formatted_tokens Associative pairing of token names (key) and replacement values (value).
-		 * @param string[] $tokens Associative pairing of unformatted token names (key) and replacement values (value).
-		 * @param BP_Email $this Current instance of the email type class.
+		 * @param string[] $formatted_tokens Associative pairing of token names (key)
+		 *                                   and replacement values (value).
+		 * @param string[] $tokens           Associative pairing of unformatted token
+		 *                                   names (key) and replacement values (value).
+		 * @param BP_Email $this             Current instance of the email type class.
 		 */
 		$this->tokens = apply_filters( 'bp_email_set_tokens', $formatted_tokens, $tokens, $this );
 
