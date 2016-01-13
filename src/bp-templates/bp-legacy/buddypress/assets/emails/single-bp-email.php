@@ -169,7 +169,7 @@ $settings = bp_email_get_appearance_settings();
 			<table cellspacing="0" cellpadding="0" border="0" align="left" width="100%" style="max-width: 600px; border-radius: 5px;" bgcolor="<?php echo esc_attr( $settings['footer_bg'] ); ?>" class="footer_bg">
 				<tr>
 					<td style="padding: 20px; width: 100%; font-size: <?php echo esc_attr( $settings['footer_text_size'] . 'px' ); ?>; font-family: sans-serif; mso-height-rule: exactly; line-height: <?php echo esc_attr( floor( $settings['footer_text_size'] * 1.618 ) . 'px' ) ?>; text-align: left; color: <?php echo esc_attr( $settings['footer_text_color'] ); ?>;" class="footer_text_color footer_text_size">
-						<span class="footer_text"><?php echo nl2br( $settings['footer_text'] ); ?></span>
+						<span class="footer_text"><?php echo nl2br( stripslashes( $settings['footer_text'] ) ); ?></span>
 						<br><br>
 						<a href="{{{unsubscribe}}}" style="text-decoration: underline;"><?php _ex( 'unsubscribe', 'email', 'buddypress' ); ?></a>
 					</td>
