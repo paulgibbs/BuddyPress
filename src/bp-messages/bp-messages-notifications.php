@@ -63,7 +63,7 @@ function messages_notification_new_message( $raw_args = array() ) {
 				'usermessage' => wp_strip_all_tags( $message ),
 				'message.url' => esc_url( bp_core_get_user_domain( $recipient->user_id ) . bp_get_messages_slug() . '/' ),
 				'sender.name' => $sender_name,
-				'subject'     => sanitize_text_field( $subject ),
+				'usersubject' => sanitize_text_field( $subject ),
 			),
 		);
 		bp_send_email( 'messages-unread', $ud, $args );

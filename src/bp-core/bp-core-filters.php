@@ -430,7 +430,6 @@ function bp_core_activation_signup_blog_notification( $domain, $path, $title, $u
 			'path'              => $path,
 			'user-site.url'     => esc_url( "http://{$domain}{$path}" ),
 			'title'             => $title,
-			'user'              => $user,
 			'user.email'        => $user_email,
 		),
 	);
@@ -484,7 +483,6 @@ function bp_core_activation_signup_user_notification( $user, $user_email, $key, 
 		'tokens' => array(
 			'activate.url' => esc_url( trailingslashit( bp_get_activation_page() ) . "{$key}/" ),
 			'key'          => $key,
-			'user'         => $user,
 			'user.email'   => $user_email,
 		),
 	);
@@ -936,20 +934,25 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 	$tokens['site.name']        = wp_specialchars_decode( bp_get_option( 'blogname' ), ENT_QUOTES );
 
 	// Default values for tokens set conditionally below.
-	$tokens['unsubscribe'] = '';
+	$tokens['recipient.email'] = '';
+	$tokens['recipient.name']  = '';
+	$tokens['unsubscribe']     = '';
 
 
 	// Who is the email going to?
 	$recipient = $email->get( 'to' );
 	if ( $recipient ) {
+		$recipient = array_shift( $recipient );
+		$user_obj  = $recipient->get_user( 'search-email' );
 
-		$user = array_shift( $recipient )->get_user( 'search-email' );
-		if ( $user ) {
+		$tokens['recipient.address'] = $recipient->get_address();
+		$tokens['recipient.name']    = $recipient->get_name();
 
+		if ( $user_obj ) {
 			// Unsubscribe link.
 			$tokens['unsubscribe'] = esc_url( sprintf(
 				'%s%s/notifications/',
-				bp_core_get_user_domain( $user->ID ),
+				bp_core_get_user_domain( $user_obj->ID ),
 				function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings'
 			) );
 		}
