@@ -2902,8 +2902,10 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	$must_use_wpmail = apply_filters( 'bp_mail_use_wp_mail', $wp_html_emails || ! $is_default_wpmail );
 
 	if ( $must_use_wpmail ) {
+		$to = $email->get( 'to' );
+
 		return wp_mail(
-			array_shift( $email->get( 'to' ) )->get_address(),
+			array_shift( $to )->get_address(),
 			$email->get( 'subject', 'replace-tokens' ),
 			$email->get( 'content_plaintext', 'replace-tokens' )
 		);
