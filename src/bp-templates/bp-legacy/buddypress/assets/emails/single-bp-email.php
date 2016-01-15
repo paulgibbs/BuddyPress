@@ -49,7 +49,6 @@ $settings = bp_email_get_appearance_settings();
 	<meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>">
 	<meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
-	<title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
 	<!-- CSS Reset -->
 	<style type="text/css">
