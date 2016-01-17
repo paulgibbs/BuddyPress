@@ -444,5 +444,5 @@ function bp_admin_reinstall_emails() {
 	require_once( buddypress()->plugin_dir . '/bp-core/admin/bp-core-admin-schema.php' );
 	bp_core_install_emails();
 
-	return array( 0, __( 'Emails have been restored to defaults.', 'buddypress' ) );
+	return array( 0, __( 'Emails have been successfully reinstalled.', 'buddypress' ) );
 }
