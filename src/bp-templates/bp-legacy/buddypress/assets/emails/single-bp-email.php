@@ -97,8 +97,11 @@ $settings = bp_email_get_appearance_settings();
 		}
 
 		/* What it does: Uses a better rendering method when resizing images in IE. */
+		/* & manages img max widths to ensure content body images  don't exceed template width */
 		img {
 			-ms-interpolation-mode:bicubic;
+			height: auto;
+			max-width: 100%;
 		}
 
 		/* What it does: Overrides styles added when Yahoo's auto-senses a link. */
