@@ -541,7 +541,7 @@ function bp_core_install_emails() {
 	$emails = array(
 		'activity-comment' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( '{{poster.name}} replied to one of your updates', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] {{poster.name}} replied to one of your updates', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "{{poster.name}} replied to one of your updates:\n\n<blockquote>&quot;{{usermessage}}&quot;</blockquote>\n\n<a href=\"{{{thread.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -549,7 +549,7 @@ function bp_core_install_emails() {
 		),
 		'activity-comment-author' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( '{{poster.name}} replied to one of your comments', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] {{poster.name}} replied to one of your comments', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "{{poster.name}} replied to one of your comments:\n\n<blockquote>&quot;{{usermessage}}&quot;</blockquote>\n\n<a href=\"{{{thread.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -557,7 +557,7 @@ function bp_core_install_emails() {
 		),
 		'activity-at-message' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( '{{poster.name}} mentioned you in a status update', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] {{poster.name}} mentioned you in a status update', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "{{poster.name}} mentioned you in a status update:\n\n<blockquote>&quot;{{usermessage}}&quot;</blockquote>\n\n<a href=\"{{{mentioned.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -565,7 +565,7 @@ function bp_core_install_emails() {
 		),
 		'groups-at-message' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( '{{poster.name}} mentioned you in an update', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] {{poster.name}} mentioned you in an update', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "{{poster.name}} mentioned you in the group \"{{group.name}}\":\n\n<blockquote>&quot;{{usermessage}}&quot;</blockquote>\n\n<a href=\"{{{group-mentioned.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -573,7 +573,7 @@ function bp_core_install_emails() {
 		),
 		'core-user-registration' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'Activate your account', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] Activate your account', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Thanks for registering!\n\nTo complete the activation of your account, go to the following link: <a href=\"{{{activate.url}}}\">{{{activate.url}}}</a>", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -581,7 +581,7 @@ function bp_core_install_emails() {
 		),
 		'core-user-registration-with-blog' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'Activate {{{user-site.url}}}', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] Activate {{{user-site.url}}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Thanks for registering!\n\nTo complete the activation of your account and site, go to the following link: <a href=\"{{{activate-site.url}}}\">{{{activate-site.url}}}</a>.\n\nAfter you activate, you can visit your site at <a href=\"{{{user-site.url}}}\">{{{user-site.url}}}</a>.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -589,7 +589,7 @@ function bp_core_install_emails() {
 		),
 		'friends-request' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'New friendship request from {{initiator.name}}', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] New friendship request from {{initiator.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "<a href=\"{{{initiator.url}}}\">{{initiator.name}}</a> wants to add you as a friend.\n\nTo accept this request and manage all of your pending requests, visit: <a href=\"{{{friend-requests.url}}}\">{{{friend-requests.url}}}</a>", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -597,7 +597,7 @@ function bp_core_install_emails() {
 		),
 		'friends-request-accepted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( '{{friend.name}} accepted your friendship request', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] {{friend.name}} accepted your friendship request', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "<a href=\"{{{friendship.url}}}\">{{friend.name}}</a> accepted your friend request.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -605,7 +605,7 @@ function bp_core_install_emails() {
 		),
 		'groups-details-updated' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'Group details updated', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] Group details updated', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Group details for the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; were updated:\n<blockquote>{{changed_text}}</blockquote>", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -613,7 +613,7 @@ function bp_core_install_emails() {
 		),
 		'groups-invitation' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'You have an invitation to the group: "{{group.name}}"', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] You have an invitation to the group: "{{group.name}}"', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "<a href=\"{{{inviter.url}}}\">{{inviter.name}}</a> has invited you to join the group: &quot;{{group.name}}&quot;.\n<a href=\"{{{invites.url}}}\">Go here to accept your invitation</a> or <a href=\"{{{group.url}}}\">visit the group</a> to learn more.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -621,7 +621,7 @@ function bp_core_install_emails() {
 		),
 		'groups-member-promoted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'You have been promoted in the group: "{{group.name}}"', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] You have been promoted in the group: "{{group.name}}"', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "You have been promoted to <b>{{promoted_to}}</b> in the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot;.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -629,7 +629,7 @@ function bp_core_install_emails() {
 		),
 		'groups-membership-request' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'Membership request for group: {{group.name}}', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] Membership request for group: {{group.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "<a href=\"{{{profile.url}}}\">{{requesting-user.name}}</a> wants to join the group &quot;{{group.name}}&quot;. As you are an administrator of this group, you must either accept or reject the membership request.\n\n<a href=\"{{{group-requests.url}}}\">Go here to manage this</a> and all other pending requests.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -637,7 +637,7 @@ function bp_core_install_emails() {
 		),
 		'messages-unread' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'New message from {{sender.name}}', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] New message from {{sender.name}}', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "{{sender.name}} sent you a new message: &quot;{{usersubject}}&quot;\n\n<blockquote>&quot;{{usermessage}}&quot;</blockquote>\n\n<a href=\"{{{message.url}}}\">Go to the discussion</a> to reply or catch up on the conversation.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -645,7 +645,7 @@ function bp_core_install_emails() {
 		),
 		'settings-verify-email-change' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'Verify your new email address', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] Verify your new email address', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "You recently changed the email address associated with your account on {{site.name}}. If this is correct, <a href=\"{{{verify.url}}}\">go here to confirm the change</a>.\n\nOtherwise, you can safely ignore and delete this email if you have changed your mind, or if you think you have received this email in error.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -653,7 +653,7 @@ function bp_core_install_emails() {
 		),
 		'groups-membership-request-accepted' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'Membership request for group "{{group.name}}" accepted', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] Membership request for group "{{group.name}}" accepted', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Your membership request for the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; has been accepted.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
@@ -661,7 +661,7 @@ function bp_core_install_emails() {
 		),
 		'groups-membership-request-rejected' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
-			'post_title'   => __( 'Membership request for group "{{group.name}}" rejected', 'buddypress' ),
+			'post_title'   => __( '[{{{site.name}}}] Membership request for group "{{group.name}}" rejected', 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_content' => __( "Your membership request for the group &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; has been rejected.", 'buddypress' ),
 			/* translators: do not remove {} brackets or translate its contents. */
