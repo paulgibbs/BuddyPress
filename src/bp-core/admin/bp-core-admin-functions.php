@@ -815,20 +815,20 @@ function bp_admin_do_wp_nav_menu_meta_box() {
  *
  * @since 2.5.0
  */
-function bp_admin_email_add_codex_link() {
+function bp_admin_email_add_codex_notice() {
 	if ( get_current_screen()->post_type !== bp_get_email_post_type() ) {
 		return;
 	}
 
 	bp_core_add_admin_notice(
 		sprintf(
-			__( 'Phrases wrapped in braces <code>{{ }}</code> are email tokens. <a href="%s">Learn about the tokens on the BuddyPress Codex</a>.', 'buddypress' ),
-			esc_url( 'https://codex.buddypress.org/TODO' )
+			__( 'Phrases wrapped in braces <code>{{ }}</code> are email tokens. <a href="%s">Learn about tokens on the BuddyPress Codex</a>.', 'buddypress' ),
+			esc_url( 'https://codex.buddypress.org/emails/email-tokens/' )
 		),
 		'error'
 	);
 }
-add_action( 'admin_head-post.php', 'bp_admin_email_add_codex_link' );
+add_action( 'admin_head-post.php', 'bp_admin_email_add_codex_notice' );
 
 /**
  * Restrict various items from view if editing a BuddyPress menu.
