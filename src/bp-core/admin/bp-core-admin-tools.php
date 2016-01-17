@@ -149,7 +149,7 @@ function bp_admin_repair_list() {
 	// - reinstall emails.
 	$repair_list[100] = array(
 		'bp-reinstall-emails',
-		__( 'Delete emails and restore from defaults.', 'buddypress' ),
+		__( 'Reinstall emails (delete and restore from defaults).', 'buddypress' ),
 		'bp_admin_reinstall_emails',
 	);
 
