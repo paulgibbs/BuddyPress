@@ -120,7 +120,7 @@ $settings = bp_email_get_appearance_settings();
 
 		<!-- Visually Hidden Preheader Text : BEGIN -->
 		<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-			(Optional) This text will appear in the inbox preview, but not the email body.
+			{{email.preheader}}
 		</div>
 		<!-- Visually Hidden Preheader Text : END -->
 

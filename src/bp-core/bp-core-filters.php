@@ -934,6 +934,7 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 	$tokens['site.name']        = wp_specialchars_decode( bp_get_option( 'blogname' ), ENT_QUOTES );
 
 	// Default values for tokens set conditionally below.
+	$tokens['email.preheader'] = '';
 	$tokens['recipient.email'] = '';
 	$tokens['recipient.name']  = '';
 	$tokens['unsubscribe']     = '';
@@ -956,6 +957,12 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 				function_exists( 'bp_get_settings_slug' ) ? bp_get_settings_slug() : 'settings'
 			) );
 		}
+	}
+
+	// Email preheader.
+	$post = $email->get( 'post_object' );
+	if ( $post ) {
+		$tokens['email.preheader'] = sanitize_text_field( get_post_meta( $post->ID, 'bp_email_preheader', true ) );
 	}
 
 	return $tokens;
