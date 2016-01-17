@@ -811,7 +811,35 @@ function bp_admin_do_wp_nav_menu_meta_box() {
 }
 
 /**
- * In Emails post editor, add notice linking to token documentation on Codex.
+ * In admin emails list, for non-en_US locales, add notice explaining how to reinstall emails.
+ *
+ * If BuddyPress installs before its translations are in place, tell people how to reinstall
+ * the emails so they have their contents in their site's language.
+ *
+ * @since 2.5.0
+ */
+function bp_admin_email_maybe_add_translation_notice() {
+	if ( get_current_screen()->post_type !== bp_get_email_post_type() || get_locale() === 'en_US' ) {
+		return;
+	}
+
+	// If user can't access BP Tools, there's no point showing the message.
+	if ( ! current_user_can( buddypress()->admin->capability ) ) {
+		return;
+	}
+
+	bp_core_add_admin_notice(
+		sprintf(
+			__( 'Are your emails in the wrong language? Go to <a href="%s">BuddyPress Tools and run the "reinstall emails"</a> tool.', 'buddypress' ),
+			bp_get_admin_url( 'tools.php?page=bp-tools' )
+		),
+		'updated'
+	);
+}
+add_action( 'admin_head-edit.php', 'bp_admin_email_maybe_add_translation_notice' );
+
+/**
+ * In emails editor, add notice linking to token documentation on Codex.
  *
  * @since 2.5.0
  */
