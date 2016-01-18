@@ -177,11 +177,11 @@ $unread:             #9dc3c8;
 /*--------------------------------------------------------------
 
 This is the BuddyPress companion stylesheet for
-the WordPress Twentysixteen theme.
+the WordPress Twentytwelve theme.
 
 This sheet supports the primary BuddyPress styles in buddypress.css
 
-If you are running as a child theme of twentysixteen this stylesheet will be
+If you are running as a child theme of twentytwelve this stylesheet will be
 loaded by default. If you want to modify the styles the normal BP Theme Compat
 hierarchy works and you can copy the file to buddypress/css/ or community/css/
 in your child themes root & either start over or modify the rulesets.
@@ -649,9 +649,11 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 			// Undo BP floats to center avatars initially mobile up
 			.item-avatar {
 				margin-bottom: $spacing-val-sm;
+
 				@media screen and (min-width: 37.500em) {
 					margin-bottom: 0;
 				}
+
 				text-align: center;
 
 				a {border-bottom: 0;}
@@ -677,6 +679,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				@media screen and (min-width: 61.5625em) {
 					margin-left: 15%;
 				}
+
 				overflow: hidden;
 
 				.item-meta {
@@ -863,7 +866,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 						float: right;
 
 						input {
-							padding: 0;
+							padding: 2px 6px;
 						}
 					}
 				}
@@ -1004,10 +1007,12 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 					display: block;
 					@include font-size(14);
 					margin-bottom: $spacing-val-xs;
+
 					@media screen and (min-width: 37.500em) {
-						display: inline-block;
+						float: left;
 						margin-bottom: 0;
 					}
+
 					padding: 0.2em 0.5em;
 				}
 			}
@@ -1049,6 +1054,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 					@media screen and (min-width: 46.25em) {
 						@include font-size(20);
 					}
+
 					margin-bottom: $spacing-val-lg;
 					p {padding: $spacing-val-md;}
 				}
@@ -1125,27 +1131,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 			} // close .ac-form
 
 		} // close .activity-comments
-
-		// as class name states this form is a reply to the original act item 'root'
-		// We'll position this below the reply button to avoid having to scroll past
-		// existing comments but only if li parent has class 'has-comments'.
-		li.has-comments {
-			.activity-comments {
-
-				.ac-form.root {
-					background: #fff;
-					left: 0;
-					@media screen and (min-width: 46.25em) {
-						left: 10px;
-					}
-					padding: 10px;
-					position: absolute;
-					top: 10px;
-					@include calc(width, "100% - 10px");
-				}
-
-			}
-		}
 
 	} // close #activity-steam
 
@@ -1392,7 +1377,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				}
 
 //				#item-header-avatar {
-//					//width: 21%;
+//					width: 21%;
 //				}
 
 				#item-header-content {
@@ -1451,7 +1436,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 
 			#item-header-avatar {
 				text-align: center;
-				width: 100%;
 
 				img.avatar,
 				a {
@@ -1472,7 +1456,6 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 			@media screen and (min-width: 46.25em) {
 				#item-header-avatar {
 					float: left;
-					width: 20%;
 
 					a {
 						float: left;
@@ -1624,6 +1607,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				background: $content-background;
 				padding: $spacing-val-md 0;
 			}
+
 			width: 100%;
 
 			#search-members-form {
@@ -1681,6 +1665,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 		.messages-options-nav {
 			float: left;
 			width: 100%;
+
 			@media screen and (min-width: 37.500em) {
 				width: 40%;
 			}
@@ -1958,6 +1943,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 				td.bulk-select-check,
 				td.thread-from {
 					height: 3em;
+
 					@media screen and (max-width: 37.500em) {
 						height: 5.2em;
 					}
@@ -1997,6 +1983,7 @@ http://codex.buddypress.org/themes/buddypress-companion-stylesheets/
 					display: block;
 					float: right;
 					line-height: 2;
+
 					@media screen and (max-width: 37.500em) {
 						clear: both;
 						@include font-size(11);
