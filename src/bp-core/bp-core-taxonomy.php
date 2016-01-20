@@ -35,7 +35,6 @@ function bp_register_default_taxonomies() {
 			'public'            => false,
 			'query_var'         => false,
 			'rewrite'           => false,
-			'show_admin_column' => true,
 			'show_tagcloud'     => false,
 			'show_ui'           => bp_current_user_can( 'bp_moderate' ),  // TODO
 		) )
