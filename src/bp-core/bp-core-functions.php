@@ -2735,7 +2735,7 @@ function bp_get_email_tax_type_labels() {
 		'items_list'            => _x( 'Email list', 'email type taxonomy label', 'buddypress' ),
 		'items_list_navigation' => _x( 'Email list navigation', 'email type taxonomy label', 'buddypress' ),
 		'menu_name'             => _x( 'Types', 'email type taxonomy label', 'buddypress' ),
-		'name'                  => _x( 'Email Types', 'email type taxonomy name', 'buddypress' ),
+		'name'                  => _x( 'Email Type', 'email type taxonomy name', 'buddypress' ),
 		'new_item_name'         => _x( 'New Email Type Name', 'email type taxonomy label', 'buddypress' ),
 		'not_found'             => _x( 'No email types found.', 'email type taxonomy label', 'buddypress' ),
 		'no_terms'              => _x( 'No email types', 'email type taxonomy label', 'buddypress' ),
