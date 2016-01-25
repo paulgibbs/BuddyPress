@@ -266,6 +266,215 @@ class BP_Email {
 	}
 
 	/**
+	 * Get email headers.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string[] Associative pairing of email header name/value.
+	 */
+	public function get_headers( $transform = 'raw' ) {
+		return $this->get( 'headers', $transform );
+	}
+
+	/**
+	 * Get the email's "bcc" address and name.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return BP_Email_Recipient[] BCC recipients.
+	 */
+	public function get_bcc( $transform = 'raw' ) {
+		return $this->get( 'bcc', $transform );
+	}
+
+	/**
+	 * Get the email's "cc" address and name.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return BP_Email_Recipient[] CC recipients.
+	 */
+	public function get_cc( $transform = 'raw' ) {
+		return $this->get( 'cc', $transform );
+	}
+
+	/**
+	 * Get the email content.
+	 *
+	 * HTML or plaintext is returned, depending on the email's $content_type.
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string HTML or plaintext, depending on $content_type.
+	 */
+	public function get_content( $transform = 'raw' ) {
+		return $this->get( 'content', $transform );
+	}
+
+	/**
+	 * Get the email content (in HTML).
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string HTML email content.
+	 */
+	public function get_content_html( $transform = 'raw' ) {
+		return $this->get( 'content_html', $transform );
+	}
+
+	/**
+	 * Get the email content (in plaintext).
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string Plain text email content.
+	 */
+	public function get_content_plaintext( $transform = 'raw' ) {
+		return $this->get( 'content_plaintext', $transform );
+	}
+
+	/**
+	 * Get the email content type (HTML or plain text) that the email will be sent in.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string Email content type ("html" or "plaintext").
+	 */
+	public function get_content_type( $transform = 'raw' ) {
+		return $this->get( 'content_type', $transform );
+	}
+
+	/**
+	 * Get the email's "from" address and name.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return BP_Email_Recipient "From" recipient.
+	 */
+	public function get_from( $transform = 'raw' ) {
+		return $this->get( 'from', $transform );
+	}
+
+	/**
+	 * Get the Post associated with the email.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @return WP_Post The post.
+	 */
+	public function get_post_object( $transform = 'raw' ) {
+		return $this->get( 'post_object', $transform );
+	}
+
+	/**
+	 * Get the email's "reply to" address and name.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return BP_Email_Recipient "Reply to" recipient.
+	 */
+	public function get_reply_to( $transform = 'raw' ) {
+		return $this->get( 'reply_to', $transform );
+	}
+
+	/**
+	 * Get the email subject.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string Email subject.
+	 */
+	public function get_subject( $transform = 'raw' ) {
+		return $this->get( 'subject', $transform );
+	}
+
+	/**
+	 * Get the email template (the HTML wrapper around the email content).
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string Email template. Assumed to be HTML.
+	 */
+	public function get_template( $transform = 'raw' ) {
+		return $this->get( 'template', $transform );
+	}
+
+	/**
+	 * Get the email's "to" address and name.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return BP_Email_Recipient "To" recipients.
+	 */
+	public function get_to( $transform = 'raw' ) {
+		return $this->get( 'to', $transform );
+	}
+
+	/**
+	 * Get token names and replacement values for this email.
+	 *
+	 * Unlike most other methods in this class, this one is not chainable.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $transform Optional. How to transform the return value.
+	 *                          Accepts 'raw' (default) or 'replace-tokens'.
+	 * @return string[] Associative pairing of token name (key) and replacement value (value).
+	 */
+	public function get_tokens( $transform = 'raw' ) {
+		return $this->get( 'tokens', $transform );
+	}
+
+	/**
 	 * Set email headers.
 	 *
 	 * Does NOT let you override to/from, etc. Use the methods provided to set those.
