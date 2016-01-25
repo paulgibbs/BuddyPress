@@ -32,6 +32,7 @@ function bp_register_default_taxonomies() {
 		apply_filters( 'bp_register_email_tax_type', array(
 			'description'   => _x( 'BuddyPress email types', 'email type taxonomy description', 'buddypress' ),
 			'labels'        => bp_get_email_tax_type_labels(),
+			'meta_box_cb'   => 'bp_email_tax_type_metabox',
 			'public'        => false,
 			'query_var'     => false,
 			'rewrite'       => false,
