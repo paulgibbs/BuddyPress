@@ -174,8 +174,8 @@ class BP_Email {
 		// This was escaped with esc_html on the way into the database in sanitize_option().
 		$site_name = wp_specialchars_decode( bp_get_option( 'blogname' ), ENT_QUOTES );
 
-		$this->from( "wordpress@$domain", $site_name );
-		$this->reply_to( bp_get_option( 'admin_email' ), $site_name );
+		$this->set_from( "wordpress@$domain", $site_name );
+		$this->set_reply_to( bp_get_option( 'admin_email' ), $site_name );
 
 		/**
 		 * Fires inside __construct() method for BP_Email class.
@@ -190,7 +190,7 @@ class BP_Email {
 
 
 	/*
-	 * Psuedo setters/getters.
+	 * Setters/getters.
 	 */
 
 	/**
@@ -274,7 +274,7 @@ class BP_Email {
 	 * @param string[] $headers Key/value pairs of header name/values (strings).
 	 * @return BP_Email
 	 */
-	public function headers( array $headers ) {
+	public function set_headers( array $headers ) {
 		$new_headers = array();
 
 		foreach ( $headers as $name => $content ) {
@@ -313,7 +313,7 @@ class BP_Email {
 	 * @param string $name Optional. If $bcc_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
-	public function bcc( $bcc_address, $name = '' ) {
+	public function set_bcc( $bcc_address, $name = '' ) {
 		$bcc = array( new BP_Email_Recipient( $bcc_address, $name ) );
 
 		/**
@@ -348,7 +348,7 @@ class BP_Email {
 	 * @param string $name Optional. If $cc_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
-	public function cc( $cc_address, $name = '' ) {
+	public function set_cc( $cc_address, $name = '' ) {
 		$cc = array( new BP_Email_Recipient( $cc_address, $name ) );
 
 		/**
@@ -375,7 +375,7 @@ class BP_Email {
 	 * @param string $content HTML email content.
 	 * @return BP_Email
 	 */
-	public function content_html( $content ) {
+	public function set_content_html( $content ) {
 
 		/**
 		 * Filters the new value of the email's "content" property (HTML).
@@ -398,7 +398,7 @@ class BP_Email {
 	 * @param string $content Plain text email content.
 	 * @return BP_Email
 	 */
-	public function content_plaintext( $content ) {
+	public function set_content_plaintext( $content ) {
 
 		/**
 		 * Filters the new value of the email's "content" property (plain text).
@@ -421,7 +421,7 @@ class BP_Email {
 	 * @param string $content_type Email content type ("html" or "plaintext").
 	 * @return BP_Email
 	 */
-	public function content_type( $content_type ) {
+	public function set_content_type( $content_type ) {
 		if ( ! in_array( $content_type, array( 'html', 'plaintext', ), true ) ) {
 			$class        = get_class_vars( get_class() );
 			$content_type = $class['content_type'];
@@ -452,7 +452,7 @@ class BP_Email {
 	 * @param string $name Optional. If $email_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
-	public function from( $email_address, $name = '' ) {
+	public function set_from( $email_address, $name = '' ) {
 		$from = new BP_Email_Recipient( $email_address, $name );
 
 		/**
@@ -481,7 +481,7 @@ class BP_Email {
 	 * @param WP_Post $post
 	 * @return BP_Email
 	 */
-	public function post_object( WP_Post $post ) {
+	public function set_post_object( WP_Post $post ) {
 
 		/**
 		 * Filters the new value of the email's "post object" property.
@@ -494,9 +494,9 @@ class BP_Email {
 		$this->post_object = apply_filters( 'bp_email_set_post_object', $post, $this );
 
 		if ( is_a( $this->post_object, 'WP_Post' ) ) {
-			$this->subject( $this->post_object->post_title )
-				->content_html( $this->post_object->post_content )
-				->content_plaintext( $this->post_object->post_excerpt );
+			$this->set_subject( $this->post_object->post_title )
+				->set_content_html( $this->post_object->post_content )
+				->set_content_plaintext( $this->post_object->post_excerpt );
 
 			ob_start();
 
@@ -520,7 +520,7 @@ class BP_Email {
 	 * @param string $name Optional. If $email_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
-	public function reply_to( $email_address, $name = '' ) {
+	public function set_reply_to( $email_address, $name = '' ) {
 		$reply_to = new BP_Email_Recipient( $email_address, $name );
 
 		/**
@@ -547,7 +547,7 @@ class BP_Email {
 	 * @param string $subject Email subject.
 	 * @return BP_Email
 	 */
-	public function subject( $subject ) {
+	public function set_subject( $subject ) {
 
 		/**
 		 * Filters the new value of the subject email property.
@@ -573,7 +573,7 @@ class BP_Email {
 	 * @param string $template Email template. Assumed to be HTML.
 	 * @return BP_Email
 	 */
-	public function template( $template ) {
+	public function set_template( $template ) {
 
 		/**
 		 * Filters the new value of the template email property.
@@ -609,7 +609,7 @@ class BP_Email {
 	 * @param string $name Optional. If $to_address is a string, this is the recipient's name.
 	 * @return BP_Email
 	 */
-	public function to( $to_address, $name = '' ) {
+	public function set_to( $to_address, $name = '' ) {
 		$to = array( new BP_Email_Recipient( $to_address, $name ) );
 
 		/**
@@ -639,7 +639,7 @@ class BP_Email {
 	 *                         Values are a string or a callable function.
 	 * @return BP_Email
 	 */
-	public function tokens( array $tokens ) {
+	public function set_tokens( array $tokens ) {
 		$formatted_tokens = array();
 
 		foreach ( $tokens as $name => $value ) {

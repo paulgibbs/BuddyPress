@@ -2811,7 +2811,7 @@ function bp_get_email( $email_type ) {
 	 */
 
 	// Post object (sets subject, content, template).
-	$email->post_object( $post );
+	$email->set_post_object( $post );
 
 	/**
 	 * Filters the BP_Email object returned by bp_get_email().
@@ -2882,8 +2882,8 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	}
 
 	// From, subject, content are set automatically.
-	$email->to( $to );
-	$email->tokens( $args['tokens'] );
+	$email->set_to( $to );
+	$email->set_tokens( $args['tokens'] );
 
 	$status = $email->validate();
 	if ( is_wp_error( $status ) ) {
