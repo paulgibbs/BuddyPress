@@ -206,6 +206,7 @@ class BP_Email {
 	 * @return mixed Returns null if property does not exist, otherwise the value.
 	 */
 	public function get( $property_name, $transform = 'raw' ) {
+
 		// "content" is replaced by HTML or plain text depending on $content_type.
 		if ( $property_name === 'content' ) {
 			$property_name = 'content_' . $this->get( 'content_type' );
@@ -221,7 +222,7 @@ class BP_Email {
 
 
 		/**
-		 * Filters the value of the specified email property.
+		 * Filters the value of the specified email property before transformation.
 		 *
 		 * This is a dynamic filter dependent on the specified key.
 		 *
@@ -251,7 +252,7 @@ class BP_Email {
 		}
 
 		/**
-		 * Filters the value of the specified email $property.
+		 * Filters the value of the specified email $property after transformation.
 		 *
 		 * @since 2.5.0
 		 *
@@ -298,7 +299,7 @@ class BP_Email {
 	}
 
 	/**
-	 * Set the email's "bcc" address.
+	 * Set the email's "bcc" address and name.
 	 *
 	 * To set a single address, the first parameter is the address and the second the name.
 	 * You can also pass a user ID or a WP_User object.
@@ -333,7 +334,7 @@ class BP_Email {
 	}
 
 	/**
-	 * Set the email's "cc" address.
+	 * Set the email's "cc" address and name.
 	 *
 	 * To set a single address, the first parameter is the address and the second the name.
 	 * You can also pass a user ID or a WP_User object.
@@ -589,7 +590,7 @@ class BP_Email {
 	}
 
 	/**
-	 * Set the email's "to" address.
+	 * Set the email's "to" address and name.
 	 *
 	 * IMPORTANT NOTE: the assumption with all emails sent by (and belonging to) BuddyPress itself
 	 * is that there will only be a single `$to_address`. This is to simplify token and templating
