@@ -669,6 +669,25 @@ function bp_core_install_emails() {
 		),
 	);
 
+	$descriptions = array(
+		'activity-comment'                   => __( 'A member has replied to an activity update that the recipient posted.', 'buddypress' ),
+		'activity-comment-author'            => __( 'A member has replied to a comment on an activity update that the recipient posted.', 'buddypress' ),
+		'activity-at-message'                => __( 'Recipient was mentioned in an activity update.', 'buddypress' ),
+		'groups-at-message'                  => __( 'Recipient was mentioned in a group activity update.', 'buddypress' ),
+		'core-user-registration'             => __( 'Recipient has registered for an account.', 'buddypress' ),
+		'core-user-registration-with-blog'   => __( 'Recipient has registered for an account and site.', 'buddypress' ),
+		'friends-request'                    => __( 'A member has sent a friend request to the recipient.', 'buddypress' ),
+		'friends-request-accepted'           => __( 'Recipient has had a friend request accepted by a member.', 'buddypress' ),
+		'groups-details-updated'             => __( "A group's details were updated.", 'buddypress' ),
+		'groups-invitation'                  => __( 'A member has sent a group invitation to the recipient.', 'buddypress' ),
+		'groups-member-promoted'             => __( "Recipient's status within a group have changed.", 'buddypress' ),
+		'groups-membership-request'          => __( 'A member has requested permission to join a group.', 'buddypress' ),
+		'messages-unread'                    => __( 'Recipient has received a private message.', 'buddypress' ),
+		'settings-verify-email-change'       => __( 'Recipient has changed their email address.', 'buddypress' ),
+		'groups-membership-request-accepted' => __( 'Recipient had requested to join a group, which was accepted.', 'buddypress' ),
+		'groups-membership-request-rejected' => __( 'Recipient had requested to join a group, which was rejected.', 'buddypress' ),
+	);
+
 	// Add these emails to the database.
 	foreach ( $emails as $id => $email ) {
 		$post_id = wp_insert_post( bp_parse_args( $email, $defaults, 'install_email_' . $id ) );
@@ -676,7 +695,12 @@ function bp_core_install_emails() {
 			continue;
 		}
 
-		wp_set_post_terms( $post_id, $id, bp_get_email_tax_type() );
+		$term_ids = wp_set_post_terms( $post_id, $id, bp_get_email_tax_type() );
+		foreach ( $term_ids as $term_id ) {
+			wp_update_term( (int) $term_id, bp_get_email_tax_type(), array(
+				'description' => $descriptions[ $id ],
+			) );
+		}
 	}
 
 	/**
