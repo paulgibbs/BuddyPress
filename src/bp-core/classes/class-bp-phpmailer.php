@@ -67,11 +67,11 @@ class BP_PHPMailer implements BP_Email_Delivery {
 		 * Content.
 		 */
 
-		$phpmailer->Subject = $email->get( 'subject', 'replace-tokens' );
-		$content_plaintext  = PHPMailer::normalizeBreaks( $email->get( 'content_plaintext', 'replace-tokens' ) );
+		$phpmailer->Subject = $email->get_subject( 'replace-tokens' );
+		$content_plaintext  = PHPMailer::normalizeBreaks( $email->get_content_plaintext( 'replace-tokens' ) );
 
 		if ( $email->get( 'content_type' ) === 'html' ) {
-			$phpmailer->msgHTML( $email->get( 'template', 'add-content' ), '', 'wp_strip_all_tags' );
+			$phpmailer->msgHTML( $email->get_template( 'add-content' ), '', 'wp_strip_all_tags' );
 			$phpmailer->AltBody = $content_plaintext;
 
 		} else {
@@ -79,19 +79,19 @@ class BP_PHPMailer implements BP_Email_Delivery {
 			$phpmailer->Body = $content_plaintext;
 		}
 
-		$recipient = $email->get( 'from' );
+		$recipient = $email->get_from();
 		try {
 			$phpmailer->SetFrom( $recipient->get_address(), $recipient->get_name() );
 		} catch ( phpmailerException $e ) {
 		}
 
-		$recipient = $email->get( 'reply_to' );
+		$recipient = $email->get_reply_to();
 		try {
 			$phpmailer->addReplyTo( $recipient->get_address(), $recipient->get_name() );
 		} catch ( phpmailerException $e ) {
 		}
 
-		$recipients = $email->get( 'to' );
+		$recipients = $email->get_to();
 		foreach ( $recipients as $recipient ) {
 			try {
 				$phpmailer->AddAddress( $recipient->get_address(), $recipient->get_name() );
@@ -99,7 +99,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 			}
 		}
 
-		$recipients = $email->get( 'cc' );
+		$recipients = $email->get_cc();
 		foreach ( $recipients as $recipient ) {
 			try {
 				$phpmailer->AddCc( $recipient->get_address(), $recipient->get_name() );
@@ -107,7 +107,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 			}
 		}
 
-		$recipients = $email->get( 'bcc' );
+		$recipients = $email->get_bcc();
 		foreach ( $recipients as $recipient ) {
 			try {
 				$phpmailer->AddBcc( $recipient->get_address(), $recipient->get_name() );
@@ -115,7 +115,7 @@ class BP_PHPMailer implements BP_Email_Delivery {
 			}
 		}
 
-		$headers = $email->get( 'headers' );
+		$headers = $email->get_headers();
 		foreach ( $headers as $name => $content ) {
 			$phpmailer->AddCustomHeader( $name, $content );
 		}

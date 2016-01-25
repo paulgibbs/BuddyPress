@@ -960,7 +960,7 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 	}
 
 	// Email preheader.
-	$post = $email->get( 'post_object' );
+	$post = $email->get_post_object();
 	if ( $post ) {
 		$tokens['email.preheader'] = sanitize_text_field( get_post_meta( $post->ID, 'bp_email_preheader', true ) );
 	}

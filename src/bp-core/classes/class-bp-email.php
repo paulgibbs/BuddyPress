@@ -209,7 +209,7 @@ class BP_Email {
 
 		// "content" is replaced by HTML or plain text depending on $content_type.
 		if ( $property_name === 'content' ) {
-			$property_name = 'content_' . $this->get( 'content_type' );
+			$property_name = 'content_' . $this->get_content_type();
 
 			if ( ! in_array( $property_name, array( 'content_html', 'content_plaintext', ), true ) ) {
 				$property_name = 'content_html';
@@ -239,11 +239,11 @@ class BP_Email {
 		switch ( $transform ) {
 			// Special-case to fill the $template with the email $content.
 			case 'add-content':
-				$retval = str_replace( '{{{content}}}', nl2br( $this->get( 'content', 'replace-tokens' ) ), $retval );
+				$retval = str_replace( '{{{content}}}', nl2br( $this->get_content( 'replace-tokens' ) ), $retval );
 				// Fall through.
 
 			case 'replace-tokens':
-				$retval = self::replace_tokens( $retval, $this->get( 'tokens', 'raw' ) );
+				$retval = self::replace_tokens( $retval, $this->get_tokens( 'raw' ) );
 				// Fall through.
 
 			case 'raw':
