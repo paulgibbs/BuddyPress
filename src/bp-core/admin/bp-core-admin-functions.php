@@ -883,10 +883,6 @@ function bp_email_tax_type_metabox( $post, $box ) {
 	$taxonomy = get_taxonomy( $r['taxonomy'] );
 	?>
 	<div id="taxonomy-<?php echo $tax_name; ?>" class="categorydiv">
-		<ul id="<?php echo $tax_name; ?>-tabs" class="category-tabs">
-			<li class="tabs"><a href="#<?php echo $tax_name; ?>-all"><?php echo $taxonomy->labels->all_items; ?></a></li>
-		</ul>
-
 		<div id="<?php echo $tax_name; ?>-all" class="tabs-panel">
 			<?php
 			$name = ( $tax_name == 'category' ) ? 'post_category' : 'tax_input[' . $tax_name . ']';
@@ -897,27 +893,7 @@ function bp_email_tax_type_metabox( $post, $box ) {
 			</ul>
 		</div>
 
-	<?php if ( current_user_can( $taxonomy->cap->edit_terms ) ) : ?>
-			<div id="<?php echo $tax_name; ?>-adder" class="wp-hidden-children">
-				<a id="<?php echo $tax_name; ?>-add-toggle" href="#<?php echo $tax_name; ?>-add" class="hide-if-no-js taxonomy-add-new">
-					<?php
-						/* translators: %s: add new taxonomy label */
-						printf( __( '+ %s' ), $taxonomy->labels->add_new_item );
-					?>
-				</a>
-				<p id="<?php echo $tax_name; ?>-add" class="category-add wp-hidden-child">
-					<label class="screen-reader-text" for="new<?php echo $tax_name; ?>"><?php echo $taxonomy->labels->add_new_item; ?></label>
-					<input type="text" name="new<?php echo $tax_name; ?>" id="new<?php echo $tax_name; ?>" class="form-required form-input-tip" value="<?php echo esc_attr( $taxonomy->labels->new_item_name ); ?>" aria-required="true"/>
-					<label class="screen-reader-text" for="new<?php echo $tax_name; ?>_parent">
-						<?php echo $taxonomy->labels->parent_item_colon; ?>
-					</label>
-
-					<input type="button" id="<?php echo $tax_name; ?>-add-submit" data-wp-lists="add:<?php echo $tax_name; ?>checklist:<?php echo $tax_name; ?>-add" class="button category-add-submit" value="<?php echo esc_attr( $taxonomy->labels->add_new_item ); ?>" />
-					<?php wp_nonce_field( 'add-' . $tax_name, '_ajax_nonce-add-' . $tax_name, false ); ?>
-					<span id="<?php echo $tax_name; ?>-ajax-response"></span>
-				</p>
-			</div>
-		<?php endif; ?>
+		<p><?php esc_html_e( 'Choose when this email will be sent.', 'buddypress' ); ?></p>
 	</div>
 	<?php
 }
