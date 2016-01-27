@@ -38,7 +38,7 @@ function bp_register_default_taxonomies() {
 			'rewrite'       => false,
 			'show_in_menu'  => false,
 			'show_tagcloud' => false,
-			'show_ui'       => bp_current_user_can( 'bp_moderate' ),  // TODO
+			'show_ui'       => bp_current_user_can( 'bp_moderate' ),
 		) )
 	);
 }
