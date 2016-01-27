@@ -100,6 +100,36 @@ function bp_members_root_slug() {
 	}
 
 /**
+ * Output the member type base slug.
+ *
+ * @since 2.5.0
+ */
+function bp_members_member_type_base() {
+	echo esc_url( bp_get_members_member_type_base() );
+}
+	/**
+	 * Get the member type base slug.
+	 *
+	 * The base slug is the string used as the base prefix when generating member type directory URLs.
+	 * For example, in example.com/members/type/foo/, 'foo' is the member type and 'type' is the
+	 * base slug.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @return string
+	 */
+	function bp_get_members_member_type_base() {
+		/**
+		 * Filters the member type URL base.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $base
+		 */
+		return apply_filters( 'bp_members_member_type_base', _x( 'type', 'member type URL base', 'buddypress' ) );
+	}
+
+/**
  * Output member directory permalink.
  *
  * @since 1.5.0
@@ -126,6 +156,54 @@ function bp_members_directory_permalink() {
 		 * @param string $value Members directory permalink.
 		 */
 		return apply_filters( 'bp_get_members_directory_permalink', trailingslashit( bp_get_root_domain() . '/' . bp_get_members_root_slug() ) );
+	}
+
+/**
+ * Output member type directory permalink.
+ *
+ * @since 2.5.0
+ *
+ * @uses bp_get_member_type_directory_permalink()
+ *
+ * @param string $member_type Optional. Member type.
+ */
+function bp_member_type_directory_permalink( $member_type = '' ) {
+	echo esc_url( bp_get_member_type_directory_permalink( $member_type ) );
+}
+	/**
+	 * Return member type directory permalink.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @param string $member_type Optional. Member type. Defaults to current member type.
+	 * @return string Member type directory URL on success, an empty string on failure.
+	 */
+	function bp_get_member_type_directory_permalink( $member_type = '' ) {
+
+		if ( $member_type ) {
+			$_member_type = $member_type;
+		} else {
+			// Fall back on the current member type.
+			$_member_type = bp_get_current_member_type();
+		}
+
+		$type = bp_get_member_type_object( $_member_type );
+
+		// Bail when member type is not found or has no directory.
+		if ( ! $type || ! $type->has_directory ) {
+			return '';
+		}
+
+		/**
+		 * Filters the member type directory permalink.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param string $value       Member type directory permalink.
+		 * @param object $type        Member type object.
+		 * @param string $member_type Member type name, as passed to the function.
+		 */
+		return apply_filters( 'bp_get_member_type_directory_permalink', trailingslashit( bp_get_members_directory_permalink() . bp_get_members_member_type_base() . '/' . $type->directory_slug ), $type, $member_type );
 	}
 
 /**
