@@ -302,7 +302,15 @@ function bp_core_activation_notice() {
 
 	if ( !empty( $orphaned_components ) ) {
 		$admin_url = bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) );
-		$notice    = sprintf( __( 'The following active BuddyPress Components do not have associated WordPress Pages: %2$s. <a href="%1$s">Repair</a>', 'buddypress' ), esc_url( $admin_url ), '<strong>' . implode( '</strong>, <strong>', $orphaned_components ) . '</strong>' );
+		$notice    = sprintf(
+			'%1$s <a href="%2$s">%3$s</a>',
+			sprintf(
+				__( 'The following active BuddyPress Components do not have associated WordPress Pages: %s.', 'buddypress' ),
+				'<strong>' . implode( '</strong>, <strong>', array_map( 'esc_html', $orphaned_components ) ) . '</strong>'
+			),
+			esc_url( $admin_url ),
+			__( 'Repair', 'buddypress' )
+		);
 
 		bp_core_add_admin_notice( $notice );
 	}
@@ -324,7 +332,15 @@ function bp_core_activation_notice() {
 	// If there are duplicates, post a message about them.
 	if ( !empty( $dupe_names ) ) {
 		$admin_url = bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) );
-		$notice    = sprintf( __( 'Each BuddyPress Component needs its own WordPress page. The following WordPress Pages have more than one component associated with them: %2$s. <a href="%1$s">Repair</a>', 'buddypress' ), esc_url( $admin_url ), '<strong>' . implode( '</strong>, <strong>', $dupe_names ) . '</strong>' );
+		$notice    = sprintf(
+			'%1$s <a href="%2$s">%3$s</a>',
+			sprintf(
+				__( 'Each BuddyPress Component needs its own WordPress page. The following WordPress Pages have more than one component associated with them: %s.', 'buddypress' ),
+				'<strong>' . implode( '</strong>, <strong>', array_map( 'esc_html', $dupe_names ) ) . '</strong>'
+			),
+			esc_url( $admin_url ),
+			__( 'Repair', 'buddypress' )
+		);
 
 		bp_core_add_admin_notice( $notice );
 	}
@@ -828,10 +844,16 @@ function bp_admin_email_maybe_add_translation_notice() {
 		return;
 	}
 
+	if ( bp_core_do_network_admin() ) {
+		$admin_page = 'admin.php';
+	} else {
+		$admin_page = 'tools.php';
+	}
+
 	bp_core_add_admin_notice(
 		sprintf(
 			__( 'Are your emails in the wrong language? Go to <a href="%s">BuddyPress Tools and run the "reinstall emails"</a> tool.', 'buddypress' ),
-			bp_get_admin_url( 'tools.php?page=bp-tools' )
+			esc_url( add_query_arg( 'page', 'bp-tools', bp_get_admin_url( $admin_page ) ) )
 		),
 		'updated'
 	);
