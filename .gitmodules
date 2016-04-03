@@ -1,3 +1,0 @@
-[submodule "tests/behat"]
-	path = tests/behat
-	url = git@github.com:paulgibbs/behat-wordpress-extension.git
