@@ -155,31 +155,26 @@ function bp_get_community_caps() {
  * Return an array of capabilities based on the role that is being requested.
  *
  * @since 1.6.0
+ * @since 2.7.0 $role parameter made mandatory.
  *
  * @param string $role The role for which you're loading caps.
  * @return array Capabilities for $role.
  */
-function bp_get_caps_for_role( $role = '' ) {
+function bp_get_caps_for_role( $role ) {
+	$caps = array();
 
-	// Which role are we looking for?
 	switch ( $role ) {
-
-		// Administrator.
 		case 'administrator' :
 			$caps = array(
-				// Misc.
-				'bp_moderate',
+				'bp_moderate' => true,
 			);
-
 			break;
 
-		// All other default WordPress blog roles.
-		case 'editor'      :
-		case 'author'      :
-		case 'contributor' :
-		case 'subscriber'  :
-		default            :
-			$caps = array();
+		// Every other role.
+		default :
+			$caps = array(
+				'bp_moderate' => false,
+			);
 			break;
 	}
 
@@ -188,7 +183,7 @@ function bp_get_caps_for_role( $role = '' ) {
 	 *
 	 * @since 1.6.0
 	 *
-	 * @param array  $caps Array of capabilities to return.
+	 * @param array  $caps Array of capabilities.
 	 * @param string $role The role currently being loaded.
 	 */
 	return apply_filters( 'bp_get_caps_for_role', $caps, $role );
