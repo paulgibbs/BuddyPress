@@ -107,15 +107,11 @@ function bp_remove_caps() {
  *
  * @since 1.6.0
  *
- * @see WP_User::has_cap() for description of the arguments passed to the
- *      'map_meta_cap' filter.
- *       args.
- *
- * @param array  $caps    See {@link WP_User::has_cap()}.
- * @param string $cap     See {@link WP_User::has_cap()}.
- * @param int    $user_id See {@link WP_User::has_cap()}.
- * @param mixed  $args    See {@link WP_User::has_cap()}.
- * @return array Actual capabilities for meta capability. See {@link WP_User::has_cap()}.
+ * @param array  $caps    The user's actual capabilities.
+ * @param string $cap     Capability name.
+ * @param int    $user_id The user ID.
+ * @param array  $args    Adds the context to the cap. Typically the object ID.
+ * @return array          Actual capabilities for meta capability.
  */
 function bp_map_meta_caps( $caps, $cap, $user_id, $args ) {
 
