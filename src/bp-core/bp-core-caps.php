@@ -60,12 +60,6 @@ function bp_get_current_blog_roles() {
 function bp_add_caps() {
 	global $wp_roles;
 
-	// Load roles if not set.
-	if ( ! isset( $wp_roles ) ) {
-		$wp_roles = new WP_Roles();
-	}
-
-	// Loop through available roles and add them.
 	foreach( $wp_roles->role_objects as $role ) {
 		foreach ( bp_get_caps_for_role( $role->name ) as $cap ) {
 			$role->add_cap( $cap );
@@ -92,12 +86,6 @@ function bp_add_caps() {
 function bp_remove_caps() {
 	global $wp_roles;
 
-	// Load roles if not set.
-	if ( ! isset( $wp_roles ) ) {
-		$wp_roles = new WP_Roles();
-	}
-
-	// Loop through available roles and remove them.
 	foreach( $wp_roles->role_objects as $role ) {
 		foreach ( bp_get_caps_for_role( $role->name ) as $cap ) {
 			$role->remove_cap( $cap );
