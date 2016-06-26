@@ -138,6 +138,7 @@ function bp_map_meta_caps( $caps, $cap, $user_id, $args ) {
  * @since 1.6.0
  *
  * @return array Community capabilities.
+ * djpaultodo Deprecate this
  */
 function bp_get_community_caps() {
 
