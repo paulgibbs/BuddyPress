@@ -61,8 +61,8 @@ function bp_add_caps() {
 	global $wp_roles;
 
 	foreach( $wp_roles->role_objects as $role ) {
-		foreach ( bp_get_caps_for_role( $role->name ) as $cap ) {
-			$role->add_cap( $cap );
+		foreach ( bp_get_caps_for_role( $role->name ) as $cap => $value ) {
+			$role->add_cap( $cap, $value );
 		}
 	}
 
@@ -87,7 +87,7 @@ function bp_remove_caps() {
 	global $wp_roles;
 
 	foreach( $wp_roles->role_objects as $role ) {
-		foreach ( bp_get_caps_for_role( $role->name ) as $cap ) {
+		foreach ( array_keys( bp_get_caps_for_role( $role->name ) ) as $cap ) {
 			$role->remove_cap( $cap );
 		}
 	}
