@@ -24,28 +24,28 @@ function bp_activity_get_caps_for_role( $caps, $role ) {
 	switch ( $role ) {
 		case 'administrator' :
 			$activity_caps = array(
-				'bp_read_activity'            => true,
-				'bp_edit_activity'            => true,
-				'bp_edit_activities'          => true,
-				'bp_edit_others_activities'   => true,
-				'bp_publish_activities'       => true,
-				'bp_delete_activity'          => true,
-				'bp_delete_activities'        => true,
-				'bp_delete_others_activities' => true,
+				'read_bp_activity'            => true,
+				'edit_bp_activity'            => true,
+				'edit_bp_activities'          => true,
+				'edit_bp_others_activities'   => true,
+				'publish_bp_activities'       => true,
+				'delete_bp_activity'          => true,
+				'delete_bp_activities'        => true,
+				'delete_bp_others_activities' => true,
 			);
 			break;
 
 		// Any other role.
 		default :
 			$activity_caps = array(
-				'bp_read_activity'            => true,
-				'bp_edit_activity'            => true,
-				'bp_edit_activities'          => false,
-				'bp_edit_others_activities'   => false,
-				'bp_publish_activities'       => true,
-				'bp_delete_activity'          => false,
-				'bp_delete_activities'        => false,
-				'bp_delete_others_activities' => false,
+				'read_bp_activity'            => true,
+				'edit_bp_activity'            => true,
+				'edit_bp_activities'          => false,
+				'edit_bp_others_activities'   => false,
+				'publish_bp_activities'       => true,
+				'delete_bp_activity'          => false,
+				'delete_bp_activities'        => false,
+				'delete_bp_others_activities' => false,
 			);
 			break;
 	}
