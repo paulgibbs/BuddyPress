@@ -111,6 +111,8 @@ add_filter( 'bp_get_total_mention_count_for_user',  'bp_core_number_format' );
 
 add_filter( 'bp_activity_get_embed_excerpt', 'bp_activity_embed_excerpt_onclick_location_filter', 9 );
 
+add_filter( 'bp_get_caps_for_role', 'bp_activity_get_caps_for_role', 10, 2 );
+
 /* Actions *******************************************************************/
 
 // At-name filter.

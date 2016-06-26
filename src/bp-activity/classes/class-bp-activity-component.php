@@ -53,6 +53,7 @@ class BP_Activity_Component extends BP_Component {
 			'cssjs',
 			'actions',
 			'screens',
+			'caps',
 			'filters',
 			'adminbar',
 			'template',
