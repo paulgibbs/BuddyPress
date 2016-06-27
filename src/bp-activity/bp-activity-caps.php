@@ -75,8 +75,26 @@ function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 
 	switch ( $cap ) {
 		case 'edit_bp_activity' :
-			if ( $user_id === $activity->user_id || user_can( $user_id, 'bp_moderate' ) ) {
+			if ( $user_id === $activity->user_id && bp_is_user_active( $user_id ) || user_can( $user_id, 'bp_moderate' ) ) {
 				$caps = array( $cap );
+			} else {
+				$caps = array( 'do_not_allow' );
+			}
+			break;
+
+		case 'edit_bp_activities' :
+			if ( user_can( $user_id, 'bp_moderate' ) ) {
+				$caps = array( $cap );
+			} else {
+				$caps = array( 'do_not_allow' );
+			}
+			break;
+
+		case 'create_bp_activities' :
+			if ( bp_is_user_active( $user_id ) ) {
+				$caps = array( $cap );
+			} else {
+				$caps = array( 'do_not_allow' );
 			}
 			break;
 
