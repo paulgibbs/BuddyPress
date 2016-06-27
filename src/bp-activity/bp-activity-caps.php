@@ -24,28 +24,22 @@ function bp_activity_get_caps_for_role( $caps, $role ) {
 	switch ( $role ) {
 		case 'administrator' :
 			$activity_caps = array(
-				'read_bp_activity'            => true,
-				'edit_bp_activity'            => true,
-				'edit_bp_activities'          => true,
-				'edit_bp_others_activities'   => true,
-				'publish_bp_activities'       => true,
-				'delete_bp_activity'          => true,
-				'delete_bp_activities'        => true,
-				'delete_bp_others_activities' => true,
+				'edit_bp_activity'     => true,
+				'edit_bp_activities'   => true,  // wp-admin
+				'create_bp_activities' => true,
+				'delete_bp_activity'   => true,
+				'delete_bp_activities' => true,  // wp-admin
 			);
 			break;
 
 		// Any other role.
 		default :
 			$activity_caps = array(
-				'read_bp_activity'            => true,
-				'edit_bp_activity'            => true,
-				'edit_bp_activities'          => false,
-				'edit_bp_others_activities'   => false,
-				'publish_bp_activities'       => true,
-				'delete_bp_activity'          => false,
-				'delete_bp_activities'        => false,
-				'delete_bp_others_activities' => false,
+				'edit_bp_activity'     => false,
+				'edit_bp_activities'   => false,  // wp-admin
+				'create_bp_activities' => true,
+				'delete_bp_activity'   => false,
+				'delete_bp_activities' => false,  // wp-admin
 			);
 			break;
 	}
