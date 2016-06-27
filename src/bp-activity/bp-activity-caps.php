@@ -59,7 +59,31 @@ function bp_activity_get_caps_for_role( $caps, $role ) {
  * @return array Actual capabilities for meta capability.
  */
 function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
+	$activity = null;
+
+	// $args[0], if set, is always an activity ID.
+	if ( isset( $args[0] ) ) {
+		$activity = bp_activity_get( array(
+			'in'          => absint( $args[0] ),
+			'show_hidden' => true,
+			'spam'        => 'all'
+		) );
+
+		$activity = empty( $activity['activities'] ) ? null : $activity['activities'][0];
+	}
+
+
 	switch ( $cap ) {
+		case 'edit_bp_activity' :
+			if ( $user_id === $activity->user_id || user_can( $user_id, 'bp_moderate' ) ) {
+				$caps = array( $cap );
+			}
+			break;
+
+		// Don't process any other capabilities further.
+		default :
+			return $caps;
+		break;
 	}
 
 
