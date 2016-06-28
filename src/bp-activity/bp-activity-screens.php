@@ -200,6 +200,7 @@ add_action( 'bp_activity_screen_mentions', 'bp_activity_reset_my_new_mentions' )
  * @since 1.2.0
  *
  */
+//djpaultodo
 function bp_activity_screen_single_activity_permalink() {
 	$bp = buddypress();
 
