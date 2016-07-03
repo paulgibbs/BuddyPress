@@ -129,29 +129,6 @@ function bp_map_meta_caps( $caps, $cap, $user_id, $args ) {
 }
 
 /**
- * Return community capabilities.
- *
- * @since 1.6.0
- *
- * @return array Community capabilities.
- * djpaultodo Deprecate this
- */
-function bp_get_community_caps() {
-
-	// Forum meta caps.
-	$caps = array();
-
-	/**
-	 * Filters community capabilities.
-	 *
-	 * @since 1.6.0
-	 *
-	 * @param array $caps Array of capabilities to add. Empty by default.
-	 */
-	return apply_filters( 'bp_get_community_caps', $caps );
-}
-
-/**
  * Return an array of capabilities based on the role that is being requested.
  *
  * @since 1.6.0
