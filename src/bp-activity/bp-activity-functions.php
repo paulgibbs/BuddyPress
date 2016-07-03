@@ -3318,7 +3318,7 @@ function bp_activity_user_can_mark_spam() {
 	 *
 	 * @param bool $moderate Whether or not the current user has bp_moderate capability.
 	 */
-	return apply_filters( 'bp_activity_user_can_mark_spam', bp_current_user_can( 'bp_moderate' ) );
+	return apply_filters( 'bp_activity_user_can_mark_spam', bp_current_user_can( 'bp_moderate' ) );//djpaultodo
 }
 
 /**

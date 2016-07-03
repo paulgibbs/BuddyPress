@@ -35,7 +35,7 @@ function bp_activity_add_admin_menu() {
 	$hook = add_menu_page(
 		_x( 'Activity', 'Admin Dashbord SWA page title', 'buddypress' ),
 		_x( 'Activity', 'Admin Dashbord SWA menu', 'buddypress' ),
-		'bp_moderate',
+		'edit_bp_activities',
 		'bp-activity',
 		'bp_activity_admin',
 		'div'
@@ -96,9 +96,8 @@ function bp_activity_admin_reply() {
 	if ( empty( $parent_activity->component ) )
 		die( __( 'ERROR: The item you are trying to reply to cannot be found, or it has been deleted.', 'buddypress' ) );
 
-	// @todo: Check if user is allowed to create new activity items
-	// if ( ! current_user_can( 'bp_new_activity' ) )
-	if ( ! current_user_can( 'bp_moderate' ) )
+	// Admin activity screen requires edit_bp_activities cap to access, so check for that.
+	if ( ! bp_current_user_can( 'edit_bp_activities' ) )
 		die( '-1' );
 
 	// Add new activity comment.
@@ -368,9 +367,12 @@ function bp_activity_admin_load() {
 
 		// "We'd like to shoot the monster, could you move, please?"
 		foreach ( $activity_ids as $activity_id ) {
-			// @todo: Check the permissions on each
-			// if ( ! current_user_can( 'bp_edit_activity', $activity_id ) )
-			// continue;
+			// djpaultodo: require edit_bp_activity for SPAM/UNSPAM and LIKE. and then go through this entire function.
+			// Check the permissions on each.
+			if ( ! bp_current_user_can( 'edit_bp_activity', $activity_id ) ) {
+				continue;
+			}
+
 			// Get the activity from the database.
 			$activity = new BP_Activity_Activity( $activity_id );
 			if ( empty( $activity->component ) ) {
@@ -625,15 +627,15 @@ function bp_activity_admin() {
  * @since 1.6.0
  */
 function bp_activity_admin_edit() {
+	$activity_id = ! empty( $_REQUEST['aid'] ) ? (int) $_REQUEST['aid'] : 0;
 
-	// @todo: Check if user is allowed to edit activity items
-	// if ( ! current_user_can( 'bp_edit_activity' ) )
-	if ( ! is_super_admin() )
+	if ( ! bp_current_user_can( 'edit_bp_activity', $activity_id ) ) {
 		die( '-1' );
+	}
 
 	// Get the activity from the database.
 	$activity = bp_activity_get( array(
-		'in'               => ! empty( $_REQUEST['aid'] ) ? (int) $_REQUEST['aid'] : 0,
+		'in'               => $activity_id,
 		'max'              => 1,
 		'show_hidden'      => true,
 		'spam'             => 'all',

@@ -82,7 +82,7 @@ function bp_activity_screen_friends() {
 	if ( !bp_is_active( 'friends' ) )
 		return false;
 
-	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );  // djpaultodo
 
 	/**
 	 * Fires right before the loading of the "My Friends" screen template file.
@@ -111,7 +111,7 @@ function bp_activity_screen_groups() {
 	if ( !bp_is_active( 'groups' ) )
 		return false;
 
-	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );// djpaultodo
 
 	/**
 	 * Fires right before the loading of the "My Groups" screen template file.
@@ -137,7 +137,7 @@ function bp_activity_screen_groups() {
  *
  */
 function bp_activity_screen_favorites() {
-	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );// djpaultodo
 
 	/**
 	 * Fires right before the loading of the "Favorites" screen template file.
@@ -163,7 +163,7 @@ function bp_activity_screen_favorites() {
  *
  */
 function bp_activity_screen_mentions() {
-	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );
+	bp_update_is_item_admin( bp_current_user_can( 'bp_moderate' ), 'activity' );// djpaultodo
 
 	/**
 	 * Fires right before the loading of the "Mentions" screen template file.

@@ -220,6 +220,7 @@ function bp_has_activities( $args = '' ) {
 	if ( bp_is_group() ) {
 		$object      = $bp->groups->id;
 		$primary_id  = bp_get_current_group_id();
+// djpaultodo
 		$show_hidden = (bool) ( groups_is_user_member( bp_loggedin_user_id(), $primary_id ) || bp_current_user_can( 'bp_moderate' ) );
 	} else {
 		$object      = false;
@@ -1555,8 +1556,7 @@ function bp_activity_user_can_delete( $activity = false ) {
 	// Only logged in users can delete activity.
 	if ( is_user_logged_in() ) {
 
-		// Community moderators can always delete activity (at least for now).
-		if ( bp_current_user_can( 'bp_moderate' ) ) {
+		if ( bp_current_user_can( 'delete_bp_activity', $activity->ID ) ) {
 			$can_delete = true;
 		}
 
