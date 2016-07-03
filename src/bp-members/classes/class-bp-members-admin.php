@@ -200,7 +200,7 @@ class BP_Members_Admin {
 			}
 
 			// Reorganise the views navigation in users.php and signups page.
-			if ( current_user_can( $this->capability ) ) {
+			if ( bp_current_user_can( $this->capability ) ) {
 				$user_screen = $this->users_screen;
 
 				/**
@@ -644,7 +644,7 @@ class BP_Members_Admin {
 			 * admins do not have the capacity to edit other users, we must add
 			 * this check.
 			 */
-			if ( current_user_can( 'edit_user', $user->ID ) ) : ?>
+			if ( bp_current_user_can( 'edit_user', $user->ID ) ) : ?>
 
 				<a class="nav-tab<?php echo esc_attr( $wp_active ); ?>" href="<?php echo esc_url( $wordpress_url );?>"><?php _e( 'Profile', 'buddypress' ); ?></a>
 
@@ -889,11 +889,11 @@ class BP_Members_Admin {
 
 				<?php if ( empty( $this->is_self_profile ) ) : ?>
 
-					<?php if ( current_user_can( 'create_users' ) ) : ?>
+					<?php if ( bp_current_user_can( 'create_users' ) ) : ?>
 
 						<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
 
-					<?php elseif ( is_multisite() && current_user_can( 'promote_users' ) ) : ?>
+					<?php elseif ( is_multisite() && bp_current_user_can( 'promote_users' ) ) : ?>
 
 						<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
 
@@ -989,7 +989,7 @@ class BP_Members_Admin {
 					 * Also prevent admins from marking themselves or other
 					 * admins as spammers.
 					 */
-					if ( ( empty( $this->is_self_profile ) && ( ! in_array( $user->user_login, get_super_admins() ) ) && empty( $this->subsite_activated ) ) || ( ! empty( $this->subsite_activated ) && current_user_can( 'manage_network_users' ) ) ) : ?>
+					if ( ( empty( $this->is_self_profile ) && ( ! in_array( $user->user_login, get_super_admins() ) ) && empty( $this->subsite_activated ) ) || ( ! empty( $this->subsite_activated ) && bp_current_user_can( 'manage_network_users' ) ) ) : ?>
 
 						<div class="misc-pub-section" id="comment-status-radio">
 							<label class="approved"><input type="radio" name="user_status" value="ham" <?php checked( $is_spammer, false ); ?>><?php esc_html_e( 'Active', 'buddypress' ); ?></label><br />
@@ -1140,7 +1140,7 @@ class BP_Members_Admin {
 		check_admin_referer( 'bp-member-type-change-' . $user_id, 'bp-member-type-nonce' );
 
 		// Permission check.
-		if ( ! current_user_can( 'bp_moderate' ) && $user_id != bp_loggedin_user_id() ) {
+		if ( ! bp_current_user_can( 'bp_moderate' ) && $user_id != bp_loggedin_user_id() ) {
 			return;
 		}
 
@@ -1187,7 +1187,7 @@ class BP_Members_Admin {
 		$args['wp_http_referer'] = urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 		// Add the "Extended" link if the current user can edit this user.
-		if ( current_user_can( 'edit_user', $user->ID ) || bp_current_user_can( 'bp_moderate' ) ) {
+		if ( bp_current_user_can( 'edit_user', $user->ID ) || bp_current_user_can( 'bp_moderate' ) ) {
 
 			// Add query args and setup the Extended link.
 			$edit_profile      = add_query_arg( $args, $this->edit_profile_url );
@@ -1867,11 +1867,11 @@ class BP_Members_Admin {
 		<div class="wrap">
 			<h1><?php _e( 'Users', 'buddypress' ); ?>
 
-				<?php if ( current_user_can( 'create_users' ) ) : ?>
+				<?php if ( bp_current_user_can( 'create_users' ) ) : ?>
 
 					<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add New', 'user', 'buddypress' ); ?></a>
 
-				<?php elseif ( is_multisite() && current_user_can( 'promote_users' ) ) : ?>
+				<?php elseif ( is_multisite() && bp_current_user_can( 'promote_users' ) ) : ?>
 
 					<a href="user-new.php" class="add-new-h2"><?php echo esc_html_x( 'Add Existing', 'user', 'buddypress' ); ?></a>
 
@@ -1908,7 +1908,7 @@ class BP_Members_Admin {
 	 * @return string
 	 */
 	public function signups_admin_manage( $action = '' ) {
-		if ( ! current_user_can( $this->capability ) || empty( $action ) ) {
+		if ( ! bp_current_user_can( $this->capability ) || empty( $action ) ) {
 			die( '-1' );
 		}
 

@@ -27,7 +27,7 @@ function bp_activity_admin_menu() {
 	}
 
 	// Only show this menu to super admins
-	if ( ! bp_current_user_can( 'bp_moderate' ) ) {
+	if ( ! bp_current_user_can( 'edit_bp_activities' ) ) {
 		return;
 	}
 

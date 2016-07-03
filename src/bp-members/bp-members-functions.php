@@ -1482,7 +1482,7 @@ function bp_core_can_edit_settings() {
 		return false;
 	}
 
-	if ( bp_current_user_can( 'bp_moderate' ) || current_user_can( 'edit_users' ) ) {
+	if ( bp_current_user_can( 'bp_moderate' ) || bp_current_user_can( 'edit_users' ) ) {
 		return true;
 	}
 

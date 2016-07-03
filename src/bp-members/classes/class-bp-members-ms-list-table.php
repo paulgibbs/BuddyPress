@@ -154,7 +154,7 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 			'resend'   => _x( 'Email',    'Pending signup action', 'buddypress' ),
 		);
 
-		if ( current_user_can( 'delete_users' ) ) {
+		if ( bp_current_user_can( 'delete_users' ) ) {
 			$actions['delete'] = __( 'Delete', 'buddypress' );
 		}
 
@@ -174,7 +174,7 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 		} else {
 			$link = false;
 
-			if ( current_user_can( 'manage_network_users' ) ) {
+			if ( bp_current_user_can( 'manage_network_users' ) ) {
 				$link = sprintf( '<a href="%1$s">%2$s</a>', esc_url( network_admin_url( 'settings.php' ) ), esc_html__( 'Edit settings', 'buddypress' ) );
 			}
 
@@ -308,7 +308,7 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 		$actions['activate'] = sprintf( '<a href="%1$s">%2$s</a>', esc_url( $activate_link ), __( 'Activate', 'buddypress' ) );
 		$actions['resend']   = sprintf( '<a href="%1$s">%2$s</a>', esc_url( $email_link    ), __( 'Email',    'buddypress' ) );
 
-		if ( current_user_can( 'delete_users' ) ) {
+		if ( bp_current_user_can( 'delete_users' ) ) {
 			$actions['delete'] = sprintf( '<a href="%1$s" class="delete">%2$s</a>', esc_url( $delete_link ), __( 'Delete', 'buddypress' ) );
 		}
 

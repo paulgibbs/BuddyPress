@@ -829,7 +829,7 @@ function bp_admin_email_maybe_add_translation_notice() {
 	}
 
 	// If user can't access BP Tools, there's no point showing the message.
-	if ( ! current_user_can( buddypress()->admin->capability ) ) {
+	if ( ! bp_current_user_can( buddypress()->admin->capability ) ) {
 		return;
 	}
 
@@ -993,7 +993,7 @@ function bp_core_admin_user_row_actions( $actions, $user_object ) {
 	}
 
 	// Bail early if user cannot perform this action, or is looking at themselves.
-	if ( current_user_can( 'edit_user', $user_id ) && ( bp_loggedin_user_id() !== $user_id ) ) {
+	if ( bp_current_user_can( 'edit_user', $user_id ) && ( bp_loggedin_user_id() !== $user_id ) ) {
 
 		// Admin URL could be single site or network.
 		$url = bp_get_admin_url( 'users.php' );

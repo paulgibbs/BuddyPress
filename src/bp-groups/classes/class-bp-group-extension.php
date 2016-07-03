@@ -810,7 +810,7 @@ class BP_Group_Extension {
 	 * @return bool
 	 */
 	public function user_can_see_nav_item( $user_can_see_nav_item = false ) {
-		if ( 'noone' !== $this->params['show_tab'] && current_user_can( 'bp_moderate' ) ) {
+		if ( 'noone' !== $this->params['show_tab'] && bp_current_user_can( 'bp_moderate' ) ) {
 			return true;
 		}
 
@@ -826,7 +826,7 @@ class BP_Group_Extension {
 	 * @return bool
 	 */
 	public function user_can_visit( $user_can_visit = false ) {
-		if ( 'noone' !== $this->params['access'] && current_user_can( 'bp_moderate' ) ) {
+		if ( 'noone' !== $this->params['access'] && bp_current_user_can( 'bp_moderate' ) ) {
 			return true;
 		}
 

@@ -889,7 +889,7 @@ function bp_blogs_sync_delete_from_activity_comment( $retval, $parent_activity_i
 	switch_to_blog( $parent_activity->item_id );
 
 	// Remove associated blog comments.
-	bp_blogs_remove_associated_blog_comments( $activity_ids, current_user_can( 'moderate_comments' ) );
+	bp_blogs_remove_associated_blog_comments( $activity_ids, bp_current_user_can( 'moderate_comments' ) );
 
 	// Multisite again!
 	restore_current_blog();

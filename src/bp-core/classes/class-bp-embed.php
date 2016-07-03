@@ -122,7 +122,7 @@ class BP_Embed extends WP_Embed {
 		 */
 		$id = apply_filters( 'embed_post_id', 0 );
 
-		$unfiltered_html   = current_user_can( 'unfiltered_html' );
+		$unfiltered_html   = bp_current_user_can( 'unfiltered_html' );
 		$default_discovery = false;
 
 		// Since 4.4, WordPress is now an oEmbed provider.

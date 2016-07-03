@@ -261,7 +261,7 @@ function bp_adminbar_account_menu() {
 }
 
 function bp_adminbar_thisblog_menu() {
-	if ( current_user_can( 'edit_posts' ) ) {
+	if ( bp_current_user_can( 'edit_posts' ) ) {
 		echo '<li id="bp-adminbar-thisblog-menu"><a href="' . admin_url() . '">';
 		_e( 'Dashboard', 'buddypress' );
 		echo '</a>';
