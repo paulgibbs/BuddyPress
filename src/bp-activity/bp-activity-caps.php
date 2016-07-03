@@ -75,7 +75,7 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 
 	switch ( $cap ) {
 		case 'edit_bp_activity' :
-			if ( $activity && $u_id === $activity->u_id && $user_is_active || user_can( $u_id, 'edit_bp_activities' ) ) {
+			if ( $activity && $u_id === $activity->u_id && $user_is_active || bp_user_can( $u_id, 'edit_bp_activities' ) ) {
 				$caps = array( $cap );
 			} else {
 				$caps = array( 'do_not_allow' );
@@ -84,9 +84,9 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 
 		case 'edit_bp_activities' :
 			if ( $user_is_active ) {
-				if ( bp_is_network_activated() && user_can( $u_id, 'manage_network_options' ) ) {
+				if ( bp_is_network_activated() && bp_user_can( $u_id, 'manage_network_options' ) ) {
 					$caps = array( $cap );
-				} elseif ( ! bp_is_network_activated() && user_can( $u_id, 'manage_options' ) ) {
+				} elseif ( ! bp_is_network_activated() && bp_user_can( $u_id, 'manage_options' ) ) {
 					$caps = array( $cap );
 				} else {
 					$caps = array( 'do_not_allow' );
@@ -105,7 +105,7 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 		break;
 
 		case 'delete_bp_activity' :
-			if ( $activity && $u_id === $activity->u_id && $user_is_active || user_can( $u_id, 'delete_bp_activities' ) ) {
+			if ( $activity && $u_id === $activity->u_id && $user_is_active || bp_user_can( $u_id, 'delete_bp_activities' ) ) {
 				$caps = array( $cap );
 			} else {
 				$caps = array( 'do_not_allow' );
@@ -114,9 +114,9 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 
 		case 'delete_bp_activities' :
 			if ( $user_is_active ) {
-				if ( bp_is_network_activated() && user_can( $u_id, 'manage_network_options' ) ) {
+				if ( bp_is_network_activated() && bp_user_can( $u_id, 'manage_network_options' ) ) {
 					$caps = array( $cap );
-				} elseif ( ! bp_is_network_activated() && user_can( $u_id, 'manage_options' ) ) {
+				} elseif ( ! bp_is_network_activated() && bp_user_can( $u_id, 'manage_options' ) ) {
 					$caps = array( $cap );
 				} else {
 					$caps = array( 'do_not_allow' );
