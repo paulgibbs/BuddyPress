@@ -220,8 +220,7 @@ function bp_has_activities( $args = '' ) {
 	if ( bp_is_group() ) {
 		$object      = $bp->groups->id;
 		$primary_id  = bp_get_current_group_id();
-// djpaultodo
-		$show_hidden = (bool) ( groups_is_user_member( bp_loggedin_user_id(), $primary_id ) || bp_current_user_can( 'bp_moderate' ) );
+		$show_hidden = (bool) ( groups_is_user_member( bp_loggedin_user_id(), $primary_id ) || bp_current_user_can( 'edit_bp_activities' ) );
 	} else {
 		$object      = false;
 		$primary_id  = false;
