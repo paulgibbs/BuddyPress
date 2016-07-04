@@ -60,7 +60,7 @@ function bp_activity_get_caps_for_role( $caps, $role ) {
  */
 function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 	$activity       = null;
-	$user_is_active = bp_user_is_active( $u_id );
+	$user_is_active = bp_is_user_active( $u_id );
 
 	// $args[0], if set, is always an activity ID.
 	if ( isset( $args[0] ) ) {
