@@ -367,8 +367,6 @@ function bp_activity_admin_load() {
 
 		// "We'd like to shoot the monster, could you move, please?"
 		foreach ( $activity_ids as $activity_id ) {
-			// djpaultodo: require edit_bp_activity for SPAM/UNSPAM and LIKE. and then go through this entire function.
-			// Check the permissions on each.
 			if ( ! bp_current_user_can( 'edit_bp_activity', $activity_id ) ) {
 				continue;
 			}
@@ -382,12 +380,15 @@ function bp_activity_admin_load() {
 
 			switch ( $doaction ) {
 				case 'delete' :
-					if ( 'activity_comment' == $activity->type )
-						bp_activity_delete_comment( $activity->item_id, $activity->id );
-					else
-						bp_activity_delete( array( 'id' => $activity->id ) );
+					if ( ! bp_current_user_can( 'delete_bp_activity', $activity->id ) ) {
+						if ( 'activity_comment' == $activity->type ) {
+							bp_activity_delete_comment( $activity->item_id, $activity->id );
+						} else {
+							bp_activity_delete( array( 'id' => $activity->id ) );
+							$deleted++;
+						}
+					}
 
-					$deleted++;
 					break;
 
 				case 'ham' :
@@ -479,8 +480,8 @@ function bp_activity_admin_load() {
 		// Get the activity from the database.
 		$activity = new BP_Activity_Activity( $activity_id );
 
-		// If the activity doesn't exist, just redirect back to the index.
-		if ( empty( $activity->component ) ) {
+		// If the activity doesn't exist or user doesn't have permission, just redirect back to the index.
+		if ( empty( $activity->component ) || ! bp_current_user_can( 'edit_bp_activity', $activity->id ) ) {
 			wp_redirect( $redirect_to );
 			exit;
 		}
@@ -613,7 +614,7 @@ function bp_activity_admin() {
 	$doaction = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
 
 	// Display the single activity edit screen.
-	if ( 'edit' == $doaction && ! empty( $_GET['aid'] ) )
+	if ( 'edit' == $doaction && ! empty( $_GET['aid'] ) && bp_current_user_can( 'edit_bp_activity', $_GET['aid'] ) )
 		bp_activity_admin_edit();
 
 	// Otherwise, display the Activity index screen.
