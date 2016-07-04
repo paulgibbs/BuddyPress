@@ -54,13 +54,13 @@ function bp_activity_get_caps_for_role( $caps, $role ) {
  *
  * @param array  $caps    Capabilities for meta capability.
  * @param string $cap     Capability name.
- * @param int    $u_id User id.
+ * @param int    $user_id User id.
  * @param mixed  $args    Arguments.
  * @return array Actual capabilities for meta capability.
  */
-function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
+function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 	$activity       = null;
-	$user_is_active = bp_is_user_active( $u_id );
+	$user_is_active = bp_is_user_active( $user_id );
 
 	// $args[0], if set, is always an activity ID.
 	if ( isset( $args[0] ) ) {
@@ -75,7 +75,7 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 
 	switch ( $cap ) {
 		case 'edit_bp_activity' :
-			if ( $activity && $u_id === $activity->u_id && $user_is_active || bp_user_can( $u_id, 'edit_bp_activities' ) ) {
+			if ( $activity && $user_id === $activity->user_id && $user_is_active || bp_user_can( $user_id, 'edit_bp_activities' ) ) {
 				$caps = array( $cap );
 			} else {
 				$caps = array( 'do_not_allow' );
@@ -84,9 +84,9 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 
 		case 'edit_bp_activities' :
 			if ( $user_is_active ) {
-				if ( bp_is_network_activated() && bp_user_can( $u_id, 'manage_network_options' ) ) {
+				if ( bp_is_network_activated() && bp_user_can( $user_id, 'manage_network_options' ) ) {
 					$caps = array( $cap );
-				} elseif ( ! bp_is_network_activated() && bp_user_can( $u_id, 'manage_options' ) ) {
+				} elseif ( ! bp_is_network_activated() && bp_user_can( $user_id, 'manage_options' ) ) {
 					$caps = array( $cap );
 				} else {
 					$caps = array( 'do_not_allow' );
@@ -105,7 +105,7 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 		break;
 
 		case 'delete_bp_activity' :
-			if ( $activity && $u_id === $activity->u_id && $user_is_active || bp_user_can( $u_id, 'delete_bp_activities' ) ) {
+			if ( $activity && $user_id === $activity->user_id && $user_is_active || bp_user_can( $user_id, 'delete_bp_activities' ) ) {
 				$caps = array( $cap );
 			} else {
 				$caps = array( 'do_not_allow' );
@@ -114,9 +114,9 @@ function bp_activity_map_meta_caps( $caps, $cap, $u_id, $args ) {
 
 		case 'delete_bp_activities' :
 			if ( $user_is_active ) {
-				if ( bp_is_network_activated() && bp_user_can( $u_id, 'manage_network_options' ) ) {
+				if ( bp_is_network_activated() && bp_user_can( $user_id, 'manage_network_options' ) ) {
 					$caps = array( $cap );
-				} elseif ( ! bp_is_network_activated() && bp_user_can( $u_id, 'manage_options' ) ) {
+				} elseif ( ! bp_is_network_activated() && bp_user_can( $user_id, 'manage_options' ) ) {
 					$caps = array( $cap );
 				} else {
 					$caps = array( 'do_not_allow' );
