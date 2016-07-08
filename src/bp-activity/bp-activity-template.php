@@ -1555,7 +1555,7 @@ function bp_activity_user_can_delete( $activity = false ) {
 	// Only logged in users can delete activity.
 	if ( is_user_logged_in() ) {
 
-		if ( bp_current_user_can( 'delete_bp_activity', $activity->ID ) ) {
+		if ( bp_current_user_can( 'delete_bp_activity', $activity->id ) ) {
 			$can_delete = true;
 		}
 
