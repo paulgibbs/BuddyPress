@@ -263,6 +263,11 @@ function bp_version_updater() {
 		if ( $raw_db_version < 10440 ) {
 			bp_update_to_2_5();
 		}
+
+		// Version 2.7.0.
+		if ( $raw_db_version < 10940 ) {
+			bp_update_to_2_7();
+		}
 	}
 
 	/* All done! *************************************************************/
@@ -497,6 +502,46 @@ function bp_update_to_2_3() {
  */
 function bp_update_to_2_5() {
 	bp_core_install_emails();
+}
+
+/**
+ * 2.5.0 update routine.
+ *
+ * - Add capabilities for Activity component.
+ *
+ * @since 2.7.0
+ */
+function bp_update_to_2_7() {
+	bp_add_caps();
+
+
+	// Multisite-only beyond this point.
+	if ( ! bp_is_network_activated() ) {
+		return;
+	}
+
+	// WP 4.6+
+	if ( function_exists( 'get_sites' ) ) {
+		$sites = get_sites( array( 'fields' => 'ids' ) );
+
+	} else {
+		if ( wp_is_large_network() ) {
+			$sites = array();
+		} else {
+			$sites = wp_list_pluck( wp_get_sites(), 'blog_id' );
+		}
+	}
+
+	$original_site_id = get_current_blog_id();
+	foreach ( $sites as $site_id ) {
+		switch_to_blog( $site_id );
+		bp_add_caps();
+		restore_current_blog();
+	}
+
+	if ( get_current_blog_id() !== $original_site_id ) {
+		switch_to_blog( $original_site_id );
+	}
 }
 
 /**
