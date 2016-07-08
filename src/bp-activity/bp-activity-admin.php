@@ -366,7 +366,7 @@ function bp_activity_admin_load() {
 
 		// "We'd like to shoot the monster, could you move, please?"
 		foreach ( $activity_ids as $activity_id ) {
-			if ( ! bp_current_user_can( 'edit_bp_activity', $activity_id ) ) {
+			if ( ! bp_current_user_can( 'edit_bp_activity', array( 'object_id' => $activity_id ) ) ) {
 				continue;
 			}
 
@@ -379,7 +379,7 @@ function bp_activity_admin_load() {
 
 			switch ( $doaction ) {
 				case 'delete' :
-					if ( bp_current_user_can( 'delete_bp_activity', $activity->id ) ) {
+					if ( bp_current_user_can( 'delete_bp_activity', array( 'object_id' => $activity->id ) ) ) {
 						if ( 'activity_comment' == $activity->type ) {
 							bp_activity_delete_comment( $activity->item_id, $activity->id );
 						} else {
@@ -481,7 +481,7 @@ function bp_activity_admin_load() {
 		$activity = new BP_Activity_Activity( $activity_id );
 
 		// If the activity doesn't exist or user doesn't have permission, just redirect back to the index.
-		if ( empty( $activity->component ) || ! bp_current_user_can( 'edit_bp_activity', $activity->id ) ) {
+		if ( empty( $activity->component ) || ! bp_current_user_can( 'edit_bp_activity', array( 'object_id' => $activity->id ) ) ) {
 			wp_redirect( $redirect_to );
 			exit;
 		}
@@ -614,7 +614,7 @@ function bp_activity_admin() {
 	$doaction = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
 
 	// Display the single activity edit screen.
-	if ( 'edit' == $doaction && ! empty( $_GET['aid'] ) && bp_current_user_can( 'edit_bp_activity', $_GET['aid'] ) )
+	if ( 'edit' == $doaction && ! empty( $_GET['aid'] ) && bp_current_user_can( 'edit_bp_activity', array( 'object_id' => $_GET['aid'] ) ) )
 		bp_activity_admin_edit();
 
 	// Otherwise, display the Activity index screen.
@@ -630,7 +630,7 @@ function bp_activity_admin() {
 function bp_activity_admin_edit() {
 	$activity_id = ! empty( $_REQUEST['aid'] ) ? (int) $_REQUEST['aid'] : 0;
 
-	if ( ! bp_current_user_can( 'edit_bp_activity', $activity_id ) ) {
+	if ( ! bp_current_user_can( 'edit_bp_activity', array( 'object_id' => $activity_id ) ) ) {
 		die( '-1' );
 	}
 
