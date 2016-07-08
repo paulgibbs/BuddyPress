@@ -26,7 +26,7 @@ do_action( 'bp_before_directory_activity' ); ?>
 	 */
 	do_action( 'bp_before_directory_activity_content' ); ?>
 
-	<?php if ( is_user_logged_in() ) : ?>
+	<?php if ( is_user_logged_in() && bp_current_user_can( 'create_bp_activities' ) ) : ?>
 
 		<?php bp_get_template_part( 'activity/post-form' ); ?>
 
