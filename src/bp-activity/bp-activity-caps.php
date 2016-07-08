@@ -66,9 +66,10 @@ function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 
 	if ( ! empty( $args[0]['object_id'] ) ) {
 		$activity = bp_activity_get( array(
-			'show_hidden' => true,
-			'spam'        => 'all'
 			'in'               => absint( $args[0]['object_id'] ),
+			'show_hidden'      => true,
+			'spam'             => 'all',
+			'display_comments' => 'stream'
 		) );
 
 		$activity = empty( $activity['activities'] ) ? null : $activity['activities'][0];
