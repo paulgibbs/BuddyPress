@@ -82,7 +82,6 @@ function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 			} else {
 				$caps = array( 'do_not_allow' );
 			}
-		}
 		break;
 
 		case 'delete_bp_activities' :
