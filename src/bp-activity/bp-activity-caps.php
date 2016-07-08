@@ -24,22 +24,24 @@ function bp_activity_get_caps_for_role( $caps, $role ) {
 	switch ( $role ) {
 		case 'administrator' :
 			$activity_caps = array(
+				'manage_bp_activities' => true,  // wp-admin
 				'edit_bp_activity'     => true,
-				'edit_bp_activities'   => true,  // wp-admin
+				'edit_bp_activities'   => true,
 				'create_bp_activities' => true,
 				'delete_bp_activity'   => true,
-				'delete_bp_activities' => true,  // wp-admin
+				'delete_bp_activities' => true,
 			);
 			break;
 
 		// Any other role.
 		default :
 			$activity_caps = array(
-				'edit_bp_activity'     => false,
-				'edit_bp_activities'   => false,  // wp-admin
+				'manage_bp_activities' => false,  // wp-admin
+				'edit_bp_activity'     => true,
+				'edit_bp_activities'   => false,
 				'create_bp_activities' => true,
-				'delete_bp_activity'   => false,
-				'delete_bp_activities' => false,  // wp-admin
+				'delete_bp_activity'   => true,
+				'delete_bp_activities' => false,
 			);
 			break;
 	}
@@ -75,52 +77,33 @@ function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 
 	switch ( $cap ) {
 		case 'edit_bp_activity' :
-			if ( $activity && $user_id === $activity->user_id && $user_is_active || bp_user_can( $user_id, 'edit_bp_activities' ) ) {
+			if ( $activity && $user_id === $activity->user_id || bp_user_can( $user_id, 'edit_bp_activities' ) ) {
 				$caps = array( $cap );
 			} else {
 				$caps = array( 'do_not_allow' );
 			}
+		}
 		break;
 
+		case 'delete_bp_activities' :
 		case 'edit_bp_activities' :
-			if ( $user_is_active ) {
-				if ( bp_is_network_activated() && bp_user_can( $user_id, 'manage_network_options' ) ) {
-					$caps = array( $cap );
-				} elseif ( ! bp_is_network_activated() && bp_user_can( $user_id, 'manage_options' ) ) {
-					$caps = array( $cap );
-				} else {
-					$caps = array( 'do_not_allow' );
-				}
+		case 'manage_bp_activities' :
+			if ( bp_is_network_activated() && bp_user_can( $user_id, 'manage_network_options' ) ) {
+				$caps = array( $cap );
+			} elseif ( ! bp_is_network_activated() && bp_user_can( $user_id, 'manage_options' ) ) {
+				$caps = array( $cap );
 			} else {
 				$caps = array( 'do_not_allow' );
 			}
 		break;
 
 		case 'create_bp_activities' :
-			if ( $user_is_active ) {
-				$caps = array( $cap );
-			} else {
-				$caps = array( 'do_not_allow' );
-			}
+			$caps = array( $cap );
 		break;
 
 		case 'delete_bp_activity' :
-			if ( $activity && $user_id === $activity->user_id && $user_is_active || bp_user_can( $user_id, 'delete_bp_activities' ) ) {
+			if ( $activity && $user_id === $activity->user_id || bp_user_can( $user_id, 'delete_bp_activities' ) ) {
 				$caps = array( $cap );
-			} else {
-				$caps = array( 'do_not_allow' );
-			}
-		break;
-
-		case 'delete_bp_activities' :
-			if ( $user_is_active ) {
-				if ( bp_is_network_activated() && bp_user_can( $user_id, 'manage_network_options' ) ) {
-					$caps = array( $cap );
-				} elseif ( ! bp_is_network_activated() && bp_user_can( $user_id, 'manage_options' ) ) {
-					$caps = array( $cap );
-				} else {
-					$caps = array( 'do_not_allow' );
-				}
 			} else {
 				$caps = array( 'do_not_allow' );
 			}
@@ -130,6 +113,10 @@ function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 		default :
 			return $caps;
 		break;
+	}
+
+	if ( ! $user_is_active ) {
+		$caps = array( 'do_not_allow' );
 	}
 
 	/**

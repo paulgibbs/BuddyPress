@@ -35,7 +35,7 @@ function bp_activity_add_admin_menu() {
 	$hook = add_menu_page(
 		_x( 'Activity', 'Admin Dashbord SWA page title', 'buddypress' ),
 		_x( 'Activity', 'Admin Dashbord SWA menu', 'buddypress' ),
-		'edit_bp_activities',
+		'manage_bp_activities',
 		'bp-activity',
 		'bp_activity_admin',
 		'div'
@@ -96,8 +96,7 @@ function bp_activity_admin_reply() {
 	if ( empty( $parent_activity->component ) )
 		die( __( 'ERROR: The item you are trying to reply to cannot be found, or it has been deleted.', 'buddypress' ) );
 
-	// Admin activity screen requires edit_bp_activities cap to access, so check for that.
-	if ( ! bp_current_user_can( 'edit_bp_activities' ) )
+	if ( ! bp_current_user_can( 'manage_bp_activities' ) )
 		die( '-1' );
 
 	// Add new activity comment.
