@@ -87,6 +87,7 @@ function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 		case 'delete_bp_activities' :
 		case 'edit_bp_activities' :
 		case 'manage_bp_activities' :
+			// This might change in the future when bp_moderate is less powerful.
 			if ( bp_is_network_activated() && bp_user_can( $user_id, 'manage_network_options' ) ) {
 				$caps = array( $cap );
 			} elseif ( ! bp_is_network_activated() && bp_user_can( $user_id, 'manage_options' ) ) {
