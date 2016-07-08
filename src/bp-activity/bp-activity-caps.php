@@ -64,12 +64,11 @@ function bp_activity_map_meta_caps( $caps, $cap, $user_id, $args ) {
 	$activity       = null;
 	$user_is_active = bp_is_user_active( $user_id );
 
-	// $args[0], if set, is always an activity ID.
-	if ( isset( $args[0] ) ) {
+	if ( ! empty( $args[0]['object_id'] ) ) {
 		$activity = bp_activity_get( array(
-			'in'          => absint( $args[0] ),
 			'show_hidden' => true,
 			'spam'        => 'all'
+			'in'               => absint( $args[0]['object_id'] ),
 		) );
 
 		$activity = empty( $activity['activities'] ) ? null : $activity['activities'][0];
