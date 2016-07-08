@@ -1553,23 +1553,8 @@ function bp_activity_user_can_delete( $activity = false ) {
 	$can_delete = false;
 
 	// Only logged in users can delete activity.
-	if ( is_user_logged_in() ) {
-
-		if ( bp_current_user_can( 'delete_bp_activity', $activity->id ) ) {
-			$can_delete = true;
-		}
-
-		// Users are allowed to delete their own activity. This is actually
-		// quite powerful, because doing so also deletes all comments to that
-		// activity item. We should revisit this eventually.
-		if ( isset( $activity->user_id ) && ( $activity->user_id === bp_loggedin_user_id() ) ) {
-			$can_delete = true;
-		}
-
-		// Viewing a single item, and this user is an admin of that item.
-		if ( bp_is_single_item() && bp_is_item_admin() ) {
-			$can_delete = true;
-		}
+	if ( is_user_logged_in() && bp_current_user_can( 'delete_bp_activity', $activity->id ) ) {
+		$can_delete = true;
 	}
 
 	/**
