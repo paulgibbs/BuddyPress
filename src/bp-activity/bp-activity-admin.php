@@ -379,13 +379,14 @@ function bp_activity_admin_load() {
 
 			switch ( $doaction ) {
 				case 'delete' :
-					if ( ! bp_current_user_can( 'delete_bp_activity', $activity->id ) ) {
+					if ( bp_current_user_can( 'delete_bp_activity', $activity->id ) ) {
 						if ( 'activity_comment' == $activity->type ) {
 							bp_activity_delete_comment( $activity->item_id, $activity->id );
 						} else {
 							bp_activity_delete( array( 'id' => $activity->id ) );
-							$deleted++;
 						}
+
+						$deleted++;
 					}
 
 					break;
