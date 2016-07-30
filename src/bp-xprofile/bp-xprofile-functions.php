@@ -158,6 +158,7 @@ function bp_xprofile_get_field_types() {
 		'selectbox'      => 'BP_XProfile_Field_Type_Selectbox',
 		'textarea'       => 'BP_XProfile_Field_Type_Textarea',
 		'textbox'        => 'BP_XProfile_Field_Type_Textbox',
+		'wp-biography'   => 'BP_XProfile_Field_Type_WordPress_Biography',
 	);
 
 	/**
